@@ -1,0 +1,212 @@
+# ============================================================
+# Pages CMS 配置 — 文档: https://pagescms.org/docs/
+# 编辑入口: https://app.pagescms.org （登录 GitHub 后选择本仓库）
+# 保存后自动提交到仓库，GitHub Actions 会自动重新构建部署
+# ============================================================
+
+# 上传的图片统一存放在 public/images，写入内容时使用 /images/ 前缀
+media:
+  input: public/images
+  output: /images
+
+content:
+  # ---------- 文章 ----------
+  - name: posts
+    label: 文章
+    type: collection
+    path: src/posts
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    view:
+      primary: title
+      fields: [title, published, category, draft]
+      sort: [published, title]
+      search: [title, description, body]
+      default:
+        sort: published
+        order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+      - name: published
+        label: 发布日期
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: description
+        label: 摘要
+        type: text
+      - name: image
+        label: 封面图
+        type: image
+        options:
+          media: images
+          path: public/images
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+      - name: category
+        label: 分类
+        type: string
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+      - name: lang
+        label: 语言
+        type: select
+        options:
+          values: [zh_CN, zh_TW, en, ja]
+      - name: body
+        label: 正文
+        type: rich-text
+        options:
+          format: markdown
+          media: images
+          path: public/images
+
+  # ---------- 个人资料（首页） ----------
+  - name: profile
+    label: 个人资料
+    type: file
+    path: src/data/profile.json
+    format: json
+    fields:
+      - name: avatar
+        label: 头像
+        type: string
+      - name: name
+        label: 名字
+        type: string
+      - name: bio
+        label: 签名
+        type: text
+      - name: links
+        label: 社交链接
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: 名称
+            type: string
+          - name: url
+            label: 链接
+            type: string
+          - name: icon
+            label: 图标
+            type: select
+            options:
+              values: [github, x, telegram, bilibili, mail]
+
+  # ---------- 友链 ----------
+  - name: friends
+    label: 友链
+    type: file
+    path: src/data/friends.json
+    format: json
+    fields:
+      - name: list
+        label: 友链列表
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: 名称
+            type: string
+          - name: imgurl
+            label: 头像
+            type: string
+          - name: desc
+            label: 描述
+            type: text
+          - name: siteurl
+            label: 网址
+            type: string
+          - name: tags
+            label: 标签
+            type: string
+            list: true
+          - name: weight
+            label: 权重
+            type: number
+          - name: enabled
+            label: 启用
+            type: boolean
+      - name: siteInfo
+        label: 本站信息
+        type: object
+        fields:
+          - name: name
+            label: 站点名称
+            type: string
+          - name: desc
+            label: 站点描述
+            type: text
+          - name: url
+            label: 站点链接
+            type: string
+          - name: avatar
+            label: 头像链接
+            type: string
+          - name: email
+            label: 申请邮箱
+            type: string
+      - name: notes
+        label: 注意事项
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: 标题
+            type: string
+          - name: content
+            label: 内容
+            type: text
+      - name: template
+        label: 申请模板
+        type: text
+
+  # ---------- 站点配置 ----------
+  - name: site
+    label: 站点配置
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - name: title
+        label: 站点标题
+        type: string
+      - name: subtitle
+        label: 副标题
+        type: string
+      - name: author
+        label: 作者
+        type: string
+      - name: site_url
+        label: 站点地址
+        type: string
+      - name: description
+        label: 站点描述
+        type: text
+      - name: keywords
+        label: 关键词
+        type: string
+        list: true
+      - name: since
+        label: 建站年份
+        type: number
+
+settings:
+  content:
+    merge: true
+  commit:
+    templates:
+      create: "发布 {path} (via Pages CMS)"
+      update: "更新 {path} (via Pages CMS)"
+      delete: "删除 {path} (via Pages CMS)"
+      rename: "重命名 {oldPath} → {newPath} (via Pages CMS)"
