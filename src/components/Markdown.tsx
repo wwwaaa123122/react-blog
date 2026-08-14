@@ -3,6 +3,7 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import type { Components } from "react-markdown";
 import { rewriteImagePaths } from "../lib/posts";
+import { assetUrl } from "../lib/base";
 
 export function slugify(text: string): string {
   return text
@@ -51,7 +52,12 @@ export default function Markdown({ content }: { content: string }) {
       );
     },
     img: ({ src, alt, ...props }) => (
-      <img src={rewriteImagePaths(src || "")} alt={alt || ""} loading="lazy" {...props} />
+      <img
+        src={assetUrl(rewriteImagePaths(src || ""))}
+        alt={alt || ""}
+        loading="lazy"
+        {...props}
+      />
     ),
     h2: ({ children }) => (
       <h2 id={slugify(String(children))}>{children}</h2>

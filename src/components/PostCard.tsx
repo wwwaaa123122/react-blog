@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import type { Post } from "../types";
 import { formatDate, readingTime } from "../lib/posts";
+import { assetUrl } from "../lib/base";
 import { Icon } from "./icons";
 
 export default function PostCard({ post }: { post: Post }) {
   const cover = post.image
-    ? post.image.replace(/\.\.\/images\//, "/images/")
+    ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/"))
     : undefined;
 
   return (

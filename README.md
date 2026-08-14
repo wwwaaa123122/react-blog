@@ -78,3 +78,8 @@ src/
 - **每页 SEO**（`<title>` / meta description / keywords / canonical）— 由 `Seo` 组件按路由设置
 - **结构化数据** — 首页 WebSite JSON-LD、文章页 Article JSON-LD
 - **后台页 noindex** — `/admin` 自动加入 `meta robots: noindex, nofollow`
+## 部署说明
+
+- **GitHub Pages 子路径部署**：CI（`.github/workflows/deploy.yml`）构建时传入 `VITE_BASE=/react-blog/`（与仓库名一致），产物部署到 `pages` 分支；`404.html` 已内置 SPA fallback，深链（如 `/posts/xxx`）可直接访问。
+- **自定义域名（根路径）**：在仓库 Settings → Pages 绑定域名后，把 workflow 中 `VITE_BASE` 改为 `/`（或删除该环境变量）重新构建即可；`src/data/site.json` 的 `site_url` 需与域名一致（当前为 `https://xc-lr.cn`）。
+- **本地开发**：直接 `pnpm dev`（默认 base `/`），无需设置 VITE_BASE。

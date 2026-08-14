@@ -39,6 +39,8 @@ jobs:
 
       - name: Build site
         run: pnpm build
+        env:
+          VITE_BASE: /react-blog/ # GitHub Pages 子路径部署
 
       - name: Create .nojekyll file
         run: touch dist/.nojekyll

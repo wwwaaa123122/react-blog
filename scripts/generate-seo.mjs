@@ -1,6 +1,6 @@
 // 构建后生成 SEO 文件：sitemap.xml / llms.txt / robots.txt
 // 用法: node scripts/generate-seo.mjs （在 vite build 之后运行）
-import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -164,6 +164,15 @@ Disallow: /admin
 
 Sitemap: ${baseUrl}/sitemap.xml
 `;
+
+// ---------- 404.html：GitHub Pages 无 SPA fallback，用 404.html 承载应用 ----------
+// GitHub Pages 对未知路径返回 404 页；把 404.html 做成与 index.html 相同的 SPA，
+// React Router 即可接管深链（如 /posts/xxx）正常渲染。
+const indexPath = join(dist, "index.html");
+if (existsSync(indexPath)) {
+  copyFileSync(indexPath, join(dist, "404.html"));
+  console.log(`[seo] 404.html (SPA fallback)`);
+}
 
 // ---------- 写入 ----------
 mkdirSync(dist, { recursive: true });

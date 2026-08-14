@@ -6,6 +6,7 @@ import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { articleJsonLd, jsonLd } from "../lib/seo";
 import { siteConfig } from "../config/site";
+import { assetUrl } from "../lib/base";
 
 function extractToc(content: string) {
   const toc: { level: number; text: string }[] = [];
@@ -39,7 +40,9 @@ export default function PostDetail() {
   }
 
   const toc = extractToc(post.content);
-  const cover = post.image?.replace(/\.\.\/images\//, "/images/");
+  const cover = post.image
+    ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/"))
+    : undefined;
   const currentYear = new Date().getFullYear();
 
   return (

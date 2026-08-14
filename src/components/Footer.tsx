@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { siteConfig } from "../config/site";
+import { assetUrl } from "../lib/base";
 
 export default function Footer() {
   return (
@@ -21,9 +22,9 @@ export default function Footer() {
           {" · "}
           <Link to="/about">关于</Link>
           {" · "}
-          <a href="/llms.txt" target="_blank" rel="noreferrer noopener">llms.txt</a>
+          <a href={assetUrl("llms.txt")} target="_blank" rel="noreferrer noopener">llms.txt</a>
           {" · "}
-          <a href="/sitemap.xml" target="_blank" rel="noreferrer noopener">sitemap</a>
+          <a href={assetUrl("sitemap.xml")} target="_blank" rel="noreferrer noopener">sitemap</a>
         </p>
       </div>
     </footer>

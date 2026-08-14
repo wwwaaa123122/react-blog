@@ -3,6 +3,7 @@ import { profileConfig } from "../config/profile";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
+import { assetUrl } from "../lib/base";
 
 const ADULT_DATE = new Date("2030-07-20T00:00:00").getTime();
 
@@ -76,14 +77,14 @@ export default function About() {
         <h3 style={{ marginTop: 26, fontSize: 16, fontWeight: 700 }}>联系我</h3>
         <div className="about-contact">
           <div className="contact-row">
-            <img className="contact-avatar" src="/images/qiwei.svg" alt="企业微信" />
+            <img className="contact-avatar" src={assetUrl("/images/qiwei.svg")} alt="企业微信" />
             <div>
               <p style={{ fontSize: 13, color: "var(--text-tertiary)" }}>企业微信</p>
               <p style={{ fontSize: 14, fontWeight: 600 }}>星辰旅人</p>
             </div>
           </div>
           <div className="contact-row">
-            <img className="contact-avatar" src="/images/QQ.svg" alt="QQ" />
+            <img className="contact-avatar" src={assetUrl("/images/QQ.svg")} alt="QQ" />
             <div>
               <p style={{ fontSize: 13, color: "var(--text-tertiary)" }}>QQ</p>
               <p style={{ fontSize: 14, fontWeight: 600 }}>3385016019</p>
