@@ -1,0 +1,28 @@
+# Starlr Blog
+
+> 分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发，作者为starlr/星辰旅人
+>
+> - 作者: 星辰旅人
+> - 主页: https://xc-lr.cn
+
+## 页面
+
+- [首页](https://xc-lr.cn/): 个人资料与最新文章
+- [文章列表](https://xc-lr.cn/posts): 全部技术文章
+- [归档](https://xc-lr.cn/archive): 按年份归档
+- [友链](https://xc-lr.cn/friends): 友情链接与申请方式
+- [关于](https://xc-lr.cn/about): 关于作者
+
+## 文章
+
+- [Kick 开播提醒：用 Python 监控直播并推送 QQ 通知](https://xc-lr.cn/posts/kick-live-notify): 基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知
+- [MC免端口域名生成器使用与部署教程](https://xc-lr.cn/posts/mc-srv-worker): 基于Cloudflare Workers的Minecraft免端口域名服务，让你的MC服务器玩家无需输入端口号
+- [关于本站迁移至Firefly](https://xc-lr.cn/posts/Why-to-Firefly): 讲述从fuwari迁移至Firefly的一些原因
+- [Fuwari 主题背景图功能教程](https://xc-lr.cn/posts/fuwari-background-image): 为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程
+- [通过Cloudflare Tunnel使用SSH](https://xc-lr.cn/posts/ssh-by-tunnel): 通过Cloudflare Tunnel连接无公网IP的服务
+- [Bot使用文档](https://xc-lr.cn/posts/how-use-bot): 星辰旅人Bot使用文档
+- [fuwari修复RSS图片不显示](https://xc-lr.cn/posts/fuwari-rss): 修复RSS图片链接问题
+- [为fuwari增加一个404界面](https://xc-lr.cn/posts/fuwari-404): 为fuwari添加一个好看的404界面
+- [BA周年庆直接9个彩](https://xc-lr.cn/posts/ba2th): 两个亚子还有礼服日奈
+- [fuwari接入评论功能](https://xc-lr.cn/posts/comment): 让你的fuwari接入评论，并让它在文章末显示出
+- [edgeone加速worker](https://xc-lr.cn/posts/edgeone-worker): 如何使用edgeone加速cf worker
