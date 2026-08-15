@@ -1,6 +1,5 @@
 # robots.txt for https://xc-lr.cn
 User-agent: *
 Allow: /
-Disallow: /admin
 
 Sitemap: https://xc-lr.cn/sitemap.xml
