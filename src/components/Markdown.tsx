@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import type { Components } from "react-markdown";
+import type { ReactElement } from "react";
 import { rewriteImagePaths } from "../lib/posts";
 import { assetUrl } from "../lib/base";
 import { Check, Copy } from "lucide-react";
@@ -17,10 +18,7 @@ const HIGHLIGHT_SUBSET = [
   "ini", "diff", "sql", "java", "nginx", "powershell",
 ];
 
-function CodeBlock({ className, children, ...props }: React.ComponentProps<"code">) {
-  const match = /language-(\w+)/.exec(className || "");
-  const lang = match ? match[1] : "";
-  const code = String(children).replace(/\n$/, "");
+function CodeBlock({ lang, code }: { lang: string; code: string }) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -34,9 +32,10 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<"code
   };
 
   return (
-    <div className="relative group">
-      <div className="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border rounded-t-[var(--radius)]">
-        <span>{lang || "code"}</span>
+    <div className="my-4 rounded-[var(--radius)] border border-border overflow-hidden">
+      {/* Header — 固定在外部，不随代码滚动 */}
+      <div className="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border">
+        <span className="font-medium">{lang || "code"}</span>
         <button
           onClick={copy}
           className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
@@ -46,14 +45,36 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<"code
           <span className="text-[11px]">{copied ? "已复制" : "复制"}</span>
         </button>
       </div>
-      <code className={className} {...props}>{children}</code>
+      {/* 代码区 — 独立横向滚动 */}
+      <pre className="!m-0 !border-0 !rounded-none overflow-x-auto" tabIndex={0}>
+        <code className={"language-" + lang}>{code}</code>
+      </pre>
     </div>
   );
 }
 
 export default function Markdown({ content }: { content: string }) {
   const components: Components = {
-    code: CodeBlock as any,
+    // 拦截 <pre>，检测子元素是否为代码块
+    pre: ({ children }) => {
+      const child = children as ReactElement;
+      if (child?.props?.className?.startsWith?.("language-")) {
+        const lang = child.props.className.replace("language-", "");
+        const code = String(child.props.children || "").replace(/\n$/, "");
+        return <CodeBlock lang={lang} code={code} />;
+      }
+      // 普通 pre（非代码块）保持原样
+      return <pre className="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto">{children}</pre>;
+    },
+    // 让 <code> 自带的 pre 不干扰
+    code: ({ className, children, ...props }) => {
+      // 如果 className 以 language- 开头，说明是代码块，返回裸 code 供 pre 处理
+      if (className?.startsWith?.("language-")) {
+        return <code className={className} {...props}>{children}</code>;
+      }
+      // 行内 code
+      return <code className="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" {...props}>{children}</code>;
+    },
     a: ({ href, children, ...props }) => {
       const isExternal = href && (href.startsWith("http://") || href.startsWith("https://"));
       return (
