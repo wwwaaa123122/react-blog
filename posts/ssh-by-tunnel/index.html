@@ -8,9 +8,9 @@
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     
-    <script type="module" crossorigin src="/react-blog/assets/index-C7QBBKvH.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-B5QIbNjk.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
-    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-DWhrC7Bw.css">
+    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-c12VVUSS.css">
   <title>通过Cloudflare Tunnel使用SSH · Starlr Blog</title>
 <meta name="description" content="通过Cloudflare Tunnel连接无公网IP的服务">
 <link rel="canonical" href="https://xc-lr.cn/posts/ssh-by-tunnel/">
@@ -41,7 +41,7 @@
 <p>打开<a href="https://one.dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Zero Trust</a>团队名随便写一个，在左侧边栏找到 <strong>网络</strong> ，选择 <strong>连接器</strong> 。进来后点击 <strong>添加隧道</strong> ，隧道类型选项 <strong>Cloudflared</strong> ，名称依旧随便取，保存隧道后选择系统类型，下面我以ubuntu 64-bit 为例</p>
 <h3 id="安装-cloudflared">安装 cloudflared</h3>
 <p>可将给的shell脚本保存为.sh执行，连上需远程ssh的终端，执行</p>
-<pre><code class="hljs language-bash"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
+<pre><div class="relative group"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border rounded-t-[var(--radius)]"><span>bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><code class="hljs language-bash" node="[object Object]"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
 <span class="hljs-comment">#!/bin/bash</span>
 
 <span class="hljs-comment"># Add cloudflare gpg key</span>
@@ -54,17 +54,17 @@ curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | <span class="hl
 <span class="hljs-comment"># install cloudflared</span>
 <span class="hljs-built_in">sudo</span> apt-get update &amp;&amp; <span class="hljs-built_in">sudo</span> apt-get install cloudflared
 EOF
-</code></pre>
+</code></div></pre>
 <p>赋予权限</p>
-<pre><code class="hljs language-bash"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
-</code></pre>
+<pre><div class="relative group"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border rounded-t-[var(--radius)]"><span>bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><code class="hljs language-bash" node="[object Object]"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
+</code></div></pre>
 <p>执行脚本安装</p>
-<pre><code class="hljs language-bash">./Install_cloudflared.sh
-</code></pre>
+<pre><div class="relative group"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border rounded-t-[var(--radius)]"><span>bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><code class="hljs language-bash" node="[object Object]">./Install_cloudflared.sh
+</code></div></pre>
 <h3 id="连接">连接</h3>
 <p>执行连接页面给的 <em>让计算机每次启动时自动运行隧道</em> 这条命令</p>
-<pre><code class="hljs language-bash"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
-</code></pre>
+<pre><div class="relative group"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border rounded-t-[var(--radius)]"><span>bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><code class="hljs language-bash" node="[object Object]"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
+</code></div></pre>
 <p>若 <strong>Connectors</strong> 列表中出现了您的设备，则说明安装成功。</p>
 <h1>配置Tunnel及应用</h1>
 <h4 id="发布应用程序路由">发布应用程序路由</h4>
