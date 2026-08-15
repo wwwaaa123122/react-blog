@@ -6,7 +6,7 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发，作者为starlr/星辰旅人</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Sat, 15 Aug 2026 07:07:40 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2026 07:12:47 GMT</lastBuildDate>
   <item>
     <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知</title>
     <link>https://xc-lr.cn/posts/kick-live-notify/</link>
@@ -255,10 +255,10 @@ python3 kick_notify.py
 <p>不想用公共实例？自己部署也很简单。</p>
 <h2 id="先决条件">先决条件</h2>
 <ul>
-<li>一个 <a href="https://dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Cloudflare</a> 账号</li>
+<li>一个 <a href="https://dash.cloudflare.com" target="_blank" rel="noreferrer noopener">Cloudflare</a> 账号</li>
 <li>一个托管在 Cloudflare 上的域名</li>
 <li>Cloudflare API Token（需要 <strong>编辑 DNS</strong> 权限，仅目标域名所在区域即可）</li>
-<li><a href="https://nodejs.org/" node="[object Object]" target="_blank" rel="noreferrer noopener">Node.js</a> 环境</li>
+<li><a href="https://nodejs.org/" target="_blank" rel="noreferrer noopener">Node.js</a> 环境</li>
 </ul>
 <h2 id="步骤">步骤</h2>
 <h3 id="1-克隆项目">1. 克隆项目</h3>
@@ -694,11 +694,11 @@ loadButtonScript();
 <h1>准备</h1>
 <h2 id="先决条件">先决条件</h2>
 <ul>
-<li><a href="https://dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Cloudflare</a>账号，没有的自行注册一个，并需绑定一张信用卡（不会扣费）</li>
+<li><a href="https://dash.cloudflare.com" target="_blank" rel="noreferrer noopener">Cloudflare</a>账号，没有的自行注册一个，并需绑定一张信用卡（不会扣费）</li>
 <li>一个托管在Cloudflare上的域名</li>
 </ul>
 <h2 id="安装tunnel">安装Tunnel</h2>
-<p>打开<a href="https://one.dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Zero Trust</a>团队名随便写一个，在左侧边栏找到 <strong>网络</strong> ，选择 <strong>连接器</strong> 。进来后点击 <strong>添加隧道</strong> ，隧道类型选项 <strong>Cloudflared</strong> ，名称依旧随便取，保存隧道后选择系统类型，下面我以ubuntu 64-bit 为例</p>
+<p>打开<a href="https://one.dash.cloudflare.com" target="_blank" rel="noreferrer noopener">Zero Trust</a>团队名随便写一个，在左侧边栏找到 <strong>网络</strong> ，选择 <strong>连接器</strong> 。进来后点击 <strong>添加隧道</strong> ，隧道类型选项 <strong>Cloudflared</strong> ，名称依旧随便取，保存隧道后选择系统类型，下面我以ubuntu 64-bit 为例</p>
 <h3 id="安装-cloudflared">安装 cloudflared</h3>
 <p>可将给的shell脚本保存为.sh执行，连上需远程ssh的终端，执行</p>
 <pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
@@ -1117,7 +1117,7 @@ import { siteConfig } from &quot;../config&quot;;
 <h3 id="单语言404-astro">单语言404.astro</h3>
 <p>此方法直接在<strong>src/pages</strong>目录下创建404.astro即可<br/>
 <!-- -->由于我没有语言的404，这里附上二叉树树的404界面<br/>
-<!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.jpg" alt="2x-404" loading="lazy" node="[object Object]"/></p>
+<!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.jpg" alt="2x-404" loading="lazy"/></p>
 <pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">---
 import Layout from &quot;@/layouts/Layout.astro&quot;;
 import MainGridLayout from &quot;@/layouts/MainGridLayout.astro&quot;;
@@ -1184,11 +1184,11 @@ import { siteConfig } from &quot;@/config&quot;;
     <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
     <description>两个亚子还有礼服日奈</description>
     <content:encoded><![CDATA[<div class="markdown"><p>快哉快哉
-<img src="https://xc-lr.cn/react-blog/images/yazi.jpg" alt="亚子" loading="lazy" node="[object Object]"/><br/>
-<img src="https://xc-lr.cn/react-blog/images/rinai.jpg" alt="日奈" loading="lazy" node="[object Object]"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/yazi.jpg" alt="亚子" loading="lazy"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/rinai.jpg" alt="日奈" loading="lazy"/><br/>
 <!-- -->还有我的支付宝和QQ主题😋<br/>
-<img src="https://xc-lr.cn/react-blog/images/ba-alipay.jpg" alt="支付宝" loading="lazy" node="[object Object]"/><br/>
-<img src="https://xc-lr.cn/react-blog/images/ba-qq.jpg" alt="QQ" loading="lazy" node="[object Object]"/></p></div>]]></content:encoded>
+<img src="https://xc-lr.cn/react-blog/images/ba-alipay.jpg" alt="支付宝" loading="lazy"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/ba-qq.jpg" alt="QQ" loading="lazy"/></p></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/ba3cai.jpg" medium="image"/>
   </item>
   <item>
@@ -1198,12 +1198,12 @@ import { siteConfig } from &quot;@/config&quot;;
     <pubDate>Mon, 04 Aug 2025 00:00:00 GMT</pubDate>
     <description>让你的fuwari接入评论，并让它在文章末显示出</description>
     <content:encoded><![CDATA[<div class="markdown"><h1>Giscus</h1>
-<p>想要接入评论，肯定需要一个三方平台 <a href="https://giscus.app/zh-CN" node="[object Object]" target="_blank" rel="noreferrer noopener">Giscus</a>
+<p>想要接入评论，肯定需要一个三方平台 <a href="https://giscus.app/zh-CN" target="_blank" rel="noreferrer noopener">Giscus</a>
 Giscus就是一个非常合适的平台</p>
 <h1>配置Giscus</h1>
 <p>首先去github创建一个存储库，<strong>一定要是公开库</strong>
 然后在仓库设置中<strong>启用</strong><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">Discussion</code>功能<br/>
-<!-- -->前往<a href="https://giscus.app/zh-CN" node="[object Object]" target="_blank" rel="noreferrer noopener">https://giscus.app/zh-CN</a>
+<!-- -->前往<a href="https://giscus.app/zh-CN" target="_blank" rel="noreferrer noopener">https://giscus.app/zh-CN</a>
 在<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">仓库</code>一栏中点击第二步的蓝字安装giscus，最后填写自己的用户名及刚刚创建的仓库名称</p>
 <h3 id="映射">映射</h3>
 <p>我只建议使用<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">pathname</code>：以文章路径区分评论区，即使换域名也能匹配<br/>
@@ -1229,7 +1229,7 @@ Giscus就是一个非常合适的平台</p>
     <description>如何使用edgeone加速cf worker</description>
     <content:encoded><![CDATA[<div class="markdown"><p>有人问：主包主包cloudflare worker访问速度太慢了，有没有更强势的访问速度呢？</p>
 <p>有的兄弟，有的</p>
-<p>去 <a href="https://edgeone.ai/zh/get-free-plan" node="[object Object]" target="_blank" rel="noreferrer noopener">edgeone</a> 拿下不要钱的计划，添加你的域名，验证所有权，这步如果不会请退出</p>
+<p>去 <a href="https://edgeone.ai/zh/get-free-plan" target="_blank" rel="noreferrer noopener">edgeone</a> 拿下不要钱的计划，添加你的域名，验证所有权，这步如果不会请退出</p>
 <p>回到我们的cloudflare，选择你想加速的worker，添加自定义域，<strong>选择路由</strong>，选择你要加速的根域名，在你想要加速的子域+eo（方便区分），如我要加速www.91sssvip.top，就填wwweo.91sssvip.top/*，在去cloudflare添加dns解析A记录随便指向一个IP，但<strong>一定要开小黄云</strong>，保存回到edgeone</p>
 <p>添加加速域名，我就填www，v6随便，我个人选择关闭，源站就写刚刚路由的域名协议https即可，<strong>回源Host头一定要选使用源站域名</strong>，最后保存就好啦</p>
 <p>END</p></div>]]></content:encoded>
