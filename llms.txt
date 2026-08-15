@@ -15,6 +15,7 @@
 
 ## 文章
 
+- [archlinux使用体验](https://xc-lr.cn/posts/archlinux/): 关于我的archlinux的使用体验
 - [Kick 开播提醒：用 Python 监控直播并推送 QQ 通知](https://xc-lr.cn/posts/kick-live-notify/): 基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知
 - [MC免端口域名生成器使用与部署教程](https://xc-lr.cn/posts/mc-srv-worker/): 基于Cloudflare Workers的Minecraft免端口域名服务，让你的MC服务器玩家无需输入端口号
 - [关于本站迁移至Firefly](https://xc-lr.cn/posts/Why-to-Firefly/): 讲述从fuwari迁移至Firefly的一些原因

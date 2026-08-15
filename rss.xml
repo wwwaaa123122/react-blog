@@ -6,7 +6,37 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发，作者为starlr/星辰旅人</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Sat, 15 Aug 2026 07:36:54 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2026 07:40:19 GMT</lastBuildDate>
+  <item>
+    <title>archlinux使用体验</title>
+    <link>https://xc-lr.cn/posts/archlinux/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/archlinux/</guid>
+    <pubDate>Fri, 14 Aug 2026 00:00:00 GMT</pubDate>
+    <description>关于我的archlinux的使用体验</description>
+    <content:encoded><![CDATA[<div class="markdown"><h1>缘起</h1>
+<p>偶然间在B站上看到一个archlinux的使用视频，在观看完后，b站开始推送更多的arch视频，我也就开始了尝试</p>
+<h1>安装</h1>
+<p>arch安装对于安装到整个硬盘/虚拟机用户无疑是方便的，但在实际使用中，可能是windows/linux或想从debian/ubuntu迁移到archlinux。</p>
+<h2 id="分盘">分盘</h2>
+<h3 id="windows">windows</h3>
+<p>windows装双系统算是简单的了，进PE分一个100G的盘基本就够archlinux的日常使用了。</p>
+<h3 id="linux">linux</h3>
+<p>linux想要安装双系统，分盘时给我的感觉非常麻烦，他不能像windows一样进PE（大部分pe都是windows内核，所以对ext4分区不太友好，显示错误）。经过我一个多小时各种尝试，最终选择整盘安装😅。这玩意用linux应用分区又提示不支持，我整盘安装是因为这个盘就是给linux的原debian没什么重要数据。</p>
+<p>:::warning<br/>
+<!-- -->数据无价，在格式化硬盘前请先确认已备份重要数据<br/>
+<!-- -->:::</p>
+<h2 id="live系统安装">live系统安装</h2>
+<p>按自己主板方法进入live系统后，如果你是使用网线，可以一步到位直接使用archinstall命令。对于需使用无线网络的，使用iwctl。具体安装可以去B站自己搜索，这里给一个链接<a href="https://b23.tv/qo9xusQ" target="_blank" rel="noreferrer noopener">https://b23.tv/qo9xusQ</a></p>
+<h1>换源</h1>
+<p>安装系统后对于我们中国用户，第一件事必须是换源，这里推荐直接用成品一键脚本<a href="https://linuxmirrors.cn/" target="_blank" rel="noreferrer noopener">https://linuxmirrors.cn</a></p>
+<p>镜像源按自己喜好选</p>
+<h1>输入法</h1>
+<p>安装中文输入法应该算是第二步，b站教程也有，但这里说一下我踩的坑，我用的是GHOME桌面，设置里全翻了一遍也没找到pinyin，问豆沙包还让我选汉语，这里正确方式应该去应用列表里找到fcitx5配置，在这个应用里去选汉语</p>
+<h1>槽点</h1>
+<p>用惯了windows/debian系这些系统后，我相信下载应用习惯应该都是去浏览器搜索应用，而arch系由于没有使用apt，但拥有yay库，就出现了一个处境：<em>官网没有安装包，得单独搜yay包</em></p>
+<p>对于已经习惯用户，这个yay方式真的很麻烦</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/archlinux.png" medium="image"/>
+  </item>
   <item>
     <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知</title>
     <link>https://xc-lr.cn/posts/kick-live-notify/</link>

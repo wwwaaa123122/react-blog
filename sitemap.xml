@@ -31,6 +31,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://xc-lr.cn/posts/archlinux/</loc>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://xc-lr.cn/posts/kick-live-notify/</loc>
     <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
