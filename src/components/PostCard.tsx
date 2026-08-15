@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import type { Post } from "../types";
 import { formatDate } from "../lib/posts";
 import { assetUrl } from "../lib/base";
-import { siteConfig } from "../config/site";
 
 export default function PostCard({ post }: { post: Post }) {
   const cover = post.image
@@ -37,14 +36,6 @@ export default function PostCard({ post }: { post: Post }) {
       <p className="text-lg leading-relaxed mb-4 text-muted-foreground">
         {post.description}
       </p>
-      <div className="flex items-center gap-3">
-        <img
-          src={siteConfig.site_url + "/favicon.svg"}
-          className="size-11 rounded-full"
-          alt={siteConfig.author}
-        />
-        <div className="text-lg font-bold">{siteConfig.author}</div>
-      </div>
     </div>
   );
 }

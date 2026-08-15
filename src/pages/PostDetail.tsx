@@ -72,21 +72,11 @@ export default function PostDetail() {
           {post.title}
         </h1>
 
-        {/* Author + Date */}
-        <div className="flex items-center justify-center md:justify-start gap-4 mb-6 md:mb-12">
-          <img
-            src={siteConfig.site_url + "/favicon.svg"}
-            className="size-12 rounded-full"
-            alt={siteConfig.author}
-          />
-          <div>
-            <div className="text-lg font-bold">{siteConfig.author}</div>
-            <div className="text-muted-foreground">
-              <time>{formatDate(post.published)}</time>
-              <span className="mx-2">·</span>
-              {readingTime(post.words)}
-            </div>
-          </div>
+        {/* Date + Reading Time */}
+        <div className="flex items-center justify-center md:justify-start gap-2 mb-6 md:mb-12 text-muted-foreground">
+          <time>{formatDate(post.published)}</time>
+          <span className="mx-2">·</span>
+          {readingTime(post.words)}
         </div>
 
         {/* Tags */}

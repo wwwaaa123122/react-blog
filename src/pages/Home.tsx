@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { publishedPosts } from "../lib/posts";
 import { siteConfig } from "../config/site";
 import { formatDate } from "../lib/posts";
-import { assetUrl } from "../lib/base";
 import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
 
@@ -44,14 +43,7 @@ const PostCard = ({ post, hero = false }: { post: typeof publishedPosts[0]; hero
             <p className="text-lg leading-relaxed mb-4 text-muted-foreground">
               {post.description}
             </p>
-            <div className="flex items-center gap-3">
-              <img
-                src={siteConfig.site_url + "/favicon.svg"}
-                className="size-12 rounded-full"
-                alt={siteConfig.author}
-              />
-              <div className="text-xl font-bold">{siteConfig.author}</div>
-            </div>
+
           </div>
         </div>
       </section>
