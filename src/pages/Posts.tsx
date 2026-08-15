@@ -5,7 +5,6 @@ import { publishedPosts, getAllTags } from "../lib/posts";
 import PostCard from "../components/PostCard";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -67,8 +66,10 @@ export default function Posts() {
       <Breadcrumb items={[{ label: "文章", to: "/posts" }]} />
 
       <div className="mb-6">
-        <h1 className="text-[26px] font-extrabold tracking-[0.5px]">文章</h1>
-        <p className="mt-1.5 text-[14px] text-muted-foreground">
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight mb-2">
+          文章
+        </h1>
+        <p className="text-lg text-muted-foreground">
           共 {publishedPosts.length} 篇文章 · 分享技术、生活与热爱
         </p>
       </div>
@@ -111,14 +112,16 @@ export default function Posts() {
       </div>
 
       {pagePosts.length === 0 ? (
-        <Card className="py-14 text-center text-muted-foreground">
-          <div className="flex justify-center opacity-50">
-            <Search className="size-11" />
-          </div>
-          <p className="mt-2">没有找到相关文章，换个关键词试试吧</p>
-        </Card>
+        <div className="py-20 text-center">
+          <Search className="mx-auto size-12 text-muted-foreground opacity-50" />
+          <p className="mt-4 text-lg text-muted-foreground">没有找到相关文章，换个关键词试试吧</p>
+        </div>
       ) : (
-        pagePosts.map((post) => <PostCard key={post.slug} post={post} />)
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 mb-20">
+          {pagePosts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </div>
       )}
 
       {totalPages > 1 && (

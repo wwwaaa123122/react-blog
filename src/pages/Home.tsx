@@ -1,37 +1,107 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Mail } from "lucide-react";
-import { profileConfig } from "../config/profile";
+import { publishedPosts } from "../lib/posts";
 import { siteConfig } from "../config/site";
-import { publishedPosts, getAllTags } from "../lib/posts";
-import PostCard from "../components/PostCard";
-import { Icon } from "../components/icons";
+import { formatDate } from "../lib/posts";
+import { assetUrl } from "../lib/base";
 import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+const PostCard = ({ post, hero = false }: { post: typeof publishedPosts[0]; hero?: boolean }) => {
+  const cover = post.image
+    ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/"))
+    : undefined;
+
+  if (hero) {
+    return (
+      <section className="mb-16">
+        {cover && (
+          <div className="mb-8 md:mb-16">
+            <Link to={"/posts/" + post.slug}>
+              <img
+                src={cover}
+                alt={post.title}
+                className="w-full rounded-lg shadow-sm transition-shadow duration-200 hover:shadow-md"
+                loading="lazy"
+              />
+            </Link>
+          </div>
+        )}
+        <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">
+          <div>
+            <h3 className="mb-4 text-4xl lg:text-5xl leading-tight font-bold">
+              <Link
+                to={"/posts/" + post.slug}
+                className="hover:underline text-foreground"
+              >
+                {post.title}
+              </Link>
+            </h3>
+            <div className="mb-4 md:mb-0 text-lg text-muted-foreground">
+              <time>{formatDate(post.published)}</time>
+            </div>
+          </div>
+          <div>
+            <p className="text-lg leading-relaxed mb-4 text-muted-foreground">
+              {post.description}
+            </p>
+            <div className="flex items-center gap-3">
+              <img
+                src={siteConfig.site_url + "/favicon.svg"}
+                className="size-12 rounded-full"
+                alt={siteConfig.author}
+              />
+              <div className="text-xl font-bold">{siteConfig.author}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <div>
+      {cover && (
+        <div className="mb-5">
+          <Link to={"/posts/" + post.slug}>
+            <img
+              src={cover}
+              alt={post.title}
+              className="w-full rounded-lg shadow-sm transition-shadow duration-200 hover:shadow-md"
+              loading="lazy"
+            />
+          </Link>
+        </div>
+      )}
+      <h3 className="text-3xl mb-3 leading-snug font-bold">
+        <Link
+          to={"/posts/" + post.slug}
+          className="hover:underline text-foreground"
+        >
+          {post.title}
+        </Link>
+      </h3>
+      <div className="text-lg mb-4 text-muted-foreground">
+        <time>{formatDate(post.published)}</time>
+      </div>
+      <p className="text-lg leading-relaxed mb-4 text-muted-foreground">
+        {post.description}
+      </p>
+      <div className="flex items-center gap-3">
+        <img
+          src={siteConfig.site_url + "/favicon.svg"}
+          className="size-11 rounded-full"
+          alt={siteConfig.author}
+        />
+        <div className="text-lg font-bold">{siteConfig.author}</div>
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  const recent = publishedPosts.slice(0, 5);
-  const totalWords = publishedPosts.reduce((sum, p) => sum + p.words, 0);
-  const siteStart = new Date(siteConfig.since, 0, 1);
-  const days = Math.max(
-    0,
-    Math.floor((now.getTime() - siteStart.getTime()) / 86400000)
-  );
-
-  const stats = [
-    { value: publishedPosts.length, label: "文章" },
-    { value: getAllTags().length, label: "标签" },
-    { value: totalWords, label: "字数" },
-    { value: days, label: "建站天数" },
-  ];
+  const allPosts = publishedPosts;
+  const heroPost = allPosts[0];
+  const morePosts = allPosts.slice(1);
 
   return (
     <>
@@ -46,92 +116,34 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: jsonLd(websiteJsonLd()) }}
       />
 
-      {/* 个人资料 */}
-      <Card className="relative overflow-hidden px-8 py-10 text-center sm:px-10">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(500px 220px at 50% -40px, var(--primary-soft), transparent 70%)",
-          }}
-        />
-        <div className="relative">
-          <div className="relative inline-block">
-            <img
-              className="h-[110px] w-[110px] rounded-full border-4 border-background object-cover shadow-xl ring-2 ring-primary"
-              src={profileConfig.avatar}
-              alt={profileConfig.name}
-            />
-            <span
-              className="absolute bottom-[10px] right-[6px] h-[22px] w-[22px] rounded-full bg-green-500 ring-[3px] ring-background"
-              title="在线"
-            />
-          </div>
-          <h1 className="mt-[18px] text-[26px] font-extrabold tracking-[1px]">
-            {profileConfig.name}
+      <main>
+        {/* Intro */}
+        <section className="flex flex-col md:flex-row items-center md:justify-between mt-16 mb-16 md:mb-12">
+          <h1 className="text-5xl md:text-8xl font-bold tracking-tighter leading-tight md:pr-8">
+            Blog.
           </h1>
-          <p className="mt-1.5 text-[15px] text-muted-foreground">
-            {profileConfig.bio}
-          </p>
-          <span className="mt-2.5 inline-flex items-center gap-2 rounded-full bg-accent px-3.5 py-1 text-[13px] font-semibold text-accent-foreground">
-            ✦ {siteConfig.subtitle} ✦
-          </span>
+          <h4 className="text-center md:text-left text-lg mt-5 md:pl-8 text-muted-foreground">
+            {siteConfig.subtitle} · 分享技术、生活与热爱
+          </h4>
+        </section>
 
-          <div className="mt-5 flex flex-wrap justify-center gap-2.5">
-            {profileConfig.links.map((link) => (
-              <a
-                key={link.name}
-                href={link.url}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex items-center gap-[7px] rounded-full border border-border bg-card px-4 py-2 text-[13.5px] font-semibold text-muted-foreground transition-all hover:-translate-y-px hover:border-primary hover:text-primary"
-              >
-                {link.icon === "mail" ? (
-                  <Mail className="size-4" />
-                ) : (
-                  <Icon name={link.icon} size={16} />
-                )}
-                {link.name}
-              </a>
-            ))}
-          </div>
+        {/* Hero Post */}
+        {heroPost && <PostCard post={heroPost} hero />}
 
-          <div className="mt-6 flex justify-center border-t border-border pt-5">
-            {stats.map((s, i) => (
-              <div
-                key={s.label}
-                className={
-                  "max-w-[160px] flex-1 text-center" +
-                  (i > 0 ? " border-l border-border" : "")
-                }
-              >
-                <div className="text-[21px] font-extrabold text-primary">
-                  {s.value}
-                </div>
-                <div className="mt-0.5 text-[12.5px] text-muted-foreground">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Card>
-
-      {/* 最新文章 */}
-      <h2 className="mb-4 mt-8 flex items-center gap-2.5 text-[17px] font-bold">
-        <span className="h-[18px] w-1 rounded-[3px] bg-primary" />
-        最新文章
-      </h2>
-      {recent.map((post) => (
-        <PostCard key={post.slug} post={post} />
-      ))}
-      {publishedPosts.length > 5 && (
-        <div className="mt-2 text-center">
-          <Button asChild variant="outline">
-            <Link to="/posts">查看全部文章 →</Link>
-          </Button>
-        </div>
-      )}
+        {/* More Stories */}
+        {morePosts.length > 0 && (
+          <section>
+            <h2 className="mb-8 text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
+              More Stories
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 mb-20">
+              {morePosts.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
     </>
   );
 }

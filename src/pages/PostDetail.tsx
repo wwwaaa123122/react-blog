@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { BookOpen, Clock, Home, ListTree, Tag } from "lucide-react";
+import { BookOpen, Home, ListTree } from "lucide-react";
 import { getPostBySlug, formatDate, readingTime } from "../lib/posts";
 import Markdown, { slugify } from "../components/Markdown";
 import Seo from "../components/Seo";
@@ -7,7 +7,6 @@ import Breadcrumb from "../components/Breadcrumb";
 import { articleJsonLd, jsonLd } from "../lib/seo";
 import { siteConfig } from "../config/site";
 import { assetUrl } from "../lib/base";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -28,17 +27,15 @@ export default function PostDetail() {
 
   if (!post) {
     return (
-      <Card className="py-14 text-center text-muted-foreground">
-        <div className="flex justify-center opacity-50">
-          <BookOpen className="size-11" />
-        </div>
-        <p className="mt-3">文章不存在或已被删除</p>
-        <div className="mt-4">
+      <div className="py-20 text-center">
+        <BookOpen className="mx-auto size-12 text-muted-foreground opacity-50" />
+        <p className="mt-4 text-lg text-muted-foreground">文章不存在或已被删除</p>
+        <div className="mt-6">
           <Button asChild>
             <Link to="/posts">返回文章列表</Link>
           </Button>
         </div>
-      </Card>
+      </div>
     );
   }
 
@@ -69,63 +66,68 @@ export default function PostDetail() {
         dangerouslySetInnerHTML={{ __html: jsonLd(articleJsonLd(post)) }}
       />
 
-      <Card className="px-[40px] py-9 sm:p-6 sm:pt-7">
-        <header className="mb-6 border-b border-border pb-5">
-          <h1 className="text-[26px] font-extrabold leading-snug tracking-[0.3px] [overflow-wrap:anywhere]">
-            {post.title}
-          </h1>
-          <div className="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-[13px] text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5">
-              <Clock className="size-3.5" />
-              {formatDate(post.published)}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <BookOpen className="size-3.5" />
-              {readingTime(post.words)} · {post.words} 字
-            </span>
-            {post.category && (
-              <span className="inline-flex items-center gap-1.5">
-                <Tag className="size-3.5" />
-                {post.category}
-              </span>
-            )}
-          </div>
-          {post.tags.length > 0 && (
-            <div className="mt-3.5 flex flex-wrap gap-2">
-              {post.tags.map((t) => (
-                <Link
-                  key={t}
-                  to={"/posts?tag=" + encodeURIComponent(t)}
-                  className="transition-opacity hover:opacity-80"
-                >
-                  <Badge variant="secondary">{t}</Badge>
-                </Link>
-              ))}
-            </div>
-          )}
-        </header>
+      <article className="mb-20">
+        {/* Post Title */}
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none mb-8 text-center md:text-left [overflow-wrap:anywhere]">
+          {post.title}
+        </h1>
 
-        {cover && (
+        {/* Author + Date */}
+        <div className="flex items-center justify-center md:justify-start gap-4 mb-6 md:mb-12">
           <img
-            className="mb-6 max-h-[320px] w-full rounded-xl object-cover"
-            src={cover}
-            alt={post.title}
-            loading="lazy"
+            src={siteConfig.site_url + "/favicon.svg"}
+            className="size-12 rounded-full"
+            alt={siteConfig.author}
           />
+          <div>
+            <div className="text-lg font-bold">{siteConfig.author}</div>
+            <div className="text-muted-foreground">
+              <time>{formatDate(post.published)}</time>
+              <span className="mx-2">·</span>
+              {readingTime(post.words)}
+            </div>
+          </div>
+        </div>
+
+        {/* Tags */}
+        {post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-8">
+            {post.tags.map((t) => (
+              <Link
+                key={t}
+                to={"/posts?tag=" + encodeURIComponent(t)}
+              >
+                <Badge variant="secondary">{t}</Badge>
+              </Link>
+            ))}
+          </div>
         )}
 
+        {/* Cover Image */}
+        {cover && (
+          <div className="mb-8 md:mb-16 -mx-5 md:mx-0">
+            <img
+              className="w-full rounded-lg shadow-sm"
+              src={cover}
+              alt={post.title}
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        {/* TOC */}
         {toc.length > 1 && (
-          <details className="mb-5">
-            <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-[14px] font-semibold text-muted-foreground [&::-webkit-details-marker]:hidden">
+          <details className="mb-8 max-w-2xl mx-auto">
+            <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-muted-foreground [&::-webkit-details-marker]:hidden">
               <ListTree className="size-4" />
               目录
             </summary>
-            <ul className="mt-2.5 space-y-0.5 border-l border-border pl-5 text-[13.5px] leading-7 text-muted-foreground">
+            <ul className="mt-3 space-y-1 border-l border-border pl-5 text-sm leading-7 text-muted-foreground">
               {toc.map((item, i) => (
                 <li key={i} style={{ paddingLeft: (item.level - 2) * 14 }}>
                   <a
                     href={"#" + slugify(item.text)}
-                    className="transition-colors hover:text-primary"
+                    className="transition-colors hover:text-foreground"
                   >
                     {item.text}
                   </a>
@@ -135,18 +137,21 @@ export default function PostDetail() {
           </details>
         )}
 
-        <Markdown content={post.content} />
+        {/* Post Body */}
+        <div className="max-w-2xl mx-auto">
+          <Markdown content={post.content} />
+        </div>
 
-        <footer className="mt-9 border-t border-border pt-5 text-[13.5px] text-muted-foreground">
+        {/* Footer */}
+        <footer className="mt-12 max-w-2xl mx-auto border-t border-border pt-6 text-sm text-muted-foreground">
           <p>
-            本文发布于 {formatDate(post.published)} · 转载需注明出处 · ©{" "}
-            {currentYear} 星辰旅人
+            本文发布于 {formatDate(post.published)} · 转载需注明出处 · © {currentYear} {siteConfig.author}
           </p>
-          <div className="mt-3.5 flex flex-wrap gap-2.5">
-            <Button asChild variant="outline">
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button asChild variant="outline" size="sm">
               <Link to="/posts">← 返回文章列表</Link>
             </Button>
-            <Button asChild>
+            <Button asChild variant="outline" size="sm">
               <Link to="/">
                 <Home className="size-4" />
                 首页
@@ -154,7 +159,7 @@ export default function PostDetail() {
             </Button>
           </div>
         </footer>
-      </Card>
+      </article>
     </>
   );
 }

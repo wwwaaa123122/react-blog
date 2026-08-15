@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import { BookOpen, CalendarDays, Tag } from "lucide-react";
 import type { Post } from "../types";
-import { formatDate, readingTime } from "../lib/posts";
+import { formatDate } from "../lib/posts";
 import { assetUrl } from "../lib/base";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { siteConfig } from "../config/site";
 
 export default function PostCard({ post }: { post: Post }) {
   const cover = post.image
@@ -12,57 +10,41 @@ export default function PostCard({ post }: { post: Post }) {
     : undefined;
 
   return (
-    <Card className="mb-4 p-[22px] transition-shadow hover:shadow-lg">
-      <div className="flex gap-[18px]">
-        <div className="min-w-0 flex-1">
-          <h3 className="text-[17.5px] font-bold leading-snug text-foreground">
-            <Link
-              to={"/posts/" + post.slug}
-              className="transition-colors hover:text-primary [overflow-wrap:anywhere]"
-            >
-              {post.title}
-            </Link>
-          </h3>
-          {post.description && (
-            <p className="mt-[7px] line-clamp-2 text-[13.8px] leading-relaxed text-muted-foreground">
-              {post.description}
-            </p>
-          )}
-          <div className="mt-3 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-[12.5px] text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5">
-              <CalendarDays className="size-3" />
-              {formatDate(post.published)}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <BookOpen className="size-3" />
-              {readingTime(post.words)}
-            </span>
-            {post.category && (
-              <span className="inline-flex items-center gap-1.5">
-                <Tag className="size-3" />
-                {post.category}
-              </span>
-            )}
-            {post.tags.slice(0, 3).map((tag) => (
-              <Link
-                key={tag}
-                to={"/posts?tag=" + encodeURIComponent(tag)}
-                className="transition-opacity hover:opacity-80"
-              >
-                <Badge variant="secondary">{tag}</Badge>
-              </Link>
-            ))}
-          </div>
+    <div>
+      {cover && (
+        <div className="mb-5">
+          <Link to={"/posts/" + post.slug}>
+            <img
+              src={cover}
+              alt={post.title}
+              className="w-full rounded-lg shadow-sm transition-shadow duration-200 hover:shadow-md"
+              loading="lazy"
+            />
+          </Link>
         </div>
-        {cover && (
-          <img
-            className="h-[100px] w-[150px] shrink-0 rounded-[9px] bg-muted object-cover"
-            src={cover}
-            alt=""
-            loading="lazy"
-          />
-        )}
+      )}
+      <h3 className="text-3xl mb-3 leading-snug font-bold">
+        <Link
+          to={"/posts/" + post.slug}
+          className="hover:underline text-foreground"
+        >
+          {post.title}
+        </Link>
+      </h3>
+      <div className="text-lg mb-4 text-muted-foreground">
+        <time>{formatDate(post.published)}</time>
       </div>
-    </Card>
+      <p className="text-lg leading-relaxed mb-4 text-muted-foreground">
+        {post.description}
+      </p>
+      <div className="flex items-center gap-3">
+        <img
+          src={siteConfig.site_url + "/favicon.svg"}
+          className="size-11 rounded-full"
+          alt={siteConfig.author}
+        />
+        <div className="text-lg font-bold">{siteConfig.author}</div>
+      </div>
+    </div>
   );
 }

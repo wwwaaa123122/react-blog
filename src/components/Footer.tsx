@@ -1,58 +1,30 @@
-import { Link } from "react-router-dom";
 import { siteConfig } from "../config/site";
-import { assetUrl } from "../lib/base";
 
 export default function Footer() {
   return (
-    <footer className="mt-auto border-t border-border py-6 text-center text-[13px] text-muted-foreground">
+    <footer className="border-t border-border bg-muted/30">
       <div className="mx-auto w-full max-w-[880px] px-5">
-        <p>
-          © {new Date().getFullYear()}{" "}
-          <Link to="/" className="text-muted-foreground transition-colors hover:text-primary">
-            {siteConfig.author}
-          </Link>
-          {" · "}
-          {siteConfig.subtitle} · Powered by React &amp; Vite
-        </p>
-        <p className="mt-1">
-          <Link to="/" className="text-muted-foreground transition-colors hover:text-primary">
-            首页
-          </Link>
-          {" · "}
-          <Link to="/posts" className="text-muted-foreground transition-colors hover:text-primary">
-            文章
-          </Link>
-          {" · "}
-          <Link to="/archive" className="text-muted-foreground transition-colors hover:text-primary">
-            归档
-          </Link>
-          {" · "}
-          <Link to="/friends" className="text-muted-foreground transition-colors hover:text-primary">
-            友链
-          </Link>
-          {" · "}
-          <Link to="/about" className="text-muted-foreground transition-colors hover:text-primary">
-            关于
-          </Link>
-          {" · "}
-          <a
-            href={assetUrl("llms.txt")}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-muted-foreground transition-colors hover:text-primary"
-          >
-            llms.txt
-          </a>
-          {" · "}
-          <a
-            href={assetUrl("sitemap.xml")}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-muted-foreground transition-colors hover:text-primary"
-          >
-            sitemap
-          </a>
-        </p>
+        <div className="py-16 flex flex-col lg:flex-row items-center">
+          <h3 className="text-4xl lg:text-[2.5rem] font-bold tracking-tighter leading-tight text-center lg:text-left mb-10 lg:mb-0 lg:pr-4 lg:w-1/2">
+            {siteConfig.subtitle}
+          </h3>
+          <div className="flex flex-col lg:flex-row justify-center items-center lg:pl-4 lg:w-1/2 gap-4">
+            <a
+              href="/"
+              className="mx-3 bg-foreground hover:bg-foreground/80 text-background font-bold py-3 px-12 lg:px-8 duration-200 transition-colors text-sm rounded-lg"
+            >
+              {siteConfig.author}
+            </a>
+            <a
+              href="https://github.com/wwwaaa123122"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="mx-3 font-bold hover:underline text-sm"
+            >
+              View on GitHub
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );
