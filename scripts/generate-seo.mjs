@@ -95,7 +95,6 @@ ${posts
 const robots = `# robots.txt for ${baseUrl}
 User-agent: *
 Allow: /
-Disallow: /admin
 
 Sitemap: ${baseUrl}/sitemap.xml
 `;

@@ -54,7 +54,7 @@ export default function Seo({
     }
     canonical.setAttribute("href", absoluteUrl(path || "/"));
 
-    // noindex（如后台管理页）
+    // noindex（需要屏蔽索引的页面）
     let robots = document.querySelector('meta[name="robots"]');
     if (noindex) {
       if (!robots) {

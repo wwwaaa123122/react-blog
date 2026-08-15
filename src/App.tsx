@@ -6,7 +6,6 @@ import PostDetail from "./pages/PostDetail";
 import Friends from "./pages/Friends";
 import About from "./pages/About";
 import Archive from "./pages/Archive";
-import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -19,7 +18,6 @@ export default function App() {
         <Route path="/friends" element={<Friends />} />
         <Route path="/about" element={<About />} />
         <Route path="/archive" element={<Archive />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

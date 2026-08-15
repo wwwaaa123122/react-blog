@@ -6,7 +6,6 @@ export const navLinks: NavLink[] = [
   { name: "归档", to: "/archive" },
   { name: "友链", to: "/friends" },
   { name: "关于", to: "/about" },
-  { name: "管理", to: "/admin" },
   { name: "GitHub", url: "https://github.com/wwwaaa123122", external: true },
   {
     name: "统计",

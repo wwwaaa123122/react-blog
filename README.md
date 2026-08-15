@@ -9,7 +9,7 @@
 | `/` | 首页：个人资料（头像 / 名字 / 签名 / 社交链接 / 站点统计）+ 最新文章 |
 | `/posts` | 文章列表：关键词搜索、标签筛选、分页 |
 | `/posts/:slug` | 文章详情：Markdown 渲染、代码高亮、目录、阅读时间 |
-| `/friends` | 友链：友链卡片、本站信息（可复制）、申请流程、注意事项 |
+| `/friends` | 友链：友链卡片（头像/描述/标签）、本站信息（一键复制）、申请模板、注意事项 |
 | `/about` | 关于我：自我介绍、联系方式、成年倒计时 |
 | `/archive` | 归档：按年份分组 |
 | `*` | 404 页面 |
@@ -47,13 +47,13 @@ src/
 
 ## 截图
 见 `docs/screenshots/`（home / posts / post / friends / about / archive）。
-## Pages CMS 后台管理
+## 内容管理（Pages CMS）
 
 本站已接入 [Pages CMS](https://pagescms.org/docs/)（基于 Git 的静态站 CMS），可以**在线编辑文章、个人资料、友链与站点配置**，保存后自动提交到仓库并由 GitHub Actions 重新构建部署。
 
 ### 使用方式
 
-1. 访问博客的 `/admin` 页面（或直接打开 [app.pagescms.org](https://app.pagescms.org/)）；
+1. 直接打开 [app.pagescms.org](https://app.pagescms.org/)（仓库已配置 .pages.yml，无需站内后台页）；
 2. 使用 GitHub 登录，并安装 **Pages CMS GitHub App** 到本仓库；
 3. 打开仓库，即可看到 `.pages.yml` 中定义的 4 个内容区域：
    - **文章**（`src/posts/*.md`，frontmatter + Markdown 正文，支持上传封面图）
@@ -69,15 +69,14 @@ src/
 
 - **`sitemap.xml`** — 全站 URL 列表（首页 / 列表页 / 每篇文章），含 lastmod、changefreq、priority
 - **`llms.txt`** — 遵循 [llmstxt.org](https://llmstxt.org/) 规范，为 LLM 提供站点与文章索引（首页 `<link>` 与页脚均有引用）
-- **`robots.txt`** — 允许爬虫抓取，屏蔽 `/admin` 后台，并指向 `sitemap.xml`
+- **`robots.txt`** — 允许爬虫抓取并指向 `sitemap.xml`
 
 站点基础 URL 取自 `src/data/site.json` 的 `site_url`（默认 `https://xc-lr.cn`），部署到其他域名时修改它后重新构建即可。
 
 页面侧还内置：
-- **面包屑导航**（含 schema.org BreadcrumbList JSON-LD）— 文章 / 归档 / 友链 / 关于 / 管理页
+- **面包屑导航**（含 schema.org BreadcrumbList JSON-LD）— 文章 / 归档 / 友链 / 关于
 - **每页 SEO**（`<title>` / meta description / keywords / canonical）— 由 `Seo` 组件按路由设置
 - **结构化数据** — 首页 WebSite JSON-LD、文章页 Article JSON-LD
-- **后台页 noindex** — `/admin` 自动加入 `meta robots: noindex, nofollow`
 ## 部署说明
 
 - **GitHub Pages 子路径部署**：CI（`.github/workflows/deploy.yml`）构建时传入 `VITE_BASE=/react-blog/`（与仓库名一致），产物部署到 `pages` 分支；`404.html` 已内置 SPA fallback，深链（如 `/posts/xxx`）可直接访问。

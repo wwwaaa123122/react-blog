@@ -13,9 +13,9 @@
     },
     {
       "title": "Acofork Blog",
-      "imgurl": "https://avatars.githubusercontent.com/u/71391258?v=4&s=640",
+      "imgurl": "https://q1.qlogo.cn/g?b=qq&nk=2726730791&s=640",
       "desc": "Acofork's personal blog",
-      "siteurl": "https://acofork.com",
+      "siteurl": "https://2x.nz",
       "tags": [
         "Blog"
       ],
@@ -23,12 +23,12 @@
       "enabled": true
     },
     {
-      "title": "伤心的导航网",
-      "imgurl": "",
-      "desc": "一个导航网站",
-      "siteurl": "https://ll12.cyou",
+      "title": "Donghai",
+      "imgurl": "https://mgrowup.com/avatar.webp",
+      "desc": "真诚记录，生活值得",
+      "siteurl": "https://mgrowup.com/",
       "tags": [
-        "导航"
+        "Blog"
       ],
       "weight": 8,
       "enabled": true

@@ -11,7 +11,6 @@ const routes = [
   ["archive", "/archive"],
   ["friends", "/friends"],
   ["about", "/about"],
-  ["admin", "/admin"],
   ["post-detail", "/posts/kick-live-notify/"],
   ["404", "/definitely-not-a-page"],
 ];

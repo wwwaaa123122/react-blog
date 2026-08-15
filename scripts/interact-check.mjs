@@ -38,15 +38,12 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
   await page.getByRole("menuitem", { name: "深色模式" }).click();
   await page.waitForTimeout(300);
   const isDark = await page.evaluate(() => document.documentElement.classList.contains("dark"));
-  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
   if (isDark) ok("主题切换 -> dark class 生效");
   else fail("主题切换", "dark class 未生效");
-  // 刷新保持
   await page.reload({ waitUntil: "networkidle" });
   const persists = await page.evaluate(() => document.documentElement.classList.contains("dark"));
   if (persists) ok("主题持久化(localStorage)");
   else fail("主题持久化", "刷新后丢失");
-  // 切回浅色
   await page.getByRole("button", { name: "切换主题" }).click();
   await page.getByRole("menuitem", { name: "浅色模式" }).click();
   const back = await page.evaluate(() => !document.documentElement.classList.contains("dark"));
@@ -55,16 +52,12 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
   await page.close();
 }
 
-// --- 3. 搜索过滤 + 分页 ---
+// --- 3. 搜索过滤 + 分页 + 标签过滤 ---
 {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await page.goto(base + "/posts", { waitUntil: "networkidle" });
-  const countBefore = await page.locator("article, [data-slot='card']").count();
   await page.getByPlaceholder("搜索文章标题、描述或内容…").fill("Cloudflare");
   await page.waitForTimeout(400);
-  const cardsAfterSearch = await page.locator("a[href^='/posts/']").count();
-  const hasPagination = await page.getByRole("navigation", { name: "pagination" }).count();
-  // 清空搜索看分页
   await page.getByRole("button", { name: "清除搜索" }).click();
   await page.waitForTimeout(300);
   const paginationVisible = await page.getByRole("navigation", { name: "pagination" }).count();
@@ -74,9 +67,8 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
     if (totalBtns >= 4) ok("分页页数按钮渲染 (" + totalBtns + " 个)");
     else fail("分页按钮", "仅 " + totalBtns + " 个");
   } else {
-    fail("分页", "搜索影响分页渲染");
+    fail("分页", "未渲染");
   }
-  // 标签过滤
   const tagBtns = await page.locator("button[data-slot='badge']").count();
   if (tagBtns > 0) ok("标签过滤按钮渲染 (" + tagBtns + " 个)");
   else fail("标签过滤", "无按钮");
@@ -100,7 +92,7 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
   await page.close();
 }
 
-// --- 5. 复制按钮（首页无需, 友链页) ---
+// --- 5. 复制按钮 ---
 {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await page.goto(base + "/friends", { waitUntil: "networkidle" });
@@ -108,7 +100,6 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
   const copyBtns = await page.getByRole("button", { name: "复制" }).count();
   if (copyBtns >= 5) ok("复制按钮渲染 (" + copyBtns + " 个)");
   else fail("复制按钮", "仅 " + copyBtns + " 个");
-  // 点击第一个复制按钮并检查图标切换为 check
   await page.getByRole("button", { name: "复制" }).first().click();
   await page.waitForTimeout(200);
   const checkIcon = await page.locator(".lucide-check").count();
@@ -127,7 +118,6 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
   else fail("目录", "未渲染");
   if (hljs > 0) ok("代码高亮渲染 (" + hljs + " 个)");
   else fail("代码高亮", "无 .hljs");
-  const mdTables = await page.locator(".markdown table").count();
   await page.close();
 }
 
@@ -138,7 +128,6 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
     ["/posts", "data-slot='input'", 1],
     ["/archive", "data-slot='badge'", 1],
     ["/about", "data-slot='avatar'", 1],
-    ["/admin", "data-slot='card'", 1],
     ["/posts/kick-live-notify/", "data-slot='card'", 1],
   ];
   for (const [path, sel, min] of checks) {
