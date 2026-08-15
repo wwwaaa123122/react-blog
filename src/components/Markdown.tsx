@@ -66,7 +66,7 @@ export default function Markdown({ content }: { content: string }) {
       return <pre className="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto">{children}</pre>;
     },
     // 让 <code> 自带的 pre 不干扰
-    code: ({ className, children, ...props }) => {
+    code: ({ className, children }: any) => {
       // 如果 className 以 language- 开头，说明是代码块，返回裸 code 供 pre 处理
       if (className?.startsWith?.("language-")) {
         return <code className={className}>{children}</code>;
