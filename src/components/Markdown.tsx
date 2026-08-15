@@ -3,7 +3,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import type { Components } from "react-markdown";
-import type { ReactElement } from "react";
 import { rewriteImagePaths } from "../lib/posts";
 import { assetUrl } from "../lib/base";
 import { Check, Copy } from "lucide-react";
@@ -57,7 +56,7 @@ export default function Markdown({ content }: { content: string }) {
   const components: Components = {
     // 拦截 <pre>，检测子元素是否为代码块
     pre: ({ children }) => {
-      const child = children as ReactElement;
+      const child = children as any;
       if (child?.props?.className?.startsWith?.("language-")) {
         const lang = child.props.className.replace("language-", "");
         const code = String(child.props.children || "").replace(/\n$/, "");
