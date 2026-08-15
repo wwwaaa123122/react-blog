@@ -26,8 +26,7 @@ export default function Posts() {
     if (keyword.trim()) {
       const kw = keyword.trim().toLowerCase();
       list = list.filter(
-        (p) =>
-          p.title.toLowerCase().includes(kw) ||
+        (p) => p.title.toLowerCase().includes(kw) ||
           p.description.toLowerCase().includes(kw) ||
           p.content.toLowerCase().includes(kw) ||
           p.tags.some((t) => t.toLowerCase().includes(kw))
@@ -50,26 +49,20 @@ export default function Posts() {
 
   return (
     <>
-      <Seo
-        title="文章"
-        description={publishedPosts.length + " 篇技术文章，涵盖服务器部署、内网穿透、Cloudflare、容器化等主题"}
-        path="/posts"
-      />
+      <Seo title="文章" description={publishedPosts.length + " 篇技术文章"} path="/posts" />
       <Breadcrumb items={[{ label: "文章", to: "/posts" }]} />
 
-      <div className="mb-6 mt-8">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-2">文章</h1>
-        <p className="text-base text-muted-foreground">共 {publishedPosts.length} 篇文章 · 分享技术、生活与热爱</p>
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">文章</h1>
+        <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章</p>
       </div>
 
-      <div className="relative mb-5">
-        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      {/* Search */}
+      <div className="relative mb-4">
+        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder="搜索文章…"
-          className="h-10 rounded-full pl-9 pr-10 text-sm"
+          type="text" value={keyword} onChange={(e) => setKeyword(e.target.value)}
+          placeholder="搜索文章…" className="h-10 pl-9 pr-10 text-sm rounded-xl"
         />
         {keyword && (
           <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 size-8" onClick={() => setKeyword("")} aria-label="清除搜索">
@@ -78,7 +71,8 @@ export default function Posts() {
         )}
       </div>
 
-      <div className="mb-5 flex flex-wrap gap-1.5">
+      {/* Tags */}
+      <div className="flex flex-wrap gap-1.5 mb-6">
         <Badge variant={tag === "" ? "default" : "secondary"} asChild>
           <button type="button" className="cursor-pointer" onClick={() => selectTag("")}>全部</button>
         </Badge>
@@ -89,19 +83,21 @@ export default function Posts() {
         ))}
       </div>
 
+      {/* Grid */}
       {pagePosts.length === 0 ? (
         <div className="py-20 text-center">
-          <Search className="mx-auto size-8 text-muted-foreground opacity-50" />
-          <p className="mt-3 text-sm text-muted-foreground">没有找到相关文章</p>
+          <Search className="mx-auto size-8 text-muted-foreground opacity-40 mb-3" />
+          <p className="text-sm text-muted-foreground">没有找到相关文章</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-5 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
           {pagePosts.map((post) => <PostCard key={post.slug} post={post} />)}
         </div>
       )}
 
+      {/* Pagination */}
       {totalPages > 1 && (
-        <Pagination className="mb-12">
+        <Pagination className="mb-10">
           <PaginationContent>
             <Button variant="outline" size="icon" disabled={current === 1} onClick={() => setPage(current - 1)} aria-label="上一页">
               <ChevronLeft className="size-4" />

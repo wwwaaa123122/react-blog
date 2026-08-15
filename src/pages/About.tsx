@@ -4,7 +4,6 @@ import { profileConfig } from "../config/profile";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
-import { assetUrl } from "../lib/base";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -14,13 +13,13 @@ function Countdown() {
   const [text, setText] = useState("");
   useEffect(() => {
     const update = () => {
-      const distance = ADULT_DATE - Date.now();
-      if (distance <= 0) { setText("成年了！🎉🎉🎉"); return false; }
-      const days = Math.floor(distance / 86400000);
-      const hours = Math.floor((distance % 86400000) / 3600000);
-      const minutes = Math.floor((distance % 3600000) / 60000);
-      const seconds = Math.floor((distance % 60000) / 1000);
-      setText(days + " 天 " + hours + " 小时 " + minutes + " 分 " + seconds + " 秒");
+      const d = ADULT_DATE - Date.now();
+      if (d <= 0) { setText("成年了！"); return false; }
+      const days = Math.floor(d / 86400000);
+      const h = Math.floor((d % 86400000) / 3600000);
+      const m = Math.floor((d % 3600000) / 60000);
+      const s = Math.floor((d % 60000) / 1000);
+      setText(days + " 天 " + h + " 小时 " + m + " 分 " + s + " 秒");
       return true;
     };
     update();
@@ -40,65 +39,40 @@ export default function About() {
     <>
       <Seo title="关于我" description="认识一下这个博客的主人" path="/about" />
       <Breadcrumb items={[{ label: "关于", to: "/about" }]} />
-
-      <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-2">关于我</h1>
-        <p className="text-base text-muted-foreground">认识一下这个博客的主人</p>
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">关于我</h1>
+        <p className="text-sm text-muted-foreground">认识一下这个博客的主人</p>
       </div>
-
-      <div className="mb-8">
+      <div className="max-w-[600px]">
         <div className="flex items-center gap-4 mb-6">
-          <Avatar size="lg" className="size-16">
+          <Avatar size="lg" className="size-14">
             <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
             <AvatarFallback>{profileConfig.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <h2 className="text-2xl font-bold">{profileConfig.name}</h2>
-            <p className="text-muted-foreground">{profileConfig.bio}</p>
+            <h2 className="text-lg font-bold">{profileConfig.name}</h2>
+            <p className="text-sm text-muted-foreground">{profileConfig.bio}</p>
           </div>
         </div>
 
-        <div className="markdown">
+        <div className="prose-sm text-muted-foreground space-y-3 mb-8">
           <p>一个初中生，喜欢折腾技术、打游戏、看番。</p>
           <p>这个博客主要分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN 优化、容器化部署等教程与实践经验，偶尔记录生活。</p>
         </div>
 
-        <h3 className="text-2xl font-bold mt-8 mb-4">联系我</h3>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
-            <img className="size-10 shrink-0 rounded-lg object-cover" src={assetUrl("/images/qiwei.svg")} alt="企业微信" />
-            <div className="min-w-0">
-              <p className="text-sm text-muted-foreground">企业微信</p>
-              <p className="font-semibold [overflow-wrap:anywhere]">星辰旅人</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
-            <img className="size-10 shrink-0 rounded-lg object-cover" src={assetUrl("/images/QQ.svg")} alt="QQ" />
-            <div className="min-w-0">
-              <p className="text-sm text-muted-foreground">QQ</p>
-              <p className="font-semibold [overflow-wrap:anywhere]">3385016019</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
-            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent text-accent-foreground">
-              <Mail className="size-5" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-sm text-muted-foreground">邮箱</p>
-              <p className="font-semibold [overflow-wrap:anywhere]"><a href="mailto:i@mcxclr.top" className="hover:underline">i@mcxclr.top</a></p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-5 flex flex-wrap gap-2.5">
-          <Button asChild variant="outline" className="rounded-full">
-            <a href="https://space.bilibili.com/3493078983772353" target="_blank" rel="noreferrer noopener"><Icon name="bilibili" size={16} />Bilibili</a>
+        <h3 className="text-sm font-bold mb-3">联系方式</h3>
+        <div className="flex flex-wrap gap-2 mb-6">
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <a href="https://space.bilibili.com/3493078983772353" target="_blank" rel="noreferrer noopener"><Icon name="bilibili" size={14} /> Bilibili</a>
           </Button>
-          <Button asChild variant="outline" className="rounded-full">
-            <a href="https://t.me/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="telegram" size={16} />Telegram</a>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <a href="https://t.me/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="telegram" size={14} /> Telegram</a>
           </Button>
-          <Button asChild variant="outline" className="rounded-full">
-            <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="github" size={16} />GitHub</a>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="github" size={14} /> GitHub</a>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <a href="mailto:i@mcxclr.top"><Mail className="size-3.5" /> 邮箱</a>
           </Button>
         </div>
 

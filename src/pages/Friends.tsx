@@ -58,8 +58,8 @@ export default function Friends() {
       <Breadcrumb items={[{ label: "友链", to: "/friends" }]} />
       <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-2">友链</h1>
-          <p className="text-base text-muted-foreground">与优秀的朋友们一起成长</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">友链</h1>
+          <p className="text-sm text-muted-foreground">与优秀的朋友们一起成长</p>
         </div>
         <Badge variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-sm"><Users className="size-3.5" />共 {friends.length} 位朋友</Badge>
       </div>

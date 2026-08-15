@@ -11,45 +11,26 @@ export default function Archive() {
     if (!byYear.has(year)) byYear.set(year, []);
     byYear.get(year)!.push(post);
   }
-  const years = Array.from(byYear.entries()).sort((a, b) =>
-    a[0] < b[0] ? 1 : -1
-  );
+  const years = Array.from(byYear.entries()).sort((a, b) => a[0] < b[0] ? 1 : -1);
 
   return (
     <>
       <Seo title="归档" description="全部文章按年份归档" path="/archive" />
       <Breadcrumb items={[{ label: "归档", to: "/archive" }]} />
-
-      <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-2">
-          归档
-        </h1>
-        <p className="text-base text-muted-foreground">
-          共 {publishedPosts.length} 篇文章 · 按年份归档
-        </p>
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">归档</h1>
+        <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章 · 按年份归档</p>
       </div>
-
       {years.map(([year, posts]) => (
-        <section key={year} className="mb-10">
-          <h2 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-3">
-            {year}
-            <Badge variant="secondary" className="text-sm">{posts.length} 篇</Badge>
+        <section key={year} className="mb-8">
+          <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
+            {year} <Badge variant="secondary" className="text-xs">{posts.length} 篇</Badge>
           </h2>
-          <ul className="list-none">
+          <ul className="space-y-1">
             {posts.map((post) => (
-              <li
-                className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-dashed border-border py-3"
-                key={post.slug}
-              >
-                <span className="shrink-0 text-sm tabular-nums text-muted-foreground">
-                  {formatDate(post.published)}
-                </span>
-                <Link
-                  className="min-w-0 text-lg font-medium text-foreground transition-colors hover:text-primary [overflow-wrap:anywhere]"
-                  to={"/posts/" + post.slug}
-                >
-                  {post.title}
-                </Link>
+              <li className="flex items-baseline gap-3 py-2 border-b border-border/50" key={post.slug}>
+                <span className="shrink-0 text-xs text-muted-foreground tabular-nums w-20">{formatDate(post.published)}</span>
+                <Link className="text-sm font-medium text-foreground hover:text-primary transition-colors [overflow-wrap:anywhere]" to={"/posts/" + post.slug}>{post.title}</Link>
               </li>
             ))}
           </ul>
