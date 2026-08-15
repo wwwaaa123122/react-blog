@@ -9,6 +9,7 @@ import { siteConfig } from "../config/site";
 import { assetUrl } from "../lib/base";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Giscus from "../components/Giscus";
 
 function extractToc(content: string) {
   const toc: { level: number; text: string }[] = [];
@@ -44,19 +45,16 @@ export default function PostDetail() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleJsonLd(post)) }} />
 
       <article className="max-w-[720px] mx-auto">
-        {/* Title */}
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-4 [overflow-wrap:anywhere]">
           {post.title}
         </h1>
 
-        {/* Meta */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-6 text-sm text-muted-foreground">
           <time>{formatDate(post.published)}</time>
           <span className="inline-flex items-center gap-1"><Clock className="size-3.5" />{readingTime(post.words)}</span>
           {post.category && <span className="inline-flex items-center gap-1"><BookOpen className="size-3.5" />{post.category}</span>}
         </div>
 
-        {/* Tags */}
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-6">
             {post.tags.map((t) => (
@@ -67,14 +65,12 @@ export default function PostDetail() {
           </div>
         )}
 
-        {/* Cover */}
         {cover && (
           <div className="mb-8 -mx-5 md:mx-0">
             <img className="w-full rounded-xl shadow-sm" src={cover} alt={post.title} loading="lazy" />
           </div>
         )}
 
-        {/* TOC */}
         {toc.length > 1 && (
           <details className="mb-6">
             <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-muted-foreground [&::-webkit-details-marker]:hidden">
@@ -90,10 +86,8 @@ export default function PostDetail() {
           </details>
         )}
 
-        {/* Body */}
         <Markdown content={post.content} />
 
-        {/* Footer */}
         <footer className="mt-10 pt-6 border-t border-border text-sm text-muted-foreground">
           <p className="mb-4">本文发布于 {formatDate(post.published)} · &copy; {currentYear} {siteConfig.author}</p>
           <div className="flex flex-wrap gap-3">
@@ -101,6 +95,9 @@ export default function PostDetail() {
             <Button asChild variant="ghost" size="sm"><Link to="/"><Home className="size-3.5" /> 首页</Link></Button>
           </div>
         </footer>
+
+        {/* Giscus 评论区 */}
+        <Giscus />
       </article>
     </>
   );

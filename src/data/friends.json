@@ -5,9 +5,7 @@
       "imgurl": "https://avatars.githubusercontent.com/u/44914786?v=4&s=640",
       "desc": "The web framework for content-driven websites.",
       "siteurl": "https://github.com/withastro/astro",
-      "tags": [
-        "Framework"
-      ],
+      "tags": ["Framework"],
       "weight": 10,
       "enabled": true
     },
@@ -16,9 +14,7 @@
       "imgurl": "https://q1.qlogo.cn/g?b=qq&nk=2726730791&s=640",
       "desc": "Acofork's personal blog",
       "siteurl": "https://2x.nz",
-      "tags": [
-        "Blog"
-      ],
+      "tags": ["Blog"],
       "weight": 9,
       "enabled": true
     },
@@ -27,37 +23,23 @@
       "imgurl": "https://mgrowup.com/avatar.webp",
       "desc": "真诚记录，生活值得",
       "siteurl": "https://mgrowup.com/",
-      "tags": [
-        "Blog"
-      ],
+      "tags": ["Blog"],
       "weight": 8,
       "enabled": true
     }
   ],
   "siteInfo": {
-    "name": "夏夜流萤",
-    "desc": "飞萤之火自无梦的长夜亮起，绽放在终竟的明天。",
-    "url": "https://blog.cuteleaf.cn",
-    "avatar": "https://weavatar.com/avatar/d252655d40d6874417a720bad0a6c5f77f8f6a1fd2f882f8f338402dc37e4190?s=640",
+    "name": "Starlr's blog",
+    "desc": "Protect What You Love./爱你所爱！",
+    "url": "https://xc-lr.cn",
+    "avatar": "https://q1.qlogo.cn/g?b=qq&nk=3385016019&s=640",
     "email": "xiaye@msn.com"
   },
   "notes": [
-    {
-      "title": "互换原则",
-      "content": "请先将本站添加到您的友链页面，确认后会添加您的友链"
-    },
-    {
-      "title": "链接维护",
-      "content": "友链网站长期无法访问或内容违规，将会被移除"
-    },
-    {
-      "title": "内容要求",
-      "content": "内容积极向上，不含有任何含色情/反动/暴力等违法违规内容"
-    },
-    {
-      "title": "站点要求",
-      "content": "支持 HTTPS，以原创内容为主，能够正常访问且有持续更新"
-    }
+    { "title": "互换原则", "content": "请先将本站添加到您的友链页面，确认后会添加您的友链" },
+    { "title": "链接维护", "content": "友链网站长期无法访问或内容违规，将会被移除" },
+    { "title": "内容要求", "content": "内容积极向上，不含有任何含色情/反动/暴力等违法违规内容" },
+    { "title": "站点要求", "content": "支持 HTTPS，以原创内容为主，能够正常访问且有持续更新" }
   ],
   "template": "站点名称：您的站点名称\n站点描述：您的站点描述\n站点链接：您的站点链接\n头像链接：您的站点头像"
 }
