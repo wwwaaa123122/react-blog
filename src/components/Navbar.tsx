@@ -91,7 +91,8 @@ export default function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-40">
                 {links.map((link) => {
-                  const IconComp = { Home, BookOpen, Archive, Link2, User }[link.icon] || Home;
+                  const icons = { Home, BookOpen, Archive, Link2, User };
+                  const IconComp = icons[link.icon as keyof typeof icons] || Home;
                   return (
                     <DropdownMenuItem key={link.to} asChild>
                       <NavLink
