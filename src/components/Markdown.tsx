@@ -74,16 +74,16 @@ export default function Markdown({ content }: { content: string }) {
       // 行内 code — 带背景和颜色，不加 border 避免像代码块
       return <code className="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">{children}</code>;
     },
-    a: ({ href, children, ...props }) => {
+    a: ({ href, children }: any) => {
       const isExternal = href && (href.startsWith("http://") || href.startsWith("https://"));
       return (
-        <a href={href} {...props} {...(isExternal ? { target: "_blank", rel: "noreferrer noopener" } : {})}>
+        <a href={href} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noreferrer noopener" : undefined}>
           {children}
         </a>
       );
     },
-    img: ({ src, alt, ...props }) => (
-      <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" {...props} />
+    img: ({ src, alt }: any) => (
+      <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" />
     ),
     h2: ({ children }) => <h2 id={slugify(String(children))}>{children}</h2>,
     h3: ({ children }) => <h3 id={slugify(String(children))}>{children}</h3>,
