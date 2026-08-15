@@ -1,21 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 export default function Layout() {
   const loc = useLocation();
-  const mainRef = useRef<HTMLDivElement>(null);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
-    // 路由变化时触发动画
-    const el = mainRef.current;
-    if (el) {
-      el.classList.remove("page-enter");
-      // 强制浏览器重排以重新触发动画
-      void el.offsetWidth;
-      el.classList.add("page-enter");
-    }
+    setKey((k) => k + 1);
   }, [loc.pathname]);
 
   return (
@@ -23,7 +16,12 @@ export default function Layout() {
       <Navbar />
       <main className="flex-1">
         <div className="mx-auto w-full max-w-[900px] px-5 py-8 md:py-10">
-          <div ref={mainRef} className="page-enter">
+          <div
+            key={key}
+            style={{
+              animation: "slideDown 0.35s ease-out both",
+            }}
+          >
             <Outlet />
           </div>
         </div>

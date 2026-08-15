@@ -125,20 +125,4 @@
   background-clip: text;
   color: transparent;
 
-/* ===== 页面加载动画 ===== */
-@keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page-enter {
-  animation: slide-down 0.35s ease-out both;
-}
-
 }
