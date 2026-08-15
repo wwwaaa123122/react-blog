@@ -25,7 +25,7 @@ export default function Seo({
 }: SeoProps) {
   useEffect(() => {
     const fullTitle = title
-      ? `${title} · ${siteConfig.title}`
+      ? (title.includes(siteConfig.title) ? title : `${title} · ${siteConfig.title}`)
       : siteConfig.title;
     document.title = fullTitle;
 
