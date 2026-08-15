@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, BookOpen, Clock, Home, ListTree } from "lucide-react";
-import { getPostBySlug, formatDate, readingTime } from "../lib/posts";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Home, ListTree } from "lucide-react";
+import { getPostBySlug, formatDate, readingTime, publishedPosts } from "../lib/posts";
 import Markdown, { slugify } from "../components/Markdown";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
@@ -36,6 +36,11 @@ export default function PostDetail() {
   const toc = extractToc(post.content);
   const cover = post.image ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/")) : undefined;
   const currentYear = new Date().getFullYear();
+
+  // 上一篇 / 下一篇
+  const currentIdx = publishedPosts.findIndex((p) => p.slug === slug);
+  const prevPost = currentIdx < publishedPosts.length - 1 ? publishedPosts[currentIdx + 1] : null;
+  const nextPost = currentIdx > 0 ? publishedPosts[currentIdx - 1] : null;
 
   return (
     <>
@@ -88,7 +93,35 @@ export default function PostDetail() {
 
         <Markdown content={post.content} />
 
-        <footer className="mt-10 pt-6 border-t border-border text-sm text-muted-foreground">
+        {/* 上一篇 / 下一篇 */}
+        <nav className="mt-10 pt-6 border-t border-border grid grid-cols-2 gap-4">
+          <div>
+            {prevPost && (
+              <Link to={"/posts/" + prevPost.slug} className="group block">
+                <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                  <ArrowLeft className="size-3" /> 上一篇
+                </span>
+                <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  {prevPost.title}
+                </span>
+              </Link>
+            )}
+          </div>
+          <div className="text-right">
+            {nextPost && (
+              <Link to={"/posts/" + nextPost.slug} className="group block">
+                <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1 justify-end">
+                  下一篇 <ArrowRight className="size-3" />
+                </span>
+                <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  {nextPost.title}
+                </span>
+              </Link>
+            )}
+          </div>
+        </nav>
+
+        <footer className="mt-6 pt-4 border-t border-border text-sm text-muted-foreground">
           <p className="mb-4">本文发布于 {formatDate(post.published)} · &copy; {currentYear} {siteConfig.author}</p>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="ghost" size="sm"><Link to="/posts"><ArrowLeft className="size-3.5" /> 返回文章列表</Link></Button>
@@ -96,7 +129,6 @@ export default function PostDetail() {
           </div>
         </footer>
 
-        {/* Giscus 评论区 */}
         <Giscus />
       </article>
     </>
