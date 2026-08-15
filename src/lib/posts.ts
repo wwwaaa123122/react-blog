@@ -1,11 +1,42 @@
 import type { Post } from "../types";
 
-// 通过 Vite 的 glob 导入所有 markdown 原始内容
-const modules = import.meta.glob("../posts/*.md", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-}) as Record<string, string>;
+// 文章加载：
+//  - 浏览器构建：Vite 的 import.meta.glob 注入（eager）
+//  - Node 预渲染（scripts/prerender.tsx）：从文件系统读取同一批 Markdown，
+//    保证爬虫预渲染与客户端渲染使用完全相同的管线（同源同数据）
+const __isNode = typeof process !== "undefined" && !!process.versions?.node;
+
+async function loadModules(): Promise<Record<string, string>> {
+  // Node 预渲染（scripts/prerender.tsx）：从文件系统读取，浏览器中不会进入此分支
+  if (__isNode) {
+    const dir =
+      process.env.POSTS_DIR ||
+      (globalThis as unknown as { __POSTS_DIR__?: string }).__POSTS_DIR__;
+    if (dir) {
+      // 动态导入避免打进浏览器 bundle
+      const fs = await import("node:fs");
+      const pathMod = await import("node:path");
+      const modules: Record<string, string> = {};
+      for (const f of fs.readdirSync(dir)) {
+        if (f.endsWith(".md")) {
+          modules["../posts/" + f] = fs.readFileSync(
+            pathMod.join(dir, f),
+            "utf-8"
+          );
+        }
+      }
+      return modules;
+    }
+  }
+  // 浏览器构建：直接调用 import.meta.glob，让 Vite 做静态转换（eager 内联）
+  return import.meta.glob("../posts/*.md", {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  }) as Record<string, string>;
+}
+
+const modules = await loadModules();
 
 type FmValue = string | string[] | boolean | null;
 
