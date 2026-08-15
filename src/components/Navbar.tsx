@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Search, X } from "lucide-react";
+import { BarChart3, Menu, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import { Icon } from "../components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const links = [
   { to: "/", label: "首页" },
@@ -16,7 +22,6 @@ const links = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -70,42 +75,46 @@ export default function Navbar() {
               <Icon name="github" size={16} />
             </Button>
           </a>
+          <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener" aria-label="统计">
+            <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hidden sm:inline-flex">
+              <BarChart3 className="size-4" />
+            </Button>
+          </a>
           <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden size-8 text-muted-foreground"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="菜单"
-          >
-            {menuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
-          </Button>
+          {/* Mobile: popover menu instead of full-width block */}
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="size-8 text-muted-foreground" aria-label="菜单">
+                  <Menu className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-40">
+                {links.map((link) => (
+                  <DropdownMenuItem key={link.to} asChild>
+                    <NavLink
+                      to={link.to}
+                      end={link.to === "/"}
+                      className={({ isActive }) => cn(
+                        "w-full",
+                        isActive && "font-semibold text-primary"
+                      )}
+                    >
+                      {link.label}
+                    </NavLink>
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuItem asChild>
+                  <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener" className="w-full">
+                    <BarChart3 className="size-3.5 mr-2" />
+                    统计
+                  </a>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden border-t border-border bg-background">
-          <nav className="flex flex-col gap-1 px-5 py-3">
-            {links.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={link.to === "/"}
-                onClick={() => setMenuOpen(false)}
-                className={({ isActive }) => cn(
-                  "px-3 py-2.5 text-sm font-medium rounded-md transition-colors",
-                  isActive
-                    ? "text-primary bg-primary-soft"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                )}
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
-        </div>
-      )}
     </header>
   );
 }
