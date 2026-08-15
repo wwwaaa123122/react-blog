@@ -30,9 +30,11 @@ export default function Navbar() {
           className="flex shrink-0 items-center gap-2.5 text-[17px] font-bold tracking-[0.3px] text-foreground"
           onClick={() => setOpen(false)}
         >
-          <span className="brand-logo h-[34px] w-[34px] rounded-[10px] text-base">
-            萤
-          </span>
+          <img
+            className="h-[34px] w-[34px] rounded-[10px] object-cover ring-1 ring-foreground/10"
+            src="https://q1.qlogo.cn/g?b=qq&nk=3385016019&s=640"
+            alt="logo"
+          />
           <span>{siteConfig.title}</span>
         </Link>
 
