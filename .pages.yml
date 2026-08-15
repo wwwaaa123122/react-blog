@@ -1,18 +1,28 @@
-# ============================================================
-# Pages CMS 配置 — 文档: https://pagescms.org/docs/
-# 编辑入口: https://app.pagescms.org （登录 GitHub 后选择本仓库）
-# 保存后自动提交到仓库，GitHub Actions 会自动重新构建部署
-# ============================================================
+# Pages CMS 配置文件
+# 文档: https://pagescms.org/docs/
+#
+# 使用方法：打开 https://app.pagescms.org ，用 GitHub 登录，
+# 安装 GitHub App 后选择本仓库即可在线编辑文章与图片。
 
-# 上传的图片统一存放在 public/images，写入内容时使用 /images/ 前缀
+# ============ 媒体（图片）存储 ============
 media:
-  input: public/images
-  output: /images
+  - name: images
+    label: 文章图片
+    input: public/images
+    output: /images
+    rename: safe
+    categories: [image]
+    commit:
+      templates:
+        create: "图片: 添加 {filename}"
+        update: "图片: 更新 {filename}"
+        delete: "图片: 删除 {filename}"
 
+# ============ 可编辑内容 ============
 content:
-  # ---------- 文章 ----------
+  # 博客文章
   - name: posts
-    label: 文章
+    label: 博客文章
     type: collection
     path: src/posts
     format: yaml-frontmatter
@@ -35,17 +45,26 @@ content:
       - name: published
         label: 发布日期
         type: date
+        required: true
         options:
           format: yyyy-MM-dd
+      - name: updated
+        label: 更新日期
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: draft
+        label: 草稿
+        type: boolean
+        description: 草稿不会出现在正式构建中
       - name: description
-        label: 摘要
+        label: 描述
         type: text
       - name: image
         label: 封面图
         type: image
         options:
           media: images
-          path: public/images
       - name: tags
         label: 标签
         type: string
@@ -53,24 +72,21 @@ content:
       - name: category
         label: 分类
         type: string
-      - name: draft
-        label: 草稿
-        type: boolean
-        default: false
+        description: 例如 tech、daily
       - name: lang
-        label: 语言
+        label: 文章语言
         type: select
         options:
-          values: [zh_CN, zh_TW, en, ja]
+          values: [zh_CN, zh_TW, en, ja, ru]
       - name: body
         label: 正文
         type: rich-text
+        required: true
         options:
           format: markdown
           media: images
-          path: public/images
 
-  # ---------- 个人资料（首页） ----------
+  # 个人资料（首页）
   - name: profile
     label: 个人资料
     type: file
@@ -103,7 +119,7 @@ content:
             options:
               values: [github, x, telegram, bilibili, mail]
 
-  # ---------- 友链 ----------
+  # 友链
   - name: friends
     label: 友链
     type: file
@@ -171,7 +187,7 @@ content:
         label: 申请模板
         type: text
 
-  # ---------- 站点配置 ----------
+  # 站点配置
   - name: site
     label: 站点配置
     type: file
@@ -201,12 +217,13 @@ content:
         label: 建站年份
         type: number
 
+# ============ 全局设置 ============
 settings:
   content:
     merge: true
   commit:
     templates:
-      create: "发布 {path} (via Pages CMS)"
-      update: "更新 {path} (via Pages CMS)"
-      delete: "删除 {path} (via Pages CMS)"
-      rename: "重命名 {oldPath} → {newPath} (via Pages CMS)"
+      create: "内容: 创建 {path}"
+      update: "内容: 更新 {path}"
+      delete: "内容: 删除 {path}"
+      rename: "内容: 重命名 {oldPath} -> {newPath}"
