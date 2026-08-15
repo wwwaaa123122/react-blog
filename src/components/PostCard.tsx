@@ -11,7 +11,7 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <div>
       {cover && (
-        <div className="mb-5">
+        <div className="mb-4">
           <Link to={"/posts/" + post.slug}>
             <img
               src={cover}
@@ -22,18 +22,15 @@ export default function PostCard({ post }: { post: Post }) {
           </Link>
         </div>
       )}
-      <h3 className="text-3xl mb-3 leading-snug font-bold">
-        <Link
-          to={"/posts/" + post.slug}
-          className="hover:underline text-foreground"
-        >
+      <h3 className="text-xl font-bold mb-2 leading-snug">
+        <Link to={"/posts/" + post.slug} className="hover:underline text-foreground">
           {post.title}
         </Link>
       </h3>
-      <div className="text-lg mb-4 text-muted-foreground">
+      <div className="text-sm text-muted-foreground mb-3">
         <time>{formatDate(post.published)}</time>
       </div>
-      <p className="text-lg leading-relaxed mb-4 text-muted-foreground">
+      <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">
         {post.description}
       </p>
     </div>

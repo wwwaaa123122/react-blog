@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent } from "@/components/ui/pagination";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 9;
 
 export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,20 +36,15 @@ export default function Posts() {
     return list;
   }, [tag, keyword]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [tag, keyword]);
+  useEffect(() => { setPage(1); }, [tag, keyword]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, totalPages);
   const pagePosts = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
   const selectTag = (t: string) => {
-    if (t === tag) {
-      searchParams.delete("tag");
-    } else {
-      searchParams.set("tag", t);
-    }
+    if (t === tag) { searchParams.delete("tag"); }
+    else { searchParams.set("tag", t); }
     setSearchParams(searchParams);
   };
 
@@ -57,103 +52,65 @@ export default function Posts() {
     <>
       <Seo
         title="文章"
-        description={
-          publishedPosts.length +
-          " 篇技术文章，涵盖服务器部署、内网穿透、Cloudflare、容器化等主题"
-        }
+        description={publishedPosts.length + " 篇技术文章，涵盖服务器部署、内网穿透、Cloudflare、容器化等主题"}
         path="/posts"
       />
       <Breadcrumb items={[{ label: "文章", to: "/posts" }]} />
 
-      <div className="mb-6">
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight mb-2">
-          文章
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          共 {publishedPosts.length} 篇文章 · 分享技术、生活与热爱
-        </p>
+      <div className="mb-6 mt-8">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-2">文章</h1>
+        <p className="text-base text-muted-foreground">共 {publishedPosts.length} 篇文章 · 分享技术、生活与热爱</p>
       </div>
 
-      <div className="relative mb-6">
-        <Search className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-muted-foreground" />
+      <div className="relative mb-5">
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="text"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          placeholder="搜索文章标题、描述或内容…"
-          className="h-11 rounded-full pl-11 pr-11 text-[14.5px]"
+          placeholder="搜索文章…"
+          className="h-10 rounded-full pl-9 pr-10 text-sm"
         />
         {keyword && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-1.5 top-1/2 -translate-y-1/2"
-            onClick={() => setKeyword("")}
-            aria-label="清除搜索"
-          >
-            <X className="size-4" />
+          <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 size-8" onClick={() => setKeyword("")} aria-label="清除搜索">
+            <X className="size-3.5" />
           </Button>
         )}
       </div>
 
-      <div className="mb-5 flex flex-wrap gap-2">
+      <div className="mb-5 flex flex-wrap gap-1.5">
         <Badge variant={tag === "" ? "default" : "secondary"} asChild>
-          <button type="button" className="cursor-pointer" onClick={() => selectTag("")}>
-            全部
-          </button>
+          <button type="button" className="cursor-pointer" onClick={() => selectTag("")}>全部</button>
         </Badge>
         {tags.map((t) => (
           <Badge key={t} variant={tag === t ? "default" : "secondary"} asChild>
-            <button type="button" className="cursor-pointer" onClick={() => selectTag(t)}>
-              {t}
-            </button>
+            <button type="button" className="cursor-pointer" onClick={() => selectTag(t)}>{t}</button>
           </Badge>
         ))}
       </div>
 
       {pagePosts.length === 0 ? (
         <div className="py-20 text-center">
-          <Search className="mx-auto size-12 text-muted-foreground opacity-50" />
-          <p className="mt-4 text-lg text-muted-foreground">没有找到相关文章，换个关键词试试吧</p>
+          <Search className="mx-auto size-8 text-muted-foreground opacity-50" />
+          <p className="mt-3 text-sm text-muted-foreground">没有找到相关文章</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 mb-20">
-          {pagePosts.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-5 mb-10">
+          {pagePosts.map((post) => <PostCard key={post.slug} post={post} />)}
         </div>
       )}
 
       {totalPages > 1 && (
-        <Pagination className="mt-8">
+        <Pagination className="mb-12">
           <PaginationContent>
-            <Button
-              variant="outline"
-              size="icon"
-              disabled={current === 1}
-              onClick={() => setPage(current - 1)}
-              aria-label="上一页"
-            >
-              <ChevronLeft />
+            <Button variant="outline" size="icon" disabled={current === 1} onClick={() => setPage(current - 1)} aria-label="上一页">
+              <ChevronLeft className="size-4" />
             </Button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <Button
-                key={n}
-                variant={n === current ? "default" : "outline"}
-                size="icon"
-                onClick={() => setPage(n)}
-              >
-                {n}
-              </Button>
+              <Button key={n} variant={n === current ? "default" : "outline"} size="icon" className="size-9 text-sm" onClick={() => setPage(n)}>{n}</Button>
             ))}
-            <Button
-              variant="outline"
-              size="icon"
-              disabled={current === totalPages}
-              onClick={() => setPage(current + 1)}
-              aria-label="下一页"
-            >
-              <ChevronRight />
+            <Button variant="outline" size="icon" disabled={current === totalPages} onClick={() => setPage(current + 1)} aria-label="下一页">
+              <ChevronRight className="size-4" />
             </Button>
           </PaginationContent>
         </Pagination>

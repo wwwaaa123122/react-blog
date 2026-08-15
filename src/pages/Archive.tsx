@@ -21,17 +21,17 @@ export default function Archive() {
       <Breadcrumb items={[{ label: "归档", to: "/archive" }]} />
 
       <div className="mb-8">
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight mb-2">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-2">
           归档
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           共 {publishedPosts.length} 篇文章 · 按年份归档
         </p>
       </div>
 
       {years.map(([year, posts]) => (
         <section key={year} className="mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 flex items-center gap-3">
+          <h2 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-3">
             {year}
             <Badge variant="secondary" className="text-sm">{posts.length} 篇</Badge>
           </h2>

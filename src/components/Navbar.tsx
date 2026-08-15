@@ -1,31 +1,41 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 
+const links = [
+  { to: "/", label: "首页" },
+  { to: "/posts", label: "文章" },
+  { to: "/archive", label: "归档" },
+  { to: "/friends", label: "友链" },
+  { to: "/about", label: "关于" },
+];
+
 export default function Navbar() {
+  const loc = useLocation();
+
   return (
     <header className="border-b border-border">
-      <div className="mx-auto flex h-16 w-full max-w-[880px] items-center justify-between px-5">
-        <Link
-          to="/"
-          className="flex items-center gap-2.5 text-2xl md:text-4xl font-bold tracking-tight md:tracking-tighter leading-tight text-foreground"
-        >
-          Blog.
+      <div className="mx-auto flex h-14 w-full max-w-[880px] items-center justify-between px-5">
+        <Link to="/" className="text-lg font-bold tracking-tight text-foreground">
+          "Blog."
         </Link>
-        <div className="flex items-center gap-2">
-          <Link to="/posts" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            文章
-          </Link>
-          <Link to="/friends" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            友链
-          </Link>
-          <Link to="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            关于
-          </Link>
-          <Link to="/archive" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            归档
-          </Link>
+        <nav className="flex items-center gap-4">
+          {links.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-foreground",
+                loc.pathname === link.to || (link.to !== "/" && loc.pathname.startsWith(link.to))
+                  ? "text-foreground"
+                  : "text-muted-foreground"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
           <ThemeToggle />
-        </div>
+        </nav>
       </div>
     </header>
   );

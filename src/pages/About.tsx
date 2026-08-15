@@ -42,8 +42,8 @@ export default function About() {
       <Breadcrumb items={[{ label: "关于", to: "/about" }]} />
 
       <div className="mb-8">
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight mb-2">关于我</h1>
-        <p className="text-lg text-muted-foreground">认识一下这个博客的主人</p>
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-2">关于我</h1>
+        <p className="text-base text-muted-foreground">认识一下这个博客的主人</p>
       </div>
 
       <div className="mb-8">
