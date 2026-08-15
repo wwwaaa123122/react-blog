@@ -91,8 +91,8 @@ export default function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-40">
                 {links.map((link) => {
-                  const icons = { Home, BookOpen, Archive, Link2, User };
-                  const IconComp = icons[link.icon as keyof typeof icons] || Home;
+                  const iconMap = { "Home": Home, "BookOpen": BookOpen, "Archive": Archive, "Link2": Link2, "User": User };
+                  const IconComp = iconMap[link.icon as keyof typeof iconMap];
                   return (
                     <DropdownMenuItem key={link.to} asChild>
                       <NavLink
@@ -108,8 +108,7 @@ export default function Navbar() {
                       </NavLink>
                     </DropdownMenuItem>
                   );
-                })
-                ))}
+                })}
                 <DropdownMenuItem asChild>
                   <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener" className="w-full">
                     <BarChart3 className="size-3.5 mr-2" />
