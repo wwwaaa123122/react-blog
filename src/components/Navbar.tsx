@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { BarChart3, Menu, Search } from "lucide-react";
+import { Archive, BarChart3, BookOpen, Home, Link2, Menu, Search, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import { Icon } from "../components/icons";
@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const links = [
-  { to: "/", label: "首页" },
-  { to: "/posts", label: "文章" },
-  { to: "/archive", label: "归档" },
-  { to: "/friends", label: "友链" },
-  { to: "/about", label: "关于" },
+  { to: "/", label: "首页", icon: "Home" },
+  { to: "/posts", label: "文章", icon: "BookOpen" },
+  { to: "/archive", label: "归档", icon: "Archive" },
+  { to: "/friends", label: "友链", icon: "Link2" },
+  { to: "/about", label: "关于", icon: "User" },
 ];
 
 export default function Navbar() {
@@ -90,19 +90,24 @@ export default function Navbar() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-40">
-                {links.map((link) => (
-                  <DropdownMenuItem key={link.to} asChild>
-                    <NavLink
-                      to={link.to}
-                      end={link.to === "/"}
-                      className={({ isActive }) => cn(
-                        "w-full",
-                        isActive && "font-semibold text-primary"
-                      )}
-                    >
-                      {link.label}
-                    </NavLink>
-                  </DropdownMenuItem>
+                {links.map((link) => {
+                  const IconComp = { Home, BookOpen, Archive, Link2, User }[link.icon] || Home;
+                  return (
+                    <DropdownMenuItem key={link.to} asChild>
+                      <NavLink
+                        to={link.to}
+                        end={link.to === "/"}
+                        className={({ isActive }) => cn(
+                          "w-full flex items-center gap-2",
+                          isActive && "font-semibold text-primary"
+                        )}
+                      >
+                        <IconComp className="size-3.5" />
+                        {link.label}
+                      </NavLink>
+                    </DropdownMenuItem>
+                  );
+                })
                 ))}
                 <DropdownMenuItem asChild>
                   <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener" className="w-full">
