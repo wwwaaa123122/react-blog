@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Icon } from "./icons";
+import { ArrowUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -11,13 +13,18 @@ export default function BackToTop() {
   }, []);
 
   return (
-    <button
-      className={`back-to-top ${visible ? "visible" : ""}`}
+    <Button
+      variant="outline"
+      size="icon"
+      className={cn(
+        "back-to-top size-[44px] rounded-[13px] shadow-lg",
+        visible && "visible"
+      )}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="回到顶部"
       title="回到顶部"
     >
-      <Icon name="arrow-up" size={20} />
-    </button>
+      <ArrowUp className="size-5" />
+    </Button>
   );
 }

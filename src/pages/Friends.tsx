@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { Check, Copy, ExternalLink, Link2, UserRound } from "lucide-react";
 import {
   getEnabledFriends,
   siteInfo,
   friendNotes,
   friendTemplate,
 } from "../config/friends";
-import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -26,14 +29,54 @@ function CopyButton({ text }: { text: string }) {
     setTimeout(() => setCopied(false), 1500);
   };
   return (
-    <button className="copy-btn" onClick={copy} aria-label="复制" title="复制">
-      <Icon name={copied ? "check" : "copy"} size={14} />
-    </button>
+    <Button
+      variant="ghost"
+      size="icon"
+      className="size-7 shrink-0 rounded-[7px] text-muted-foreground"
+      onClick={copy}
+      aria-label="复制"
+      title="复制"
+    >
+      {copied ? (
+        <Check className="size-3.5 text-primary" />
+      ) : (
+        <Copy className="size-3.5" />
+      )}
+    </Button>
   );
 }
 
 export default function Friends() {
   const friends = getEnabledFriends();
+
+  const infoRows = [
+    { label: "站点名称", value: siteInfo.name },
+    { label: "站点描述", value: siteInfo.desc },
+    { label: "站点链接", value: siteInfo.url },
+    { label: "头像链接", value: siteInfo.avatar },
+  ];
+
+  const steps = [
+    {
+      title: "添加本站友链",
+      desc: "请先在您的网站友链页面添加本站信息，可直接复制左侧各字段",
+    },
+    {
+      title: "评论区留言或发送申请邮件",
+      desc: (
+        <>
+          请将右侧邮箱复制到邮件客户端，或直接点击：
+          <code className="rounded-[5px] border border-border bg-muted px-1.5 py-px font-mono text-[12px] text-primary [overflow-wrap:anywhere]">
+            {siteInfo.email}
+          </code>
+        </>
+      ),
+    },
+    {
+      title: "等待审核",
+      desc: "确认信息无误后会尽快添加您的友链",
+    },
+  ];
 
   return (
     <>
@@ -44,133 +87,141 @@ export default function Friends() {
       />
       <Breadcrumb items={[{ label: "友链", to: "/friends" }]} />
 
-      <div className="page-header">
-        <h1>友链</h1>
-        <p>与优秀的朋友们一起成长</p>
+      <div className="mb-6">
+        <h1 className="text-[26px] font-extrabold tracking-[0.5px]">友链</h1>
+        <p className="mt-1.5 text-[14px] text-muted-foreground">
+          与优秀的朋友们一起成长
+        </p>
       </div>
 
       {/* 申请信息 */}
-      <div className="info-grid">
-        <div className="card info-card">
-          <h3>
-            <Icon name="link" size={18} />
+      <div className="mb-4 grid gap-4 md:grid-cols-2">
+        <Card className="p-6">
+          <h3 className="mb-4 flex items-center gap-2 text-base font-bold">
+            <Link2 className="size-[18px] text-primary" />
             本站信息
           </h3>
-          {[
-            { label: "站点名称", value: siteInfo.name },
-            { label: "站点描述", value: siteInfo.desc },
-            { label: "站点链接", value: siteInfo.url },
-            { label: "头像链接", value: siteInfo.avatar },
-          ].map((item) => (
-            <div className="info-row" key={item.label}>
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <p className="info-row-label">{item.label}</p>
-                <p className="info-row-value" title={item.value}>
+          {infoRows.map((item) => (
+            <div
+              key={item.label}
+              className="mb-2 flex items-center justify-between gap-2 rounded-[9px] bg-muted/60 px-3 py-2"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="mb-0.5 text-[11.5px] text-muted-foreground">
+                  {item.label}
+                </p>
+                <p
+                  className="min-w-0 text-[12.8px] font-medium [overflow-wrap:anywhere] [word-break:break-all]"
+                  title={item.value}
+                >
                   {item.value}
                 </p>
               </div>
               <CopyButton text={item.value} />
             </div>
           ))}
-        </div>
+        </Card>
 
-        <div className="card info-card">
-          <h3>
-            <Icon name="user" size={18} />
+        <Card className="p-6">
+          <h3 className="mb-4 flex items-center gap-2 text-base font-bold">
+            <UserRound className="size-[18px] text-primary" />
             申请友链
           </h3>
-          <ul className="step-list">
-            <li>
-              <span className="step-num">1</span>
-              <div>
-                <p className="step-title">添加本站友链</p>
-                <p className="step-desc">
-                  请先在您的网站友链页面添加本站信息，可直接复制左侧各字段
-                </p>
-              </div>
-            </li>
-            <li>
-              <span className="step-num">2</span>
-              <div>
-                <p className="step-title">
-                  评论区留言或发送申请邮件至{" "}
-                  <code
-                    style={{
-                      padding: "1px 6px",
-                      borderRadius: 5,
-                      background: "var(--code-bg)",
-                      border: "1px solid var(--line-divider)",
-                      fontSize: 12,
-                    }}
-                  >
-                    {siteInfo.email}
-                  </code>
-                </p>
-                <p className="step-desc">复制下方模板，修改后发送</p>
-                <div className="template-block">
-                  {friendTemplate}
-                  <CopyButton text={friendTemplate} />
+          <ol className="space-y-4">
+            {steps.map((s, i) => (
+              <li key={i} className="relative flex gap-3">
+                {i < steps.length - 1 && (
+                  <span className="absolute bottom-[-4px] left-[13px] top-[30px] w-[2px] bg-border" />
+                )}
+                <span className="z-10 flex size-[27px] shrink-0 items-center justify-center rounded-full bg-primary text-[12.5px] font-bold text-primary-foreground">
+                  {i + 1}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold [overflow-wrap:anywhere]">
+                    {s.title}
+                  </p>
+                  <p className="mt-0.5 text-[12.5px] text-muted-foreground [overflow-wrap:anywhere]">
+                    {s.desc}
+                  </p>
+                  {i === 1 && (
+                    <div className="relative mt-2 rounded-[9px] border border-border bg-muted/60 p-3 pr-10 font-mono text-[12px] leading-relaxed whitespace-pre-wrap text-muted-foreground [overflow-wrap:anywhere] [word-break:break-word]">
+                      {friendTemplate}
+                      <span className="absolute right-2 top-2">
+                        <CopyButton text={friendTemplate} />
+                      </span>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </li>
-            <li>
-              <span className="step-num">3</span>
-              <div>
-                <p className="step-title">等待审核</p>
-                <p className="step-desc">确认信息无误后会尽快添加您的友链</p>
-              </div>
-            </li>
-          </ul>
-        </div>
+              </li>
+            ))}
+          </ol>
+        </Card>
       </div>
 
-      <div className="card notes-card">
-        <h3>
-          <Icon name="tag" size={18} />
+      {/* 注意事项 */}
+      <Card className="mb-4 p-5">
+        <h3 className="mb-3.5 flex items-center gap-2 text-[15.5px] font-bold">
+          <Badge variant="outline" className="h-5 w-fit">
+            提示
+          </Badge>
           注意事项
         </h3>
         {friendNotes.map((note) => (
-          <div className="note-item" key={note.title}>
-            <span className="note-dot" />
-            <p>
-              <strong>{note.title}</strong>：{note.content}
+          <div
+            key={note.title}
+            className="flex items-baseline gap-2.5 py-[7px] text-[13.8px] text-muted-foreground"
+          >
+            <span className="size-[7px] shrink-0 translate-y-[-1px] rounded-full bg-primary" />
+            <p className="min-w-0 [overflow-wrap:anywhere]">
+              <strong className="font-semibold text-foreground">
+                {note.title}
+              </strong>
+              ：{note.content}
             </p>
           </div>
         ))}
-      </div>
+      </Card>
 
       {/* 友链列表 */}
-      <h2 className="section-title">
+      <h2 className="mb-4 mt-8 flex items-center gap-2.5 text-[17px] font-bold">
+        <span className="h-[18px] w-1 rounded-[3px] bg-primary" />
         友链列表（{friends.length}）
       </h2>
-      <div className="friends-grid">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
         {friends.map((f) => (
           <a
             key={f.title}
-            className="card card-hover friend-card"
+            className="flex min-w-0 items-start gap-3.5 rounded-xl bg-card p-[18px] ring-1 ring-foreground/10 transition-all hover:-translate-y-0.5 hover:shadow-lg"
             href={f.siteurl}
             target="_blank"
             rel="noreferrer noopener"
           >
             {f.imgurl ? (
-              <img className="friend-avatar" src={f.imgurl} alt={f.title} loading="lazy" />
+              <img
+                className="size-[52px] shrink-0 rounded-[14px] border border-border bg-muted object-cover"
+                src={f.imgurl}
+                alt={f.title}
+                loading="lazy"
+              />
             ) : (
-              <span className="friend-avatar friend-fallback">
+              <span className="grid size-[52px] shrink-0 place-items-center rounded-[14px] border border-border bg-muted text-xl font-bold text-primary">
                 {f.title.charAt(0)}
               </span>
             )}
-            <div style={{ minWidth: 0 }}>
-              <p className="friend-title">
+            <div className="min-w-0 flex-1">
+              <p className="flex items-center gap-1.5 text-[15px] font-bold text-foreground [overflow-wrap:anywhere] [word-break:break-word]">
                 {f.title}
-                <Icon name="external" size={12} />
+                <ExternalLink className="size-3 shrink-0 text-muted-foreground" />
               </p>
-              <p className="friend-desc">{f.desc}</p>
+              <p className="mt-1 line-clamp-2 text-[12.8px] leading-relaxed text-muted-foreground [overflow-wrap:anywhere] [word-break:break-word]">
+                {f.desc}
+              </p>
               {f.tags.length > 0 && (
-                <div className="friend-tags">
+                <div className="mt-2 flex flex-wrap gap-1.5">
                   {f.tags.map((t) => (
-                    <span className="tag" key={t}>
+                    <Badge key={t} variant="secondary" className="text-[11px]">
                       {t}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               )}

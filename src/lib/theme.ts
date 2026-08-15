@@ -2,6 +2,7 @@ export type Theme = "light" | "dark";
 
 export function getInitialTheme(): Theme {
   try {
+    if (typeof window === "undefined") return "light"; // Node 预渲染
     const saved = localStorage.getItem("theme");
     if (saved === "light" || saved === "dark") return saved;
   } catch {
@@ -12,8 +13,11 @@ export function getInitialTheme(): Theme {
     : "light";
 }
 
+// shadcn/ui 深色模式约定：在 <html> 上切换 .dark class
 export function applyTheme(theme: Theme) {
-  document.documentElement.dataset.theme = theme;
+  if (typeof document !== "undefined") {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }
   try {
     localStorage.setItem("theme", theme);
   } catch {

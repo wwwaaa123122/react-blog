@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { publishedPosts, formatDate } from "../lib/posts";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function Archive() {
   const byYear = new Map<string, typeof publishedPosts>();
@@ -19,23 +21,35 @@ export default function Archive() {
       <Seo title="归档" description="全部文章按年份归档" path="/archive" />
       <Breadcrumb items={[{ label: "归档", to: "/archive" }]} />
 
-      <div className="page-header">
-        <h1>归档</h1>
-        <p>共 {publishedPosts.length} 篇文章 · 按年份归档</p>
+      <div className="mb-6">
+        <h1 className="text-[26px] font-extrabold tracking-[0.5px]">归档</h1>
+        <p className="mt-1.5 text-[14px] text-muted-foreground">
+          共 {publishedPosts.length} 篇文章 · 按年份归档
+        </p>
       </div>
 
-      <div className="card" style={{ padding: "22px 28px" }}>
+      <Card className="px-7 py-5">
         {years.map(([year, posts]) => (
           <section key={year}>
-            <h2 className="archive-year">
+            <h2 className="mb-3.5 mt-6 flex items-center gap-2.5 text-[19px] font-extrabold first:mt-0">
               {year}
-              <span className="count">{posts.length} 篇</span>
+              <Badge variant="secondary" className="text-[12.5px]">
+                {posts.length} 篇
+              </Badge>
             </h2>
-            <ul className="archive-list">
+            <ul className="list-none">
               {posts.map((post) => (
-                <li className="archive-item" key={post.slug}>
-                  <span className="archive-date">{formatDate(post.published)}</span>
-                  <Link className="archive-link" to={`/posts/${post.slug}`}>
+                <li
+                  className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-dashed border-border px-1 py-2.5"
+                  key={post.slug}
+                >
+                  <span className="shrink-0 text-[13px] tabular-nums text-muted-foreground">
+                    {formatDate(post.published)}
+                  </span>
+                  <Link
+                    className="min-w-0 text-[15px] font-medium text-foreground transition-colors hover:text-primary [overflow-wrap:anywhere]"
+                    to={"/posts/" + post.slug}
+                  >
                     {post.title}
                   </Link>
                 </li>
@@ -43,7 +57,7 @@ export default function Archive() {
             </ul>
           </section>
         ))}
-      </div>
+      </Card>
     </>
   );
 }
