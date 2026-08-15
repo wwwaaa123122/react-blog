@@ -4,3 +4,6 @@ dist
 .DS_Store
 
 artifacts/
+
+# Cloudflare
+.wrangler/
