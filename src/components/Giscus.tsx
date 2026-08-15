@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const GISCUS_CONFIG = {
   repo: "wwwaaa123122/blogcomment",
@@ -14,8 +14,26 @@ const GISCUS_CONFIG = {
   loading: "lazy",
 };
 
+function sendTheme(theme: string) {
+  const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+  if (iframe?.contentWindow) {
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme } } },
+      "https://giscus.app"
+    );
+  }
+}
+
 export default function Giscus() {
+  const initialized = useRef(false);
+
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
+    const container = document.getElementById("giscus-container");
+    if (!container) return;
+
     // 加载 giscus 脚本
     const script = document.createElement("script");
     script.src = "https://giscus.app/client.js";
@@ -34,28 +52,23 @@ export default function Giscus() {
     script.async = true;
     script.crossOrigin = "anonymous";
 
-    const container = document.getElementById("giscus-container");
-    if (container) {
-      container.innerHTML = "";
-      container.appendChild(script);
-    }
+    container.innerHTML = "";
+    container.appendChild(script);
 
-    // 监听主题变化
+    // 监听主题变化 — 向 giscus iframe 发送主题更新消息
     const observer = new MutationObserver(() => {
-      const isDark = document.documentElement.classList.contains("dark");
-      const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
-      if (iframe) {
-        iframe.contentWindow?.postMessage(
-          { giscus: { setConfig: { theme: isDark ? "dark" : "light" } } },
-          "https://giscus.app"
-        );
-      }
+      const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+      // 立即尝试发送，iframe 可能还没加载
+      sendTheme(theme);
+      // 500ms 后再试一次（确保 iframe 已加载）
+      setTimeout(() => sendTheme(theme), 500);
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
     return () => {
       observer.disconnect();
-      if (container) container.innerHTML = "";
+      container.innerHTML = "";
+      initialized.current = false;
     };
   }, []);
 
