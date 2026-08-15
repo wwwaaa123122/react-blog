@@ -69,10 +69,10 @@ export default function Markdown({ content }: { content: string }) {
     code: ({ className, children, ...props }) => {
       // 如果 className 以 language- 开头，说明是代码块，返回裸 code 供 pre 处理
       if (className?.startsWith?.("language-")) {
-        return <code className={className} {...props}>{children}</code>;
+        return <code className={className}>{children}</code>;
       }
-      // 行内 code
-      return <code className="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" {...props}>{children}</code>;
+      // 行内 code — 带背景和颜色，不加 border 避免像代码块
+      return <code className="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">{children}</code>;
     },
     a: ({ href, children, ...props }) => {
       const isExternal = href && (href.startsWith("http://") || href.startsWith("https://"));
