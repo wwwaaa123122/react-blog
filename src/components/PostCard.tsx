@@ -13,7 +13,7 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <article className="group border border-border rounded-xl p-5 transition-all duration-200 hover:border-primary/30 hover:shadow-sm bg-card">
       {cover && (
-        <Link to={"/posts/" + post.slug} className="block mb-4 -mx-5 -mt-5 rounded-t-xl overflow-hidden">
+        <Link to={"/posts/" + post.slug} className="block mb-4 -mx-5 -mt-5 rounded-t-xl overflow-hidden" aria-label={post.title + " 封面"}>
           <img
             src={cover}
             alt={post.title}
