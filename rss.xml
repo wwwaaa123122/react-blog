@@ -6,7 +6,7 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发，作者为starlr/星辰旅人</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Sat, 15 Aug 2026 07:04:08 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2026 07:07:40 GMT</lastBuildDate>
   <item>
     <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知</title>
     <link>https://xc-lr.cn/posts/kick-live-notify/</link>
@@ -19,16 +19,16 @@
 <p>本文介绍一个用 Python 写的 Kick 开播提醒工具，通过 NapCat 对接 QQ，支持私聊和群聊通知。</p>
 <h1>Kick API 介绍</h1>
 <p>Kick 有一个私有 API 可以查询主播的直播状态：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">GET https://api.kick.com/private/v1/channels/{channel}/livestream
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">GET https://api.kick.com/private/v1/channels/{channel}/livestream
 </code></pre>
-<p>其中 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">{channel}</code> 是主播的用户名（频道名），比如 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">xctraveller</code>。</p>
+<p>其中 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">{channel}</code> 是主播的用户名（频道名），比如 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">xctraveller</code>。</p>
 <p>请求示例：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">curl <span class="hljs-string">&quot;https://api.kick.com/private/v1/channels/xctraveller/livestream&quot;</span> \
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl <span class="hljs-string">&quot;https://api.kick.com/private/v1/channels/xctraveller/livestream&quot;</span> \
   -H <span class="hljs-string">&quot;User-Agent: Mozilla/5.0&quot;</span> \
   -H <span class="hljs-string">&quot;Accept: application/json&quot;</span>
 </code></pre>
 <p>返回格式：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-punctuation">{</span>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
     <span class="hljs-attr">&quot;livestream&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123456</span><span class="hljs-punctuation">,</span>
@@ -44,8 +44,8 @@
 <span class="hljs-punctuation">}</span>
 </code></pre>
 <ul>
-<li>如果 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">livestream</code> 存在且有 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">id</code> 字段，说明正在直播</li>
-<li>如果 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">livestream</code> 为 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">null</code> 或没有 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">id</code>，说明未开播</li>
+<li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 存在且有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code> 字段，说明正在直播</li>
+<li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">null</code> 或没有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code>，说明未开播</li>
 </ul>
 <p>:::warning
 这是 Kick 的私有 API，没有官方文档，随时可能变动。目前不需要认证，但未来可能需要。
@@ -57,19 +57,19 @@
 <li>发送群聊消息</li>
 <li>以及更多 QQ Bot 功能</li>
 </ul>
-<p>OneBot 11 提供了 HTTP API，我们只需要调用 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">send_private_msg</code> 或 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">send_group_msg</code> 接口就能发送消息。</p>
+<p>OneBot 11 提供了 HTTP API，我们只需要调用 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">send_private_msg</code> 或 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">send_group_msg</code> 接口就能发送消息。</p>
 <h1>工作原理</h1>
 <p>整体流程很简单：</p>
 <ol>
 <li>定时请求 Kick API 查询主播状态</li>
 <li>如果检测到开播且之前未通知 → 发送开播通知</li>
 <li>如果检测到下播且之前已通知 → 发送下播通知</li>
-<li>使用一个 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">set</code> 记录已通知的主播，避免重复通知</li>
+<li>使用一个 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">set</code> 记录已通知的主播，避免重复通知</li>
 </ol>
 <p>为了防止程序重启时误发通知，启动时会先同步一次当前状态，只记录不通知。</p>
 <h1>代码实现</h1>
 <h2 id="检查直播状态">检查直播状态</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_live</span>(<span class="hljs-params">channel: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">tuple</span>[<span class="hljs-built_in">bool</span>, <span class="hljs-built_in">dict</span> | <span class="hljs-literal">None</span>]:
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_live</span>(<span class="hljs-params">channel: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">tuple</span>[<span class="hljs-built_in">bool</span>, <span class="hljs-built_in">dict</span> | <span class="hljs-literal">None</span>]:
     url = <span class="hljs-string">f&quot;https://api.kick.com/private/v1/channels/<span class="hljs-subst">{channel}</span>/livestream&quot;</span>
     req = urllib.request.Request(url, headers={
         <span class="hljs-string">&quot;User-Agent&quot;</span>: <span class="hljs-string">&quot;Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36&quot;</span>,
@@ -89,12 +89,12 @@
 </code></pre>
 <p>返回值设计：</p>
 <ul>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">(False, livestream)</code> — 正在直播</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">(False, None)</code> — 确认未开播</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">(True, None)</code> — 查询失败，跳过本轮</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">(False, livestream)</code> — 正在直播</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">(False, None)</code> — 确认未开播</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">(True, None)</code> — 查询失败，跳过本轮</li>
 </ul>
 <h2 id="发送-napcat-消息">发送 NapCat 消息</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">def</span> <span class="hljs-title function_">napcat_send</span>(<span class="hljs-params">config: <span class="hljs-built_in">dict</span>, endpoint: <span class="hljs-built_in">str</span>, params: <span class="hljs-built_in">dict</span></span>) -&gt; <span class="hljs-built_in">bool</span>:
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">def</span> <span class="hljs-title function_">napcat_send</span>(<span class="hljs-params">config: <span class="hljs-built_in">dict</span>, endpoint: <span class="hljs-built_in">str</span>, params: <span class="hljs-built_in">dict</span></span>) -&gt; <span class="hljs-built_in">bool</span>:
     napcat = config[<span class="hljs-string">&quot;napcat&quot;</span>]
     url = <span class="hljs-string">f&quot;http://<span class="hljs-subst">{napcat[<span class="hljs-string">&#x27;host&#x27;</span>]}</span>:<span class="hljs-subst">{napcat[<span class="hljs-string">&#x27;port&#x27;</span>]}</span>/<span class="hljs-subst">{endpoint}</span>&quot;</span>
     body = json.dumps(params).encode(<span class="hljs-string">&quot;utf-8&quot;</span>)
@@ -110,7 +110,7 @@
         <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
 </code></pre>
 <h2 id="构造通知消息">构造通知消息</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">message = (
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">message = (
     <span class="hljs-string">f&quot;🔴 <span class="hljs-subst">{channel}</span> 开播了!\n&quot;</span>
     <span class="hljs-string">f&quot;标题: <span class="hljs-subst">{title}</span>\n&quot;</span>
     <span class="hljs-string">f&quot;分类: <span class="hljs-subst">{category}</span>\n&quot;</span>
@@ -119,7 +119,7 @@
 )
 </code></pre>
 <h2 id="主循环">主循环</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">notified: <span class="hljs-built_in">set</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-built_in">set</span>()
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">notified: <span class="hljs-built_in">set</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-built_in">set</span>()
 
 <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
     <span class="hljs-keyword">for</span> channel <span class="hljs-keyword">in</span> streamers:
@@ -140,8 +140,8 @@
     time.sleep(interval)
 </code></pre>
 <h1>配置说明</h1>
-<p>配置文件 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">config.json</code>：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-punctuation">{</span>
+<p>配置文件 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">config.json</code>：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-punctuation">{</span>
     <span class="hljs-attr">&quot;napcat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
         <span class="hljs-attr">&quot;host&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;127.0.0.1&quot;</span><span class="hljs-punctuation">,</span>
         <span class="hljs-attr">&quot;port&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3000</span><span class="hljs-punctuation">,</span>
@@ -158,7 +158,7 @@
     <span class="hljs-attr">&quot;check_interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
-<table><thead><tr><th>字段</th><th>说明</th></tr></thead><tbody><tr><td><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">napcat.host</code></td><td>NapCat HTTP 服务地址</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">napcat.port</code></td><td>NapCat HTTP 服务端口</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">napcat.token</code></td><td>NapCat 访问令牌（可选）</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">notify.private</code></td><td>私聊通知的 QQ 号列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">notify.group</code></td><td>群聊通知的群号列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">streamers</code></td><td>要监控的 Kick 主播用户名列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">check_interval</code></td><td>检查间隔（秒）</td></tr></tbody></table>
+<table><thead><tr><th>字段</th><th>说明</th></tr></thead><tbody><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">napcat.host</code></td><td>NapCat HTTP 服务地址</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">napcat.port</code></td><td>NapCat HTTP 服务端口</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">napcat.token</code></td><td>NapCat 访问令牌（可选）</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">notify.private</code></td><td>私聊通知的 QQ 号列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">notify.group</code></td><td>群聊通知的群号列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">streamers</code></td><td>要监控的 Kick 主播用户名列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">check_interval</code></td><td>检查间隔（秒）</td></tr></tbody></table>
 <h1>部署运行</h1>
 <h2 id="环境要求">环境要求</h2>
 <ul>
@@ -166,7 +166,7 @@
 <li>NapCat 已部署并运行</li>
 </ul>
 <h2 id="运行">运行</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-comment"># 直接运行</span>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-comment"># 直接运行</span>
 python3 kick_notify.py
 
 <span class="hljs-comment"># 或者用脚本启动</span>
@@ -174,7 +174,7 @@ python3 kick_notify.py
 ./run.sh
 </code></pre>
 <h2 id="后台运行">后台运行</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-comment"># 使用 nohup</span>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-comment"># 使用 nohup</span>
 <span class="hljs-built_in">nohup</span> python3 kick_notify.py &gt; kick.log 2&gt;&amp;1 &amp;
 
 <span class="hljs-comment"># 或者用 screen/tmux</span>
@@ -184,14 +184,14 @@ python3 kick_notify.py
 </code></pre>
 <h1>效果示例</h1>
 <p>开播通知：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">🔴 xctraveller 开播了!
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">🔴 xctraveller 开播了!
 标题: 晚上打游戏
 分类: GTA V
 观众: 42
 链接: https://kick.com/xctraveller
 </code></pre>
 <p>下播通知：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">⚫ xctraveller 下播了
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">⚫ xctraveller 下播了
 链接: https://kick.com/xctraveller
 </code></pre>
 <h1>注意事项</h1>
@@ -214,7 +214,7 @@ python3 kick_notify.py
     <pubDate>Sun, 31 May 2026 00:00:00 GMT</pubDate>
     <description>基于Cloudflare Workers的Minecraft免端口域名服务，让你的MC服务器玩家无需输入端口号</description>
     <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
-<p>玩Minecraft的都知道，开服的时候如果用了非默认端口（不是25565），连接的时候就得在域名后面加个冒号再填端口号，比如 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">play.example.com:25566</code>，对于不熟悉的人来说还挺麻烦的。</p>
+<p>玩Minecraft的都知道，开服的时候如果用了非默认端口（不是25565），连接的时候就得在域名后面加个冒号再填端口号，比如 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">play.example.com:25566</code>，对于不熟悉的人来说还挺麻烦的。</p>
 <p>有没有办法让玩家只输域名就能连上？有的兄弟，有的。</p>
 <p>今天介绍的 <strong>mc-srv-worker</strong> 就是干这个的——基于 Cloudflare Workers 自动创建 DNS SRV 记录，让 Minecraft Java 版服务器实现&quot;免端口&quot;连接。</p>
 <h1>这东西怎么工作的</h1>
@@ -230,15 +230,15 @@ python3 kick_notify.py
 <p>如果你只是想用别人部署好的服务，直接打开页面就行。</p>
 <h2 id="创建域名">创建域名</h2>
 <ol>
-<li>在输入框填入你的服务器地址和端口，格式为 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">地址:端口</code>，例如：<!-- -->
+<li>在输入框填入你的服务器地址和端口，格式为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">地址:端口</code>，例如：<!-- -->
 <ul>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">play.example.com:25565</code></li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">1.2.3.4:25566</code></li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">play.example.com:25565</code></li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">1.2.3.4:25566</code></li>
 </ul>
 </li>
-<li>可选填自定义前缀，不填会自动生成一个 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">mc-xxxxxx</code> 格式的前缀</li>
+<li>可选填自定义前缀，不填会自动生成一个 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">mc-xxxxxx</code> 格式的前缀</li>
 <li>点击「生成域名」</li>
-<li>成功后会返回一个类似 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">mc-abc123.zako.mom</code> 的域名和一个 <strong>16位授权码</strong></li>
+<li>成功后会返回一个类似 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">mc-abc123.zako.mom</code> 的域名和一个 <strong>16位授权码</strong></li>
 </ol>
 <p>:::warning
 授权码很重要！修改和删除记录时都需要它，丢了就只能等记录过期了
@@ -262,16 +262,16 @@ python3 kick_notify.py
 </ul>
 <h2 id="步骤">步骤</h2>
 <h3 id="1-克隆项目">1. 克隆项目</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">git <span class="hljs-built_in">clone</span> https://github.com/wwwaaa123122/mc-srv-worker.git
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">git <span class="hljs-built_in">clone</span> https://github.com/wwwaaa123122/mc-srv-worker.git
 <span class="hljs-built_in">cd</span> mc-srv-worker
 </code></pre>
 <h3 id="2-创建-kv-命名空间">2. 创建 KV 命名空间</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">npx wrangler kv:namespace create MC_KV
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">npx wrangler kv:namespace create MC_KV
 </code></pre>
 <p>执行后会返回一个 KV 命名空间 ID，记下来。</p>
 <h3 id="3-配置-wrangler-toml">3. 配置 wrangler.toml</h3>
-<p>编辑 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">wrangler.toml</code>，填入你的信息：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-attr">name</span> = <span class="hljs-string">&quot;mc-srv-worker&quot;</span>
+<p>编辑 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">wrangler.toml</code>，填入你的信息：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-attr">name</span> = <span class="hljs-string">&quot;mc-srv-worker&quot;</span>
 <span class="hljs-attr">main</span> = <span class="hljs-string">&quot;src/index.js&quot;</span>
 <span class="hljs-attr">compatibility_date</span> = <span class="hljs-string">&quot;2025-08-11&quot;</span>
 
@@ -291,37 +291,37 @@ python3 kick_notify.py
 </code></pre>
 <h3 id="4-设置-secrets">4. 设置 Secrets</h3>
 <p>敏感信息不要写在配置文件里，用 wrangler secret 设置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">npx wrangler secret put CF_API_TOKEN
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">npx wrangler secret put CF_API_TOKEN
 <span class="hljs-comment"># 输入你的 Cloudflare API Token</span>
 
 npx wrangler secret put CF_ZONE_ID
 <span class="hljs-comment"># 输入你的域名区域 ID（在 Cloudflare 域名概览页面底部可以找到）</span>
 </code></pre>
 <h3 id="5-部署">5. 部署</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">npx wrangler deploy
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">npx wrangler deploy
 </code></pre>
-<p>部署成功后会给你一个 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">*.workers.dev</code> 的域名，也可以在 Cloudflare 面板绑定自定义域名。</p>
+<p>部署成功后会给你一个 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">*.workers.dev</code> 的域名，也可以在 Cloudflare 面板绑定自定义域名。</p>
 <h2 id="api-接口">API 接口</h2>
 <p>如果你想自己写前端或者集成到其他地方，可以直接调用 API：</p>
 <h3 id="创建域名">创建域名</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">curl -X POST https://你的域名/api/create \
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl -X POST https://你的域名/api/create \
   -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
   -d <span class="hljs-string">&#x27;{&quot;address&quot;: &quot;1.2.3.4:25566&quot;, &quot;prefix&quot;: &quot;myserver&quot;}&#x27;</span>
 </code></pre>
 <p>返回：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-punctuation">{</span>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">&quot;success&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">&quot;domain&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myserver.example.com&quot;</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">&quot;authCode&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;a1b2c3d4e5f67890&quot;</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
 <h3 id="修改解析">修改解析</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">curl -X POST https://你的域名/api/update \
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl -X POST https://你的域名/api/update \
   -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
   -d <span class="hljs-string">&#x27;{&quot;sub&quot;: &quot;myserver&quot;, &quot;target&quot;: &quot;5.6.7.8&quot;, &quot;port&quot;: 25567, &quot;authCode&quot;: &quot;a1b2c3d4e5f67890&quot;}&#x27;</span>
 </code></pre>
 <h3 id="删除解析">删除解析</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">curl -X POST https://你的域名/api/delete \
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl -X POST https://你的域名/api/delete \
   -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
   -d <span class="hljs-string">&#x27;{&quot;sub&quot;: &quot;myserver&quot;, &quot;authCode&quot;: &quot;a1b2c3d4e5f67890&quot;}&#x27;</span>
 </code></pre>
@@ -329,8 +329,8 @@ npx wrangler secret put CF_ZONE_ID
 <ul>
 <li>每个域名创建后会生成一个 <strong>授权码</strong>，修改或删除时必须提供，请妥善保存</li>
 <li>每 IP 每分钟有创建次数限制（默认 5 次），防止滥用</li>
-<li>目标地址格式必须为 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">地址:端口</code></li>
-<li>端口范围：<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">1</code> ~ <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">65535</code></li>
+<li>目标地址格式必须为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">地址:端口</code></li>
+<li>端口范围：<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">1</code> ~ <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">65535</code></li>
 <li>授权码是 16 位的十六进制字符串，丢了就没了，记得备份</li>
 </ul>
 <h1>END</h1>
@@ -390,8 +390,8 @@ npx wrangler secret put CF_ZONE_ID
 </ul>
 <h2 id="配置步骤">配置步骤</h2>
 <h3 id="1-配置背景图">1. 配置背景图</h3>
-<p>打开 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/config.ts</code> 文件，找到 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">siteConfig</code> 对象，添加或修改 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">background</code> 配置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+<p>打开 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/config.ts</code> 文件，找到 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">siteConfig</code> 对象，添加或修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">background</code> 配置：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
   <span class="hljs-comment">// ... 其他配置</span>
   
   <span class="hljs-attr">background</span>: {
@@ -405,12 +405,12 @@ npx wrangler secret put CF_ZONE_ID
 </code></pre>
 <p><strong>参数说明：</strong></p>
 <ul>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">enable</code>: 布尔值，控制是否显示背景图</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src</code>: 图片路径，以 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">/</code> 开头表示相对于 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">/public</code> 目录，否则相对于 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">/src</code> 目录</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">blur</code>: 数字，默认模糊程度，范围建议 0-50</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">enable</code>: 布尔值，控制是否显示背景图</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src</code>: 图片路径，以 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">/</code> 开头表示相对于 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">/public</code> 目录，否则相对于 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">/src</code> 目录</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">blur</code>: 数字，默认模糊程度，范围建议 0-50</li>
 </ul>
 <h3 id="2-添加背景图片">2. 添加背景图片</h3>
-<p>将你的背景图片放到 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">/public</code> 目录下（如果路径以 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">/</code> 开头）或 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">/src</code> 目录下。建议使用高分辨率的图片以获得最佳效果。</p>
+<p>将你的背景图片放到 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">/public</code> 目录下（如果路径以 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">/</code> 开头）或 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">/src</code> 目录下。建议使用高分辨率的图片以获得最佳效果。</p>
 <p><strong>推荐图片规格：</strong></p>
 <ul>
 <li>分辨率：至少 1920x1080</li>
@@ -425,8 +425,8 @@ npx wrangler secret put CF_ZONE_ID
 <li>设置会自动保存，刷新页面后保持</li>
 </ol>
 <h2 id="样式自定义">样式自定义</h2>
-<p>如果需要调整半透明效果，可以修改 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/styles/variables.styl</code> 文件：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">define({
+<p>如果需要调整半透明效果，可以修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/styles/variables.styl</code> 文件：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">define({
   // 卡片背景透明度（85% 不透明）
   --card-bg-transparent: oklch(1 0 0 / 0.85) oklch(0.23 0.015 var(--hue) / 0.85)
   
@@ -434,10 +434,10 @@ npx wrangler secret put CF_ZONE_ID
   --navbar-bg: oklch(1 0 0 / 0.8) oklch(0.23 0.015 var(--hue) / 0.8)
 })
 </code></pre>
-<p>修改 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">0.85</code> 和 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">0.8</code> 可以调整透明度（0-1 之间，越小越透明）。</p>
+<p>修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">0.85</code> 和 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">0.8</code> 可以调整透明度（0-1 之间，越小越透明）。</p>
 <h2 id="禁用背景图">禁用背景图</h2>
-<p>如果不想要背景图效果，只需在配置中设置 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">enable: false</code>：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-attr">background</span>: {
+<p>如果不想要背景图效果，只需在配置中设置 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">enable: false</code>：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-attr">background</span>: {
   <span class="hljs-attr">enable</span>: <span class="hljs-literal">false</span>,
   <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,
   <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,
@@ -454,8 +454,8 @@ npx wrangler secret put CF_ZONE_ID
 <h2 id="代码实现">代码实现</h2>
 <p>如果你想从零开始实现这个功能，或者了解具体的技术细节，请按照以下步骤操作：</p>
 <h3 id="步骤-1-定义配置类型">步骤 1: 定义配置类型</h3>
-<p>首先在 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/types/config.ts</code> 中添加背景图配置的类型定义：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">SiteConfig</span> = {
+<p>首先在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/types/config.ts</code> 中添加背景图配置的类型定义：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">SiteConfig</span> = {
   <span class="hljs-comment">// ... 其他配置</span>
 
   <span class="hljs-attr">background</span>: {
@@ -468,8 +468,8 @@ npx wrangler secret put CF_ZONE_ID
 };
 </code></pre>
 <h3 id="步骤-2-添加配置项">步骤 2: 添加配置项</h3>
-<p>在 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/config.ts</code> 中添加背景图配置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+<p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/config.ts</code> 中添加背景图配置：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
   <span class="hljs-comment">// ... 其他配置</span>
 
   <span class="hljs-attr">background</span>: {
@@ -482,8 +482,8 @@ npx wrangler secret put CF_ZONE_ID
 };
 </code></pre>
 <h3 id="步骤-3-实现设置存储和读取">步骤 3: 实现设置存储和读取</h3>
-<p>在 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/utils/setting-utils.ts</code> 中添加模糊度的存储和读取函数：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-comment">// 获取默认模糊度</span>
+<p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/utils/setting-utils.ts</code> 中添加模糊度的存储和读取函数：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-comment">// 获取默认模糊度</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getDefaultBlur</span>(<span class="hljs-params"></span>): <span class="hljs-built_in">number</span> {
   <span class="hljs-keyword">const</span> fallback = <span class="hljs-string">&quot;10&quot;</span>;
   <span class="hljs-keyword">const</span> configCarrier = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;config-carrier&quot;</span>);
@@ -507,8 +507,8 @@ npx wrangler secret put CF_ZONE_ID
 }
 </code></pre>
 <h3 id="步骤-4-创建模糊设置组件">步骤 4: 创建模糊设置组件</h3>
-<p>创建 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/components/widget/BlurSettings.svelte</code> 文件：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">&lt;script lang=&quot;ts&quot;&gt;
+<p>创建 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/widget/BlurSettings.svelte</code> 文件：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;script lang=&quot;ts&quot;&gt;
 import I18nKey from &quot;@i18n/i18nKey&quot;;
 import { i18n } from &quot;@i18n/translation&quot;;
 import Icon from &quot;@iconify/svelte&quot;;
@@ -554,8 +554,8 @@ $: if (blur || blur === 0) {
 &lt;/div&gt;
 </code></pre>
 <h3 id="步骤-5-更新-configcarrier-组件">步骤 5: 更新 ConfigCarrier 组件</h3>
-<p>修改 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/components/ConfigCarrier.astro</code> 以传递模糊度配置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">---
+<p>修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/ConfigCarrier.astro</code> 以传递模糊度配置：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">---
 import { siteConfig } from &quot;../config&quot;;
 
 interface Props {
@@ -569,8 +569,8 @@ const { blur = siteConfig.background.blur || 10 } = Astro.props;
 &lt;/div&gt;
 </code></pre>
 <h3 id="步骤-6-在-layout-中添加背景图">步骤 6: 在 Layout 中添加背景图</h3>
-<p>在 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/layouts/Layout.astro</code> 中添加背景图元素和初始化脚本：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">&lt;body&gt;
+<p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/layouts/Layout.astro</code> 中添加背景图元素和初始化脚本：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;body&gt;
   &lt;ConfigCarrier blur={siteConfig.background.blur || 10}&gt;&lt;/ConfigCarrier&gt;
   {siteConfig.background.enable &amp;&amp; (
     &lt;div id=&quot;background-wrapper&quot; class=&quot;fixed inset-0 -z-10 overflow-hidden&quot;&gt;
@@ -587,7 +587,7 @@ const { blur = siteConfig.background.blur || 10 } = Astro.props;
 &lt;/body&gt;
 </code></pre>
 <p>并在内联脚本中添加模糊度加载：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">&lt;script is:inline&gt;
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;script is:inline&gt;
   // 加载模糊度
   const configCarrier = document.getElementById(&#x27;config-carrier&#x27;);
   const defaultBlur = configCarrier?.dataset.blur || &#x27;10&#x27;;
@@ -596,8 +596,8 @@ const { blur = siteConfig.background.blur || 10 } = Astro.props;
 &lt;/script&gt;
 </code></pre>
 <h3 id="步骤-7-添加-css-变量">步骤 7: 添加 CSS 变量</h3>
-<p>在 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/styles/variables.styl</code> 中添加 CSS 变量：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">:root
+<p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/styles/variables.styl</code> 中添加 CSS 变量：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">:root
   --radius-large 1rem
   --content-delay 150ms
   --bg-blur 10px
@@ -609,8 +609,8 @@ define({
 })
 </code></pre>
 <h3 id="步骤-8-在导航栏添加模糊设置按钮">步骤 8: 在导航栏添加模糊设置按钮</h3>
-<p>修改 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/components/Navbar.astro</code>，添加模糊设置按钮和面板：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">&lt;Search client:only=&quot;svelte&quot;&gt;&lt;/Search&gt;
+<p>修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/Navbar.astro</code>，添加模糊设置按钮和面板：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;Search client:only=&quot;svelte&quot;&gt;&lt;/Search&gt;
 {siteConfig.background.enable &amp;&amp; (
   &lt;button aria-label=&quot;Blur Settings&quot; class=&quot;btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90&quot; id=&quot;blur-settings-switch&quot;&gt;
     &lt;Icon name=&quot;material-symbols:blur-on&quot; class=&quot;text-[1.25rem]&quot;&gt;&lt;/Icon&gt;
@@ -623,7 +623,7 @@ define({
 {siteConfig.background.enable &amp;&amp; &lt;BlurSettings client:only=&quot;svelte&quot;&gt;&lt;/BlurSettings&gt;}
 </code></pre>
 <p>并添加按钮点击事件处理：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">&lt;script&gt;
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;script&gt;
 function loadButtonScript() {
   // ... 其他按钮
 
@@ -642,8 +642,8 @@ loadButtonScript();
 &lt;/script&gt;
 </code></pre>
 <h3 id="步骤-9-添加半透明卡片样式">步骤 9: 添加半透明卡片样式</h3>
-<p>在 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/styles/main.css</code> 中添加半透明卡片样式：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">@layer</span> components {
+<p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/styles/main.css</code> 中添加半透明卡片样式：</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">@layer</span> components {
   <span class="hljs-selector-class">.card-base</span> {
     <span class="hljs-keyword">@apply</span> rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
   }
@@ -653,17 +653,17 @@ loadButtonScript();
   }
 }
 </code></pre>
-<p>然后将各个组件的 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">card-base</code> 类替换为 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">card-base-transparent</code> 以使用半透明效果。</p>
+<p>然后将各个组件的 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">card-base</code> 类替换为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">card-base-transparent</code> 以使用半透明效果。</p>
 <h2 id="技术实现">技术实现</h2>
 <p>功能实现涉及以下文件：</p>
 <ul>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/types/config.ts</code> - 配置类型定义</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/config.ts</code> - 配置项</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/layouts/Layout.astro</code> - 背景图渲染</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/components/Navbar.astro</code> - 模糊设置按钮</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/components/widget/BlurSettings.svelte</code> - 模糊调节面板</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/utils/setting-utils.ts</code> - 设置存储和读取</li>
-<li><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/styles/variables.styl</code> - 样式变量</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/types/config.ts</code> - 配置类型定义</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/config.ts</code> - 配置项</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/layouts/Layout.astro</code> - 背景图渲染</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/Navbar.astro</code> - 模糊设置按钮</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/widget/BlurSettings.svelte</code> - 模糊调节面板</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/utils/setting-utils.ts</code> - 设置存储和读取</li>
+<li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/styles/variables.styl</code> - 样式变量</li>
 </ul>
 <h2 id="注意事项">注意事项</h2>
 <ol>
@@ -674,7 +674,7 @@ loadButtonScript();
 </ol>
 <h2 id="常见问题">常见问题</h2>
 <p><strong>Q: 为什么背景图不显示？</strong><br/>
-<!-- -->A: 检查 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">background.enable</code> 是否为 <code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">true</code>，图片路径是否正确。</p>
+<!-- -->A: 检查 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">background.enable</code> 是否为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">true</code>，图片路径是否正确。</p>
 <p><strong>Q: 如何让背景图固定不滚动？</strong><br/>
 <!-- -->A: 当前实现已经是固定的，背景图不会随页面滚动。</p>
 <p><strong>Q: 可以为不同页面设置不同背景图吗？</strong><br/>
@@ -701,7 +701,7 @@ loadButtonScript();
 <p>打开<a href="https://one.dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Zero Trust</a>团队名随便写一个，在左侧边栏找到 <strong>网络</strong> ，选择 <strong>连接器</strong> 。进来后点击 <strong>添加隧道</strong> ，隧道类型选项 <strong>Cloudflared</strong> ，名称依旧随便取，保存隧道后选择系统类型，下面我以ubuntu 64-bit 为例</p>
 <h3 id="安装-cloudflared">安装 cloudflared</h3>
 <p>可将给的shell脚本保存为.sh执行，连上需远程ssh的终端，执行</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
 <span class="hljs-comment">#!/bin/bash</span>
 
 <span class="hljs-comment"># Add cloudflare gpg key</span>
@@ -716,14 +716,14 @@ curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | <span class="hl
 EOF
 </code></pre>
 <p>赋予权限</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
 </code></pre>
 <p>执行脚本安装</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">./Install_cloudflared.sh
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">./Install_cloudflared.sh
 </code></pre>
 <h3 id="连接">连接</h3>
 <p>执行连接页面给的 <em>让计算机每次启动时自动运行隧道</em> 这条命令</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
 </code></pre>
 <p>若 <strong>Connectors</strong> 列表中出现了您的设备，则说明安装成功。</p>
 <h1>配置Tunnel及应用</h1>
@@ -860,7 +860,7 @@ EOF
 <h1>修改RSS配置文件</h1>
 <p>打开<strong>src/pages/rss.xml.ts</strong>，当然你也可以直接删了<br/>
 <!-- -->直接一个全选删除再将下面的配置粘贴填入</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">import</span> rss <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">import</span> rss <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
 <span class="hljs-keyword">import</span> sanitizeHtml <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;sanitize-html&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">MarkdownIt</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;markdown-it&#x27;</span>;
 <span class="hljs-keyword">import</span> { getCollection } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;astro:content&#x27;</span>;
@@ -946,7 +946,7 @@ EOF
 }
 </code></pre>
 <p>保存了，还需要安装一个pnpm包，不用管是什么，能帮我们转换成链接就是的了</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">pnpm add node-html-parser
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">pnpm add node-html-parser
 </code></pre>
 <p>:::warning
 在推送到仓库时，你可能会遇到warning: in the working copy of &#x27;pnpm-lock.yaml&#x27;, LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可
@@ -962,7 +962,7 @@ EOF
     <content:encoded><![CDATA[<div class="markdown"><h1>本文章分为两部分</h1>
 <h3 id="适配多语言的404界面">适配多语言的404界面</h3>
 <p>打开<strong>src/i18n/i18nKey.ts</strong></p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">	license = <span class="hljs-string">&quot;license&quot;</span>,
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">	license = <span class="hljs-string">&quot;license&quot;</span>,
 	friends = <span class="hljs-string">&quot;friends&quot;</span>,
 
 	<span class="hljs-comment">// 404 page</span>
@@ -974,7 +974,7 @@ EOF
 </code></pre>
 <p>再分别打开languages下的<strong>en.ts</strong>和<strong>zh_CN.ts</strong><br/>
 <!-- -->en.ts</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;License&quot;</span>,
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;License&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">friends</span>]: <span class="hljs-string">&quot;Friends&quot;</span>,
 
 	<span class="hljs-comment">// 404 page</span>
@@ -985,7 +985,7 @@ EOF
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">viewArchive</span>]: <span class="hljs-string">&quot;View Archive&quot;</span>,
 </code></pre>
 <p>zh_CN.ts</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;许可协议&quot;</span>,
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;许可协议&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">friends</span>]: <span class="hljs-string">&quot;友链&quot;</span>,
 
 	<span class="hljs-comment">// 404 page</span>
@@ -996,7 +996,7 @@ EOF
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">viewArchive</span>]: <span class="hljs-string">&quot;查看归档&quot;</span>,
 </code></pre>
 <p>最后在<strong>src/pages</strong>目录下创建<strong>404.astro</strong></p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">---
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">---
 import { Icon } from &quot;astro-icon/components&quot;;
 import MainGridLayout from &quot;../layouts/MainGridLayout.astro&quot;;
 import I18nKey from &quot;../i18n/i18nKey&quot;;
@@ -1118,7 +1118,7 @@ import { siteConfig } from &quot;../config&quot;;
 <p>此方法直接在<strong>src/pages</strong>目录下创建404.astro即可<br/>
 <!-- -->由于我没有语言的404，这里附上二叉树树的404界面<br/>
 <!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.jpg" alt="2x-404" loading="lazy" node="[object Object]"/></p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">---
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">---
 import Layout from &quot;@/layouts/Layout.astro&quot;;
 import MainGridLayout from &quot;@/layouts/MainGridLayout.astro&quot;;
 import { Icon } from &quot;astro-icon/components&quot;;
@@ -1202,19 +1202,19 @@ import { siteConfig } from &quot;@/config&quot;;
 Giscus就是一个非常合适的平台</p>
 <h1>配置Giscus</h1>
 <p>首先去github创建一个存储库，<strong>一定要是公开库</strong>
-然后在仓库设置中<strong>启用</strong><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">Discussion</code>功能<br/>
+然后在仓库设置中<strong>启用</strong><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">Discussion</code>功能<br/>
 <!-- -->前往<a href="https://giscus.app/zh-CN" node="[object Object]" target="_blank" rel="noreferrer noopener">https://giscus.app/zh-CN</a>
-在<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">仓库</code>一栏中点击第二步的蓝字安装giscus，最后填写自己的用户名及刚刚创建的仓库名称</p>
+在<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">仓库</code>一栏中点击第二步的蓝字安装giscus，最后填写自己的用户名及刚刚创建的仓库名称</p>
 <h3 id="映射">映射</h3>
-<p>我只建议使用<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">pathname</code>：以文章路径区分评论区，即使换域名也能匹配<br/>
+<p>我只建议使用<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">pathname</code>：以文章路径区分评论区，即使换域名也能匹配<br/>
 <!-- -->其它映射可以看官方介绍<br/>
 <!-- -->分类选择<strong>公告（announcements）</strong><br/>
 <!-- -->特性个人建议勾选<strong>1 3 4</strong><br/>
 <!-- -->主题默认即可，也可以尝试官方的其它主题<br/>
 <!-- -->最后将给出的JS复制</p>
 <h1>配置fuwari</h1>
-<p>在<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/pages/posts/</code>目录下找到<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">[...slug].astro</code>，在它的<strong>135行</strong>插入</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">&lt;div id=&quot;giscus-comments&quot; style=&quot;margin-top: 3rem;&quot;&gt;
+<p>在<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/pages/posts/</code>目录下找到<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">[...slug].astro</code>，在它的<strong>135行</strong>插入</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;div id=&quot;giscus-comments&quot; style=&quot;margin-top: 3rem;&quot;&gt;
   你的JS
 &lt;/div&gt;
 </code></pre>

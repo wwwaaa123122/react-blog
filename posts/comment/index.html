@@ -8,9 +8,9 @@
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     
-    <script type="module" crossorigin src="/react-blog/assets/index-C1svLTev.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-D5OXQzlb.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
-    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-DIq_Syqa.css">
+    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-CE7OXDER.css">
   <title>fuwari接入评论功能 · Starlr Blog</title>
 <meta name="description" content="让你的fuwari接入评论，并让它在文章末显示出">
 <link rel="canonical" href="https://xc-lr.cn/posts/comment/">
@@ -34,19 +34,19 @@
 Giscus就是一个非常合适的平台</p>
 <h1>配置Giscus</h1>
 <p>首先去github创建一个存储库，<strong>一定要是公开库</strong>
-然后在仓库设置中<strong>启用</strong><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">Discussion</code>功能<br/>
+然后在仓库设置中<strong>启用</strong><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">Discussion</code>功能<br/>
 <!-- -->前往<a href="https://giscus.app/zh-CN" node="[object Object]" target="_blank" rel="noreferrer noopener">https://giscus.app/zh-CN</a>
-在<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">仓库</code>一栏中点击第二步的蓝字安装giscus，最后填写自己的用户名及刚刚创建的仓库名称</p>
+在<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">仓库</code>一栏中点击第二步的蓝字安装giscus，最后填写自己的用户名及刚刚创建的仓库名称</p>
 <h3 id="映射">映射</h3>
-<p>我只建议使用<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">pathname</code>：以文章路径区分评论区，即使换域名也能匹配<br/>
+<p>我只建议使用<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">pathname</code>：以文章路径区分评论区，即使换域名也能匹配<br/>
 <!-- -->其它映射可以看官方介绍<br/>
 <!-- -->分类选择<strong>公告（announcements）</strong><br/>
 <!-- -->特性个人建议勾选<strong>1 3 4</strong><br/>
 <!-- -->主题默认即可，也可以尝试官方的其它主题<br/>
 <!-- -->最后将给出的JS复制</p>
 <h1>配置fuwari</h1>
-<p>在<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">src/pages/posts/</code>目录下找到<code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">[...slug].astro</code>，在它的<strong>135行</strong>插入</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">&lt;div id=&quot;giscus-comments&quot; style=&quot;margin-top: 3rem;&quot;&gt;
+<p>在<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/pages/posts/</code>目录下找到<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">[...slug].astro</code>，在它的<strong>135行</strong>插入</p>
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;div id=&quot;giscus-comments&quot; style=&quot;margin-top: 3rem;&quot;&gt;
   你的JS
 &lt;/div&gt;
 </code></pre>

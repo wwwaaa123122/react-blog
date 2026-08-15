@@ -8,9 +8,9 @@
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     
-    <script type="module" crossorigin src="/react-blog/assets/index-C1svLTev.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-D5OXQzlb.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
-    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-DIq_Syqa.css">
+    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-CE7OXDER.css">
   <title>fuwari修复RSS图片不显示 · Starlr Blog</title>
 <meta name="description" content="修复RSS图片链接问题">
 <link rel="canonical" href="https://xc-lr.cn/posts/fuwari-rss/">
@@ -34,7 +34,7 @@
 <h1>修改RSS配置文件</h1>
 <p>打开<strong>src/pages/rss.xml.ts</strong>，当然你也可以直接删了<br/>
 <!-- -->直接一个全选删除再将下面的配置粘贴填入</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-keyword">import</span> rss <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">import</span> rss <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
 <span class="hljs-keyword">import</span> sanitizeHtml <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;sanitize-html&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">MarkdownIt</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;markdown-it&#x27;</span>;
 <span class="hljs-keyword">import</span> { getCollection } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;astro:content&#x27;</span>;
@@ -120,7 +120,7 @@
 }
 </code></pre>
 <p>保存了，还需要安装一个pnpm包，不用管是什么，能帮我们转换成链接就是的了</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">pnpm add node-html-parser
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">pnpm add node-html-parser
 </code></pre>
 <p>:::warning
 在推送到仓库时，你可能会遇到warning: in the working copy of &#x27;pnpm-lock.yaml&#x27;, LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可

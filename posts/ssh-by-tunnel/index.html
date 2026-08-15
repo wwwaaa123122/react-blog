@@ -8,9 +8,9 @@
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     
-    <script type="module" crossorigin src="/react-blog/assets/index-C1svLTev.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-D5OXQzlb.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
-    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-DIq_Syqa.css">
+    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-CE7OXDER.css">
   <title>通过Cloudflare Tunnel使用SSH · Starlr Blog</title>
 <meta name="description" content="通过Cloudflare Tunnel连接无公网IP的服务">
 <link rel="canonical" href="https://xc-lr.cn/posts/ssh-by-tunnel/">
@@ -41,7 +41,7 @@
 <p>打开<a href="https://one.dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Zero Trust</a>团队名随便写一个，在左侧边栏找到 <strong>网络</strong> ，选择 <strong>连接器</strong> 。进来后点击 <strong>添加隧道</strong> ，隧道类型选项 <strong>Cloudflared</strong> ，名称依旧随便取，保存隧道后选择系统类型，下面我以ubuntu 64-bit 为例</p>
 <h3 id="安装-cloudflared">安装 cloudflared</h3>
 <p>可将给的shell脚本保存为.sh执行，连上需远程ssh的终端，执行</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
 <span class="hljs-comment">#!/bin/bash</span>
 
 <span class="hljs-comment"># Add cloudflare gpg key</span>
@@ -56,14 +56,14 @@ curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | <span class="hl
 EOF
 </code></pre>
 <p>赋予权限</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
 </code></pre>
 <p>执行脚本安装</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]">./Install_cloudflared.sh
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">./Install_cloudflared.sh
 </code></pre>
 <h3 id="连接">连接</h3>
 <p>执行连接页面给的 <em>让计算机每次启动时自动运行隧道</em> 这条命令</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted border border-border text-[0.88em] text-primary" node="[object Object]"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
+<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
 </code></pre>
 <p>若 <strong>Connectors</strong> 列表中出现了您的设备，则说明安装成功。</p>
 <h1>配置Tunnel及应用</h1>
