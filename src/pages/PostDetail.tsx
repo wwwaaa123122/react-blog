@@ -39,8 +39,8 @@ export default function PostDetail() {
 
   // 上一篇 / 下一篇
   const currentIdx = publishedPosts.findIndex((p) => p.slug === slug);
-  const prevPost = currentIdx < publishedPosts.length - 1 ? publishedPosts[currentIdx + 1] : null;
-  const nextPost = currentIdx > 0 ? publishedPosts[currentIdx - 1] : null;
+  const prevPost = currentIdx > 0 ? publishedPosts[currentIdx - 1] : null;
+  const nextPost = currentIdx < publishedPosts.length - 1 ? publishedPosts[currentIdx + 1] : null;
 
   return (
     <>
