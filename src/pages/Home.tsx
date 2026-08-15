@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { publishedPosts } from "../lib/posts";
 import { siteConfig } from "../config/site";
 import { formatDate } from "../lib/posts";
+import { assetUrl } from "../lib/base";
 import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
 
