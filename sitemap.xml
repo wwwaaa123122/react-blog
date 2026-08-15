@@ -2,96 +2,96 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://xc-lr.cn/</loc>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts</loc>
-    <lastmod>2026-08-14</lastmod>
+    <loc>https://xc-lr.cn/posts/</loc>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xc-lr.cn/archive</loc>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://xc-lr.cn/friends</loc>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://xc-lr.cn/about</loc>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/kick-live-notify</loc>
+    <loc>https://xc-lr.cn/posts/kick-live-notify/</loc>
     <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/mc-srv-worker</loc>
+    <loc>https://xc-lr.cn/posts/mc-srv-worker/</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/Why-to-Firefly</loc>
+    <loc>https://xc-lr.cn/posts/Why-to-Firefly/</loc>
     <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/fuwari-background-image</loc>
+    <loc>https://xc-lr.cn/posts/fuwari-background-image/</loc>
     <lastmod>2026-03-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/ssh-by-tunnel</loc>
+    <loc>https://xc-lr.cn/posts/ssh-by-tunnel/</loc>
     <lastmod>2026-02-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/how-use-bot</loc>
+    <loc>https://xc-lr.cn/posts/how-use-bot/</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/fuwari-rss</loc>
+    <loc>https://xc-lr.cn/posts/fuwari-rss/</loc>
     <lastmod>2025-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/fuwari-404</loc>
+    <loc>https://xc-lr.cn/posts/fuwari-404/</loc>
     <lastmod>2025-09-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/ba2th</loc>
+    <loc>https://xc-lr.cn/posts/ba2th/</loc>
     <lastmod>2025-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/comment</loc>
+    <loc>https://xc-lr.cn/posts/comment/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xc-lr.cn/posts/edgeone-worker</loc>
+    <loc>https://xc-lr.cn/posts/edgeone-worker/</loc>
     <lastmod>2025-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

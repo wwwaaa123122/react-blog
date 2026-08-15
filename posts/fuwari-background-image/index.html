@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/react-blog/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
+    
+    <script type="module" crossorigin src="/react-blog/assets/index-DJ-lz5ae.js"></script>
+    <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
+    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-DaOTDET3.css">
+  <title>Fuwari 主题背景图功能教程 · Starlr Blog</title>
+<meta name="description" content="为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程">
+<link rel="canonical" href="https://xc-lr.cn/posts/fuwari-background-image/">
+<meta property="og:site_name" content="Starlr Blog">
+<meta property="og:title" content="Fuwari 主题背景图功能教程 · Starlr Blog">
+<meta property="og:description" content="为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xc-lr.cn/posts/fuwari-background-image/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xc-lr.cn/react-blog/homeground.webg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fuwari 主题背景图功能教程 · Starlr Blog">
+<meta name="twitter:description" content="为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程">
+<meta name="twitter:image" content="https://xc-lr.cn/react-blog/homeground.webg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Fuwari 主题背景图功能教程","description":"为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程","datePublished":"2026-03-29","dateModified":"2026-03-29","author":{"@type":"Person","name":"星辰旅人"},"publisher":{"@type":"Organization","name":"Starlr Blog"},"image":"https://xc-lr.cn/homeground.webg","mainEntityOfPage":"https://xc-lr.cn/posts/fuwari-background-image"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"文章","item":"https://xc-lr.cn/posts/"},{"@type":"ListItem","position":2,"name":"Fuwari 主题背景图功能教程"}]}</script>
+</head>
+  <body>
+    <div id="root"><div class="flex min-h-screen flex-col"><header class="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl"><div class="mx-auto flex h-[60px] w-full max-w-[880px] items-center justify-between gap-4 px-5"><a class="flex shrink-0 items-center gap-2.5 text-[17px] font-bold tracking-[0.3px] text-foreground" href="/react-blog" data-discover="true"><span class="brand-logo h-[34px] w-[34px] rounded-[10px] text-base">萤</span><span>Starlr Blog</span></a><nav class="hidden md:block"><ul class="flex list-none items-center gap-0.5"><li><a class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" href="/react-blog" data-discover="true">首页</a></li><li><a aria-current="page" class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium transition-colors hover:bg-accent bg-accent text-primary hover:text-primary" href="/react-blog/posts" data-discover="true">文章</a></li><li><a class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" href="/react-blog/archive" data-discover="true">归档</a></li><li><a class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" href="/react-blog/friends" data-discover="true">友链</a></li><li><a class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" href="/react-blog/about" data-discover="true">关于</a></li><li><a class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" href="/react-blog/admin" data-discover="true">管理</a></li><li><a class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener">GitHub<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link size-3" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></li><li><a class="flex items-center gap-1.5 rounded-[9px] px-3 py-[7px] text-[14.5px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener">统计<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link size-3" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></li></ul></nav><div class="flex items-center gap-1.5"><button data-slot="dropdown-menu-trigger" data-variant="ghost" data-size="icon" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-8" aria-label="切换主题" title="切换主题" type="button" id="radix-_R_79_" aria-haspopup="menu" aria-expanded="false" data-state="closed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun size-[19px] dark:hidden" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon hidden size-[19px] dark:block" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg></button><button data-slot="button" data-variant="ghost" data-size="icon" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-8 md:hidden" aria-label="菜单" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></div></header><main class="flex-1 py-7 pb-14"><div class="mx-auto w-full max-w-[880px] px-5"><nav aria-label="breadcrumb" data-slot="breadcrumb" class="mb-4"><ol data-slot="breadcrumb-list" class="flex flex-wrap items-center gap-1.5 text-sm wrap-break-word text-muted-foreground"><li data-slot="breadcrumb-item" class="inline-flex items-center gap-1"><a class="transition-colors hover:text-foreground text-muted-foreground transition-colors hover:text-primary" data-slot="breadcrumb-link" href="/react-blog" data-discover="true">首页</a><li data-slot="breadcrumb-separator" role="presentation" aria-hidden="true" class="[&amp;&gt;svg]:size-3.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></li></li><li data-slot="breadcrumb-item" class="inline-flex items-center gap-1"><a class="transition-colors hover:text-foreground text-muted-foreground transition-colors hover:text-primary" data-slot="breadcrumb-link" href="/react-blog/posts" data-discover="true">文章</a><li data-slot="breadcrumb-separator" role="presentation" aria-hidden="true" class="[&amp;&gt;svg]:size-3.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></li></li><li data-slot="breadcrumb-item" class="inline-flex items-center gap-1"><span data-slot="breadcrumb-page" role="link" aria-disabled="true" aria-current="page" class="font-semibold text-foreground">Fuwari 主题背景图功能教程</span></li></ol></nav><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://xc-lr.cn/"},{"@type":"ListItem","position":2,"name":"文章","item":"https://xc-lr.cn/posts"},{"@type":"ListItem","position":3,"name":"Fuwari 主题背景图功能教程"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Fuwari 主题背景图功能教程","description":"为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程","datePublished":"2026-03-29","dateModified":"2026-03-29","author":{"@type":"Person","name":"星辰旅人"},"publisher":{"@type":"Organization","name":"Starlr Blog"},"image":"https://xc-lr.cn/homeground.webg","mainEntityOfPage":"https://xc-lr.cn/posts/fuwari-background-image"}</script><div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl px-[40px] py-9 sm:p-6 sm:pt-7"><header class="mb-6 border-b border-border pb-5"><h1 class="text-[26px] font-extrabold leading-snug tracking-[0.3px] [overflow-wrap:anywhere]">Fuwari 主题背景图功能教程</h1><div class="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-[13px] text-muted-foreground"><span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock size-3.5" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>2026/03/29</span><span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-3.5" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg>约 6 分钟<!-- --> · <!-- -->1756<!-- --> 字</span><span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tag size-3.5" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle></svg>tech</span></div><div class="mt-3.5 flex flex-wrap gap-2"><a class="transition-opacity hover:opacity-80" href="/react-blog/posts?tag=fuwari" data-discover="true"><span data-slot="badge" data-variant="secondary" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80">fuwari</span></a></div></header><img class="mb-6 max-h-[320px] w-full rounded-xl object-cover" src="/react-blog/homeground.webg" alt="Fuwari 主题背景图功能教程" loading="lazy"/><details class="mb-5"><summary class="inline-flex cursor-pointer list-none items-center gap-1.5 text-[14px] font-semibold text-muted-foreground [&amp;::-webkit-details-marker]:hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-tree size-4" aria-hidden="true"><path d="M8 5h13"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="M3 10a2 2 0 0 0 2 2h3"></path><path d="M3 5v12a2 2 0 0 0 2 2h3"></path></svg>目录</summary><ul class="mt-2.5 space-y-0.5 border-l border-border pl-5 text-[13.5px] leading-7 text-muted-foreground"><li style="padding-left:0"><a href="#功能特性" class="transition-colors hover:text-primary">功能特性</a></li><li style="padding-left:0"><a href="#配置步骤" class="transition-colors hover:text-primary">配置步骤</a></li><li style="padding-left:14px"><a href="#1-配置背景图" class="transition-colors hover:text-primary">1. 配置背景图</a></li><li style="padding-left:14px"><a href="#2-添加背景图片" class="transition-colors hover:text-primary">2. 添加背景图片</a></li><li style="padding-left:14px"><a href="#3-自定义模糊度" class="transition-colors hover:text-primary">3. 自定义模糊度</a></li><li style="padding-left:0"><a href="#样式自定义" class="transition-colors hover:text-primary">样式自定义</a></li><li style="padding-left:0"><a href="#禁用背景图" class="transition-colors hover:text-primary">禁用背景图</a></li><li style="padding-left:0"><a href="#效果展示" class="transition-colors hover:text-primary">效果展示</a></li><li style="padding-left:0"><a href="#代码实现" class="transition-colors hover:text-primary">代码实现</a></li><li style="padding-left:14px"><a href="#步骤-1-定义配置类型" class="transition-colors hover:text-primary">步骤 1: 定义配置类型</a></li><li style="padding-left:14px"><a href="#步骤-2-添加配置项" class="transition-colors hover:text-primary">步骤 2: 添加配置项</a></li><li style="padding-left:14px"><a href="#步骤-3-实现设置存储和读取" class="transition-colors hover:text-primary">步骤 3: 实现设置存储和读取</a></li><li style="padding-left:14px"><a href="#步骤-4-创建模糊设置组件" class="transition-colors hover:text-primary">步骤 4: 创建模糊设置组件</a></li><li style="padding-left:14px"><a href="#步骤-5-更新-configcarrier-组件" class="transition-colors hover:text-primary">步骤 5: 更新 ConfigCarrier 组件</a></li><li style="padding-left:14px"><a href="#步骤-6-在-layout-中添加背景图" class="transition-colors hover:text-primary">步骤 6: 在 Layout 中添加背景图</a></li><li style="padding-left:14px"><a href="#步骤-7-添加-css-变量" class="transition-colors hover:text-primary">步骤 7: 添加 CSS 变量</a></li><li style="padding-left:14px"><a href="#步骤-8-在导航栏添加模糊设置按钮" class="transition-colors hover:text-primary">步骤 8: 在导航栏添加模糊设置按钮</a></li><li style="padding-left:14px"><a href="#步骤-9-添加半透明卡片样式" class="transition-colors hover:text-primary">步骤 9: 添加半透明卡片样式</a></li><li style="padding-left:0"><a href="#技术实现" class="transition-colors hover:text-primary">技术实现</a></li><li style="padding-left:0"><a href="#注意事项" class="transition-colors hover:text-primary">注意事项</a></li><li style="padding-left:0"><a href="#常见问题" class="transition-colors hover:text-primary">常见问题</a></li></ul></details><div class="markdown"><p>本教程将介绍如何为 Fuwari 主题添加背景图功能，包括高斯模糊效果和用户可调节的模糊程度。</p>
+<h2 id="功能特性">功能特性</h2>
+<ul>
+<li>✨ 全屏背景图显示</li>
+<li>🎨 高斯模糊效果</li>
+<li>🎚️ 用户可调节模糊程度（0-50px）</li>
+<li>🧊 半透明卡片效果</li>
+<li>💾 设置自动保存到本地存储</li>
+</ul>
+<h2 id="配置步骤">配置步骤</h2>
+<h3 id="1-配置背景图">1. 配置背景图</h3>
+<p>打开 <code>src/config.ts</code> 文件，找到 <code>siteConfig</code> 对象，添加或修改 <code>background</code> 配置：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+  <span class="hljs-comment">// ... 其他配置</span>
+  
+  <span class="hljs-attr">background</span>: {
+    <span class="hljs-attr">enable</span>: <span class="hljs-literal">true</span>,              <span class="hljs-comment">// 是否启用背景图</span>
+    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,   <span class="hljs-comment">// 背景图片路径</span>
+    <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,                  <span class="hljs-comment">// 默认模糊程度（像素）</span>
+  },
+  
+  <span class="hljs-comment">// ... 其他配置</span>
+};
+</code></pre>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><code>enable</code>: 布尔值，控制是否显示背景图</li>
+<li><code>src</code>: 图片路径，以 <code>/</code> 开头表示相对于 <code>/public</code> 目录，否则相对于 <code>/src</code> 目录</li>
+<li><code>blur</code>: 数字，默认模糊程度，范围建议 0-50</li>
+</ul>
+<h3 id="2-添加背景图片">2. 添加背景图片</h3>
+<p>将你的背景图片放到 <code>/public</code> 目录下（如果路径以 <code>/</code> 开头）或 <code>/src</code> 目录下。建议使用高分辨率的图片以获得最佳效果。</p>
+<p><strong>推荐图片规格：</strong></p>
+<ul>
+<li>分辨率：至少 1920x1080</li>
+<li>格式：WebP（推荐）、JPG、PNG</li>
+<li>大小：建议小于 2MB</li>
+</ul>
+<h3 id="3-自定义模糊度">3. 自定义模糊度</h3>
+<p>用户可以在网页上通过导航栏的模糊图标调节背景模糊度：</p>
+<ol>
+<li>点击导航栏右侧的模糊图标</li>
+<li>使用滑块调节模糊程度（0-50px）</li>
+<li>设置会自动保存，刷新页面后保持</li>
+</ol>
+<h2 id="样式自定义">样式自定义</h2>
+<p>如果需要调整半透明效果，可以修改 <code>src/styles/variables.styl</code> 文件：</p>
+<pre><code class="hljs language-stylus">define({
+  // 卡片背景透明度（85% 不透明）
+  --card-bg-transparent: oklch(1 0 0 / 0.85) oklch(0.23 0.015 var(--hue) / 0.85)
+  
+  // 导航栏背景透明度（80% 不透明）
+  --navbar-bg: oklch(1 0 0 / 0.8) oklch(0.23 0.015 var(--hue) / 0.8)
+})
+</code></pre>
+<p>修改 <code>0.85</code> 和 <code>0.8</code> 可以调整透明度（0-1 之间，越小越透明）。</p>
+<h2 id="禁用背景图">禁用背景图</h2>
+<p>如果不想要背景图效果，只需在配置中设置 <code>enable: false</code>：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-attr">background</span>: {
+  <span class="hljs-attr">enable</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,
+  <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,
+},
+</code></pre>
+<h2 id="效果展示">效果展示</h2>
+<p>启用背景图后，整个网站将拥有：</p>
+<ul>
+<li>固定在底层的全屏背景图</li>
+<li>可调节的高斯模糊效果</li>
+<li>半透明的卡片和导航栏</li>
+<li>保持良好的文字可读性</li>
+</ul>
+<h2 id="代码实现">代码实现</h2>
+<p>如果你想从零开始实现这个功能，或者了解具体的技术细节，请按照以下步骤操作：</p>
+<h3 id="步骤-1-定义配置类型">步骤 1: 定义配置类型</h3>
+<p>首先在 <code>src/types/config.ts</code> 中添加背景图配置的类型定义：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">SiteConfig</span> = {
+  <span class="hljs-comment">// ... 其他配置</span>
+
+  <span class="hljs-attr">background</span>: {
+    <span class="hljs-attr">enable</span>: <span class="hljs-built_in">boolean</span>;
+    <span class="hljs-attr">src</span>: <span class="hljs-built_in">string</span>;
+    <span class="hljs-attr">blur</span>?: <span class="hljs-built_in">number</span>;
+  };
+
+  <span class="hljs-comment">// ... 其他配置</span>
+};
+</code></pre>
+<h3 id="步骤-2-添加配置项">步骤 2: 添加配置项</h3>
+<p>在 <code>src/config.ts</code> 中添加背景图配置：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+  <span class="hljs-comment">// ... 其他配置</span>
+
+  <span class="hljs-attr">background</span>: {
+    <span class="hljs-attr">enable</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,
+    <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,
+  },
+
+  <span class="hljs-comment">// ... 其他配置</span>
+};
+</code></pre>
+<h3 id="步骤-3-实现设置存储和读取">步骤 3: 实现设置存储和读取</h3>
+<p>在 <code>src/utils/setting-utils.ts</code> 中添加模糊度的存储和读取函数：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">// 获取默认模糊度</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getDefaultBlur</span>(<span class="hljs-params"></span>): <span class="hljs-built_in">number</span> {
+  <span class="hljs-keyword">const</span> fallback = <span class="hljs-string">&quot;10&quot;</span>;
+  <span class="hljs-keyword">const</span> configCarrier = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;config-carrier&quot;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">parseInt</span>(configCarrier?.<span class="hljs-property">dataset</span>.<span class="hljs-property">blur</span> || fallback);
+}
+
+<span class="hljs-comment">// 获取存储的模糊度</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getBlur</span>(<span class="hljs-params"></span>): <span class="hljs-built_in">number</span> {
+  <span class="hljs-keyword">const</span> stored = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&quot;blur&quot;</span>);
+  <span class="hljs-keyword">return</span> stored ? <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">parseInt</span>(stored) : <span class="hljs-title function_">getDefaultBlur</span>();
+}
+
+<span class="hljs-comment">// 设置模糊度</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">setBlur</span>(<span class="hljs-params"><span class="hljs-attr">blur</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">void</span> {
+  <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&quot;blur&quot;</span>, <span class="hljs-title class_">String</span>(blur));
+  <span class="hljs-keyword">const</span> r = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;:root&quot;</span>) <span class="hljs-keyword">as</span> <span class="hljs-title class_">HTMLElement</span>;
+  <span class="hljs-keyword">if</span> (!r) {
+    <span class="hljs-keyword">return</span>;
+  }
+  r.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(<span class="hljs-string">&quot;--bg-blur&quot;</span>, <span class="hljs-title class_">String</span>(blur) + <span class="hljs-string">&quot;px&quot;</span>);
+}
+</code></pre>
+<h3 id="步骤-4-创建模糊设置组件">步骤 4: 创建模糊设置组件</h3>
+<p>创建 <code>src/components/widget/BlurSettings.svelte</code> 文件：</p>
+<pre><code class="hljs language-svelte">&lt;script lang=&quot;ts&quot;&gt;
+import I18nKey from &quot;@i18n/i18nKey&quot;;
+import { i18n } from &quot;@i18n/translation&quot;;
+import Icon from &quot;@iconify/svelte&quot;;
+import { getDefaultBlur, getBlur, setBlur } from &quot;@utils/setting-utils&quot;;
+
+let blur = getBlur();
+const defaultBlur = getDefaultBlur();
+
+function resetBlur() {
+  blur = getDefaultBlur();
+}
+
+$: if (blur || blur === 0) {
+  setBlur(blur);
+}
+&lt;/script&gt;
+
+&lt;div id=&quot;blur-setting&quot; class=&quot;float-panel float-panel-closed absolute transition-all w-80 right-4 px-4 py-4&quot;&gt;
+    &lt;div class=&quot;flex flex-row gap-2 mb-3 items-center justify-between&quot;&gt;
+        &lt;div class=&quot;flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:-left-3 before:top-[0.33rem]&quot;
+        &gt;
+            背景模糊
+            &lt;button aria-label=&quot;Reset to Default&quot; class=&quot;btn-regular w-7 h-7 rounded-md active:scale-90&quot;
+                    class:opacity-0={blur === defaultBlur} class:pointer-events-none={blur === defaultBlur} on:click={resetBlur}&gt;
+                &lt;div class=&quot;text-[var(--btn-content)]&quot;&gt;
+                    &lt;Icon icon=&quot;fa6-solid:arrow-rotate-left&quot; class=&quot;text-[0.875rem]&quot;&gt;&lt;/Icon&gt;
+                &lt;/div&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;flex gap-1&quot;&gt;
+            &lt;div id=&quot;blurValue&quot; class=&quot;transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center
+            font-bold text-sm items-center text-[var(--btn-content)]&quot;&gt;
+                {blur}
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none&quot;&gt;
+        &lt;input aria-label=&quot;Background Blur&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; bind:value={blur}
+               class=&quot;slider&quot; id=&quot;blurSlider&quot; step=&quot;1&quot; style=&quot;width: 100%&quot;&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3 id="步骤-5-更新-configcarrier-组件">步骤 5: 更新 ConfigCarrier 组件</h3>
+<p>修改 <code>src/components/ConfigCarrier.astro</code> 以传递模糊度配置：</p>
+<pre><code class="hljs language-astro">---
+import { siteConfig } from &quot;../config&quot;;
+
+interface Props {
+  blur?: number;
+}
+
+const { blur = siteConfig.background.blur || 10 } = Astro.props;
+---
+
+&lt;div id=&quot;config-carrier&quot; data-hue={siteConfig.themeColor.hue} data-blur={blur}&gt;
+&lt;/div&gt;
+</code></pre>
+<h3 id="步骤-6-在-layout-中添加背景图">步骤 6: 在 Layout 中添加背景图</h3>
+<p>在 <code>src/layouts/Layout.astro</code> 中添加背景图元素和初始化脚本：</p>
+<pre><code class="hljs language-astro">&lt;body&gt;
+  &lt;ConfigCarrier blur={siteConfig.background.blur || 10}&gt;&lt;/ConfigCarrier&gt;
+  {siteConfig.background.enable &amp;&amp; (
+    &lt;div id=&quot;background-wrapper&quot; class=&quot;fixed inset-0 -z-10 overflow-hidden&quot;&gt;
+      &lt;img
+        id=&quot;background-image&quot;
+        src={url(siteConfig.background.src)}
+        alt=&quot;Background image&quot;
+        class=&quot;absolute inset-0 w-full h-full object-cover&quot;
+        style={`filter: blur(var(--bg-blur, 10px))`}
+      /&gt;
+    &lt;/div&gt;
+  )}
+  &lt;slot /&gt;
+&lt;/body&gt;
+</code></pre>
+<p>并在内联脚本中添加模糊度加载：</p>
+<pre><code class="hljs language-astro">&lt;script is:inline&gt;
+  // 加载模糊度
+  const configCarrier = document.getElementById(&#x27;config-carrier&#x27;);
+  const defaultBlur = configCarrier?.dataset.blur || &#x27;10&#x27;;
+  const blur = localStorage.getItem(&#x27;blur&#x27;) || defaultBlur;
+  document.documentElement.style.setProperty(&#x27;--bg-blur&#x27;, `${blur}px`);
+&lt;/script&gt;
+</code></pre>
+<h3 id="步骤-7-添加-css-变量">步骤 7: 添加 CSS 变量</h3>
+<p>在 <code>src/styles/variables.styl</code> 中添加 CSS 变量：</p>
+<pre><code class="hljs language-stylus">:root
+  --radius-large 1rem
+  --content-delay 150ms
+  --bg-blur 10px
+
+define({
+  // 背景图相关的变量
+  --card-bg-transparent: oklch(1 0 0 / 0.85) oklch(0.23 0.015 var(--hue) / 0.85)
+  --navbar-bg: oklch(1 0 0 / 0.8) oklch(0.23 0.015 var(--hue) / 0.8)
+})
+</code></pre>
+<h3 id="步骤-8-在导航栏添加模糊设置按钮">步骤 8: 在导航栏添加模糊设置按钮</h3>
+<p>修改 <code>src/components/Navbar.astro</code>，添加模糊设置按钮和面板：</p>
+<pre><code class="hljs language-astro">&lt;Search client:only=&quot;svelte&quot;&gt;&lt;/Search&gt;
+{siteConfig.background.enable &amp;&amp; (
+  &lt;button aria-label=&quot;Blur Settings&quot; class=&quot;btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90&quot; id=&quot;blur-settings-switch&quot;&gt;
+    &lt;Icon name=&quot;material-symbols:blur-on&quot; class=&quot;text-[1.25rem]&quot;&gt;&lt;/Icon&gt;
+  &lt;/button&gt;
+)}
+&lt;LightDarkSwitch client:only=&quot;svelte&quot;&gt;&lt;/LightDarkSwitch&gt;
+
+&lt;!-- ... --&gt;
+
+{siteConfig.background.enable &amp;&amp; &lt;BlurSettings client:only=&quot;svelte&quot;&gt;&lt;/BlurSettings&gt;}
+</code></pre>
+<p>并添加按钮点击事件处理：</p>
+<pre><code class="hljs language-astro">&lt;script&gt;
+function loadButtonScript() {
+  // ... 其他按钮
+
+  let blurSettingBtn = document.getElementById(&quot;blur-settings-switch&quot;);
+  if (blurSettingBtn) {
+    blurSettingBtn.onclick = function () {
+      let blurSettingPanel = document.getElementById(&quot;blur-setting&quot;);
+      if (blurSettingPanel) {
+        blurSettingPanel.classList.toggle(&quot;float-panel-closed&quot;);
+      }
+    };
+  }
+}
+
+loadButtonScript();
+&lt;/script&gt;
+</code></pre>
+<h3 id="步骤-9-添加半透明卡片样式">步骤 9: 添加半透明卡片样式</h3>
+<p>在 <code>src/styles/main.css</code> 中添加半透明卡片样式：</p>
+<pre><code class="hljs language-css"><span class="hljs-keyword">@layer</span> components {
+  <span class="hljs-selector-class">.card-base</span> {
+    <span class="hljs-keyword">@apply</span> rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
+  }
+
+  <span class="hljs-selector-class">.card-base-transparent</span> {
+    <span class="hljs-keyword">@apply</span> rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg-transparent)] backdrop-blur-md transition;
+  }
+}
+</code></pre>
+<p>然后将各个组件的 <code>card-base</code> 类替换为 <code>card-base-transparent</code> 以使用半透明效果。</p>
+<h2 id="技术实现">技术实现</h2>
+<p>功能实现涉及以下文件：</p>
+<ul>
+<li><code>src/types/config.ts</code> - 配置类型定义</li>
+<li><code>src/config.ts</code> - 配置项</li>
+<li><code>src/layouts/Layout.astro</code> - 背景图渲染</li>
+<li><code>src/components/Navbar.astro</code> - 模糊设置按钮</li>
+<li><code>src/components/widget/BlurSettings.svelte</code> - 模糊调节面板</li>
+<li><code>src/utils/setting-utils.ts</code> - 设置存储和读取</li>
+<li><code>src/styles/variables.styl</code> - 样式变量</li>
+</ul>
+<h2 id="注意事项">注意事项</h2>
+<ol>
+<li>背景图片会影响页面加载速度，建议使用压缩后的图片</li>
+<li>模糊程度过高可能会影响视觉体验</li>
+<li>半透明效果在浅色主题下可能需要调整</li>
+<li>移动设备上建议使用较小的背景图片</li>
+</ol>
+<h2 id="常见问题">常见问题</h2>
+<p><strong>Q: 为什么背景图不显示？</strong><br/>
+<!-- -->A: 检查 <code>background.enable</code> 是否为 <code>true</code>，图片路径是否正确。</p>
+<p><strong>Q: 如何让背景图固定不滚动？</strong><br/>
+<!-- -->A: 当前实现已经是固定的，背景图不会随页面滚动。</p>
+<p><strong>Q: 可以为不同页面设置不同背景图吗？</strong><br/>
+<!-- -->A: 当前版本所有页面使用同一背景图，如需不同背景需要修改代码。</p>
+<hr/>
+<p>希望这个教程能帮助你更好地使用 Fuwari 主题的背景图功能！</p></div><footer class="mt-9 border-t border-border pt-5 text-[13.5px] text-muted-foreground"><p>本文发布于 <!-- -->2026/03/29<!-- --> · 转载需注明出处 · ©<!-- --> <!-- -->2026<!-- --> 星辰旅人</p><div class="mt-3.5 flex flex-wrap gap-2.5"><a data-slot="button" data-variant="outline" data-size="default" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2" href="/react-blog/posts" data-discover="true">← 返回文章列表</a><a data-slot="button" data-variant="default" data-size="default" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2" href="/react-blog" data-discover="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house size-4" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>首页</a></div></footer></div></div></main><footer class="mt-auto border-t border-border py-6 text-center text-[13px] text-muted-foreground"><div class="mx-auto w-full max-w-[880px] px-5"><p>© <!-- -->2026<!-- --> <a class="text-muted-foreground transition-colors hover:text-primary" href="/react-blog" data-discover="true">星辰旅人</a> · <!-- -->爱你所爱<!-- --> · Powered by React &amp; Vite</p><p class="mt-1"><a class="text-muted-foreground transition-colors hover:text-primary" href="/react-blog" data-discover="true">首页</a> · <a class="text-muted-foreground transition-colors hover:text-primary" href="/react-blog/posts" data-discover="true">文章</a> · <a class="text-muted-foreground transition-colors hover:text-primary" href="/react-blog/archive" data-discover="true">归档</a> · <a class="text-muted-foreground transition-colors hover:text-primary" href="/react-blog/friends" data-discover="true">友链</a> · <a class="text-muted-foreground transition-colors hover:text-primary" href="/react-blog/about" data-discover="true">关于</a> · <a href="/react-blog/llms.txt" target="_blank" rel="noreferrer noopener" class="text-muted-foreground transition-colors hover:text-primary">llms.txt</a> · <a href="/react-blog/sitemap.xml" target="_blank" rel="noreferrer noopener" class="text-muted-foreground transition-colors hover:text-primary">sitemap</a></p></div></footer><button data-slot="button" data-variant="outline" data-size="icon" class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 back-to-top size-[44px] rounded-[13px] shadow-lg" aria-label="回到顶部" title="回到顶部"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up size-5" aria-hidden="true"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg></button></div></div>
+  </body>
+</html>

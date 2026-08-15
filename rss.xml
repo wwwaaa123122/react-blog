@@ -1,0 +1,1239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Starlr Blog</title>
+    <link>https://xc-lr.cn/</link>
+    <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发，作者为starlr/星辰旅人</description>
+    <language>zh-CN</language>
+    <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Sat, 15 Aug 2026 04:45:47 GMT</lastBuildDate>
+  <item>
+    <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知</title>
+    <link>https://xc-lr.cn/posts/kick-live-notify/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/kick-live-notify/</guid>
+    <pubDate>Sun, 14 Jun 2026 00:00:00 GMT</pubDate>
+    <description>基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知</description>
+    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+<p>Kick 是一个比较新的直播平台，虽然没有 Twitch 那么火，但也吸引了不少主播。</p>
+<p>如果你想关注某个 Kick 主播，但又不想一直开着网页等他开播，那就可以用脚本自动监控，开播了直接推消息到 QQ。</p>
+<p>本文介绍一个用 Python 写的 Kick 开播提醒工具，通过 NapCat 对接 QQ，支持私聊和群聊通知。</p>
+<h1>Kick API 介绍</h1>
+<p>Kick 有一个私有 API 可以查询主播的直播状态：</p>
+<pre><code>GET https://api.kick.com/private/v1/channels/{channel}/livestream
+</code></pre>
+<p>其中 <code>{channel}</code> 是主播的用户名（频道名），比如 <code>xctraveller</code>。</p>
+<p>请求示例：</p>
+<pre><code class="hljs language-bash">curl <span class="hljs-string">&quot;https://api.kick.com/private/v1/channels/xctraveller/livestream&quot;</span> \
+  -H <span class="hljs-string">&quot;User-Agent: Mozilla/5.0&quot;</span> \
+  -H <span class="hljs-string">&quot;Accept: application/json&quot;</span>
+</code></pre>
+<p>返回格式：</p>
+<pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;livestream&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123456</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;viewers_count&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">42</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;metadata&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;直播标题&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">&quot;category&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;游戏分类&quot;</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<ul>
+<li>如果 <code>livestream</code> 存在且有 <code>id</code> 字段，说明正在直播</li>
+<li>如果 <code>livestream</code> 为 <code>null</code> 或没有 <code>id</code>，说明未开播</li>
+</ul>
+<p>:::warning
+这是 Kick 的私有 API，没有官方文档，随时可能变动。目前不需要认证，但未来可能需要。
+:::</p>
+<h1>NapCat (OneBot 11) 简介</h1>
+<p>NapCat 是一个基于 QQNT 的 Bot 框架，实现了 OneBot 11 协议。通过它可以：</p>
+<ul>
+<li>发送私聊消息</li>
+<li>发送群聊消息</li>
+<li>以及更多 QQ Bot 功能</li>
+</ul>
+<p>OneBot 11 提供了 HTTP API，我们只需要调用 <code>send_private_msg</code> 或 <code>send_group_msg</code> 接口就能发送消息。</p>
+<h1>工作原理</h1>
+<p>整体流程很简单：</p>
+<ol>
+<li>定时请求 Kick API 查询主播状态</li>
+<li>如果检测到开播且之前未通知 → 发送开播通知</li>
+<li>如果检测到下播且之前已通知 → 发送下播通知</li>
+<li>使用一个 <code>set</code> 记录已通知的主播，避免重复通知</li>
+</ol>
+<p>为了防止程序重启时误发通知，启动时会先同步一次当前状态，只记录不通知。</p>
+<h1>代码实现</h1>
+<h2 id="检查直播状态">检查直播状态</h2>
+<pre><code class="hljs language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_live</span>(<span class="hljs-params">channel: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">tuple</span>[<span class="hljs-built_in">bool</span>, <span class="hljs-built_in">dict</span> | <span class="hljs-literal">None</span>]:
+    url = <span class="hljs-string">f&quot;https://api.kick.com/private/v1/channels/<span class="hljs-subst">{channel}</span>/livestream&quot;</span>
+    req = urllib.request.Request(url, headers={
+        <span class="hljs-string">&quot;User-Agent&quot;</span>: <span class="hljs-string">&quot;Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36&quot;</span>,
+        <span class="hljs-string">&quot;Accept&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span>,
+    })
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">with</span> urllib.request.urlopen(req, timeout=<span class="hljs-number">15</span>) <span class="hljs-keyword">as</span> resp:
+            body = json.loads(resp.read().decode())
+            livestream = body.get(<span class="hljs-string">&quot;data&quot;</span>, {}).get(<span class="hljs-string">&quot;livestream&quot;</span>)
+            <span class="hljs-keyword">if</span> livestream <span class="hljs-keyword">and</span> livestream.get(<span class="hljs-string">&quot;id&quot;</span>):
+                <span class="hljs-keyword">return</span> (<span class="hljs-literal">False</span>, livestream)
+            <span class="hljs-keyword">return</span> (<span class="hljs-literal">False</span>, <span class="hljs-literal">None</span>)
+    <span class="hljs-keyword">except</span> (urllib.error.URLError, urllib.error.HTTPError, 
+            json.JSONDecodeError, OSError) <span class="hljs-keyword">as</span> e:
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[错误] 检查 <span class="hljs-subst">{channel}</span> 失败: <span class="hljs-subst">{e}</span>&quot;</span>, file=sys.stderr)
+        <span class="hljs-keyword">return</span> (<span class="hljs-literal">True</span>, <span class="hljs-literal">None</span>)
+</code></pre>
+<p>返回值设计：</p>
+<ul>
+<li><code>(False, livestream)</code> — 正在直播</li>
+<li><code>(False, None)</code> — 确认未开播</li>
+<li><code>(True, None)</code> — 查询失败，跳过本轮</li>
+</ul>
+<h2 id="发送-napcat-消息">发送 NapCat 消息</h2>
+<pre><code class="hljs language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">napcat_send</span>(<span class="hljs-params">config: <span class="hljs-built_in">dict</span>, endpoint: <span class="hljs-built_in">str</span>, params: <span class="hljs-built_in">dict</span></span>) -&gt; <span class="hljs-built_in">bool</span>:
+    napcat = config[<span class="hljs-string">&quot;napcat&quot;</span>]
+    url = <span class="hljs-string">f&quot;http://<span class="hljs-subst">{napcat[<span class="hljs-string">&#x27;host&#x27;</span>]}</span>:<span class="hljs-subst">{napcat[<span class="hljs-string">&#x27;port&#x27;</span>]}</span>/<span class="hljs-subst">{endpoint}</span>&quot;</span>
+    body = json.dumps(params).encode(<span class="hljs-string">&quot;utf-8&quot;</span>)
+    headers = {<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span>}
+    <span class="hljs-keyword">if</span> napcat.get(<span class="hljs-string">&quot;token&quot;</span>):
+        headers[<span class="hljs-string">&quot;Authorization&quot;</span>] = <span class="hljs-string">f&quot;Bearer <span class="hljs-subst">{napcat[<span class="hljs-string">&#x27;token&#x27;</span>]}</span>&quot;</span>
+    req = urllib.request.Request(url, data=body, headers=headers, method=<span class="hljs-string">&quot;POST&quot;</span>)
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">with</span> urllib.request.urlopen(req, timeout=<span class="hljs-number">10</span>) <span class="hljs-keyword">as</span> resp:
+            result = json.loads(resp.read().decode())
+            <span class="hljs-keyword">return</span> result.get(<span class="hljs-string">&quot;retcode&quot;</span>) == <span class="hljs-number">0</span>
+    <span class="hljs-keyword">except</span> (urllib.error.URLError, urllib.error.HTTPError, OSError):
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+</code></pre>
+<h2 id="构造通知消息">构造通知消息</h2>
+<pre><code class="hljs language-python">message = (
+    <span class="hljs-string">f&quot;🔴 <span class="hljs-subst">{channel}</span> 开播了!\n&quot;</span>
+    <span class="hljs-string">f&quot;标题: <span class="hljs-subst">{title}</span>\n&quot;</span>
+    <span class="hljs-string">f&quot;分类: <span class="hljs-subst">{category}</span>\n&quot;</span>
+    <span class="hljs-string">f&quot;观众: <span class="hljs-subst">{viewers}</span>\n&quot;</span>
+    <span class="hljs-string">f&quot;链接: https://kick.com/<span class="hljs-subst">{channel}</span>&quot;</span>
+)
+</code></pre>
+<h2 id="主循环">主循环</h2>
+<pre><code class="hljs language-python">notified: <span class="hljs-built_in">set</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-built_in">set</span>()
+
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+    <span class="hljs-keyword">for</span> channel <span class="hljs-keyword">in</span> streamers:
+        is_error, live_info = check_live(channel)
+        
+        <span class="hljs-keyword">if</span> is_error:
+            <span class="hljs-keyword">continue</span>  <span class="hljs-comment"># 查询失败，跳过</span>
+        
+        <span class="hljs-keyword">if</span> live_info:
+            <span class="hljs-keyword">if</span> channel.lower() <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> notified:
+                send_notification(config, channel, live_info)
+                notified.add(channel.lower())
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">if</span> channel.lower() <span class="hljs-keyword">in</span> notified:
+                notified.discard(channel.lower())
+                send_offline_notification(config, channel)
+    
+    time.sleep(interval)
+</code></pre>
+<h1>配置说明</h1>
+<p>配置文件 <code>config.json</code>：</p>
+<pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;napcat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">&quot;host&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;127.0.0.1&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">&quot;port&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3000</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;notify&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">&quot;private&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">&quot;group&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">123456789</span><span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;streamers&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-string">&quot;xctraveller&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;another_streamer&quot;</span>
+    <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;check_interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<table><thead><tr><th>字段</th><th>说明</th></tr></thead><tbody><tr><td><code>napcat.host</code></td><td>NapCat HTTP 服务地址</td></tr><tr><td><code>napcat.port</code></td><td>NapCat HTTP 服务端口</td></tr><tr><td><code>napcat.token</code></td><td>NapCat 访问令牌（可选）</td></tr><tr><td><code>notify.private</code></td><td>私聊通知的 QQ 号列表</td></tr><tr><td><code>notify.group</code></td><td>群聊通知的群号列表</td></tr><tr><td><code>streamers</code></td><td>要监控的 Kick 主播用户名列表</td></tr><tr><td><code>check_interval</code></td><td>检查间隔（秒）</td></tr></tbody></table>
+<h1>部署运行</h1>
+<h2 id="环境要求">环境要求</h2>
+<ul>
+<li>Python 3.10+</li>
+<li>NapCat 已部署并运行</li>
+</ul>
+<h2 id="运行">运行</h2>
+<pre><code class="hljs language-bash"><span class="hljs-comment"># 直接运行</span>
+python3 kick_notify.py
+
+<span class="hljs-comment"># 或者用脚本启动</span>
+<span class="hljs-built_in">chmod</span> +x run.sh
+./run.sh
+</code></pre>
+<h2 id="后台运行">后台运行</h2>
+<pre><code class="hljs language-bash"><span class="hljs-comment"># 使用 nohup</span>
+<span class="hljs-built_in">nohup</span> python3 kick_notify.py &gt; kick.log 2&gt;&amp;1 &amp;
+
+<span class="hljs-comment"># 或者用 screen/tmux</span>
+screen -S kick
+python3 kick_notify.py
+<span class="hljs-comment"># Ctrl+A D 断开</span>
+</code></pre>
+<h1>效果示例</h1>
+<p>开播通知：</p>
+<pre><code>🔴 xctraveller 开播了!
+标题: 晚上打游戏
+分类: GTA V
+观众: 42
+链接: https://kick.com/xctraveller
+</code></pre>
+<p>下播通知：</p>
+<pre><code>⚫ xctraveller 下播了
+链接: https://kick.com/xctraveller
+</code></pre>
+<h1>注意事项</h1>
+<ul>
+<li>Kick 的私有 API 没有官方保证，可能随时失效或变更</li>
+<li>检查间隔不要太短，30 秒到 1 分钟比较合理，避免被限流</li>
+<li>NapCat 需要先部署好，具体部署方法请参考 NapCat 官方文档</li>
+<li>程序重启时不会发送重复通知，会先同步当前状态</li>
+</ul>
+<h1>END</h1>
+<p>一个简单但实用的小工具。如果你也想监控 Kick 主播的开播状态，可以直接用这个脚本，改改配置就行。</p>
+<h1>额外感想</h1>
+<p>在制作之初，我是直接问ChatGPT如何做，甚至都没用搜索引擎查一下，ChatGPT说用webhook并使用fastapi封装，翻了十几分钟文档没咋看明白，直到直接用opencode+免费的mimo说了我要做开播提醒，mimo一开始其实也没多好，甚至想出来轮询每页找到目标，在他自己fetch几遍后直接用了kick的api，不过也算是完美完成了。</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/kick.png" medium="image"/>
+  </item>
+  <item>
+    <title>MC免端口域名生成器使用与部署教程</title>
+    <link>https://xc-lr.cn/posts/mc-srv-worker/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/mc-srv-worker/</guid>
+    <pubDate>Sun, 31 May 2026 00:00:00 GMT</pubDate>
+    <description>基于Cloudflare Workers的Minecraft免端口域名服务，让你的MC服务器玩家无需输入端口号</description>
+    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+<p>玩Minecraft的都知道，开服的时候如果用了非默认端口（不是25565），连接的时候就得在域名后面加个冒号再填端口号，比如 <code>play.example.com:25566</code>，对于不熟悉的人来说还挺麻烦的。</p>
+<p>有没有办法让玩家只输域名就能连上？有的兄弟，有的。</p>
+<p>今天介绍的 <strong>mc-srv-worker</strong> 就是干这个的——基于 Cloudflare Workers 自动创建 DNS SRV 记录，让 Minecraft Java 版服务器实现&quot;免端口&quot;连接。</p>
+<h1>这东西怎么工作的</h1>
+<p>Minecraft Java 版在连接服务器时支持 DNS SRV 记录查询。简单来说，就是可以在 DNS 层面把一个域名映射到指定的地址和端口，客户端会自动解析并连接。</p>
+<p>mc-srv-worker 就是利用了这个特性：</p>
+<ul>
+<li>你提供服务器地址和端口</li>
+<li>它在 Cloudflare DNS 上自动创建 SRV 记录</li>
+<li>如果目标是 IP 地址，还会额外创建一个 A 记录（因为 Cloudflare 的 SRV 不支持直接填 IP）</li>
+<li>玩家在游戏中直接输入域名即可连接</li>
+</ul>
+<h1>使用方法</h1>
+<p>如果你只是想用别人部署好的服务，直接打开页面就行。</p>
+<h2 id="创建域名">创建域名</h2>
+<ol>
+<li>在输入框填入你的服务器地址和端口，格式为 <code>地址:端口</code>，例如：<!-- -->
+<ul>
+<li><code>play.example.com:25565</code></li>
+<li><code>1.2.3.4:25566</code></li>
+</ul>
+</li>
+<li>可选填自定义前缀，不填会自动生成一个 <code>mc-xxxxxx</code> 格式的前缀</li>
+<li>点击「生成域名」</li>
+<li>成功后会返回一个类似 <code>mc-abc123.zako.mom</code> 的域名和一个 <strong>16位授权码</strong></li>
+</ol>
+<p>:::warning
+授权码很重要！修改和删除记录时都需要它，丢了就只能等记录过期了
+:::</p>
+<h2 id="管理域名">管理域名</h2>
+<p>页面下方有管理区域，可以对已创建的域名进行修改或删除：</p>
+<ul>
+<li><strong>修改</strong>：填入前缀、新的服务器地址、端口和授权码，点击更新即可</li>
+<li><strong>删除</strong>：填入前缀和授权码，点击删除即可清理 DNS 记录</li>
+</ul>
+<h2 id="在-minecraft-中使用">在 Minecraft 中使用</h2>
+<p>拿到域名后，玩家在 Minecraft Java 版中直接输入这个域名就能连接，不需要加端口号。</p>
+<h1>自己部署</h1>
+<p>不想用公共实例？自己部署也很简单。</p>
+<h2 id="先决条件">先决条件</h2>
+<ul>
+<li>一个 <a href="https://dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Cloudflare</a> 账号</li>
+<li>一个托管在 Cloudflare 上的域名</li>
+<li>Cloudflare API Token（需要 <strong>编辑 DNS</strong> 权限，仅目标域名所在区域即可）</li>
+<li><a href="https://nodejs.org/" node="[object Object]" target="_blank" rel="noreferrer noopener">Node.js</a> 环境</li>
+</ul>
+<h2 id="步骤">步骤</h2>
+<h3 id="1-克隆项目">1. 克隆项目</h3>
+<pre><code class="hljs language-bash">git <span class="hljs-built_in">clone</span> https://github.com/wwwaaa123122/mc-srv-worker.git
+<span class="hljs-built_in">cd</span> mc-srv-worker
+</code></pre>
+<h3 id="2-创建-kv-命名空间">2. 创建 KV 命名空间</h3>
+<pre><code class="hljs language-bash">npx wrangler kv:namespace create MC_KV
+</code></pre>
+<p>执行后会返回一个 KV 命名空间 ID，记下来。</p>
+<h3 id="3-配置-wrangler-toml">3. 配置 wrangler.toml</h3>
+<p>编辑 <code>wrangler.toml</code>，填入你的信息：</p>
+<pre><code class="hljs language-toml"><span class="hljs-attr">name</span> = <span class="hljs-string">&quot;mc-srv-worker&quot;</span>
+<span class="hljs-attr">main</span> = <span class="hljs-string">&quot;src/index.js&quot;</span>
+<span class="hljs-attr">compatibility_date</span> = <span class="hljs-string">&quot;2025-08-11&quot;</span>
+
+<span class="hljs-section">[[kv_namespaces]]</span>
+<span class="hljs-attr">binding</span> = <span class="hljs-string">&quot;MC_KV&quot;</span>
+<span class="hljs-attr">id</span> = <span class="hljs-string">&quot;上一步获取的KV_ID&quot;</span>
+
+<span class="hljs-section">[vars]</span>
+<span class="hljs-attr">CF_API_TOKEN</span> = <span class="hljs-string">&quot;&quot;</span>    <span class="hljs-comment"># 留空，后面用 secret 设置</span>
+<span class="hljs-attr">CF_ZONE_ID</span> = <span class="hljs-string">&quot;&quot;</span>      <span class="hljs-comment"># 留空，后面用 secret 设置</span>
+<span class="hljs-attr">BASE_DOMAIN</span> = <span class="hljs-string">&quot;你的域名&quot;</span>  <span class="hljs-comment"># 例如 example.com</span>
+<span class="hljs-attr">RATE_LIMIT</span> = <span class="hljs-string">&quot;5&quot;</span>      <span class="hljs-comment"># 每IP每分钟最大创建次数</span>
+
+<span class="hljs-section">[assets]</span>
+<span class="hljs-attr">directory</span> = <span class="hljs-string">&quot;./public&quot;</span>
+<span class="hljs-attr">binding</span> = <span class="hljs-string">&quot;ASSETS&quot;</span>
+</code></pre>
+<h3 id="4-设置-secrets">4. 设置 Secrets</h3>
+<p>敏感信息不要写在配置文件里，用 wrangler secret 设置：</p>
+<pre><code class="hljs language-bash">npx wrangler secret put CF_API_TOKEN
+<span class="hljs-comment"># 输入你的 Cloudflare API Token</span>
+
+npx wrangler secret put CF_ZONE_ID
+<span class="hljs-comment"># 输入你的域名区域 ID（在 Cloudflare 域名概览页面底部可以找到）</span>
+</code></pre>
+<h3 id="5-部署">5. 部署</h3>
+<pre><code class="hljs language-bash">npx wrangler deploy
+</code></pre>
+<p>部署成功后会给你一个 <code>*.workers.dev</code> 的域名，也可以在 Cloudflare 面板绑定自定义域名。</p>
+<h2 id="api-接口">API 接口</h2>
+<p>如果你想自己写前端或者集成到其他地方，可以直接调用 API：</p>
+<h3 id="创建域名">创建域名</h3>
+<pre><code class="hljs language-bash">curl -X POST https://你的域名/api/create \
+  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  -d <span class="hljs-string">&#x27;{&quot;address&quot;: &quot;1.2.3.4:25566&quot;, &quot;prefix&quot;: &quot;myserver&quot;}&#x27;</span>
+</code></pre>
+<p>返回：</p>
+<pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;success&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;domain&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myserver.example.com&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;authCode&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;a1b2c3d4e5f67890&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<h3 id="修改解析">修改解析</h3>
+<pre><code class="hljs language-bash">curl -X POST https://你的域名/api/update \
+  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  -d <span class="hljs-string">&#x27;{&quot;sub&quot;: &quot;myserver&quot;, &quot;target&quot;: &quot;5.6.7.8&quot;, &quot;port&quot;: 25567, &quot;authCode&quot;: &quot;a1b2c3d4e5f67890&quot;}&#x27;</span>
+</code></pre>
+<h3 id="删除解析">删除解析</h3>
+<pre><code class="hljs language-bash">curl -X POST https://你的域名/api/delete \
+  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  -d <span class="hljs-string">&#x27;{&quot;sub&quot;: &quot;myserver&quot;, &quot;authCode&quot;: &quot;a1b2c3d4e5f67890&quot;}&#x27;</span>
+</code></pre>
+<h1>注意事项</h1>
+<ul>
+<li>每个域名创建后会生成一个 <strong>授权码</strong>，修改或删除时必须提供，请妥善保存</li>
+<li>每 IP 每分钟有创建次数限制（默认 5 次），防止滥用</li>
+<li>目标地址格式必须为 <code>地址:端口</code></li>
+<li>端口范围：<code>1</code> ~ <code>65535</code></li>
+<li>授权码是 16 位的十六进制字符串，丢了就没了，记得备份</li>
+</ul>
+<h1>END</h1>
+<p>就这样，很简单的一个小工具。有公网服务器的可以自己部署一个，没有的用公共实例也行。祝大家开服愉快！</p>
+<h4 id="后记">后记</h4>
+<p>纯纯不知道写啥了，稍稍水个文章qwq</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/mc-srv.webp" medium="image"/>
+  </item>
+  <item>
+    <title>关于本站迁移至Firefly</title>
+    <link>https://xc-lr.cn/posts/Why-to-Firefly/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/Why-to-Firefly/</guid>
+    <pubDate>Mon, 18 May 2026 00:00:00 GMT</pubDate>
+    <description>讲述从fuwari迁移至Firefly的一些原因</description>
+    <content:encoded><![CDATA[<div class="markdown"><h2 id="缘起">缘起</h2>
+<p>博客已经运行了很长一段时间，最初选择的是 Fuwari 主题。Fuwari 确实是一个不错的主题，简洁美观，但随着使用深入，我逐渐发现一些问题，最终促使我迁移到了 Firefly。</p>
+<h2 id="fuwari-想要的功能需要自己加">Fuwari：想要的功能需要自己加</h2>
+<p>Fuwari 的设计理念是<strong>轻量、简洁</strong>，这既是优点也是局限。当我想要为博客添加一些功能时，发现：</p>
+<ul>
+<li><strong>评论系统</strong>需要自己集成，Fuwari 并没有内置支持</li>
+<li><strong>说说/动态页面</strong>没有现成方案</li>
+<li><strong>赞助页面、打赏功能</strong>需要从零开始</li>
+<li><strong>音乐播放器、实验室页面</strong>等高级功能全部要自己动手</li>
+</ul>
+<p>每一次「想要什么功能就自己加」的过程，实际上是在消耗大量的时间和精力。对于一个希望专注于内容创作的博主来说，这无疑是一种负担。</p>
+<h2 id="自定义之路-改着改着-功能就废了">自定义之路：改着改着，功能就废了</h2>
+<p>更让人头疼的是自定义过程中的问题。Fuwari 的代码结构在经过多次修改后，<strong>依赖冲突、样式覆盖、功能失效</strong>接踵而来：</p>
+<ul>
+<li>升级主题版本后，之前手动添加的功能全部需要重新适配</li>
+<li>为了实现某个功能修改了核心代码，结果导致其他功能异常</li>
+<li>CSS 样式互相覆盖，调试起来苦不堪言</li>
+</ul>
+<p>每次折腾完，都感觉「杀敌一千，自损八百」。</p>
+<h2 id="firefly-开箱即用-面面俱到">Firefly：开箱即用，面面俱到</h2>
+<p>迁移到 Firefly 后，这些问题迎刃而解。Firefly 最大的优势在于其<strong>功能丰富且开箱即用</strong>：</p>
+<table><thead><tr><th>功能</th><th>Fuwari</th><th>Firefly</th></tr></thead><tbody><tr><td>评论系统</td><td>❌ 需自行集成</td><td>✅ 内置支持</td></tr><tr><td>说说/动态</td><td>❌ 需自行开发</td><td>✅ 已有方案</td></tr><tr><td>赞助页面</td><td>❌ 需自行实现</td><td>✅ 已有功能</td></tr><tr><td>实验室/工具</td><td>❌ 需自行开发</td><td>✅ 多种工具可用</td></tr><tr><td>主题配置</td><td>⚠️ 需要魔改</td><td>✅ 配置文件搞定</td></tr></tbody></table>
+<p>Firefly 几乎覆盖了我所有的使用需求，不需要再为了一个功能而耗费大量时间研究、调试。对于我这样的博主来说，<strong>把时间花在内容创作上，远比花在折腾主题上更有价值</strong>。</p>
+<h2 id="写在最后">写在最后</h2>
+<p>选择博客主题就像选择工具：合适的才是最好的。Fuwari 适合喜欢折腾、追求极简的用户；而 Firefly 则适合希望专注于内容、同时需要丰富功能的博主。</p>
+<p>如果你也在 Fuwari 中挣扎于各种自定义，不妨试试 Firefly，说不定会打开新世界的大门。</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/firefly.png" medium="image"/>
+  </item>
+  <item>
+    <title>Fuwari 主题背景图功能教程</title>
+    <link>https://xc-lr.cn/posts/fuwari-background-image/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/fuwari-background-image/</guid>
+    <pubDate>Sun, 29 Mar 2026 00:00:00 GMT</pubDate>
+    <description>为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程</description>
+    <content:encoded><![CDATA[<div class="markdown"><p>本教程将介绍如何为 Fuwari 主题添加背景图功能，包括高斯模糊效果和用户可调节的模糊程度。</p>
+<h2 id="功能特性">功能特性</h2>
+<ul>
+<li>✨ 全屏背景图显示</li>
+<li>🎨 高斯模糊效果</li>
+<li>🎚️ 用户可调节模糊程度（0-50px）</li>
+<li>🧊 半透明卡片效果</li>
+<li>💾 设置自动保存到本地存储</li>
+</ul>
+<h2 id="配置步骤">配置步骤</h2>
+<h3 id="1-配置背景图">1. 配置背景图</h3>
+<p>打开 <code>src/config.ts</code> 文件，找到 <code>siteConfig</code> 对象，添加或修改 <code>background</code> 配置：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+  <span class="hljs-comment">// ... 其他配置</span>
+  
+  <span class="hljs-attr">background</span>: {
+    <span class="hljs-attr">enable</span>: <span class="hljs-literal">true</span>,              <span class="hljs-comment">// 是否启用背景图</span>
+    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,   <span class="hljs-comment">// 背景图片路径</span>
+    <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,                  <span class="hljs-comment">// 默认模糊程度（像素）</span>
+  },
+  
+  <span class="hljs-comment">// ... 其他配置</span>
+};
+</code></pre>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><code>enable</code>: 布尔值，控制是否显示背景图</li>
+<li><code>src</code>: 图片路径，以 <code>/</code> 开头表示相对于 <code>/public</code> 目录，否则相对于 <code>/src</code> 目录</li>
+<li><code>blur</code>: 数字，默认模糊程度，范围建议 0-50</li>
+</ul>
+<h3 id="2-添加背景图片">2. 添加背景图片</h3>
+<p>将你的背景图片放到 <code>/public</code> 目录下（如果路径以 <code>/</code> 开头）或 <code>/src</code> 目录下。建议使用高分辨率的图片以获得最佳效果。</p>
+<p><strong>推荐图片规格：</strong></p>
+<ul>
+<li>分辨率：至少 1920x1080</li>
+<li>格式：WebP（推荐）、JPG、PNG</li>
+<li>大小：建议小于 2MB</li>
+</ul>
+<h3 id="3-自定义模糊度">3. 自定义模糊度</h3>
+<p>用户可以在网页上通过导航栏的模糊图标调节背景模糊度：</p>
+<ol>
+<li>点击导航栏右侧的模糊图标</li>
+<li>使用滑块调节模糊程度（0-50px）</li>
+<li>设置会自动保存，刷新页面后保持</li>
+</ol>
+<h2 id="样式自定义">样式自定义</h2>
+<p>如果需要调整半透明效果，可以修改 <code>src/styles/variables.styl</code> 文件：</p>
+<pre><code class="hljs language-stylus">define({
+  // 卡片背景透明度（85% 不透明）
+  --card-bg-transparent: oklch(1 0 0 / 0.85) oklch(0.23 0.015 var(--hue) / 0.85)
+  
+  // 导航栏背景透明度（80% 不透明）
+  --navbar-bg: oklch(1 0 0 / 0.8) oklch(0.23 0.015 var(--hue) / 0.8)
+})
+</code></pre>
+<p>修改 <code>0.85</code> 和 <code>0.8</code> 可以调整透明度（0-1 之间，越小越透明）。</p>
+<h2 id="禁用背景图">禁用背景图</h2>
+<p>如果不想要背景图效果，只需在配置中设置 <code>enable: false</code>：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-attr">background</span>: {
+  <span class="hljs-attr">enable</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,
+  <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,
+},
+</code></pre>
+<h2 id="效果展示">效果展示</h2>
+<p>启用背景图后，整个网站将拥有：</p>
+<ul>
+<li>固定在底层的全屏背景图</li>
+<li>可调节的高斯模糊效果</li>
+<li>半透明的卡片和导航栏</li>
+<li>保持良好的文字可读性</li>
+</ul>
+<h2 id="代码实现">代码实现</h2>
+<p>如果你想从零开始实现这个功能，或者了解具体的技术细节，请按照以下步骤操作：</p>
+<h3 id="步骤-1-定义配置类型">步骤 1: 定义配置类型</h3>
+<p>首先在 <code>src/types/config.ts</code> 中添加背景图配置的类型定义：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">SiteConfig</span> = {
+  <span class="hljs-comment">// ... 其他配置</span>
+
+  <span class="hljs-attr">background</span>: {
+    <span class="hljs-attr">enable</span>: <span class="hljs-built_in">boolean</span>;
+    <span class="hljs-attr">src</span>: <span class="hljs-built_in">string</span>;
+    <span class="hljs-attr">blur</span>?: <span class="hljs-built_in">number</span>;
+  };
+
+  <span class="hljs-comment">// ... 其他配置</span>
+};
+</code></pre>
+<h3 id="步骤-2-添加配置项">步骤 2: 添加配置项</h3>
+<p>在 <code>src/config.ts</code> 中添加背景图配置：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+  <span class="hljs-comment">// ... 其他配置</span>
+
+  <span class="hljs-attr">background</span>: {
+    <span class="hljs-attr">enable</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,
+    <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,
+  },
+
+  <span class="hljs-comment">// ... 其他配置</span>
+};
+</code></pre>
+<h3 id="步骤-3-实现设置存储和读取">步骤 3: 实现设置存储和读取</h3>
+<p>在 <code>src/utils/setting-utils.ts</code> 中添加模糊度的存储和读取函数：</p>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">// 获取默认模糊度</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getDefaultBlur</span>(<span class="hljs-params"></span>): <span class="hljs-built_in">number</span> {
+  <span class="hljs-keyword">const</span> fallback = <span class="hljs-string">&quot;10&quot;</span>;
+  <span class="hljs-keyword">const</span> configCarrier = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;config-carrier&quot;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">parseInt</span>(configCarrier?.<span class="hljs-property">dataset</span>.<span class="hljs-property">blur</span> || fallback);
+}
+
+<span class="hljs-comment">// 获取存储的模糊度</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getBlur</span>(<span class="hljs-params"></span>): <span class="hljs-built_in">number</span> {
+  <span class="hljs-keyword">const</span> stored = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&quot;blur&quot;</span>);
+  <span class="hljs-keyword">return</span> stored ? <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">parseInt</span>(stored) : <span class="hljs-title function_">getDefaultBlur</span>();
+}
+
+<span class="hljs-comment">// 设置模糊度</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">setBlur</span>(<span class="hljs-params"><span class="hljs-attr">blur</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">void</span> {
+  <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&quot;blur&quot;</span>, <span class="hljs-title class_">String</span>(blur));
+  <span class="hljs-keyword">const</span> r = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;:root&quot;</span>) <span class="hljs-keyword">as</span> <span class="hljs-title class_">HTMLElement</span>;
+  <span class="hljs-keyword">if</span> (!r) {
+    <span class="hljs-keyword">return</span>;
+  }
+  r.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(<span class="hljs-string">&quot;--bg-blur&quot;</span>, <span class="hljs-title class_">String</span>(blur) + <span class="hljs-string">&quot;px&quot;</span>);
+}
+</code></pre>
+<h3 id="步骤-4-创建模糊设置组件">步骤 4: 创建模糊设置组件</h3>
+<p>创建 <code>src/components/widget/BlurSettings.svelte</code> 文件：</p>
+<pre><code class="hljs language-svelte">&lt;script lang=&quot;ts&quot;&gt;
+import I18nKey from &quot;@i18n/i18nKey&quot;;
+import { i18n } from &quot;@i18n/translation&quot;;
+import Icon from &quot;@iconify/svelte&quot;;
+import { getDefaultBlur, getBlur, setBlur } from &quot;@utils/setting-utils&quot;;
+
+let blur = getBlur();
+const defaultBlur = getDefaultBlur();
+
+function resetBlur() {
+  blur = getDefaultBlur();
+}
+
+$: if (blur || blur === 0) {
+  setBlur(blur);
+}
+&lt;/script&gt;
+
+&lt;div id=&quot;blur-setting&quot; class=&quot;float-panel float-panel-closed absolute transition-all w-80 right-4 px-4 py-4&quot;&gt;
+    &lt;div class=&quot;flex flex-row gap-2 mb-3 items-center justify-between&quot;&gt;
+        &lt;div class=&quot;flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:-left-3 before:top-[0.33rem]&quot;
+        &gt;
+            背景模糊
+            &lt;button aria-label=&quot;Reset to Default&quot; class=&quot;btn-regular w-7 h-7 rounded-md active:scale-90&quot;
+                    class:opacity-0={blur === defaultBlur} class:pointer-events-none={blur === defaultBlur} on:click={resetBlur}&gt;
+                &lt;div class=&quot;text-[var(--btn-content)]&quot;&gt;
+                    &lt;Icon icon=&quot;fa6-solid:arrow-rotate-left&quot; class=&quot;text-[0.875rem]&quot;&gt;&lt;/Icon&gt;
+                &lt;/div&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;flex gap-1&quot;&gt;
+            &lt;div id=&quot;blurValue&quot; class=&quot;transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center
+            font-bold text-sm items-center text-[var(--btn-content)]&quot;&gt;
+                {blur}
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none&quot;&gt;
+        &lt;input aria-label=&quot;Background Blur&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; bind:value={blur}
+               class=&quot;slider&quot; id=&quot;blurSlider&quot; step=&quot;1&quot; style=&quot;width: 100%&quot;&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3 id="步骤-5-更新-configcarrier-组件">步骤 5: 更新 ConfigCarrier 组件</h3>
+<p>修改 <code>src/components/ConfigCarrier.astro</code> 以传递模糊度配置：</p>
+<pre><code class="hljs language-astro">---
+import { siteConfig } from &quot;../config&quot;;
+
+interface Props {
+  blur?: number;
+}
+
+const { blur = siteConfig.background.blur || 10 } = Astro.props;
+---
+
+&lt;div id=&quot;config-carrier&quot; data-hue={siteConfig.themeColor.hue} data-blur={blur}&gt;
+&lt;/div&gt;
+</code></pre>
+<h3 id="步骤-6-在-layout-中添加背景图">步骤 6: 在 Layout 中添加背景图</h3>
+<p>在 <code>src/layouts/Layout.astro</code> 中添加背景图元素和初始化脚本：</p>
+<pre><code class="hljs language-astro">&lt;body&gt;
+  &lt;ConfigCarrier blur={siteConfig.background.blur || 10}&gt;&lt;/ConfigCarrier&gt;
+  {siteConfig.background.enable &amp;&amp; (
+    &lt;div id=&quot;background-wrapper&quot; class=&quot;fixed inset-0 -z-10 overflow-hidden&quot;&gt;
+      &lt;img
+        id=&quot;background-image&quot;
+        src={url(siteConfig.background.src)}
+        alt=&quot;Background image&quot;
+        class=&quot;absolute inset-0 w-full h-full object-cover&quot;
+        style={`filter: blur(var(--bg-blur, 10px))`}
+      /&gt;
+    &lt;/div&gt;
+  )}
+  &lt;slot /&gt;
+&lt;/body&gt;
+</code></pre>
+<p>并在内联脚本中添加模糊度加载：</p>
+<pre><code class="hljs language-astro">&lt;script is:inline&gt;
+  // 加载模糊度
+  const configCarrier = document.getElementById(&#x27;config-carrier&#x27;);
+  const defaultBlur = configCarrier?.dataset.blur || &#x27;10&#x27;;
+  const blur = localStorage.getItem(&#x27;blur&#x27;) || defaultBlur;
+  document.documentElement.style.setProperty(&#x27;--bg-blur&#x27;, `${blur}px`);
+&lt;/script&gt;
+</code></pre>
+<h3 id="步骤-7-添加-css-变量">步骤 7: 添加 CSS 变量</h3>
+<p>在 <code>src/styles/variables.styl</code> 中添加 CSS 变量：</p>
+<pre><code class="hljs language-stylus">:root
+  --radius-large 1rem
+  --content-delay 150ms
+  --bg-blur 10px
+
+define({
+  // 背景图相关的变量
+  --card-bg-transparent: oklch(1 0 0 / 0.85) oklch(0.23 0.015 var(--hue) / 0.85)
+  --navbar-bg: oklch(1 0 0 / 0.8) oklch(0.23 0.015 var(--hue) / 0.8)
+})
+</code></pre>
+<h3 id="步骤-8-在导航栏添加模糊设置按钮">步骤 8: 在导航栏添加模糊设置按钮</h3>
+<p>修改 <code>src/components/Navbar.astro</code>，添加模糊设置按钮和面板：</p>
+<pre><code class="hljs language-astro">&lt;Search client:only=&quot;svelte&quot;&gt;&lt;/Search&gt;
+{siteConfig.background.enable &amp;&amp; (
+  &lt;button aria-label=&quot;Blur Settings&quot; class=&quot;btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90&quot; id=&quot;blur-settings-switch&quot;&gt;
+    &lt;Icon name=&quot;material-symbols:blur-on&quot; class=&quot;text-[1.25rem]&quot;&gt;&lt;/Icon&gt;
+  &lt;/button&gt;
+)}
+&lt;LightDarkSwitch client:only=&quot;svelte&quot;&gt;&lt;/LightDarkSwitch&gt;
+
+&lt;!-- ... --&gt;
+
+{siteConfig.background.enable &amp;&amp; &lt;BlurSettings client:only=&quot;svelte&quot;&gt;&lt;/BlurSettings&gt;}
+</code></pre>
+<p>并添加按钮点击事件处理：</p>
+<pre><code class="hljs language-astro">&lt;script&gt;
+function loadButtonScript() {
+  // ... 其他按钮
+
+  let blurSettingBtn = document.getElementById(&quot;blur-settings-switch&quot;);
+  if (blurSettingBtn) {
+    blurSettingBtn.onclick = function () {
+      let blurSettingPanel = document.getElementById(&quot;blur-setting&quot;);
+      if (blurSettingPanel) {
+        blurSettingPanel.classList.toggle(&quot;float-panel-closed&quot;);
+      }
+    };
+  }
+}
+
+loadButtonScript();
+&lt;/script&gt;
+</code></pre>
+<h3 id="步骤-9-添加半透明卡片样式">步骤 9: 添加半透明卡片样式</h3>
+<p>在 <code>src/styles/main.css</code> 中添加半透明卡片样式：</p>
+<pre><code class="hljs language-css"><span class="hljs-keyword">@layer</span> components {
+  <span class="hljs-selector-class">.card-base</span> {
+    <span class="hljs-keyword">@apply</span> rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
+  }
+
+  <span class="hljs-selector-class">.card-base-transparent</span> {
+    <span class="hljs-keyword">@apply</span> rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg-transparent)] backdrop-blur-md transition;
+  }
+}
+</code></pre>
+<p>然后将各个组件的 <code>card-base</code> 类替换为 <code>card-base-transparent</code> 以使用半透明效果。</p>
+<h2 id="技术实现">技术实现</h2>
+<p>功能实现涉及以下文件：</p>
+<ul>
+<li><code>src/types/config.ts</code> - 配置类型定义</li>
+<li><code>src/config.ts</code> - 配置项</li>
+<li><code>src/layouts/Layout.astro</code> - 背景图渲染</li>
+<li><code>src/components/Navbar.astro</code> - 模糊设置按钮</li>
+<li><code>src/components/widget/BlurSettings.svelte</code> - 模糊调节面板</li>
+<li><code>src/utils/setting-utils.ts</code> - 设置存储和读取</li>
+<li><code>src/styles/variables.styl</code> - 样式变量</li>
+</ul>
+<h2 id="注意事项">注意事项</h2>
+<ol>
+<li>背景图片会影响页面加载速度，建议使用压缩后的图片</li>
+<li>模糊程度过高可能会影响视觉体验</li>
+<li>半透明效果在浅色主题下可能需要调整</li>
+<li>移动设备上建议使用较小的背景图片</li>
+</ol>
+<h2 id="常见问题">常见问题</h2>
+<p><strong>Q: 为什么背景图不显示？</strong><br/>
+<!-- -->A: 检查 <code>background.enable</code> 是否为 <code>true</code>，图片路径是否正确。</p>
+<p><strong>Q: 如何让背景图固定不滚动？</strong><br/>
+<!-- -->A: 当前实现已经是固定的，背景图不会随页面滚动。</p>
+<p><strong>Q: 可以为不同页面设置不同背景图吗？</strong><br/>
+<!-- -->A: 当前版本所有页面使用同一背景图，如需不同背景需要修改代码。</p>
+<hr/>
+<p>希望这个教程能帮助你更好地使用 Fuwari 主题的背景图功能！</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/homeground.webg" medium="image"/>
+  </item>
+  <item>
+    <title>通过Cloudflare Tunnel使用SSH</title>
+    <link>https://xc-lr.cn/posts/ssh-by-tunnel/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/ssh-by-tunnel/</guid>
+    <pubDate>Wed, 04 Feb 2026 00:00:00 GMT</pubDate>
+    <description>通过Cloudflare Tunnel连接无公网IP的服务</description>
+    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+<p>在没有公网的条件下我们想访问无公网IP往往只能通过FRP或IPv6，本篇文章将介绍使用Cloudflare Tunnel连接内网中的SSH服务</p>
+<h1>准备</h1>
+<h2 id="先决条件">先决条件</h2>
+<ul>
+<li><a href="https://dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Cloudflare</a>账号，没有的自行注册一个，并需绑定一张信用卡（不会扣费）</li>
+<li>一个托管在Cloudflare上的域名</li>
+</ul>
+<h2 id="安装tunnel">安装Tunnel</h2>
+<p>打开<a href="https://one.dash.cloudflare.com" node="[object Object]" target="_blank" rel="noreferrer noopener">Zero Trust</a>团队名随便写一个，在左侧边栏找到 <strong>网络</strong> ，选择 <strong>连接器</strong> 。进来后点击 <strong>添加隧道</strong> ，隧道类型选项 <strong>Cloudflared</strong> ，名称依旧随便取，保存隧道后选择系统类型，下面我以ubuntu 64-bit 为例</p>
+<h3 id="安装-cloudflared">安装 cloudflared</h3>
+<p>可将给的shell脚本保存为.sh执行，连上需远程ssh的终端，执行</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
+<span class="hljs-comment">#!/bin/bash</span>
+
+<span class="hljs-comment"># Add cloudflare gpg key</span>
+<span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p --mode=0755 /usr/share/keyrings
+curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | <span class="hljs-built_in">sudo</span> <span class="hljs-built_in">tee</span> /usr/share/keyrings/cloudflare-public-v2.gpg &gt;/dev/null
+
+<span class="hljs-comment"># Add this repo to your apt repositories</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main&#x27;</span> | <span class="hljs-built_in">sudo</span> <span class="hljs-built_in">tee</span> /etc/apt/sources.list.d/cloudflared.list
+
+<span class="hljs-comment"># install cloudflared</span>
+<span class="hljs-built_in">sudo</span> apt-get update &amp;&amp; <span class="hljs-built_in">sudo</span> apt-get install cloudflared
+EOF
+</code></pre>
+<p>赋予权限</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
+</code></pre>
+<p>执行脚本安装</p>
+<pre><code class="hljs language-bash">./Install_cloudflared.sh
+</code></pre>
+<h3 id="连接">连接</h3>
+<p>执行连接页面给的 <em>让计算机每次启动时自动运行隧道</em> 这条命令</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
+</code></pre>
+<p>若 <strong>Connectors</strong> 列表中出现了您的设备，则说明安装成功。</p>
+<h1>配置Tunnel及应用</h1>
+<h4 id="发布应用程序路由">发布应用程序路由</h4>
+<ul>
+<li>子域：随便填 示例：ssh</li>
+<li>域：选择你的域名</li>
+<li>路径：空着</li>
+<li>服务类型：SSH</li>
+<li>URL：127.0.0.1</li>
+</ul>
+<h3 id="配置应用程序">配置应用程序</h3>
+<p>侧栏中选中 <strong>访问控制</strong> → <strong>应用程序</strong> → <strong>添加应用程序</strong></p>
+<p>类型选择 <strong>自托管</strong> ，名称依旧随便写，会话持续时间看你自己，我这里选的是6小时</p>
+<p>点击 <strong>添加公共主机名</strong>
+输入方式默认，但子域及域要填写与<em><strong>发布应用程序路由</strong></em>  <strong>一致的</strong> ，展开下面的<strong>浏览器呈现设置</strong> 启用<em>允许自动 Cloudflared 身份验证</em><br/>
+<!-- -->浏览器呈现选择<strong>SSH</strong><br/>
+<!-- -->下面需创建一个策略，名称依旧随便写，操作选择<em>允许</em><br/>
+<!-- -->认证方式自己选一个方便的，我这里选的是EMAIL即邮箱，其它的看自己最后点保存，回到配置页面，选择好刚刚配置的规则，没其它要求一直点下一步，至此配置就结束了。</p>
+<h1>最终体验</h1>
+<p>打开你的域名，此时应会跳转到Cloudflare的验证界面，按照你自己选择的验证方式过后应该就会跳转到输入<em>User</em> 的界面，输入你的用户名提交后输入密码，至此就大功告成了。</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/SSH_Cloudflare.webp" medium="image"/>
+  </item>
+  <item>
+    <title>Bot使用文档</title>
+    <link>https://xc-lr.cn/posts/how-use-bot/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/how-use-bot/</guid>
+    <pubDate>Sat, 25 Oct 2025 00:00:00 GMT</pubDate>
+    <description>星辰旅人Bot使用文档</description>
+    <content:encoded><![CDATA[<div class="markdown"><p>:::warning
+变量部分均使用{}包裹，多选项用/分隔
+:::</p>
+<h1>LLM</h1>
+<h2 id="deepseek">Deepseek</h2>
+<p>切换命令：<strong>#Deepseek</strong>
+常用模型，回复速度快，稳定
+缺点：无法识别图片</p>
+<h2 id="gemini">Gemini</h2>
+<p>切换命令：#Gemini
+可以识别图片
+缺点：有速率限制，超过范围会报错429</p>
+<h2 id="gpt">GPT</h2>
+<p>切换命令：#GPT4/#GPT
+此模型为替代模型，可联网搜索
+缺点：由于是非官方API，服务可能不稳</p>
+<h1>rua</h1>
+<p>命令：#rua {@一个用户/QQ号}
+介绍：生成rua表情</p>
+<h1>发电</h1>
+<p>命令：#发电{目标名称}
+介绍：生成一段表白话(?</p>
+<h1>我今天棒不棒</h1>
+<p>命令：我今天棒不棒
+介绍：给出你今天的分数</p>
+<h1>enc解密</h1>
+<p>命令：#enc解密 {解密内容}
+介绍：解密被enc加密过的内容</p>
+<h1>生图</h1>
+<p>命令：#生图 {Pixiv/ACG}  {标签}
+介绍：</p>
+<ul>
+<li>Pixiv为从p站拉取一张图</li>
+<li>ACG的标签只有：随机、电脑壁纸、头像、手机背景、壁纸</li>
+</ul>
+<h1>http</h1>
+<p>命令：#http {网址}
+介绍：测试网站是否能访问并返回状态码</p>
+<h1>Banme</h1>
+<p>命令：banme
+介绍：当bot为该群管理时会禁用1~5小时，适用于安心睡觉</p>
+<h1>今日运势</h1>
+<p>命令：今日运势
+介绍：返回今日运势</p>
+<h1>名人名言</h1>
+<p>命令：#名人名言 {引用一条消息}
+介绍：制作一个名言图片</p>
+<h1>MC服务器状态</h1>
+<p>命令：#mcs {服务器地址}
+介绍：查看此服务器状态及在线人数</p>
+<h1>名言</h1>
+<p>命令：#名言 {引用一条消息}
+介绍：同上名人名言</p>
+<h1>抖音解析</h1>
+<p>命令：发送抖音链接触发
+介绍：解析抖音视频并发送</p>
+<h1>点歌</h1>
+<p>命令：#点歌 {歌名/歌曲id}
+介绍：仅能解析网易云歌曲</p>
+<h1>狐狸图</h1>
+<p>命令：狐狸图
+介绍：随机发送一张狐狸图</p>
+<h1>一言</h1>
+<p>命令：#名言
+介绍：找一句好听的名言</p>
+<h1>天气</h1>
+<p>命令：#天气 {城市名称}
+介绍：当前天气及未来三天天气</p>
+<h1>签到</h1>
+<p>命令：签到
+介绍：签到功能</p>
+<h1>转码</h1>
+<p>命令：#转码 {文字/网址(需带https)}
+介绍：将文字或网页转换为二维码</p>
+<h1>ping</h1>
+<p>命令：#ping {域名/ip}
+介绍：由bot所运行的服务器ping 4次目标地址</p>
+<h1>大头照</h1>
+<p>命令：#大头照 {@一个用户/QQ号}
+介绍：发送该用户的QQ头像</p>
+<h1>whois</h1>
+<p>命令：#whois {域名}
+介绍：查询该域名信息</p>
+<h1>点赞</h1>
+<p>命令：赞我/超我
+介绍：给你QQ名片点赞</p>
+<h1>伪造消息</h1>
+<p>命令：#伪造消息 {QQ号/@一个用户}说{内容}<br/>
+<!-- -->多条消息格式：#伪造消息 {QQ号/@一个用户}说{消息1}|{QQ号/@一个用户}说{消息2}<br/>
+<!-- -->更多条以此类推
+介绍：转发伪造合并转发的消息</p>
+<h1>角色扮演</h1>
+<p>命令：#角色扮演<br/>
+<!-- -->介绍：查看Bot的所有预设</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/how-use-bot-cover.webp" medium="image"/>
+  </item>
+  <item>
+    <title>fuwari修复RSS图片不显示</title>
+    <link>https://xc-lr.cn/posts/fuwari-rss/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/fuwari-rss/</guid>
+    <pubDate>Sat, 27 Sep 2025 00:00:00 GMT</pubDate>
+    <description>修复RSS图片链接问题</description>
+    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+<p>啊大家都知道，fuwari的RSS如果你用的是相对路径，那么生成的RSS将也是相对路径，但这样就看不了图了啊，所以本章将带你修复它</p>
+<h1>修改RSS配置文件</h1>
+<p>打开<strong>src/pages/rss.xml.ts</strong>，当然你也可以直接删了<br/>
+<!-- -->直接一个全选删除再将下面的配置粘贴填入</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> rss <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
+<span class="hljs-keyword">import</span> sanitizeHtml <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;sanitize-html&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">MarkdownIt</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;markdown-it&#x27;</span>;
+<span class="hljs-keyword">import</span> { getCollection } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;astro:content&#x27;</span>;
+<span class="hljs-keyword">import</span> { siteConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/config&#x27;</span>;
+<span class="hljs-keyword">import</span> { parse <span class="hljs-keyword">as</span> htmlParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node-html-parser&#x27;</span>;
+<span class="hljs-keyword">import</span> { getImage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;astro:assets&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">APIContext</span>, <span class="hljs-title class_">ImageMetadata</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;astro&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">RSSFeedItem</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
+<span class="hljs-keyword">import</span> { getSortedPosts } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/utils/content-utils&#x27;</span>;
+
+<span class="hljs-keyword">const</span> markdownParser = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MarkdownIt</span>();
+
+<span class="hljs-comment">// get dynamic import of images as a map collection</span>
+<span class="hljs-keyword">const</span> imagesGlob = <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">glob</span>&lt;{ <span class="hljs-attr">default</span>: <span class="hljs-title class_">ImageMetadata</span> }&gt;(
+	<span class="hljs-string">&#x27;/src/content/**/*.{jpeg,jpg,png,gif,webp}&#x27;</span>, <span class="hljs-comment">// include posts and assets</span>
+);
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">GET</span>(<span class="hljs-params"><span class="hljs-attr">context</span>: <span class="hljs-title class_">APIContext</span></span>) {
+	<span class="hljs-keyword">if</span> (!context.<span class="hljs-property">site</span>) {
+		<span class="hljs-keyword">throw</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;site not set&#x27;</span>);
+	}
+
+	<span class="hljs-comment">// Use the same ordering as site listing (pinned first, then by published desc)</span>
+	<span class="hljs-keyword">const</span> posts = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getSortedPosts</span>();
+	<span class="hljs-keyword">const</span> <span class="hljs-attr">feed</span>: <span class="hljs-title class_">RSSFeedItem</span>[] = [];
+
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> post <span class="hljs-keyword">of</span> posts) {
+		<span class="hljs-comment">// convert markdown to html string</span>
+		<span class="hljs-keyword">const</span> body = markdownParser.<span class="hljs-title function_">render</span>(post.<span class="hljs-property">body</span>);
+		<span class="hljs-comment">// convert html string to DOM-like structure</span>
+		<span class="hljs-keyword">const</span> html = htmlParser.<span class="hljs-title function_">parse</span>(body);
+		<span class="hljs-comment">// hold all img tags in variable images</span>
+		<span class="hljs-keyword">const</span> images = html.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;img&#x27;</span>);
+
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> img <span class="hljs-keyword">of</span> images) {
+			<span class="hljs-keyword">const</span> src = img.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;src&#x27;</span>);
+			<span class="hljs-keyword">if</span> (!src) <span class="hljs-keyword">continue</span>;
+
+			<span class="hljs-comment">// Handle content-relative images and convert them to built _astro paths</span>
+			<span class="hljs-keyword">if</span> (src.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;./&#x27;</span>) || src.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;../&#x27;</span>)) {
+				<span class="hljs-keyword">let</span> <span class="hljs-attr">importPath</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span>;
+
+				<span class="hljs-keyword">if</span> (src.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;./&#x27;</span>)) {
+					<span class="hljs-comment">// Path relative to the post file directory</span>
+					<span class="hljs-keyword">const</span> prefixRemoved = src.<span class="hljs-title function_">slice</span>(<span class="hljs-number">2</span>);
+					importPath = <span class="hljs-string">`/src/content/posts/<span class="hljs-subst">${prefixRemoved}</span>`</span>;
+				} <span class="hljs-keyword">else</span> {
+					<span class="hljs-comment">// Path like ../assets/images/xxx -&gt; relative to /src/content/</span>
+					<span class="hljs-keyword">const</span> cleaned = src.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^\.\.\//</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+					importPath = <span class="hljs-string">`/src/content/<span class="hljs-subst">${cleaned}</span>`</span>;
+				}
+
+				<span class="hljs-keyword">const</span> imageMod = <span class="hljs-keyword">await</span> imagesGlob[importPath]?.()?.<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> res.<span class="hljs-property">default</span>);
+				<span class="hljs-keyword">if</span> (imageMod) {
+					<span class="hljs-keyword">const</span> optimizedImg = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getImage</span>({ <span class="hljs-attr">src</span>: imageMod });
+					img.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;src&#x27;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(optimizedImg.<span class="hljs-property">src</span>, context.<span class="hljs-property">site</span>).<span class="hljs-property">href</span>);
+				}
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (src.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;/&#x27;</span>)) {
+				<span class="hljs-comment">// images starting with `/` are in public dir</span>
+				img.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;src&#x27;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(src, context.<span class="hljs-property">site</span>).<span class="hljs-property">href</span>);
+			}
+		}
+
+		feed.<span class="hljs-title function_">push</span>({
+			<span class="hljs-attr">title</span>: post.<span class="hljs-property">data</span>.<span class="hljs-property">title</span>,
+			<span class="hljs-attr">description</span>: post.<span class="hljs-property">data</span>.<span class="hljs-property">description</span>,
+			<span class="hljs-attr">pubDate</span>: post.<span class="hljs-property">data</span>.<span class="hljs-property">published</span>,
+			<span class="hljs-attr">link</span>: <span class="hljs-string">`/posts/<span class="hljs-subst">${post.slug}</span>/`</span>,
+			<span class="hljs-comment">// sanitize the new html string with corrected image paths</span>
+			<span class="hljs-attr">content</span>: <span class="hljs-title function_">sanitizeHtml</span>(html.<span class="hljs-title function_">toString</span>(), {
+				<span class="hljs-attr">allowedTags</span>: sanitizeHtml.<span class="hljs-property">defaults</span>.<span class="hljs-property">allowedTags</span>.<span class="hljs-title function_">concat</span>([<span class="hljs-string">&#x27;img&#x27;</span>]),
+			}),
+		});
+	}
+
+	<span class="hljs-keyword">return</span> <span class="hljs-title function_">rss</span>({
+		<span class="hljs-attr">title</span>: siteConfig.<span class="hljs-property">title</span>,
+		<span class="hljs-attr">description</span>: siteConfig.<span class="hljs-property">subtitle</span> || <span class="hljs-string">&#x27;No description&#x27;</span>,
+		<span class="hljs-attr">site</span>: context.<span class="hljs-property">site</span>,
+		<span class="hljs-attr">items</span>: feed,
+		<span class="hljs-attr">customData</span>: <span class="hljs-string">`&lt;language&gt;<span class="hljs-subst">${siteConfig.lang}</span>&lt;/language&gt;`</span>,
+	});
+}
+</code></pre>
+<p>保存了，还需要安装一个pnpm包，不用管是什么，能帮我们转换成链接就是的了</p>
+<pre><code class="hljs language-bash">pnpm add node-html-parser
+</code></pre>
+<p>:::warning
+在推送到仓库时，你可能会遇到warning: in the working copy of &#x27;pnpm-lock.yaml&#x27;, LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可
+:::</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/fuwari-rss-fix.jpg" medium="image"/>
+  </item>
+  <item>
+    <title>为fuwari增加一个404界面</title>
+    <link>https://xc-lr.cn/posts/fuwari-404/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/fuwari-404/</guid>
+    <pubDate>Wed, 24 Sep 2025 00:00:00 GMT</pubDate>
+    <description>为fuwari添加一个好看的404界面</description>
+    <content:encoded><![CDATA[<div class="markdown"><h1>本文章分为两部分</h1>
+<h3 id="适配多语言的404界面">适配多语言的404界面</h3>
+<p>打开<strong>src/i18n/i18nKey.ts</strong></p>
+<pre><code class="hljs language-typescript">	license = <span class="hljs-string">&quot;license&quot;</span>,
+	friends = <span class="hljs-string">&quot;friends&quot;</span>,
+
+	<span class="hljs-comment">// 404 page</span>
+	notFound = <span class="hljs-string">&quot;notFound&quot;</span>,
+	notFoundTitle = <span class="hljs-string">&quot;notFoundTitle&quot;</span>,
+	notFoundMessage = <span class="hljs-string">&quot;notFoundMessage&quot;</span>,
+	backToHome = <span class="hljs-string">&quot;backToHome&quot;</span>,
+	viewArchive = <span class="hljs-string">&quot;viewArchive&quot;</span>,
+</code></pre>
+<p>再分别打开languages下的<strong>en.ts</strong>和<strong>zh_CN.ts</strong><br/>
+<!-- -->en.ts</p>
+<pre><code class="hljs language-typescript">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;License&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">friends</span>]: <span class="hljs-string">&quot;Friends&quot;</span>,
+
+	<span class="hljs-comment">// 404 page</span>
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFound</span>]: <span class="hljs-string">&quot;Page Not Found&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFoundTitle</span>]: <span class="hljs-string">&quot;Oops! Page Not Found&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFoundMessage</span>]: <span class="hljs-string">&quot;The page you are looking for doesn&#x27;t exist. It may have been moved or deleted.&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">backToHome</span>]: <span class="hljs-string">&quot;Back to Home&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">viewArchive</span>]: <span class="hljs-string">&quot;View Archive&quot;</span>,
+</code></pre>
+<p>zh_CN.ts</p>
+<pre><code class="hljs language-typescript">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;许可协议&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">friends</span>]: <span class="hljs-string">&quot;友链&quot;</span>,
+
+	<span class="hljs-comment">// 404 page</span>
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFound</span>]: <span class="hljs-string">&quot;页面未找到&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFoundTitle</span>]: <span class="hljs-string">&quot;哎呀！页面走丢了&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFoundMessage</span>]: <span class="hljs-string">&quot;您访问的页面不存在，可能已被删除或链接有误。&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">backToHome</span>]: <span class="hljs-string">&quot;返回首页&quot;</span>,
+	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">viewArchive</span>]: <span class="hljs-string">&quot;查看归档&quot;</span>,
+</code></pre>
+<p>最后在<strong>src/pages</strong>目录下创建<strong>404.astro</strong></p>
+<pre><code class="hljs language-astro">---
+import { Icon } from &quot;astro-icon/components&quot;;
+import MainGridLayout from &quot;../layouts/MainGridLayout.astro&quot;;
+import I18nKey from &quot;../i18n/i18nKey&quot;;
+import { i18n } from &quot;../i18n/translation&quot;;
+import { url } from &quot;../utils/url-utils&quot;;
+import { siteConfig } from &quot;../config&quot;;
+---
+
+&lt;MainGridLayout title={i18n(I18nKey.notFound)} description={i18n(I18nKey.notFoundMessage)}&gt;
+    &lt;div class=&quot;flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-96&quot;&gt;
+        &lt;div class=&quot;card-base z-10 px-6 md:px-12 py-8 md:py-12 relative w-full&quot;&gt;
+            &lt;!-- 404 Content --&gt;
+            &lt;div class=&quot;flex flex-col items-center text-center space-y-6&quot;&gt;
+                &lt;!-- Large 404 Number --&gt;
+                &lt;div class=&quot;relative opacity-0 animate-fade-in-up&quot;&gt;
+                    &lt;div class=&quot;text-8xl md:text-9xl font-bold bg-gradient-to-br from-[var(--primary)] to-[oklch(0.65_0.18_var(--hue))] bg-clip-text text-transparent select-none&quot;&gt;
+                        404
+                    &lt;/div&gt;
+                    &lt;!-- Decorative elements --&gt;
+                    &lt;div class=&quot;absolute -top-4 -right-4 w-8 h-8 bg-[var(--primary)] rounded-full opacity-20 animate-pulse&quot;&gt;&lt;/div&gt;
+                    &lt;div class=&quot;absolute -bottom-2 -left-2 w-6 h-6 bg-[var(--primary)] rounded-full opacity-30 animate-pulse&quot; style=&quot;animation-delay: 0.5s;&quot;&gt;&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Title and Message --&gt;
+                &lt;div class=&quot;space-y-3 max-w-md opacity-0 animate-fade-in-up animate-delay-100&quot;&gt;
+                    &lt;h1 class=&quot;text-2xl md:text-3xl font-bold text-[var(--primary)]&quot;&gt;
+                        {i18n(I18nKey.notFoundTitle)}
+                    &lt;/h1&gt;
+                    &lt;p class=&quot;text-75 text-base md:text-lg leading-relaxed&quot;&gt;
+                        {i18n(I18nKey.notFoundMessage)}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Illustration --&gt;
+                &lt;div class=&quot;py-4 opacity-0 animate-fade-in-up animate-delay-200&quot;&gt;
+                    &lt;div class=&quot;relative w-32 h-32 mx-auto animate-float&quot;&gt;
+                        &lt;!-- Simple geometric illustration --&gt;
+                        &lt;div class=&quot;absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-[oklch(0.65_0.18_var(--hue))] rounded-full opacity-10&quot;&gt;&lt;/div&gt;
+                        &lt;div class=&quot;absolute inset-4 bg-[var(--card-bg)] rounded-full border-2 border-[var(--primary)] border-opacity-20&quot;&gt;&lt;/div&gt;
+                        &lt;div class=&quot;absolute inset-0 flex items-center justify-center&quot;&gt;
+                            &lt;Icon name=&quot;fa6-solid:location-crosshairs&quot; class=&quot;w-12 h-12 text-[var(--primary)] opacity-60&quot; /&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Action Buttons --&gt;
+                &lt;div class=&quot;flex flex-col sm:flex-row gap-3 pt-4 opacity-0 animate-fade-in-up animate-delay-300&quot;&gt;
+                    &lt;a href={url(&quot;/&quot;)} 
+                       class=&quot;btn-regular px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2&quot;&gt;
+                        &lt;Icon name=&quot;fa6-solid:house&quot; class=&quot;w-4 h-4&quot; /&gt;
+                        {i18n(I18nKey.backToHome)}
+                    &lt;/a&gt;
+                    &lt;a href={url(&quot;/archive&quot;)} 
+                       class=&quot;btn-card px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[var(--line-divider)]&quot;&gt;
+                        &lt;Icon name=&quot;fa6-solid:box-archive&quot; class=&quot;w-4 h-4&quot; /&gt;
+                        {i18n(I18nKey.viewArchive)}
+                    &lt;/a&gt;
+                    &lt;a href={url(&quot;/about&quot;)} 
+                       class=&quot;btn-card px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[var(--line-divider)]&quot;&gt;
+                        &lt;Icon name=&quot;fa6-solid:circle-info&quot; class=&quot;w-4 h-4&quot; /&gt;
+                        {i18n(I18nKey.about)}
+                    &lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Additional Help Text --&gt;
+                &lt;div class=&quot;pt-6 text-sm text-50&quot;&gt;
+                    &lt;p class=&quot;transition-all duration-300&quot;&gt;
+                        {siteConfig.lang === &#x27;zh_CN&#x27; ? &#x27;如果您认为这是一个错误，请联系网站管理员。&#x27; : &#x27;If you believe this is an error, please contact the site administrator.&#x27;}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/MainGridLayout&gt;
+
+&lt;style&gt;
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+    
+    .animate-delay-100 {
+        animation-delay: 0.1s;
+    }
+    
+    .animate-delay-200 {
+        animation-delay: 0.2s;
+    }
+    
+    .animate-delay-300 {
+        animation-delay: 0.3s;
+    }
+    
+    .animate-delay-400 {
+        animation-delay: 0.4s;
+    }
+&lt;/style&gt;
+</code></pre>
+<h3 id="单语言404-astro">单语言404.astro</h3>
+<p>此方法直接在<strong>src/pages</strong>目录下创建404.astro即可<br/>
+<!-- -->由于我没有语言的404，这里附上二叉树树的404界面<br/>
+<!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.jpg" alt="2x-404" loading="lazy" node="[object Object]"/></p>
+<pre><code class="hljs language-astro">---
+import Layout from &quot;@/layouts/Layout.astro&quot;;
+import MainGridLayout from &quot;@/layouts/MainGridLayout.astro&quot;;
+import { Icon } from &quot;astro-icon/components&quot;;
+import { siteConfig } from &quot;@/config&quot;;
+---
+
+&lt;Layout title=&quot;页面未找到&quot;&gt;
+        &lt;MainGridLayout&gt;
+                &lt;div class=&quot;flex flex-col items-center justify-center min-h-[60vh] text-center px-4&quot;&gt;
+                        &lt;!-- 404 图标 --&gt;
+                        &lt;div class=&quot;mb-8&quot;&gt;
+                                &lt;div class=&quot;relative&quot;&gt;
+                                        &lt;div class=&quot;text-8xl md:text-9xl font-bold text-[var(--primary)] opacity-20&quot;&gt;
+                                                404
+                                        &lt;/div&gt;
+                                        &lt;div class=&quot;absolute inset-0 flex items-center justify-center&quot;&gt;
+                                                &lt;Icon name=&quot;fa6-solid:face-sad-tear&quot; class=&quot;text-6xl md:text-7xl text-[var(--primary)]&quot; /&gt;
+                                        &lt;/div&gt;
+                                &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;!-- 错误信息 --&gt;
+                        &lt;div class=&quot;card-base p-8 max-w-md mx-auto mb-8&quot;&gt;
+                                &lt;h1 class=&quot;text-2xl md:text-3xl font-bold text-90 mb-4&quot;&gt;
+                                        页面走丢了
+                                &lt;/h1&gt;
+                                &lt;p class=&quot;text-75 mb-6 leading-relaxed&quot;&gt;
+                                        抱歉，您访问的页面不存在或已被移动。
+                                        &lt;br&gt;
+                                        请检查URL是否正确，或者返回首页继续浏览。
+                                &lt;/p&gt;
+
+                                &lt;!-- 导航按钮 --&gt;
+                                &lt;div class=&quot;flex flex-col sm:flex-row gap-3 justify-center&quot;&gt;
+                                        &lt;a href=&quot;/&quot; class=&quot;btn-regular-dark px-6 py-3 rounded-lg text-white font-medium&quot;&gt;
+                                                &lt;Icon name=&quot;fa6-solid:house&quot; class=&quot;mr-2&quot; /&gt;
+                                                返回首页
+                                        &lt;/a&gt;
+                                        &lt;a href=&quot;/archive/&quot; class=&quot;btn-regular px-6 py-3 rounded-lg font-medium&quot;&gt;
+                                                &lt;Icon name=&quot;fa6-solid:box-archive&quot; class=&quot;mr-2&quot; /&gt;
+                                                文章归档
+                                        &lt;/a&gt;
+                                &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;!-- 返回提示 --&gt;
+                        &lt;div class=&quot;mt-8 text-50 text-sm&quot;&gt;
+                                &lt;p class=&quot;flex items-center justify-center&quot;&gt;
+                                        &lt;Icon name=&quot;fa6-solid:clock-rotate-left&quot; class=&quot;mr-2&quot; /&gt;
+                                        您也可以使用浏览器的后退按钮返回上一页
+                                &lt;/p&gt;
+                        &lt;/div&gt;
+                &lt;/div&gt;
+        &lt;/MainGridLayout&gt;
+&lt;/Layout&gt;
+</code></pre></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/fuwari-404.jpg" medium="image"/>
+  </item>
+  <item>
+    <title>BA周年庆直接9个彩</title>
+    <link>https://xc-lr.cn/posts/ba2th/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/ba2th/</guid>
+    <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
+    <description>两个亚子还有礼服日奈</description>
+    <content:encoded><![CDATA[<div class="markdown"><p>快哉快哉
+<img src="https://xc-lr.cn/react-blog/images/yazi.jpg" alt="亚子" loading="lazy" node="[object Object]"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/rinai.jpg" alt="日奈" loading="lazy" node="[object Object]"/><br/>
+<!-- -->还有我的支付宝和QQ主题😋<br/>
+<img src="https://xc-lr.cn/react-blog/images/ba-alipay.jpg" alt="支付宝" loading="lazy" node="[object Object]"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/ba-qq.jpg" alt="QQ" loading="lazy" node="[object Object]"/></p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/ba3cai.jpg" medium="image"/>
+  </item>
+  <item>
+    <title>fuwari接入评论功能</title>
+    <link>https://xc-lr.cn/posts/comment/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/comment/</guid>
+    <pubDate>Mon, 04 Aug 2025 00:00:00 GMT</pubDate>
+    <description>让你的fuwari接入评论，并让它在文章末显示出</description>
+    <content:encoded><![CDATA[<div class="markdown"><h1>Giscus</h1>
+<p>想要接入评论，肯定需要一个三方平台 <a href="https://giscus.app/zh-CN" node="[object Object]" target="_blank" rel="noreferrer noopener">Giscus</a>
+Giscus就是一个非常合适的平台</p>
+<h1>配置Giscus</h1>
+<p>首先去github创建一个存储库，<strong>一定要是公开库</strong>
+然后在仓库设置中<strong>启用</strong><code>Discussion</code>功能<br/>
+<!-- -->前往<a href="https://giscus.app/zh-CN" node="[object Object]" target="_blank" rel="noreferrer noopener">https://giscus.app/zh-CN</a>
+在<code>仓库</code>一栏中点击第二步的蓝字安装giscus，最后填写自己的用户名及刚刚创建的仓库名称</p>
+<h3 id="映射">映射</h3>
+<p>我只建议使用<code>pathname</code>：以文章路径区分评论区，即使换域名也能匹配<br/>
+<!-- -->其它映射可以看官方介绍<br/>
+<!-- -->分类选择<strong>公告（announcements）</strong><br/>
+<!-- -->特性个人建议勾选<strong>1 3 4</strong><br/>
+<!-- -->主题默认即可，也可以尝试官方的其它主题<br/>
+<!-- -->最后将给出的JS复制</p>
+<h1>配置fuwari</h1>
+<p>在<code>src/pages/posts/</code>目录下找到<code>[...slug].astro</code>，在它的<strong>135行</strong>插入</p>
+<pre><code class="hljs language-astro">&lt;div id=&quot;giscus-comments&quot; style=&quot;margin-top: 3rem;&quot;&gt;
+  你的JS
+&lt;/div&gt;
+</code></pre>
+<p>最后本地测试一下，没问题就可以部署到服务器了</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/comment.jpg" medium="image"/>
+  </item>
+  <item>
+    <title>edgeone加速worker</title>
+    <link>https://xc-lr.cn/posts/edgeone-worker/</link>
+    <guid isPermaLink="true">https://xc-lr.cn/posts/edgeone-worker/</guid>
+    <pubDate>Tue, 29 Jul 2025 00:00:00 GMT</pubDate>
+    <description>如何使用edgeone加速cf worker</description>
+    <content:encoded><![CDATA[<div class="markdown"><p>有人问：主包主包cloudflare worker访问速度太慢了，有没有更强势的访问速度呢？</p>
+<p>有的兄弟，有的</p>
+<p>去 <a href="https://edgeone.ai/zh/get-free-plan" node="[object Object]" target="_blank" rel="noreferrer noopener">edgeone</a> 拿下不要钱的计划，添加你的域名，验证所有权，这步如果不会请退出</p>
+<p>回到我们的cloudflare，选择你想加速的worker，添加自定义域，<strong>选择路由</strong>，选择你要加速的根域名，在你想要加速的子域+eo（方便区分），如我要加速www.91sssvip.top，就填wwweo.91sssvip.top/*，在去cloudflare添加dns解析A记录随便指向一个IP，但<strong>一定要开小黄云</strong>，保存回到edgeone</p>
+<p>添加加速域名，我就填www，v6随便，我个人选择关闭，源站就写刚刚路由的域名协议https即可，<strong>回源Host头一定要选使用源站域名</strong>，最后保存就好啦</p>
+<p>END</p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/aluona.jpg" medium="image"/>
+  </item>
+  </channel>
+</rss>
