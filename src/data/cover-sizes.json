@@ -1,0 +1,90 @@
+{
+  "/apple-touch-icon.png": {
+    "w": 180,
+    "h": 180
+  },
+  "/favicon.png": {
+    "w": 100,
+    "h": 100
+  },
+  "/homeground.webp": {
+    "w": 2520,
+    "h": 1440
+  },
+  "/images/2x-404.jpg": {
+    "w": 562,
+    "h": 557
+  },
+  "/images/SSH_Cloudflare.webp": {
+    "w": 2560,
+    "h": 1440
+  },
+  "/images/aluona.webp": {
+    "w": 1600,
+    "h": 897
+  },
+  "/images/archlinux.png": {
+    "w": 1067,
+    "h": 600
+  },
+  "/images/ba-alipay.webp": {
+    "w": 900,
+    "h": 2000
+  },
+  "/images/ba-qq.webp": {
+    "w": 900,
+    "h": 1853
+  },
+  "/images/ba3cai.webp": {
+    "w": 1600,
+    "h": 720
+  },
+  "/images/comment.jpg": {
+    "w": 775,
+    "h": 359
+  },
+  "/images/firefly.png": {
+    "w": 1920,
+    "h": 800
+  },
+  "/images/fuwari-404.jpg": {
+    "w": 724,
+    "h": 537
+  },
+  "/images/fuwari-rss-fix.jpg": {
+    "w": 1080,
+    "h": 720
+  },
+  "/images/how-use-bot-cover.webp": {
+    "w": 1672,
+    "h": 941
+  },
+  "/images/kick.png": {
+    "w": 1067,
+    "h": 600
+  },
+  "/images/mc-srv.webp": {
+    "w": 2000,
+    "h": 1433
+  },
+  "/images/qiwei.jpg": {
+    "w": 1080,
+    "h": 2234
+  },
+  "/images/qrwechat.png": {
+    "w": 962,
+    "h": 1277
+  },
+  "/images/rinai.webp": {
+    "w": 1600,
+    "h": 720
+  },
+  "/images/yazi.webp": {
+    "w": 1600,
+    "h": 720
+  },
+  "/images/zeseshuxia.webp": {
+    "w": 1600,
+    "h": 915
+  }
+}

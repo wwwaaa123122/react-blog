@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/generate-seo.mjs && npx tsx scripts/prerender-entry.mjs && npx tsx scripts/outline-check.mts",
+    "build": "node scripts/cover-sizes.mjs && tsc --noEmit && vite build && node scripts/generate-seo.mjs && npx tsx scripts/prerender-entry.mjs && npx tsx scripts/outline-check.mts",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "generate:seo": "node scripts/generate-seo.mjs",

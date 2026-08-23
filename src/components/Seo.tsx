@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { siteConfig } from "../config/site";
 import { absoluteUrl } from "../lib/seo";
 import { assetUrl } from "../lib/base";
+import coverSizes from "../data/cover-sizes.json";
 
 interface SeoProps {
   title?: string;
@@ -93,9 +94,21 @@ export default function Seo({
     if (ogImageUrl) {
       setMeta("property", "og:image", ogImageUrl);
       setMeta("name", "twitter:image", ogImageUrl);
+      const size = ogImage && !ogImage.startsWith("http")
+        ? coverSizes[ogImage as keyof typeof coverSizes]
+        : undefined;
+      if (size) {
+        setMeta("property", "og:image:width", String(size.w));
+        setMeta("property", "og:image:height", String(size.h));
+      } else {
+        removeMeta("property", "og:image:width");
+        removeMeta("property", "og:image:height");
+      }
     } else {
       removeMeta("property", "og:image");
       removeMeta("name", "twitter:image");
+      removeMeta("property", "og:image:width");
+      removeMeta("property", "og:image:height");
     }
   }, [title, description, path, keywords, noindex, ogType, ogImage]);
 

@@ -28,6 +28,7 @@ import {
 } from "../src/lib/seo";
 import siteData from "../src/data/site.json";
 import profileData from "../src/data/profile.json";
+import coverSizes from "../src/data/cover-sizes.json";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
@@ -141,6 +142,12 @@ function withHead(
       ? meta.ogImage
       : siteUrl + assetUrl(rewriteImagePaths(meta.ogImage))
     : undefined;
+  const ogImagePath = ogImageUrl?.startsWith(siteUrl)
+    ? ogImageUrl.slice(siteUrl.length)
+    : ogImageUrl && !ogImageUrl.startsWith("http")
+      ? ogImageUrl
+      : undefined;
+  const ogSize = ogImagePath ? coverSizes[ogImagePath] : undefined;
 
   const jsonLdBlocks = jsonLdFor(path);
 
@@ -158,6 +165,8 @@ function withHead(
     `<meta property="og:url" content="${esc(url)}">`,
     `<meta property="og:locale" content="zh_CN">`,
     ogImageUrl ? `<meta property="og:image" content="${esc(ogImageUrl)}">` : "",
+    ogImageUrl && ogSize ? `<meta property="og:image:width" content="${ogSize.w}">` : "",
+    ogImageUrl && ogSize ? `<meta property="og:image:height" content="${ogSize.h}">` : "",
     `<meta name="twitter:card" content="${ogImageUrl && path.startsWith("/posts/") ? "summary_large_image" : "summary"}">`,
     `<meta name="twitter:title" content="${esc(fullTitle)}">`,
     `<meta name="twitter:description" content="${esc(desc)}">`,
