@@ -43,7 +43,7 @@ const urls = [
   })),
   ...posts.map((p) => ({
     loc: postUrl(p.slug),
-    lastmod: p.published || today,
+    lastmod: p.updated || p.published || today,
     changefreq: "monthly",
     priority: "0.7",
   })),

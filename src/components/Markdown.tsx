@@ -11,6 +11,22 @@ export function slugify(text: string): string {
   return text.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
+// 递归提取 heading 的纯文本：标题里若含 <code>/<strong>/<a> 等行内元素，
+// String(children) 会得到 "[object Object]" 导致锚点 id 与目录 href 失配
+function headingText(children: React.ReactNode): string {
+  if (typeof children === "string" || typeof children === "number") {
+    return String(children);
+  }
+  if (Array.isArray(children)) {
+    return children.map(headingText).join("");
+  }
+  if (children && typeof children === "object" && "props" in children) {
+    const props = (children as { props?: { children?: React.ReactNode } }).props;
+    return headingText(props?.children);
+  }
+  return "";
+}
+
 const HIGHLIGHT_SUBSET = [
   "javascript", "typescript", "jsx", "tsx", "bash", "shell", "json",
   "markdown", "css", "html", "xml", "python", "yaml", "dockerfile",
@@ -85,9 +101,9 @@ export default function Markdown({ content }: { content: string }) {
     img: ({ src, alt }: any) => (
       <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" />
     ),
-    h2: ({ children }) => <h2 id={slugify(String(children))}>{children}</h2>,
-    h3: ({ children }) => <h3 id={slugify(String(children))}>{children}</h3>,
-    h4: ({ children }) => <h4 id={slugify(String(children))}>{children}</h4>,
+    h2: ({ children }) => <h2 id={slugify(headingText(children))}>{children}</h2>,
+    h3: ({ children }) => <h3 id={slugify(headingText(children))}>{children}</h3>,
+    h4: ({ children }) => <h4 id={slugify(headingText(children))}>{children}</h4>,
   };
 
   return (

@@ -28,10 +28,3 @@ export interface SocialLink {
   url: string;
   icon: "github" | "x" | "telegram" | "mail" | "bilibili";
 }
-
-export interface NavLink {
-  name: string;
-  to?: string;
-  url?: string;
-  external?: boolean;
-}

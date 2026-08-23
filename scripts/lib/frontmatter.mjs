@@ -72,6 +72,7 @@ export function loadPosts(postsDir) {
         slug: f.replace(/\.md$/, ""),
         title: String(data.title || f),
         published: String(data.published || ""),
+        updated: data.updated ? String(data.updated) : undefined,
         description: String(data.description || ""),
         image: data.image ? String(data.image) : undefined,
         tags,
