@@ -2,7 +2,7 @@
 title: Fuwari 主题背景图功能教程
 published: 2026-03-29
 description: '为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程'
-image: '/homeground.webg'
+image: '/homeground.webp'
 tags: [fuwari]
 category: 'tech'
 draft: false
@@ -31,7 +31,7 @@ export const siteConfig: SiteConfig = {
   
   background: {
     enable: true,              // 是否启用背景图
-    src: "/homeground.webg",   // 背景图片路径
+    src: "/homeground.webp",   // 背景图片路径
     blur: 10,                  // 默认模糊程度（像素）
   },
   
@@ -84,7 +84,7 @@ define({
 ```typescript
 background: {
   enable: false,
-  src: "/homeground.webg",
+  src: "/homeground.webp",
   blur: 10,
 },
 ```
@@ -129,7 +129,7 @@ export const siteConfig: SiteConfig = {
 
   background: {
     enable: true,
-    src: "/homeground.webg",
+    src: "/homeground.webp",
     blur: 10,
   },
 
