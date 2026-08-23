@@ -61,6 +61,13 @@ function useActiveHeading(toc: { level: number; text: string; id: string }[]): s
     };
   }, [toc]);
 
+  // 长目录：高亮项滚出目录内部视口时，把目录滚动到该项（仅滚动最近的可滚动祖先）
+  useEffect(() => {
+    if (!active) return;
+    const el = document.querySelector(`[data-toc-id="${CSS.escape(active)}"]`);
+    el?.scrollIntoView({ block: "nearest" });
+  }, [active]);
+
   return active;
 }
 
@@ -144,7 +151,7 @@ export default function PostDetail() {
               <ul className="mt-2 max-h-72 overflow-y-auto space-y-0.5 border-l-2 border-border pl-4 text-sm leading-7 text-muted-foreground">
                 {toc.map((item, i) => (
                   <li key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
-                    <a href={"#" + item.id} className="transition-colors hover:text-foreground">{item.text}</a>
+                    <a href={"#" + item.id} data-toc-id={item.id} className="transition-colors hover:text-foreground">{item.text}</a>
                   </li>
                 ))}
               </ul>
@@ -198,6 +205,7 @@ export default function PostDetail() {
                   <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
                     <a
                       href={"#" + item.id}
+                      data-toc-id={item.id}
                       aria-current={activeHeading === item.id ? "location" : undefined}
                       className={cn(
                         "block transition-colors hover:text-foreground truncate",
