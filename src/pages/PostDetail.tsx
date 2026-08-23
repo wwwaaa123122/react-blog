@@ -91,10 +91,13 @@ export default function PostDetail() {
 
   if (!post) {
     return (
-      <div className="py-20 text-center">
-        <p className="text-lg text-muted-foreground mb-4">文章不存在或已被删除</p>
-        <Button asChild variant="outline"><Link to="/posts">返回文章列表</Link></Button>
-      </div>
+      <>
+        <Seo title="文章不存在" description="文章不存在或已被删除" noindex />
+        <div className="py-20 text-center">
+          <p className="text-lg text-muted-foreground mb-4">文章不存在或已被删除</p>
+          <Button asChild variant="outline"><Link to="/posts">返回文章列表</Link></Button>
+        </div>
+      </>
     );
   }
 
