@@ -71,6 +71,7 @@ src/
 - **`sitemap.xml`** — 全站 URL 列表（首页 / 列表页 / 每篇文章），含 lastmod、changefreq、priority
 - **`llms.txt`** — 遵循 [llmstxt.org](https://llmstxt.org/) 规范，为 LLM 提供站点与文章索引（首页 `<link>` 与页脚均有引用）
 - **`robots.txt`** — 允许爬虫抓取并指向 `sitemap.xml`
+- **`src/data/cover-sizes.json`** — 构建时由 `scripts/cover-sizes.mjs` 自动解析 `public/` 下封面图尺寸，用于 OG 分享卡片（`og:image:width/height`）与 RSS `media:content` 的尺寸标注
 
 站点基础 URL 取自 `src/data/site.json` 的 `site_url`（默认 `https://xc-lr.cn`），部署到其他域名时修改它后重新构建即可。
 
