@@ -109,15 +109,15 @@ title: archlinux使用体验
 published: 2026-08-14
 draft: false
 description: 关于我的archlinux的使用体验
-image: ../images/archlinux.png
+image: /images/archlinux.png
 tags:
   - arch
   - linux
   - thoughts
 category: tech
 lang: zh_CN
+updated: 2026-08-23
 ---
-
 # 缘起
 
 偶然间在B站上看到一个archlinux的使用视频，在观看完后，b站开始推送更多的arch视频，我也就开始了尝试
@@ -158,8 +158,7 @@ linux想要安装双系统，分盘时给我的感觉非常麻烦，他不能像
 
 用惯了windows/debian系这些系统后，我相信下载应用习惯应该都是去浏览器搜索应用，而arch系由于没有使用apt，但拥有yay库，就出现了一个处境：*官网没有安装包，得单独搜yay包*
 
-对于已经习惯用户，这个yay方式真的很麻烦
-`,Pw=`---
+对于已经习惯用户，这个yay方式真的很麻烦`,Pw=`---
 title: BA周年庆直接9个彩
 published: 2025-08-07
 description: '两个亚子还有礼服日奈'
