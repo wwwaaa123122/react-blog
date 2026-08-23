@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { publishedPosts, getAllTags } from "../lib/posts";
@@ -16,8 +16,10 @@ export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tag = searchParams.get("tag") ?? "";
   const cat = searchParams.get("cat") ?? "";
-  const [keyword, setKeyword] = useState("");
-  const [page, setPage] = useState(1);
+  // 搜索词与页码也放进 URL（?q= / ?page=）：可分享、刷新/后退不丢失
+  const keyword = searchParams.get("q") ?? "";
+  const rawPage = parseInt(searchParams.get("page") ?? "1", 10);
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
 
   const tags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
@@ -38,27 +40,46 @@ export default function Posts() {
     return list;
   }, [cat, tag, keyword]);
 
-  useEffect(() => { setPage(1); }, [cat, tag, keyword]);
-
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, totalPages);
   const pagePosts = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
+  // 统一更新 URL 参数；过滤条件变化时重置页码
+  const updateParams = (
+    mutator: (sp: URLSearchParams) => void,
+    options?: { resetPage?: boolean; replace?: boolean }
+  ) => {
+    const next = new URLSearchParams(searchParams);
+    mutator(next);
+    if (options?.resetPage) next.delete("page");
+    setSearchParams(next, options?.replace ? { replace: true } : undefined);
+  };
+
   const selectTag = (t: string) => {
-    if (t === tag) { searchParams.delete("tag"); }
-    else { searchParams.set("tag", t); }
-    setSearchParams(searchParams);
+    updateParams((sp) => {
+      if (t === tag) sp.delete("tag");
+      else sp.set("tag", t);
+    }, { resetPage: true });
   };
 
   const selectCat = (c: string) => {
-    if (c === cat) { searchParams.delete("cat"); }
-    else { searchParams.set("cat", c); }
-    setSearchParams(searchParams);
+    updateParams((sp) => {
+      if (c === cat) sp.delete("cat");
+      else sp.set("cat", c);
+    }, { resetPage: true });
+  };
+
+  const onKeywordChange = (v: string) => {
+    // 逐字输入用 replace，避免刷爆历史记录
+    updateParams((sp) => {
+      if (v) sp.set("q", v);
+      else sp.delete("q");
+    }, { resetPage: true, replace: true });
   };
 
   // 翻页时回到页面顶部，避免停留在旧列表的滚动位置
   const goToPage = (n: number) => {
-    setPage(n);
+    updateParams((sp) => sp.set("page", String(n)));
     try {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
@@ -80,11 +101,11 @@ export default function Posts() {
       <div className="relative mb-4">
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          type="search" value={keyword} onChange={(e) => setKeyword(e.target.value)}
+          type="search" value={keyword} onChange={(e) => onKeywordChange(e.target.value)}
           placeholder="搜索文章…" aria-label="搜索文章" className="h-10 pl-9 pr-10 text-sm rounded-xl [&::-webkit-search-cancel-button]:hidden"
         />
         {keyword && (
-          <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 size-8" onClick={() => setKeyword("")} aria-label="清除搜索">
+          <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 size-8" onClick={() => onKeywordChange("")} aria-label="清除搜索">
             <X className="size-3.5" />
           </Button>
         )}

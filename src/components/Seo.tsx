@@ -81,12 +81,21 @@ export default function Seo({
     setMeta("property", "og:type", ogType);
     setMeta("property", "og:url", url);
     setMeta("property", "og:locale", "zh_CN");
-    if (ogImageUrl) setMeta("property", "og:image", ogImageUrl);
-
     setMeta("name", "twitter:card", ogImageUrl ? "summary_large_image" : "summary");
     setMeta("name", "twitter:title", fullTitle);
     setMeta("name", "twitter:description", desc);
-    if (ogImageUrl) setMeta("name", "twitter:image", ogImageUrl);
+
+    // 无封面时移除上一页残留的图片 meta（否则文章 → 无图页面后 OG 仍是旧图）
+    const removeMeta = (attr: "name" | "property", key: string) => {
+      document.querySelector(`meta[${attr}="${key}"]`)?.remove();
+    };
+    if (ogImageUrl) {
+      setMeta("property", "og:image", ogImageUrl);
+      setMeta("name", "twitter:image", ogImageUrl);
+    } else {
+      removeMeta("property", "og:image");
+      removeMeta("name", "twitter:image");
+    }
   }, [title, description, path, keywords, noindex, ogType, ogImage]);
 
   return null;
