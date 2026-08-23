@@ -141,7 +141,7 @@ export default function PostDetail() {
               <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-muted-foreground [&::-webkit-details-marker]:hidden">
                 <ListTree className="size-4" /> 目录
               </summary>
-              <ul className="mt-2 space-y-0.5 border-l-2 border-border pl-4 text-sm leading-7 text-muted-foreground">
+              <ul className="mt-2 max-h-72 overflow-y-auto space-y-0.5 border-l-2 border-border pl-4 text-sm leading-7 text-muted-foreground">
                 {toc.map((item, i) => (
                   <li key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
                     <a href={"#" + item.id} className="transition-colors hover:text-foreground">{item.text}</a>
@@ -193,7 +193,7 @@ export default function PostDetail() {
           <aside className="hidden lg:block w-56 shrink-0">
             <div className="sticky top-20">
               <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目录</h4>
-              <nav aria-label="文章目录" className="space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
+              <nav aria-label="文章目录" className="max-h-[calc(100vh-7rem)] overflow-y-auto space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
                 {toc.map((item, i) => (
                   <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
                     <a
