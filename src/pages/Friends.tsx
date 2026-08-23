@@ -139,7 +139,7 @@ export default function Friends() {
           <a key={f.title} className="group flex min-w-0 flex-col gap-3 rounded-xl border border-border/70 bg-card p-4 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg" href={f.siteurl} target="_blank" rel="noreferrer noopener">
             <div className="flex items-center gap-3">
               {f.imgurl ? (
-                <img className="size-12 shrink-0 rounded-xl border border-border object-cover transition-transform duration-200 group-hover:scale-105" src={f.imgurl} alt={f.title} loading="lazy" />
+                <img className="size-12 shrink-0 rounded-xl border border-border object-cover transition-transform duration-200 group-hover:scale-105" src={f.imgurl} alt={f.title} loading="lazy" decoding="async" />
               ) : (
                 <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/20 to-accent text-lg font-bold text-primary">{f.title.charAt(0)}</span>
               )}

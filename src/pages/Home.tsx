@@ -28,6 +28,7 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
               alt={post.title}
               className="w-24 h-20 sm:w-28 sm:h-22 rounded-lg object-cover bg-muted"
               loading="lazy"
+              decoding="async"
             />
           </Link>
         )}

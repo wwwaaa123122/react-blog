@@ -26,6 +26,7 @@ export default function PostCard({ post }: { post: Post }) {
               alt={post.title}
               className="w-full aspect-[2/1] object-cover transition-transform duration-200 group-hover:scale-[1.02]"
               loading="lazy"
+              decoding="async"
             />
           </Link>
           {/* Magic UI：封面边框流光 */}

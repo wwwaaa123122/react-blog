@@ -99,7 +99,7 @@ export default function Markdown({ content }: { content: string }) {
       );
     },
     img: ({ src, alt }: any) => (
-      <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" />
+      <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" decoding="async" />
     ),
     h2: ({ children }) => <h2 id={slugify(headingText(children))}>{children}</h2>,
     h3: ({ children }) => <h3 id={slugify(headingText(children))}>{children}</h3>,

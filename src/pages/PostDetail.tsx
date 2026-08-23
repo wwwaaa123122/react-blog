@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, Home, ListTree, RefreshCw } from "lucide-react";
 import { getPostBySlug, formatDate, readingTime, publishedPosts } from "../lib/posts";
@@ -9,6 +10,7 @@ import { siteConfig } from "../config/site";
 import { assetUrl } from "../lib/base";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import Giscus from "../components/Giscus";
 
 function extractToc(content: string) {
@@ -29,9 +31,46 @@ function extractToc(content: string) {
   return toc;
 }
 
+// 目录滚动高亮（scroll-spy）：滚动时找出视口上方最近的一个标题作为"当前章节"
+function useActiveHeading(toc: { level: number; text: string }[]): string {
+  const [active, setActive] = useState("");
+
+  useEffect(() => {
+    setActive("");
+    // 标题由 Markdown 组件渲染（id = slugify(text)），滚动时取视口最上方的章节
+    const onScroll = () => {
+      const offset = 140; // 导航栏高度 + 阅读余量
+      let current = "";
+      for (const item of toc) {
+        const el = document.getElementById(slugify(item.text));
+        if (el && el.getBoundingClientRect().top <= offset) {
+          current = slugify(item.text);
+        }
+      }
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [toc]);
+
+  return active;
+}
+
 export default function PostDetail() {
   const { slug } = useParams();
   const post = slug ? getPostBySlug(slug) : undefined;
+
+  // 注意：所有 hooks 必须在早期 return 之前调用（保持调用顺序稳定）
+  const toc = useMemo(
+    () => (post ? extractToc(post.content) : []),
+    [post]
+  );
+  const activeHeading = useActiveHeading(toc);
 
   if (!post) {
     return (
@@ -42,7 +81,6 @@ export default function PostDetail() {
     );
   }
 
-  const toc = extractToc(post.content);
   const cover = post.image ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/")) : undefined;
   const currentYear = new Date().getFullYear();
 
@@ -89,7 +127,7 @@ export default function PostDetail() {
 
           {cover && (
             <div className="mb-8 -mx-5 md:mx-0">
-              <img className="w-full rounded-xl shadow-sm" src={cover} alt={post.title} loading="lazy" />
+              <img className="w-full rounded-xl shadow-sm" src={cover} alt={post.title} loading="lazy" decoding="async" />
             </div>
           )}
 
@@ -160,7 +198,13 @@ export default function PostDetail() {
                   <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
                     <a
                       href={"#" + slugify(item.text)}
-                      className="block transition-colors hover:text-foreground truncate"
+                      aria-current={activeHeading === slugify(item.text) ? "location" : undefined}
+                      className={cn(
+                        "block transition-colors hover:text-foreground truncate",
+                        activeHeading === slugify(item.text)
+                          ? "text-primary font-medium"
+                          : undefined
+                      )}
                     >
                       {item.text}
                     </a>
