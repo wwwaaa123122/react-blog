@@ -76,8 +76,8 @@ export default function Friends() {
   ];
   return (
     <>
-      <Seo title="友链" description="友情链接与友链申请方式，与优秀的朋友们一起成长" path="/friends" />
-      <Breadcrumb items={[{ label: "友链", to: "/friends" }]} />
+      <Seo title="友链" description="友情链接与友链申请方式，与优秀的朋友们一起成长" path="/friends/" />
+      <Breadcrumb items={[{ label: "友链", to: "/friends/" }]} />
       <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">友链</h1>

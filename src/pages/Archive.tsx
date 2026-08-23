@@ -15,8 +15,8 @@ export default function Archive() {
 
   return (
     <>
-      <Seo title="归档" description="全部文章按年份归档" path="/archive" />
-      <Breadcrumb items={[{ label: "归档", to: "/archive" }]} />
+      <Seo title="归档" description="全部文章按年份归档" path="/archive/" />
+      <Breadcrumb items={[{ label: "归档", to: "/archive/" }]} />
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">归档</h1>
         <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章 · 按年份归档</p>

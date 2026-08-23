@@ -38,8 +38,8 @@ function Countdown() {
 export default function About() {
   return (
     <>
-      <Seo title="关于我" description="认识一下这个博客的主人" path="/about" />
-      <Breadcrumb items={[{ label: "关于", to: "/about" }]} />
+      <Seo title="关于我" description="认识一下这个博客的主人" path="/about/" />
+      <Breadcrumb items={[{ label: "关于", to: "/about/" }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(personJsonLd()) }} />
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">关于我</h1>

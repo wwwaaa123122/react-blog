@@ -103,9 +103,9 @@ function jsonLdFor(path: string): string[] {
   } else {
     const labelMap: Record<string, string> = {
       "/posts/": "文章",
-      "/archive": "归档",
-      "/friends": "友链",
-      "/about": "关于我",
+      "/archive/": "归档",
+      "/friends/": "友链",
+      "/about/": "关于我",
     };
     const label = labelMap[path];
     if (label) {
@@ -216,12 +216,12 @@ writePage("/posts/", {
   title: "文章",
   description: `共 ${publishedPosts.length} 篇文章 · 分享技术、生活与热爱`,
 });
-writePage("/archive", { title: "归档", description: "全部文章按年份归档" });
-writePage("/friends", {
+writePage("/archive/", { title: "归档", description: "全部文章按年份归档" });
+writePage("/friends/", {
   title: "友链",
   description: "友情链接与友链申请方式，与优秀的朋友们一起成长",
 });
-writePage("/about", { title: "关于我", description: "认识一下这个博客的主人" });
+writePage("/about/", { title: "关于我", description: "认识一下这个博客的主人" });
 
 // 每篇文章：/posts/<slug>/ （GitHub Pages 静态目录形态，sitemap/canonical 与之对应）
 for (const post of publishedPosts) {

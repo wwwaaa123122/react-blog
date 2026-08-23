@@ -29,9 +29,9 @@ const postUrl = (slug) => baseUrl + postPath(slug);
 const staticPages = [
   { path: "/", lastmod: today, priority: "1.0", changefreq: "daily" },
   { path: "/posts/", lastmod: today, priority: "0.8", changefreq: "daily" },
-  { path: "/archive", lastmod: today, priority: "0.5", changefreq: "weekly" },
-  { path: "/friends", lastmod: today, priority: "0.5", changefreq: "weekly" },
-  { path: "/about", lastmod: today, priority: "0.5", changefreq: "monthly" },
+  { path: "/archive/", lastmod: today, priority: "0.5", changefreq: "weekly" },
+  { path: "/friends/", lastmod: today, priority: "0.5", changefreq: "weekly" },
+  { path: "/about/", lastmod: today, priority: "0.5", changefreq: "monthly" },
 ];
 
 const urls = [
@@ -77,9 +77,9 @@ const llms = `# ${site.title}
 
 - [首页](${baseUrl}/): 个人资料与最新文章
 - [文章列表](${baseUrl}/posts/): 全部技术文章
-- [归档](${baseUrl}/archive): 按年份归档
-- [友链](${baseUrl}/friends): 友情链接与申请方式
-- [关于](${baseUrl}/about): 关于作者
+- [归档](${baseUrl}/archive/): 按年份归档
+- [友链](${baseUrl}/friends/): 友情链接与申请方式
+- [关于](${baseUrl}/about/): 关于作者
 
 ## 文章
 
