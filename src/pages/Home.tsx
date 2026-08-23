@@ -97,10 +97,24 @@ export default function Home() {
           }
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -32px 0px" }
+      // 底部提前 25% 视口高度触发：快划时动画在元素进入视野前就开播，不会"没跟上"
+      { threshold: 0, rootMargin: "0px 0px 25% 0px" }
     );
     items.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    // 兜底：若极端快划导致漏触发，把已进入/划过视口的残留元素强制显示
+    const fallback = window.setTimeout(() => {
+      const vh = window.innerHeight;
+      items.forEach((el) => {
+        if (el.classList.contains("rise-in")) return;
+        if (el.getBoundingClientRect().top < vh) el.classList.add("rise-in");
+      });
+    }, 1200);
+
+    return () => {
+      io.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   return (
@@ -164,7 +178,7 @@ export default function Home() {
                 className={isClient ? "rise-item" : undefined}
                 style={
                   isClient
-                    ? { transitionDelay: `${Math.min(i * 60, 360)}ms` }
+                    ? { transitionDelay: `${Math.min(i * 50, 250)}ms` }
                     : undefined
                 }
               >
