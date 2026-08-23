@@ -4,7 +4,7 @@ import type { Post } from "../types";
 import { formatDate, readingTime } from "../lib/posts";
 import { assetUrl } from "../lib/base";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { BorderBeam } from "@/components/magicui/border-beam";
 
 export default function PostCard({ post }: { post: Post }) {
@@ -41,14 +41,15 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
       )}
       <CardContent className="p-5">
-        <CardTitle className="mb-2 text-base font-semibold leading-snug">
+        {/* 卡片标题用真实 h3（CardTitle 只渲染 div，读屏无法识别为标题） */}
+        <h3 className="mb-2 font-heading text-base font-semibold leading-snug">
           <Link
             to={"/posts/" + post.slug}
             className="text-foreground hover:text-primary transition-colors duration-150"
           >
             {post.title}
           </Link>
-        </CardTitle>
+        </h3>
         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-3">
           {post.description}
         </p>

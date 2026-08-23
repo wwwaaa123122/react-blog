@@ -151,32 +151,28 @@ export default function PostDetail() {
 
           <Markdown content={post.content} />
 
-          {/* 上一篇 / 下一篇 */}
-          <nav aria-label="上一篇/下一篇" className="mt-10 pt-6 border-t border-border grid grid-cols-2 gap-4">
-            <div>
-              {prevPost && (
-                <Link to={"/posts/" + prevPost.slug} className="group block">
-                  <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                    <ArrowLeft className="size-3" /> 上一篇
-                  </span>
-                  <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                    {prevPost.title}
-                  </span>
-                </Link>
-              )}
-            </div>
-            <div className="text-right">
-              {nextPost && (
-                <Link to={"/posts/" + nextPost.slug} className="group block">
-                  <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1 justify-end">
-                    下一篇 <ArrowRight className="size-3" />
-                  </span>
-                  <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                    {nextPost.title}
-                  </span>
-                </Link>
-              )}
-            </div>
+          {/* 上一篇 / 下一篇（只渲染存在的邻居，避免空单元格） */}
+          <nav aria-label="上一篇/下一篇" className="mt-10 pt-6 border-t border-border flex items-center gap-4">
+            {prevPost && (
+              <Link to={"/posts/" + prevPost.slug} className="group block min-w-0">
+                <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                  <ArrowLeft className="size-3" /> 上一篇
+                </span>
+                <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  {prevPost.title}
+                </span>
+              </Link>
+            )}
+            {nextPost && (
+              <Link to={"/posts/" + nextPost.slug} className="group block min-w-0 ml-auto text-right">
+                <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1 justify-end">
+                  下一篇 <ArrowRight className="size-3" />
+                </span>
+                <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  {nextPost.title}
+                </span>
+              </Link>
+            )}
           </nav>
 
           <footer className="mt-6 pt-4 border-t border-border text-sm text-muted-foreground">
