@@ -174,6 +174,21 @@
     animation-delay: 0s !important;
     scroll-behavior: auto !important;
   }
+  /* 关闭 View Transitions 动画（打开文章时的标题/封面飞入） */
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ===== 打开文章：标题/封面共享元素过渡（View Transitions） ===== */
+/* 列表里的标题/封面与文章页同名元素配对，浏览器自动把它从列表位置"飞"到文章顶部 */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.32s;
+  animation-timing-function: cubic-bezier(0.22, 0.8, 0.3, 1);
 }
 
 /* ===== 路由切换：顶部加载进度条（nprogress 风格） ===== */

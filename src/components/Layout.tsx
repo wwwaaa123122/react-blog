@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import LoadingBar from "./LoadingBar";
+import { isViewTransitionRunning } from "../lib/viewTransition";
 
 export default function Layout() {
   const loc = useLocation();
@@ -15,6 +16,11 @@ export default function Layout() {
     // 否则每次刷新都会看到内容再"加载"一遍（旧版 slideDown 的怪异来源）
     if (!mounted.current) {
       mounted.current = true;
+      return;
+    }
+    // 视图过渡（打开文章时标题/封面飞入）已接管转场，跳过淡入重挂载
+    if (isViewTransitionRunning()) {
+      prevPath.current = loc.pathname;
       return;
     }
     if (prevPath.current !== loc.pathname) {

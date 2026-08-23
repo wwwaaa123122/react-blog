@@ -10,6 +10,7 @@ import { assetUrl } from "../lib/base";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Giscus from "../components/Giscus";
+import TransitionLink from "../components/TransitionLink";
 
 function extractToc(content: string) {
   const toc: { level: number; text: string }[] = [];
@@ -52,7 +53,10 @@ export default function PostDetail() {
       <div className="flex gap-8 lg:gap-12 relative">
         {/* 文章主体 */}
         <article className="min-w-0 flex-1 max-w-[720px]">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-4 [overflow-wrap:anywhere]">
+          <h1
+            className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-4 [overflow-wrap:anywhere]"
+            style={{ viewTransitionName: `vt-title-${post.slug}` }}
+          >
             {post.title}
           </h1>
 
@@ -74,7 +78,13 @@ export default function PostDetail() {
 
           {cover && (
             <div className="mb-8 -mx-5 md:mx-0">
-              <img className="w-full rounded-xl shadow-sm" src={cover} alt={post.title} loading="lazy" />
+              <img
+                className="w-full rounded-xl shadow-sm"
+                src={cover}
+                alt={post.title}
+                loading="lazy"
+                style={{ viewTransitionName: `vt-cover-${post.slug}` }}
+              />
             </div>
           )}
 
@@ -100,26 +110,26 @@ export default function PostDetail() {
           <nav className="mt-10 pt-6 border-t border-border grid grid-cols-2 gap-4">
             <div>
               {prevPost && (
-                <Link to={"/posts/" + prevPost.slug} className="group block">
+                <TransitionLink to={"/posts/" + prevPost.slug} className="group block">
                   <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
                     <ArrowLeft className="size-3" /> 上一篇
                   </span>
                   <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {prevPost.title}
                   </span>
-                </Link>
+                </TransitionLink>
               )}
             </div>
             <div className="text-right">
               {nextPost && (
-                <Link to={"/posts/" + nextPost.slug} className="group block">
+                <TransitionLink to={"/posts/" + nextPost.slug} className="group block">
                   <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1 justify-end">
                     下一篇 <ArrowRight className="size-3" />
                   </span>
                   <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {nextPost.title}
                   </span>
-                </Link>
+                </TransitionLink>
               )}
             </div>
           </nav>

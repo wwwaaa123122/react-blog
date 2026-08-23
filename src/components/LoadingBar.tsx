@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { isViewTransitionRunning } from "../lib/viewTransition";
 
 // 路由切换时的顶部加载进度条（nprogress 风格）
 // - 仅在发生路由跳转时出现（首次加载不播，避免和预渲染首屏重复动画）
@@ -14,6 +15,11 @@ export default function LoadingBar() {
     // 跳过首次挂载
     if (!mounted.current) {
       mounted.current = true;
+      return;
+    }
+    // 视图过渡（打开文章）已接管转场，不再叠加进度条
+    if (isViewTransitionRunning()) {
+      prevPath.current = pathname;
       return;
     }
     if (prevPath.current !== pathname) {
