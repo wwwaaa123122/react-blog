@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUp, Rss } from "lucide-react";
 import { siteConfig } from "../config/site";
-import { Icon } from "../components/icons";
+import { Icon } from "./icons";
 import { assetUrl } from "../lib/base";
 import { Button } from "@/components/ui/button";
 

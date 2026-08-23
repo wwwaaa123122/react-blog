@@ -128,7 +128,8 @@ export default function PostDetail() {
 
           {cover && (
             <div className="mb-8 -mx-5 md:mx-0">
-              <img className="w-full rounded-xl shadow-sm" src={cover} alt={post.title} loading="lazy" decoding="async" />
+              {/* 首屏封面：急切加载并提高优先级（LCP 元素），避免 lazy 延迟 */}
+              <img className="w-full rounded-xl shadow-sm bg-muted" src={cover} alt={post.title} decoding="async" fetchPriority="high" />
             </div>
           )}
 

@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { Archive, BarChart3, BookOpen, Home as HomeIcon, Link2, Menu, Search, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
-import { Icon } from "../components/icons";
+import { Icon } from "./icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

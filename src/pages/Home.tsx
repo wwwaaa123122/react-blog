@@ -93,6 +93,19 @@ export default function Home() {
   const allTags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
   const reducedMotion = usePrefersReducedMotion();
+  // 打字机动画每会话只播一次：老访客直接看到完整文字，不必等待逐字打完
+  const [typingPlayed, setTypingPlayed] = useState(true);
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem("hero-typed")) {
+        setTypingPlayed(false);
+      } else {
+        sessionStorage.setItem("hero-typed", "1");
+      }
+    } catch {
+      /* 隐私模式等场景：保持播放 */
+    }
+  }, []);
 
   // 文章列表"从下向上弹出"：隐藏类只在客户端渲染时加上（预渲染 HTML 不包含，
   // 爬虫/无 JS 场景保持可见），元素滚入视口后依次弹入
@@ -159,7 +172,7 @@ export default function Home() {
               {profileConfig.name}
             </h1>
             <p className="text-sm text-muted-foreground">{profileConfig.bio}</p>
-            {reducedMotion ? (
+            {reducedMotion || !typingPlayed ? (
               <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-lg">
                 {siteConfig.description}
               </p>
