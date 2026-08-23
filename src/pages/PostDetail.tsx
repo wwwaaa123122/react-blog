@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, Home, ListTree, RefreshCw } from "lucide-react";
 import { getPostBySlug, formatDate, readingTime, publishedPosts } from "../lib/posts";
-import Markdown, { slugify } from "../components/Markdown";
+import Markdown, { createSlugger } from "../components/Markdown";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { articleJsonLd, jsonLd } from "../lib/seo";
@@ -29,23 +29,25 @@ function extractToc(content: string) {
       toc.push({ level: Math.max(2, m[1].length), text });
     }
   }
-  return toc;
+  // 与 Markdown 渲染一致的去重 id（重复标题追加 -1/-2）
+  const slug = createSlugger();
+  return toc.map((t) => ({ ...t, id: slug(t.text) }));
 }
 
 // 目录滚动高亮（scroll-spy）：滚动时找出视口上方最近的一个标题作为"当前章节"
-function useActiveHeading(toc: { level: number; text: string }[]): string {
+function useActiveHeading(toc: { level: number; text: string; id: string }[]): string {
   const [active, setActive] = useState("");
 
   useEffect(() => {
     setActive("");
-    // 标题由 Markdown 组件渲染（id = slugify(text)），滚动时取视口最上方的章节
+    // 标题由 Markdown 组件渲染（id 与目录一致，重复标题带 -1/-2 后缀）
     const onScroll = () => {
       const offset = 140; // 导航栏高度 + 阅读余量
       let current = "";
       for (const item of toc) {
-        const el = document.getElementById(slugify(item.text));
+        const el = document.getElementById(item.id);
         if (el && el.getBoundingClientRect().top <= offset) {
-          current = slugify(item.text);
+          current = item.id;
         }
       }
       setActive(current);
@@ -142,7 +144,7 @@ export default function PostDetail() {
               <ul className="mt-2 space-y-0.5 border-l-2 border-border pl-4 text-sm leading-7 text-muted-foreground">
                 {toc.map((item, i) => (
                   <li key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
-                    <a href={"#" + slugify(item.text)} className="transition-colors hover:text-foreground">{item.text}</a>
+                    <a href={"#" + item.id} className="transition-colors hover:text-foreground">{item.text}</a>
                   </li>
                 ))}
               </ul>
@@ -195,11 +197,11 @@ export default function PostDetail() {
                 {toc.map((item, i) => (
                   <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
                     <a
-                      href={"#" + slugify(item.text)}
-                      aria-current={activeHeading === slugify(item.text) ? "location" : undefined}
+                      href={"#" + item.id}
+                      aria-current={activeHeading === item.id ? "location" : undefined}
                       className={cn(
                         "block transition-colors hover:text-foreground truncate",
-                        activeHeading === slugify(item.text)
+                        activeHeading === item.id
                           ? "text-primary font-medium"
                           : undefined
                       )}

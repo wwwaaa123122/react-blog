@@ -11,6 +11,24 @@ export function slugify(text: string): string {
   return text.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
+// GitHub 风格的标题 id 去重：重复的标题追加 -1、-2… 后缀，
+// 保证锚点唯一（同一文档内按出现顺序调用）
+export function createSlugger(): (text: string) => string {
+  const used = new Set<string>();
+  return (text: string) => {
+    const base = slugify(text);
+    if (!used.has(base)) {
+      used.add(base);
+      return base;
+    }
+    let i = 1;
+    while (used.has(`${base}-${i}`)) i++;
+    const id = `${base}-${i}`;
+    used.add(id);
+    return id;
+  };
+}
+
 // 递归提取 heading 的纯文本：标题里若含 <code>/<strong>/<a> 等行内元素，
 // String(children) 会得到 "[object Object]" 导致锚点 id 与目录 href 失配
 function headingText(children: ReactNode): string {
@@ -97,6 +115,8 @@ function CodeBlock({
 }
 
 export default function Markdown({ content }: { content: string }) {
+  // 每次渲染新建 slugger：同一文档内标题 id 唯一（重复标题追加 -1/-2）
+  const slug = createSlugger();
   const components: Components = {
     // 拦截 <pre>，检测子元素是否为代码块
     pre: ({ children }) => {
@@ -135,13 +155,13 @@ export default function Markdown({ content }: { content: string }) {
     // 文章正文里的 # 标题降级为 h2：页面已有文章标题作为唯一的 h1，
     // 避免文档大纲出现多个同级 h1（对读屏与大纲结构友好）
     h1: ({ children }) => (
-      <h2 className="markdown-h1" id={slugify(headingText(children))}>
+      <h2 className="markdown-h1" id={slug(headingText(children))}>
         {children}
       </h2>
     ),
-    h2: ({ children }) => <h2 id={slugify(headingText(children))}>{children}</h2>,
-    h3: ({ children }) => <h3 id={slugify(headingText(children))}>{children}</h3>,
-    h4: ({ children }) => <h4 id={slugify(headingText(children))}>{children}</h4>,
+    h2: ({ children }) => <h2 id={slug(headingText(children))}>{children}</h2>,
+    h3: ({ children }) => <h3 id={slug(headingText(children))}>{children}</h3>,
+    h4: ({ children }) => <h4 id={slug(headingText(children))}>{children}</h4>,
   };
 
   return (
