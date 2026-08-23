@@ -56,15 +56,16 @@ export default function Posts() {
   };
 
   const selectTag = (t: string) => {
+    // 点击当前激活的标签 = 取消；点击其它 = 切换；点击"全部" = 清空参数
     updateParams((sp) => {
-      if (t === tag) sp.delete("tag");
+      if (t === tag || !t) sp.delete("tag");
       else sp.set("tag", t);
     }, { resetPage: true });
   };
 
   const selectCat = (c: string) => {
     updateParams((sp) => {
-      if (c === cat) sp.delete("cat");
+      if (c === cat || !c) sp.delete("cat");
       else sp.set("cat", c);
     }, { resetPage: true });
   };
