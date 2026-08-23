@@ -255,6 +255,9 @@ export default function Home() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {siteConfig.subtitle} · 分享技术、生活与热爱
               </p>
+              <p className="mt-2 text-xs text-muted-foreground/80">
+                {publishedPosts.length} 篇文章 · {siteConfig.since} 年建站
+              </p>
             </div>
 
             {/* Categories */}
