@@ -173,4 +173,57 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== 路由切换：顶部加载进度条（nprogress 风格） ===== */
+.route-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+}
+.route-loading-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    hsl(187 100% 45%),
+    var(--chart-4),
+    var(--primary)
+  );
+  background-size: 200% 100%;
+  animation: route-loading 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes route-loading {
+  0% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+  55% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* ===== 路由切换：内容淡入 ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 }
