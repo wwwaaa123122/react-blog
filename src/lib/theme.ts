@@ -43,9 +43,14 @@ export function applyTheme(
     const resolved = resolveTheme(theme);
     document.documentElement.classList.toggle("dark", resolved === "dark");
     // 同步浏览器地址栏/状态栏底色（移动端），与背景色一致避免突兀色块
-    let meta = document.querySelector<HTMLMetaElement>(
+    // 更新不带 media 限定的 meta（media 变体由浏览器按系统明暗自行匹配）
+    const metas = document.querySelectorAll<HTMLMetaElement>(
       'meta[name="theme-color"]'
     );
+    let meta: HTMLMetaElement | null = null;
+    for (const m of metas) {
+      if (!m.hasAttribute("media")) meta = m;
+    }
     if (!meta) {
       meta = document.createElement("meta");
       meta.setAttribute("name", "theme-color");

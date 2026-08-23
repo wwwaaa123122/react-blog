@@ -12,8 +12,14 @@
             (saved !== "light" &&
               window.matchMedia("(prefers-color-scheme: dark)").matches);
           document.documentElement.classList.toggle("dark", dark);
-          var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute("content", dark ? "#0b0e14" : "#f8f9fc");
+          // 更新不带 media 限定的 theme-color meta（取最后一个）
+          var metas = document.querySelectorAll('meta[name="theme-color"]');
+          if (metas.length) {
+            metas[metas.length - 1].setAttribute(
+              "content",
+              dark ? "#0b0e14" : "#f8f9fc"
+            );
+          }
         } catch (e) {}
       })();
     </script>
@@ -24,6 +30,10 @@
     <link rel="preconnect" href="https://giscus.app" crossorigin />
     <link rel="preconnect" href="https://umami.xc-lr.cn" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- theme-color：JS 会按实际主题覆盖；media 变体让不响应 JS 更新的
+         旧版 iOS Safari 也能按系统明暗自动取色 -->
+    <meta name="theme-color" content="#f8f9fc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0e14" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f8f9fc" />
     <meta name="description" content="星辰旅人 - 分享技术、生活与热爱的个人博客" />
     <link rel="alternate" type="text/markdown" href="%BASE_URL%llms.txt" title="llms.txt" />
