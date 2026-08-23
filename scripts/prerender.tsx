@@ -294,7 +294,13 @@ function buildRss(): string {
     <pubDate>${fmtRFC822(p.published)}</pubDate>
     <description>${esc(p.description || "")}</description>
     <content:encoded><![CDATA[${absBody}]]></content:encoded>
-    ${cover ? `<media:content url="${esc(cover)}" medium="image"/>` : ""}
+    ${cover
+      ? (() => {
+          const ogPath = cover.startsWith(siteUrl) ? cover.slice(siteUrl.length) : undefined;
+          const sz = ogPath ? coverSizes[ogPath] : undefined;
+          return `<media:content url="${esc(cover)}" medium="image"${sz ? ` width="${sz.w}" height="${sz.h}"` : ""}/>`;
+        })()
+      : ""}
   </item>`;
     })
     .join("\n");
