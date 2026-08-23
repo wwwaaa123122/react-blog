@@ -36,6 +36,28 @@ function CopyIconButton({ text, label = "复制" }: { text: string; label?: stri
   );
 }
 
+// 友链头像：图片加载失败时回退为首字母占位（外部头像源可能失效）
+function FriendAvatar({ title, imgurl }: { title: string; imgurl?: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!imgurl || failed) {
+    return (
+      <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/20 to-accent text-lg font-bold text-primary">
+        {title.charAt(0)}
+      </span>
+    );
+  }
+  return (
+    <img
+      className="size-12 shrink-0 rounded-xl border border-border object-cover transition-transform duration-200 group-hover:scale-105"
+      src={imgurl}
+      alt={title}
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 const infoFields = [
   { key: "name", label: "站点名称", icon: Globe },
   { key: "desc", label: "站点描述", icon: MessageSquareText },
@@ -138,11 +160,7 @@ export default function Friends() {
         {friends.map((f) => (
           <a key={f.title} className="group flex min-w-0 flex-col gap-3 rounded-xl border border-border/70 bg-card p-4 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg" href={f.siteurl} target="_blank" rel="noreferrer noopener">
             <div className="flex items-center gap-3">
-              {f.imgurl ? (
-                <img className="size-12 shrink-0 rounded-xl border border-border object-cover transition-transform duration-200 group-hover:scale-105" src={f.imgurl} alt={f.title} loading="lazy" decoding="async" />
-              ) : (
-                <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/20 to-accent text-lg font-bold text-primary">{f.title.charAt(0)}</span>
-              )}
+              <FriendAvatar title={f.title} imgurl={f.imgurl} />
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-1.5 text-sm font-bold text-foreground [overflow-wrap:anywhere] [word-break:break-word]">
                   {f.title}<ExternalLink className="size-3 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />

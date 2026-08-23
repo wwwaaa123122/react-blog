@@ -10,6 +10,7 @@ import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { TypingAnimation } from "@/components/magicui/typing-animation";
 
@@ -162,11 +163,10 @@ export default function Home() {
       {/* Hero */}
       <section className="mb-10 md:mb-12 pt-4 md:pt-6">
         <div className="flex items-start gap-5 mb-6">
-          <img
-            src={profileConfig.avatar}
-            alt={profileConfig.name}
-            className="size-14 md:size-16 rounded-full ring-2 ring-border"
-          />
+          <Avatar className="size-14 md:size-16 rounded-full ring-2 ring-border">
+            <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
+            <AvatarFallback className="text-lg font-bold">{profileConfig.name.charAt(0)}</AvatarFallback>
+          </Avatar>
           <div className="min-w-0">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">
               {profileConfig.name}
