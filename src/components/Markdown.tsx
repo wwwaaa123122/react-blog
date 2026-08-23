@@ -55,6 +55,7 @@ function CodeBlock({ lang, code }: { lang: string; code: string }) {
           onClick={copy}
           className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           aria-label={copied ? "已复制" : "复制代码"}
+          aria-live="polite"
         >
           {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
           <span className="text-[11px]">{copied ? "已复制" : "复制"}</span>

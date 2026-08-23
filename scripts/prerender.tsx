@@ -114,7 +114,8 @@ function jsonLdFor(path: string): string[] {
 function withHead(
   html: string,
   path: string,
-  meta: PageMeta
+  meta: PageMeta,
+  options: { noindex?: boolean } = {}
 ): string {
   const fullTitle = meta.title ? `${meta.title} · ${site.title}` : site.title;
   const desc = meta.description || site.description;
@@ -130,6 +131,9 @@ function withHead(
   const headExtra = [
     `<title>${esc(fullTitle)}</title>`,
     `<meta name="description" content="${esc(desc)}">`,
+    ...(options.noindex
+      ? [`<meta name="robots" content="noindex, nofollow">`]
+      : []),
     `<link rel="canonical" href="${esc(url)}">`,
     `<meta property="og:site_name" content="${esc(site.title)}">`,
     `<meta property="og:title" content="${esc(fullTitle)}">`,
@@ -197,6 +201,30 @@ for (const post of publishedPosts) {
     ogImage: post.image,
   });
 }
+
+// 404 页面：GitHub Pages 等静态托管以 404.html 承载（HTTP 404 状态）。
+// 用真实 NotFound 组件渲染并标记 noindex，避免爬虫把软 404 当正常页面收录。
+// 注意 generate-seo.mjs 先于本脚本执行（复制的还是 SPA 壳），这里覆盖为完整页面。
+function write404(): void {
+  try {
+    const appHtml = renderApp("/__not-found__");
+    const doc = template.replace(
+      '<div id="root"></div>',
+      `<div id="root">${appHtml}</div>`
+    );
+    const html = withHead(
+      doc,
+      "/__not-found__",
+      { title: "404", description: "页面不存在或已被移除" },
+      { noindex: true }
+    );
+    writeFileSync(join(dist, "404.html"), html, "utf-8");
+    console.log(`[prerender] 404.html (noindex, ${Buffer.byteLength(html)} bytes)`);
+  } catch (e) {
+    console.warn(`[prerender] SKIP 404.html: ${(e as Error).message}`);
+  }
+}
+write404();
 
 // ---------- RSS ----------
 function buildRss(): string {
