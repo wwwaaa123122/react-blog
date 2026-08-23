@@ -15,7 +15,14 @@ import Giscus from "../components/Giscus";
 
 function extractToc(content: string) {
   const toc: { level: number; text: string }[] = [];
+  let inFence = false;
   for (const line of content.split("\n")) {
+    // 代码围栏内的 # 注释行不是标题，跳过（此前会被误判为目录项）
+    if (/^```/.test(line.trim())) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
     const m = line.match(/^(#{1,4})\s+(.+)$/);
     if (m) {
       // 与 Markdown.tsx 的 headingText 对齐：图片整体去掉，链接只留文字，
