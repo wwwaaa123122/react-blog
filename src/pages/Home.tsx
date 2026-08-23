@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Clock } from "lucide-react";
 import { publishedPosts, getAllTags, formatDate, readingTime } from "../lib/posts";
@@ -74,6 +75,34 @@ export default function Home() {
   const allTags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
 
+  // 文章列表"从下向上弹出"：隐藏类只在客户端渲染时加上（预渲染 HTML 不包含，
+  // 爬虫/无 JS 场景保持可见），元素滚入视口后依次弹入
+  const isClient = typeof window !== "undefined";
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = listRef.current;
+    if (!root) return;
+    const items = Array.from(root.children) as HTMLElement[];
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("rise-in")); // 兜底：直接显示
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("rise-in");
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -32px 0px" }
+    );
+    items.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   return (
     <>
       <Seo title={siteConfig.title + " - " + siteConfig.subtitle} description={siteConfig.description} path="/" keywords={siteConfig.keywords} />
@@ -128,8 +157,20 @@ export default function Home() {
             最新文章
             <span className="text-xs font-normal text-muted-foreground">({publishedPosts.length} 篇)</span>
           </h2>
-          <div className="divide-y divide-border">
-            {posts.map((post) => <PostListItem key={post.slug} post={post} />)}
+          <div ref={listRef} className="divide-y divide-border">
+            {posts.map((post, i) => (
+              <div
+                key={post.slug}
+                className={isClient ? "rise-item" : undefined}
+                style={
+                  isClient
+                    ? { transitionDelay: `${Math.min(i * 60, 360)}ms` }
+                    : undefined
+                }
+              >
+                <PostListItem post={post} />
+              </div>
+            ))}
           </div>
           {publishedPosts.length > 8 && (
             <div className="mt-6 text-center">
