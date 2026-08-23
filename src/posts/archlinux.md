@@ -3,15 +3,15 @@ title: archlinux使用体验
 published: 2026-08-14
 draft: false
 description: 关于我的archlinux的使用体验
-image: ../images/archlinux.png
+image: /images/archlinux.png
 tags:
   - arch
   - linux
   - thoughts
 category: tech
 lang: zh_CN
+updated: 2026-08-23
 ---
-
 # 缘起
 
 偶然间在B站上看到一个archlinux的使用视频，在观看完后，b站开始推送更多的arch视频，我也就开始了尝试
