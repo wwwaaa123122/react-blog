@@ -2,6 +2,19 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <!-- 首屏前同步应用主题，避免刷新时先亮色再暗色的闪烁 -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var dark =
+            saved === "dark" ||
+            (saved !== "light" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" type="image/png" href="/react-blog/favicon.png" />
     <link rel="apple-touch-icon" href="/react-blog/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,9 +22,9 @@
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     <title>Starlr Blog · 星辰旅人</title>
-    <script type="module" crossorigin src="/react-blog/assets/index-w66MeGHV.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-C4VTqrQv.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
-    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-CHymEVbw.css">
+    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-BPet1eog.css">
   </head>
   <body>
     <div id="root"></div>
