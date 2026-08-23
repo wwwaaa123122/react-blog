@@ -92,8 +92,8 @@ export default function PostDetail() {
   return (
     <>
       <Seo title={post.title} description={post.description || siteConfig.description}
-        path={"/posts/" + post.slug} keywords={post.tags} ogType="article" ogImage={post.image} />
-      <Breadcrumb items={[{ label: "文章", to: "/posts" }, { label: post.title }]} />
+        path={"/posts/" + post.slug + "/"} keywords={post.tags} ogType="article" ogImage={post.image} />
+      <Breadcrumb items={[{ label: "文章", to: "/posts/" }, { label: post.title }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleJsonLd(post)) }} />
 
       {/* 双栏布局：文章 + 右侧目录 */}

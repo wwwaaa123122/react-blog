@@ -68,8 +68,8 @@ export default function Posts() {
 
   return (
     <>
-      <Seo title="文章" description={publishedPosts.length + " 篇技术文章"} path="/posts" />
-      <Breadcrumb items={[{ label: "文章", to: "/posts" }]} />
+      <Seo title="文章" description={publishedPosts.length + " 篇技术文章"} path="/posts/" />
+      <Breadcrumb items={[{ label: "文章", to: "/posts/" }]} />
 
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">文章</h1>

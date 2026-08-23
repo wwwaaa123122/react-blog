@@ -51,7 +51,7 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
     ...(post.image
       ? { image: absoluteUrl(post.image.replace(/\.\.\/images\//, "/images/")) }
       : {}),
-    mainEntityOfPage: absoluteUrl(`/posts/${post.slug}`),
+    mainEntityOfPage: absoluteUrl(`/posts/${post.slug}/`),
   };
 }
 
