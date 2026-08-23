@@ -4,7 +4,6 @@ import type { Post } from "../types";
 import { formatDate, readingTime } from "../lib/posts";
 import { assetUrl } from "../lib/base";
 import { Badge } from "@/components/ui/badge";
-import TransitionLink from "./TransitionLink";
 
 export default function PostCard({ post }: { post: Post }) {
   const cover = post.image
@@ -14,20 +13,19 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <article className="group border border-border rounded-xl p-5 transition-all duration-200 hover:border-primary/30 hover:shadow-sm bg-card">
       {cover && (
-        <TransitionLink to={"/posts/" + post.slug} className="block mb-4 -mx-5 -mt-5 rounded-t-xl overflow-hidden" aria-label={post.title + " 封面"}>
+        <Link to={"/posts/" + post.slug} className="block mb-4 -mx-5 -mt-5 rounded-t-xl overflow-hidden" aria-label={post.title + " 封面"}>
           <img
             src={cover}
             alt={post.title}
             className="w-full aspect-[2/1] object-cover transition-transform duration-200 group-hover:scale-[1.02]"
             loading="lazy"
-            style={{ viewTransitionName: `vt-cover-${post.slug}` }}
           />
-        </TransitionLink>
+        </Link>
       )}
-      <h3 className="text-base font-semibold leading-snug mb-2" style={{ viewTransitionName: `vt-title-${post.slug}` }}>
-        <TransitionLink to={"/posts/" + post.slug} className="text-foreground hover:text-primary transition-colors duration-150">
+      <h3 className="text-base font-semibold leading-snug mb-2">
+        <Link to={"/posts/" + post.slug} className="text-foreground hover:text-primary transition-colors duration-150">
           {post.title}
-        </TransitionLink>
+        </Link>
       </h3>
       <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-3">
         {post.description}

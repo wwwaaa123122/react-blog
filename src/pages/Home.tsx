@@ -11,7 +11,6 @@ import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import TransitionLink from "../components/TransitionLink";
 
 function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
   const cover = post.image
@@ -22,27 +21,23 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
     <article className="group border-b border-border last:border-0 py-5">
       <div className="flex gap-4">
         {cover && (
-          <TransitionLink to={"/posts/" + post.slug} className="shrink-0">
+          <Link to={"/posts/" + post.slug} className="shrink-0">
             <img
               src={cover}
               alt={post.title}
               className="w-24 h-20 sm:w-28 sm:h-22 rounded-lg object-cover bg-muted"
               loading="lazy"
-              style={{ viewTransitionName: `vt-cover-${post.slug}` }}
             />
-          </TransitionLink>
+          </Link>
         )}
         <div className="min-w-0 flex-1">
-          <h2
-            className="text-base sm:text-lg font-semibold leading-snug mb-1.5"
-            style={{ viewTransitionName: `vt-title-${post.slug}` }}
-          >
-            <TransitionLink
+          <h2 className="text-base sm:text-lg font-semibold leading-snug mb-1.5">
+            <Link
               to={"/posts/" + post.slug}
               className="text-foreground hover:text-primary transition-colors duration-150"
             >
               {post.title}
-            </TransitionLink>
+            </Link>
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-2">
             {post.description}
