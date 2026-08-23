@@ -263,7 +263,9 @@ export default function Home() {
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">分类</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {categories.map((cat) => (
-                    <Badge key={cat} variant="secondary" className="text-xs">{cat}</Badge>
+                    <Link key={cat} to={"/posts?cat=" + encodeURIComponent(cat)}>
+                      <Badge variant="secondary" className="text-xs cursor-pointer transition-colors hover:bg-muted">{cat}</Badge>
+                    </Link>
                   ))}
                 </div>
               </div>

@@ -15,13 +15,16 @@ const PAGE_SIZE = 9;
 export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tag = searchParams.get("tag") ?? "";
+  const cat = searchParams.get("cat") ?? "";
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
 
   const tags = getAllTags();
+  const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
 
   const filtered = useMemo(() => {
     let list = publishedPosts;
+    if (cat) list = list.filter((p) => p.category === cat);
     if (tag) list = list.filter((p) => p.tags.includes(tag));
     if (keyword.trim()) {
       const kw = keyword.trim().toLowerCase();
@@ -33,9 +36,9 @@ export default function Posts() {
       );
     }
     return list;
-  }, [tag, keyword]);
+  }, [cat, tag, keyword]);
 
-  useEffect(() => { setPage(1); }, [tag, keyword]);
+  useEffect(() => { setPage(1); }, [cat, tag, keyword]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, totalPages);
@@ -44,6 +47,12 @@ export default function Posts() {
   const selectTag = (t: string) => {
     if (t === tag) { searchParams.delete("tag"); }
     else { searchParams.set("tag", t); }
+    setSearchParams(searchParams);
+  };
+
+  const selectCat = (c: string) => {
+    if (c === cat) { searchParams.delete("cat"); }
+    else { searchParams.set("cat", c); }
     setSearchParams(searchParams);
   };
 
@@ -81,8 +90,24 @@ export default function Posts() {
         )}
       </div>
 
+      {/* Categories */}
+      {categories.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 mb-3">
+          <span className="text-xs text-muted-foreground mr-1">分类</span>
+          <Badge variant={cat === "" ? "default" : "secondary"} asChild>
+            <button type="button" className="cursor-pointer" onClick={() => selectCat("")}>全部</button>
+          </Badge>
+          {categories.map((c) => (
+            <Badge key={c} variant={cat === c ? "default" : "secondary"} asChild>
+              <button type="button" className="cursor-pointer" onClick={() => selectCat(c)}>{c}</button>
+            </Badge>
+          ))}
+        </div>
+      )}
+
       {/* Tags */}
-      <div className="flex flex-wrap gap-1.5 mb-6">
+      <div className="flex flex-wrap items-center gap-1.5 mb-6">
+        <span className="text-xs text-muted-foreground mr-1">标签</span>
         <Badge variant={tag === "" ? "default" : "secondary"} asChild>
           <button type="button" className="cursor-pointer" onClick={() => selectTag("")}>全部</button>
         </Badge>
