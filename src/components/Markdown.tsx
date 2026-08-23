@@ -31,9 +31,35 @@ const HIGHLIGHT_SUBSET = [
   "javascript", "typescript", "jsx", "tsx", "bash", "shell", "json",
   "markdown", "css", "html", "xml", "python", "yaml", "dockerfile",
   "ini", "diff", "sql", "java", "nginx", "powershell",
+  // 博客文章中实际使用的语言（此前缺失导致不高亮）
+  "stylus", "toml",
 ];
 
-function CodeBlock({ lang, code }: { lang: string; code: string }) {
+// astro/svelte 不是 highlight.js 注册语言，但文章里大量使用；
+// 映射到 markup/xml 语法高亮（注册方向：已注册语言 -> 别名列表）
+const HIGHLIGHT_ALIASES = { xml: ["astro", "svelte"] };
+
+// 递归提取代码块纯文本：高亮后的 children 是 hljs span 元素数组，
+// String(children) 会得到 "[object Object]" 导致复制内容损坏
+function codeText(node: unknown): string {
+  if (node == null) return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(codeText).join("");
+  if (typeof node === "object" && "props" in (node as object)) {
+    return codeText((node as { props?: { children?: unknown } }).props?.children);
+  }
+  return "";
+}
+
+function CodeBlock({
+  lang,
+  code,
+  highlighted,
+}: {
+  lang: string;
+  code: string;
+  highlighted: ReactNode;
+}) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -61,9 +87,10 @@ function CodeBlock({ lang, code }: { lang: string; code: string }) {
           <span className="text-[11px]">{copied ? "已复制" : "复制"}</span>
         </button>
       </div>
-      {/* 代码区 — 独立横向滚动 */}
+      {/* 代码区 — 独立横向滚动；highlighted 保留 rehype-highlight 生成的 span，
+          code 纯文本供复制按钮使用 */}
       <pre className="!m-0 !border-0 !rounded-none overflow-x-auto" tabIndex={0}>
-        <code className={"language-" + lang}>{code}</code>
+        <code className={"language-" + lang}>{highlighted}</code>
       </pre>
     </div>
   );
@@ -74,18 +101,21 @@ export default function Markdown({ content }: { content: string }) {
     // 拦截 <pre>，检测子元素是否为代码块
     pre: ({ children }) => {
       const child = children as any;
-      if (child?.props?.className?.startsWith?.("language-")) {
-        const lang = child.props.className.replace("language-", "");
-        const code = String(child.props.children || "").replace(/\n$/, "");
-        return <CodeBlock lang={lang} code={code} />;
+      const cls = child?.props?.className as string | undefined;
+      // rehype-highlight 生成的类名形如 "hljs language-typescript"（hljs 在前），
+      // 必须用词边界匹配而非 startsWith，否则所有代码块都会退化为普通 pre
+      if (cls && /\blanguage-/.test(cls)) {
+        const lang = cls.match(/language-([\w+-]+)/)?.[1] ?? "";
+        const code = codeText(child.props.children).replace(/\n$/, "");
+        return <CodeBlock lang={lang} code={code} highlighted={child.props.children} />;
       }
       // 普通 pre（非代码块）保持原样
       return <pre className="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto">{children}</pre>;
     },
     // 让 <code> 自带的 pre 不干扰
     code: ({ className, children }: any) => {
-      // 如果 className 以 language- 开头，说明是代码块，返回裸 code 供 pre 处理
-      if (className?.startsWith?.("language-")) {
+      // 含 language- 类的是代码块，返回裸 code 供 pre 处理（类名顺序不固定）
+      if (className && /\blanguage-/.test(className)) {
         return <code className={className}>{children}</code>;
       }
       // 行内 code — 带背景和颜色，不加 border 避免像代码块
@@ -116,7 +146,7 @@ export default function Markdown({ content }: { content: string }) {
 
   return (
     <div className="markdown">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeHighlight, { subset: HIGHLIGHT_SUBSET }]]} components={components}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeHighlight, { subset: HIGHLIGHT_SUBSET, aliases: HIGHLIGHT_ALIASES }]]} components={components}>
         {rewriteImagePaths(content)}
       </ReactMarkdown>
     </div>
