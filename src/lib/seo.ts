@@ -32,6 +32,15 @@ export function websiteJsonLd(): Record<string, unknown> {
     alternateName: siteConfig.author,
     description: siteConfig.description,
     url: siteUrl(),
+    // 站点内搜索（Google 站点搜索框 / sitelinks searchbox）
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: siteUrl() + "/posts/?q={search_term_string}",
+      },
+      "query-input": "required name=search_term_string",
+    },
   };
 }
 
@@ -57,6 +66,8 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
     description: post.description || undefined,
     datePublished: post.published,
     dateModified: post.updated || post.published,
+    keywords: post.tags.length > 0 ? post.tags.join(", ") : undefined,
+    articleSection: post.category || undefined,
     author: { "@type": "Person", name: siteConfig.author },
     publisher: {
       "@type": "Organization",
