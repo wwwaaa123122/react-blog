@@ -37,7 +37,7 @@ pnpm preview    # 预览生产构建
 
 ```
 src/
-├── config/      # 站点、个人资料、友链、导航配置（数据来自 Firefly）
+├── config/      # 站点、个人资料、友链配置（数据来自 Firefly）
 ├── lib/         # 文章加载与 frontmatter 解析、主题
 ├── components/  # 布局与通用组件
 ├── pages/       # 各路由页面

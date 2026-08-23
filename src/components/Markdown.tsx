@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -13,7 +13,7 @@ export function slugify(text: string): string {
 
 // 递归提取 heading 的纯文本：标题里若含 <code>/<strong>/<a> 等行内元素，
 // String(children) 会得到 "[object Object]" 导致锚点 id 与目录 href 失配
-function headingText(children: React.ReactNode): string {
+function headingText(children: ReactNode): string {
   if (typeof children === "string" || typeof children === "number") {
     return String(children);
   }
