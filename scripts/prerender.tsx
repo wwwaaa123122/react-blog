@@ -88,9 +88,11 @@ function jsonLdFor(path: string): string[] {
     );
     if (post) {
       blocks.push(jsonLd(articleJsonLd(post)));
+      // 与客户端 Breadcrumb 组件一致：首页 → 文章 → 当前文章
       blocks.push(
         jsonLd(
           breadcrumbJsonLd([
+            { label: "首页", to: "/" },
             { label: "文章", to: "/posts/" },
             { label: post.title },
           ])
@@ -106,8 +108,14 @@ function jsonLdFor(path: string): string[] {
     };
     const label = labelMap[path];
     if (label) {
+      // 与客户端 Breadcrumb 组件一致：首页 → 当前页
       blocks.push(
-        jsonLd(breadcrumbJsonLd([{ label, to: path }]))
+        jsonLd(
+          breadcrumbJsonLd([
+            { label: "首页", to: "/" },
+            { label, to: path },
+          ])
+        )
       );
     }
   }
