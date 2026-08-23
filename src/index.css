@@ -248,6 +248,8 @@
 .rise-item.rise-in {
   opacity: 1;
   transform: translateY(0);
+  /* 动画完成后释放合成层，避免 8 个列表项长期占用 GPU 层 */
+  will-change: auto;
 }
 
 /* ===== Magic UI：ShimmerButton / TypingAnimation 关键帧 ===== */
