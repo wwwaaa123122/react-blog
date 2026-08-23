@@ -94,7 +94,11 @@ export default function Posts() {
 
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">文章</h1>
-        <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章</p>
+        <p className="text-sm text-muted-foreground">
+          {filtered.length === publishedPosts.length
+            ? `共 ${publishedPosts.length} 篇文章`
+            : `找到 ${filtered.length} 篇文章`}
+        </p>
       </div>
 
       {/* Search */}
