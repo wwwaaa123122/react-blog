@@ -229,15 +229,18 @@ export function TypingAnimation({
         elementRef.current = el
       }}
       style={style}
+      // 完整文本作为无障碍名称：动画逐字渲染时读屏不会逐字播报
+      aria-label={typeof children === "string" ? children : undefined}
       className={cn(
         "leading-20 tracking-[-0.02em]",
         Component === "span" && "inline-block",
         className
       )}
     >
-      {displayedText}
+      <span aria-hidden="true">{displayedText}</span>
       {shouldShowCursor && (
         <span
+          aria-hidden="true"
           className={cn("inline-block", blinkCursor && "animate-blink-cursor")}
         >
           {getCursorChar()}
