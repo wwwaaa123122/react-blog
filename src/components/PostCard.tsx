@@ -41,15 +41,15 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
       )}
       <CardContent className="p-5">
-        {/* 卡片标题用真实 h3（CardTitle 只渲染 div，读屏无法识别为标题） */}
-        <h3 className="mb-2 font-heading text-base font-semibold leading-snug">
+        {/* 卡片标题用真实 h2（h1 文章页标题 → h2 卡片，不跳级） */}
+        <h2 className="mb-2 font-heading text-base font-semibold leading-snug">
           <Link
             to={"/posts/" + post.slug}
             className="text-foreground hover:text-primary transition-colors duration-150"
           >
             {post.title}
           </Link>
-        </h3>
+        </h2>
         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-3">
           {post.description}
         </p>

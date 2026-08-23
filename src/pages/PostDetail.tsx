@@ -206,7 +206,7 @@ export default function PostDetail() {
         {toc.length > 1 && (
           <aside className="hidden lg:block w-56 shrink-0">
             <div className="sticky top-20">
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目录</h4>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目录</p>
               <nav aria-label="文章目录" className="max-h-[calc(100vh-7rem)] overflow-y-auto space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
                 {toc.map((item, i) => (
                   <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>

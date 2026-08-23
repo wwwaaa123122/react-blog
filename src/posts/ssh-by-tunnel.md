@@ -71,7 +71,7 @@ sudo cloudflared service install <你的令牌>
 
 # 配置Tunnel及应用
 
-#### 发布应用程序路由
+### 发布应用程序路由
 
 - 子域：随便填 示例：ssh  
 - 域：选择你的域名  

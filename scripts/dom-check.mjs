@@ -62,7 +62,7 @@ const fail = (n, w) => report.failures.push(n + " :: " + w);
 {
   const page = await browser.newPage();
   await page.goto(base + "/posts", { waitUntil: "networkidle" });
-  const titles = await page.locator("h3 a[href^='/posts/']").count();
+  const titles = await page.locator("h2 a[href^='/posts/']").count();
   if (titles >= 6) ok("文章列表标题 (" + titles + ")");
   else fail("文章列表标题", "仅 " + titles);
   await page.close();
