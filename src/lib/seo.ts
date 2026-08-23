@@ -1,4 +1,5 @@
 import { siteConfig } from "../config/site";
+import { profileConfig } from "../config/profile";
 import type { Post } from "../types";
 
 export const siteUrl = (): string => siteConfig.site_url.replace(/\/$/, "");
@@ -31,6 +32,19 @@ export function websiteJsonLd(): Record<string, unknown> {
     alternateName: siteConfig.author,
     description: siteConfig.description,
     url: siteUrl(),
+  };
+}
+
+// 作者 JSON-LD（关于页）
+export function personJsonLd(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profileConfig.name,
+    url: siteUrl(),
+    image: profileConfig.avatar,
+    description: profileConfig.bio,
+    sameAs: profileConfig.links.map((l) => l.url),
   };
 }
 

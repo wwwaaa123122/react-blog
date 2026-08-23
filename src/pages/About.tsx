@@ -4,6 +4,7 @@ import { profileConfig } from "../config/profile";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
+import { jsonLd, personJsonLd } from "../lib/seo";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -39,6 +40,7 @@ export default function About() {
     <>
       <Seo title="关于我" description="认识一下这个博客的主人" path="/about" />
       <Breadcrumb items={[{ label: "关于", to: "/about" }]} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(personJsonLd()) }} />
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">关于我</h1>
         <p className="text-sm text-muted-foreground">认识一下这个博客的主人</p>

@@ -23,6 +23,7 @@ import {
   articleJsonLd,
   breadcrumbJsonLd,
   jsonLd,
+  personJsonLd,
   websiteJsonLd,
 } from "../src/lib/seo";
 import siteData from "../src/data/site.json";
@@ -78,6 +79,8 @@ function jsonLdFor(path: string): string[] {
   const blocks: string[] = [];
   if (path === "/") {
     blocks.push(jsonLd(websiteJsonLd()));
+  } else if (path === "/about") {
+    blocks.push(jsonLd(personJsonLd()));
   } else if (path.startsWith("/posts/") && path !== "/posts/") {
     const post = publishedPosts.find(
       (p) => `/posts/${p.slug}/` === path
