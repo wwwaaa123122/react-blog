@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUp, Rss } from "lucide-react";
+import { ArrowUp, FileText, Rss } from "lucide-react";
 import { siteConfig } from "../config/site";
 import { Icon } from "./icons";
 import { assetUrl } from "../lib/base";
@@ -29,6 +29,9 @@ export default function Footer() {
             </a>
             <a href={assetUrl("/rss.xml")} target="_blank" rel="noreferrer noopener" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="RSS">
               <Rss className="size-4" />
+            </a>
+            <a href={assetUrl("/llms.txt")} target="_blank" rel="noreferrer noopener" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="llms.txt">
+              <FileText className="size-4" />
             </a>
             <Button variant="ghost" size="icon" className="size-7 text-muted-foreground" onClick={scrollTop} aria-label="回到顶部">
               <ArrowUp className="size-3.5" />

@@ -1,6 +1,6 @@
 # React Blog · 星辰旅人
 
-基于 **React 19 + Vite 8 + TypeScript** 重写的个人博客，内容与数据来源于原仓库 [/root/Firefly](https://github.com/)（Fuwari/Astro 主题）。
+基于 **React 19 + Vite 8 + TypeScript** 重写的个人博客，内容与数据来源于原仓库 Firefly（Fuwari/Astro 主题）。
 
 ## 页面与功能
 
@@ -77,7 +77,7 @@ src/
 页面侧还内置：
 - **面包屑导航**（含 schema.org BreadcrumbList JSON-LD）— 文章 / 归档 / 友链 / 关于
 - **每页 SEO**（`<title>` / meta description / keywords / canonical）— 由 `Seo` 组件按路由设置
-- **结构化数据** — 首页 WebSite JSON-LD、文章页 Article JSON-LD
+- **结构化数据** — 首页 WebSite（含 SearchAction）、文章页 Article（keywords/articleSection）、关于页 Person JSON-LD
 ## 部署说明
 
 - **GitHub Pages 子路径部署**：CI（`.github/workflows/deploy.yml`）构建时传入 `VITE_BASE=/react-blog/`（与仓库名一致），产物部署到 `pages` 分支；`404.html` 已内置 SPA fallback，深链（如 `/posts/xxx`）可直接访问。
