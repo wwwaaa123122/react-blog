@@ -1,48 +1,32 @@
-"use client"
-
 import {
   useEffect,
   useMemo,
   useRef,
   useState,
-  type ComponentType,
-  type RefAttributes,
+  type CSSProperties,
   type RefObject,
 } from "react"
-import {
-  motion,
-  useInView,
-  type DOMMotionComponents,
-  type HTMLMotionProps,
-  type MotionProps,
-} from "motion/react"
 
 import { cn } from "@/lib/utils"
 
-const motionElements = {
-  article: motion.article,
-  div: motion.div,
-  h1: motion.h1,
-  h2: motion.h2,
-  h3: motion.h3,
-  h4: motion.h4,
-  h5: motion.h5,
-  h6: motion.h6,
-  li: motion.li,
-  p: motion.p,
-  section: motion.section,
-  span: motion.span,
+const elements = {
+  article: "article",
+  div: "div",
+  h1: "h1",
+  h2: "h2",
+  h3: "h3",
+  h4: "h4",
+  h5: "h5",
+  h6: "h6",
+  li: "li",
+  p: "p",
+  section: "section",
+  span: "span",
 } as const
 
-type MotionElementType = Extract<
-  keyof DOMMotionComponents,
-  keyof typeof motionElements
->
-type TypingAnimationMotionComponent = ComponentType<
-  Omit<HTMLMotionProps<"span">, "ref"> & RefAttributes<HTMLElement>
->
+type ElementKey = keyof typeof elements
 
-interface TypingAnimationProps extends Omit<MotionProps, "children"> {
+interface TypingAnimationProps {
   children?: string
   words?: string[]
   className?: string
@@ -52,11 +36,41 @@ interface TypingAnimationProps extends Omit<MotionProps, "children"> {
   delay?: number
   pauseDelay?: number
   loop?: boolean
-  as?: MotionElementType
+  as?: ElementKey
   startOnView?: boolean
   showCursor?: boolean
   blinkCursor?: boolean
   cursorStyle?: "line" | "block" | "underscore"
+  style?: CSSProperties
+}
+
+// 轻量版 useInView（once）：替代 motion 的 useInView，仅在元素滚入视口时触发一次
+function useInViewOnce(
+  ref: RefObject<HTMLElement | null>,
+  amount: number
+): boolean {
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true)
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setInView(true)
+          io.disconnect()
+        }
+      },
+      { threshold: Math.min(Math.max(amount, 0), 1) }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [ref, amount])
+
+  return inView
 }
 
 export function TypingAnimation({
@@ -74,21 +88,14 @@ export function TypingAnimation({
   showCursor = true,
   blinkCursor = true,
   cursorStyle = "line",
-  ...props
+  style,
 }: TypingAnimationProps) {
-  const MotionComponent = motionElements[
-    Component
-  ] as TypingAnimationMotionComponent
-
   const [displayedText, setDisplayedText] = useState<string>("")
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [currentCharIndex, setCurrentCharIndex] = useState(0)
   const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing")
   const elementRef = useRef<HTMLElement | null>(null)
-  const isInView = useInView(elementRef as RefObject<Element>, {
-    amount: 0.3,
-    once: true,
-  })
+  const isInView = useInViewOnce(elementRef, 0.3)
 
   const wordsToAnimate = useMemo(
     () => words ?? (children ? [children] : []),
@@ -213,15 +220,20 @@ export function TypingAnimation({
     }
   }
 
+  // Tag 是多种原生标签的联合类型，ref 类型无法精确推导，统一收窄为 HTMLElement
+  const Tag = elements[Component] as unknown as "span"
+
   return (
-    <MotionComponent
-      ref={elementRef}
+    <Tag
+      ref={(el) => {
+        elementRef.current = el
+      }}
+      style={style}
       className={cn(
         "leading-20 tracking-[-0.02em]",
         Component === "span" && "inline-block",
         className
       )}
-      {...props}
     >
       {displayedText}
       {shouldShowCursor && (
@@ -231,6 +243,6 @@ export function TypingAnimation({
           {getCursorChar()}
         </span>
       )}
-    </MotionComponent>
+    </Tag>
   )
 }

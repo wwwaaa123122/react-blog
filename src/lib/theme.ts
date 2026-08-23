@@ -40,10 +40,18 @@ export function applyTheme(
 ): void {
   const { persist = true } = options;
   if (typeof document !== "undefined") {
-    document.documentElement.classList.toggle(
-      "dark",
-      resolveTheme(theme) === "dark"
+    const resolved = resolveTheme(theme);
+    document.documentElement.classList.toggle("dark", resolved === "dark");
+    // 同步浏览器地址栏/状态栏底色（移动端），与背景色一致避免突兀色块
+    let meta = document.querySelector<HTMLMetaElement>(
+      'meta[name="theme-color"]'
     );
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "theme-color");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", resolved === "dark" ? "#0b0e14" : "#f8f9fc");
   }
   // 仅在用户明确选择时写入 localStorage；跟随系统时清除保存值，
   // 这样"默认跟随系统"不会因首次访问把系统主题写死成用户选择。

@@ -250,6 +250,31 @@
 }
 
 /* ===== Magic UI：ShimmerButton / TypingAnimation 关键帧 ===== */
+/* 纯 CSS 封面流光（替代 motion）：offset-distance 沿 offset-path 移动 */
+@keyframes border-beam {
+  from {
+    offset-distance: var(--beam-start, 0%);
+  }
+  to {
+    offset-distance: calc(100% + var(--beam-start, 0%));
+  }
+}
+.border-beam-anim {
+  animation-name: border-beam;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: var(--beam-duration, 6s);
+  /* 负延迟让动画从中间位置开始，与 motion 的 delay: -x 语义一致 */
+  animation-delay: var(--beam-delay, 0s);
+  animation-direction: var(--beam-direction, normal);
+}
+@media (prefers-reduced-motion: reduce) {
+  .border-beam-anim {
+    /* 装饰性流光：减弱动效用户直接隐藏，避免残留静态色块 */
+    display: none;
+  }
+}
+
 @keyframes shimmer-slide {
   to {
     transform: translate(calc(100cqw - 100%), 0);

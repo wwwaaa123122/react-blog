@@ -29,7 +29,7 @@ export default function Archive() {
           <ul className="space-y-1">
             {posts.map((post) => (
               <li className="flex items-baseline gap-3 py-2 border-b border-border/50" key={post.slug}>
-                <span className="shrink-0 text-xs text-muted-foreground tabular-nums w-20">{formatDate(post.published)}</span>
+                <time dateTime={post.published} className="shrink-0 text-xs text-muted-foreground tabular-nums w-20">{formatDate(post.published)}</time>
                 <Link className="text-sm font-medium text-foreground hover:text-primary transition-colors [overflow-wrap:anywhere]" to={"/posts/" + post.slug}>{post.title}</Link>
               </li>
             ))}

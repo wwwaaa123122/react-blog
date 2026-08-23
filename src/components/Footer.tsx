@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUp, Rss } from "lucide-react";
 import { siteConfig } from "../config/site";
 import { Icon } from "../components/icons";
+import { assetUrl } from "../lib/base";
 import { Button } from "@/components/ui/button";
 
 export default function Footer() {
@@ -26,7 +27,7 @@ export default function Footer() {
             <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
               <Icon name="github" size={16} />
             </a>
-            <a href="/rss.xml" target="_blank" rel="noreferrer noopener" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="RSS">
+            <a href={assetUrl("/rss.xml")} target="_blank" rel="noreferrer noopener" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="RSS">
               <Rss className="size-4" />
             </a>
             <Button variant="ghost" size="icon" className="size-7 text-muted-foreground" onClick={scrollTop} aria-label="回到顶部">

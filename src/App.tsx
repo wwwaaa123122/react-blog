@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { assetUrl } from "./lib/base";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Posts from "./pages/Posts";
@@ -14,7 +15,7 @@ export default function App() {
       {/* 站外跳转（不经过 Layout） */}
       <Route path="/gh" element={<Navigate to="https://github.com/wwwaaa123122" replace />} />
       <Route path="/bot" element={<Navigate to="https://xc.bot.cd/" replace />} />
-      <Route path="/rss" element={<Navigate to="/rss.xml" replace />} />
+      <Route path="/rss" element={<Navigate to={assetUrl("/rss.xml")} replace />} />
 
       {/* 主站页面 */}
       <Route element={<Layout />}>

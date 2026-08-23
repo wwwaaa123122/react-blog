@@ -102,6 +102,35 @@
 .dark .markdown .hljs-attr, .dark .markdown .hljs-attribute, .dark .markdown .hljs-symbol, .dark .markdown .hljs-bullet, .dark .markdown .hljs-built_in, .dark .markdown .hljs-addition { color: #ffa657; }
 .dark .markdown .hljs-meta { color: #8b949e; }
 
+/* ===== 回到顶部浮动按钮 ===== */
+.back-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 40;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+@media (max-width: 480px) {
+  .back-to-top {
+    right: 14px;
+    bottom: 18px;
+  }
+}
+
 /* ===== 倒计时（关于页） ===== */
 .countdown {
   margin-top: 24px;

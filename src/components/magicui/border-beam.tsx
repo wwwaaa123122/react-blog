@@ -1,8 +1,6 @@
-"use client"
+import type { CSSProperties } from "react";
 
-import { motion, type MotionStyle, type Transition } from "motion/react"
-
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface BorderBeamProps {
   /**
@@ -26,18 +24,6 @@ interface BorderBeamProps {
    */
   colorTo?: string
   /**
-   * The motion transition of the border beam.
-   */
-  transition?: Transition
-  /**
-   * The class name of the border beam.
-   */
-  className?: string
-  /**
-   * The style of the border beam.
-   */
-  style?: React.CSSProperties
-  /**
    * Whether to reverse the animation direction.
    */
   reverse?: boolean
@@ -49,8 +35,15 @@ interface BorderBeamProps {
    * The border width of the beam.
    */
   borderWidth?: number
+  /**
+   * The class name of the border beam.
+   */
+  className?: string
 }
 
+// 纯 CSS 版本（原实现依赖 motion 库）：
+// offset-distance 本身就是可动画的 CSS 属性，无需引入动画库，
+// 用 @keyframes border-beam 驱动，行为与原 motion 动画一致。
 export const BorderBeam = ({
   className,
   size = 50,
@@ -58,8 +51,6 @@ export const BorderBeam = ({
   duration = 6,
   colorFrom = "#ffaa40",
   colorTo = "#9c40ff",
-  transition,
-  style,
   reverse = false,
   initialOffset = 0,
   borderWidth = 1,
@@ -78,37 +69,27 @@ export const BorderBeam = ({
       style={
         {
           "--border-beam-width": `${borderWidth}px`,
-        } as React.CSSProperties
+        } as CSSProperties
       }
     >
-      <motion.div
+      <div
         className={cn(
-          "absolute aspect-square",
-          "bg-linear-to-l from-(--color-from) via-(--color-to) to-transparent",
+          "border-beam-anim absolute aspect-square",
+          "bg-linear-to-l from-(--beam-from) via-(--beam-to) to-transparent",
           className
         )}
         style={
           {
             width: size,
             offsetPath: `rect(0 auto auto 0 round ${size}px)`,
-            "--color-from": colorFrom,
-            "--color-to": colorTo,
-            ...style,
-          } as MotionStyle
+            "--beam-from": colorFrom,
+            "--beam-to": colorTo,
+            "--beam-duration": `${duration}s`,
+            "--beam-delay": `${delay}s`,
+            "--beam-start": `${initialOffset}%`,
+            "--beam-direction": reverse ? "reverse" : "normal",
+          } as CSSProperties
         }
-        initial={{ offsetDistance: `${initialOffset}%` }}
-        animate={{
-          offsetDistance: reverse
-            ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
-            : [`${initialOffset}%`, `${100 + initialOffset}%`],
-        }}
-        transition={{
-          repeat: Infinity,
-          ease: "linear",
-          duration,
-          delay: -delay,
-          ...transition,
-        }}
       />
     </div>
   )

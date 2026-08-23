@@ -47,6 +47,16 @@ export default function Posts() {
     setSearchParams(searchParams);
   };
 
+  // 翻页时回到页面顶部，避免停留在旧列表的滚动位置
+  const goToPage = (n: number) => {
+    setPage(n);
+    try {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      window.scrollTo(0, 0);
+    }
+  };
+
   return (
     <>
       <Seo title="文章" description={publishedPosts.length + " 篇技术文章"} path="/posts" />
@@ -61,8 +71,8 @@ export default function Posts() {
       <div className="relative mb-4">
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          type="text" value={keyword} onChange={(e) => setKeyword(e.target.value)}
-          placeholder="搜索文章…" className="h-10 pl-9 pr-10 text-sm rounded-xl"
+          type="search" value={keyword} onChange={(e) => setKeyword(e.target.value)}
+          placeholder="搜索文章…" aria-label="搜索文章" className="h-10 pl-9 pr-10 text-sm rounded-xl [&::-webkit-search-cancel-button]:hidden"
         />
         {keyword && (
           <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 size-8" onClick={() => setKeyword("")} aria-label="清除搜索">
@@ -99,13 +109,23 @@ export default function Posts() {
       {totalPages > 1 && (
         <Pagination className="mb-10">
           <PaginationContent>
-            <Button variant="outline" size="icon" disabled={current === 1} onClick={() => setPage(current - 1)} aria-label="上一页">
+            <Button variant="outline" size="icon" disabled={current === 1} onClick={() => goToPage(current - 1)} aria-label="上一页">
               <ChevronLeft className="size-4" />
             </Button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <Button key={n} variant={n === current ? "default" : "outline"} size="icon" className="size-9 text-sm" onClick={() => setPage(n)}>{n}</Button>
+              <Button
+                key={n}
+                variant={n === current ? "default" : "outline"}
+                size="icon"
+                className="size-9 text-sm"
+                onClick={() => goToPage(n)}
+                aria-label={"第 " + n + " 页"}
+                aria-current={n === current ? "page" : undefined}
+              >
+                {n}
+              </Button>
             ))}
-            <Button variant="outline" size="icon" disabled={current === totalPages} onClick={() => setPage(current + 1)} aria-label="下一页">
+            <Button variant="outline" size="icon" disabled={current === totalPages} onClick={() => goToPage(current + 1)} aria-label="下一页">
               <ChevronRight className="size-4" />
             </Button>
           </PaginationContent>

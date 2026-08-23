@@ -12,12 +12,15 @@
             (saved !== "light" &&
               window.matchMedia("(prefers-color-scheme: dark)").matches);
           document.documentElement.classList.toggle("dark", dark);
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", dark ? "#0b0e14" : "#f8f9fc");
         } catch (e) {}
       })();
     </script>
     <link rel="icon" type="image/png" href="%BASE_URL%favicon.png" />
     <link rel="apple-touch-icon" href="%BASE_URL%favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8f9fc" />
     <meta name="description" content="星辰旅人 - 分享技术、生活与热爱的个人博客" />
     <link rel="alternate" type="text/markdown" href="%BASE_URL%llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="%BASE_URL%rss.xml" />

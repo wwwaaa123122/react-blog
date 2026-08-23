@@ -57,7 +57,7 @@ export default function PostDetail() {
           </h1>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-6 text-sm text-muted-foreground">
-            <time>{formatDate(post.published)}</time>
+            <time dateTime={post.published}>{formatDate(post.published)}</time>
             <span className="inline-flex items-center gap-1"><Clock className="size-3.5" />{readingTime(post.words)}</span>
             {post.category && <span className="inline-flex items-center gap-1"><BookOpen className="size-3.5" />{post.category}</span>}
           </div>

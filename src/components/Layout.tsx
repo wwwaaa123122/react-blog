@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import LoadingBar from "./LoadingBar";
+import BackToTop from "./BackToTop";
 
 export default function Layout() {
   const loc = useLocation();
@@ -20,14 +21,27 @@ export default function Layout() {
     if (prevPath.current !== loc.pathname) {
       prevPath.current = loc.pathname;
       setKey((k) => k + 1);
+      // SPA 跳转后回到顶部（不覆盖带 #hash 的锚点跳转，那些不改变 pathname）
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      } catch {
+        // 旧浏览器不支持 behavior:"instant"，退化为直接跳转
+        window.scrollTo(0, 0);
+      }
     }
   }, [loc.pathname]);
 
   return (
     <div className="flex min-h-screen flex-col">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:ring-2 focus:ring-ring"
+      >
+        跳到主要内容
+      </a>
       <LoadingBar />
       <Navbar />
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <div className="mx-auto w-full max-w-[900px] px-5 py-8 md:py-10">
           <div
             key={key}
@@ -42,6 +56,7 @@ export default function Layout() {
         </div>
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }

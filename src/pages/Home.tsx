@@ -1,12 +1,10 @@
-import { useEffect, useRef } from "react";
-import { useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, BookOpen, Clock } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, Mail } from "lucide-react";
 import { publishedPosts, getAllTags, formatDate, readingTime } from "../lib/posts";
 import { siteConfig } from "../config/site";
 import { profileConfig } from "../config/profile";
 import { assetUrl } from "../lib/base";
-import { Mail } from "lucide-react";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
@@ -46,7 +44,7 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
             {post.description}
           </p>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-            <time>{formatDate(post.published)}</time>
+            <time dateTime={post.published}>{formatDate(post.published)}</time>
             {post.category && (
               <span className="inline-flex items-center gap-1">
                 <BookOpen className="size-3" />
@@ -73,11 +71,27 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
   );
 }
 
+// 轻量版 prefers-reduced-motion 监听（替代 motion 的 useReducedMotion，避免引入动画库）
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return reduced;
+}
+
 export default function Home() {
   const posts = publishedPosts.slice(0, 8);
   const allTags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = usePrefersReducedMotion();
 
   // 文章列表"从下向上弹出"：隐藏类只在客户端渲染时加上（预渲染 HTML 不包含，
   // 爬虫/无 JS 场景保持可见），元素滚入视口后依次弹入
@@ -88,6 +102,11 @@ export default function Home() {
     const root = listRef.current;
     if (!root) return;
     const items = Array.from(root.children) as HTMLElement[];
+    // 减弱动效用户：直接显示，不做滚动触发动画
+    if (reducedMotion) {
+      items.forEach((el) => el.classList.add("rise-in"));
+      return;
+    }
     if (!("IntersectionObserver" in window)) {
       items.forEach((el) => el.classList.add("rise-in")); // 兜底：直接显示
       return;
@@ -119,7 +138,7 @@ export default function Home() {
       io.disconnect();
       window.clearTimeout(fallback);
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <>

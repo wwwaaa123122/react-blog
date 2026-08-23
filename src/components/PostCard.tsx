@@ -52,7 +52,7 @@ export default function PostCard({ post }: { post: Post }) {
           {post.description}
         </p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          <time>{formatDate(post.published)}</time>
+          <time dateTime={post.published}>{formatDate(post.published)}</time>
           {post.category && (
             <span className="inline-flex items-center gap-1">
               <BookOpen className="size-3" />
