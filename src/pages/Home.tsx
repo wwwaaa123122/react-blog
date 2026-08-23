@@ -189,17 +189,12 @@ export default function Home() {
             </Link>
           </ShimmerButton>
           {profileConfig.links.map((link) => (
-            <a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <Button variant="outline" size="sm" className="h-8 gap-1.5">
+            <Button asChild key={link.name} variant="outline" size="sm" className="h-8 gap-1.5">
+              <a href={link.url} target="_blank" rel="noreferrer noopener">
                 {link.icon === "mail" ? <Mail className="size-3.5" /> : <Icon name={link.icon} size={14} />}
                 {link.name}
-              </Button>
-            </a>
+              </a>
+            </Button>
           ))}
         </div>
       </section>

@@ -73,21 +73,21 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-1">
-          <Link to="/posts?tag=" aria-label="搜索">
-            <Button variant="ghost" size="icon" className="size-8 text-muted-foreground">
+          <Button asChild variant="ghost" size="icon" className="size-8 text-muted-foreground" aria-label="搜索">
+            <Link to="/posts?tag=">
               <Search className="size-4" />
-            </Button>
-          </Link>
-          <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener" aria-label="GitHub">
-            <Button variant="ghost" size="icon" className="size-8 text-muted-foreground">
+            </Link>
+          </Button>
+          <Button asChild variant="ghost" size="icon" className="size-8 text-muted-foreground" aria-label="GitHub">
+            <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener">
               <Icon name="github" size={16} />
-            </Button>
-          </a>
-          <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener" aria-label="统计">
-            <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hidden sm:inline-flex">
+            </a>
+          </Button>
+          <Button asChild variant="ghost" size="icon" className="size-8 text-muted-foreground hidden sm:inline-flex" aria-label="统计">
+            <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener">
               <BarChart3 className="size-4" />
-            </Button>
-          </a>
+            </a>
+          </Button>
           <ThemeToggle />
           <div className="md:hidden">
             <DropdownMenu>
