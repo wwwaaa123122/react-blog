@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Monitor, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,7 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { applyTheme, getInitialTheme, type Theme } from "../lib/theme";
+import {
+  applyTheme,
+  getInitialTheme,
+  watchSystemTheme,
+  type Theme,
+} from "../lib/theme";
 import { cn } from "@/lib/utils";
 
 export default function ThemeToggle() {
@@ -15,6 +20,9 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     applyTheme(theme);
+    // 跟随系统时实时响应系统主题变化
+    if (theme !== "system") return;
+    return watchSystemTheme(() => applyTheme("system", { persist: false }));
   }, [theme]);
 
   return (
@@ -44,6 +52,13 @@ export default function ThemeToggle() {
         >
           <Moon />
           深色模式
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => setTheme("system")}
+          className={cn(theme === "system" && "bg-accent text-accent-foreground")}
+        >
+          <Monitor />
+          跟随系统
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
