@@ -41,7 +41,7 @@ export default function Layout() {
       </a>
       <LoadingBar />
       <Navbar />
-      <main id="main" className="flex-1">
+      <main id="main" tabIndex={-1} className="flex-1 outline-none">
         <div className="mx-auto w-full max-w-[900px] px-5 py-8 md:py-10">
           <div
             key={key}
