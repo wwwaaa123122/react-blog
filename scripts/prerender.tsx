@@ -117,7 +117,11 @@ function withHead(
   meta: PageMeta,
   options: { noindex?: boolean } = {}
 ): string {
-  const fullTitle = meta.title ? `${meta.title} · ${site.title}` : site.title;
+  const fullTitle = meta.title
+    ? meta.title.includes(site.title)
+      ? meta.title
+      : `${meta.title} · ${site.title}`
+    : site.title;
   const desc = meta.description || site.description;
   const url = siteUrl + path;
   const ogImageUrl = meta.ogImage
@@ -181,7 +185,8 @@ function writePage(path: string, meta: PageMeta): void {
 }
 
 // ---------- 预渲染主要页面 ----------
-writePage("/", { title: "", description: site.description });
+// 首页标题与客户端 Seo 组件保持一致（"Starlr Blog - 爱你所爱"），避免水合后标题翻转
+writePage("/", { title: `${site.title} - ${site.subtitle}`, description: site.description });
 writePage("/posts/", {
   title: "文章",
   description: `共 ${publishedPosts.length} 篇文章 · 分享技术、生活与热爱`,

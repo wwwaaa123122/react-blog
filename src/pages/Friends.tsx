@@ -66,8 +66,8 @@ export default function Friends() {
       <div className="mb-4 grid gap-4 md:grid-cols-2">
         <Card className="p-6">
           <div className="mb-4 flex items-center justify-between gap-2">
-            <h3 className="flex items-center gap-2.5 text-lg font-bold">
-              <span className="grid size-8 place-items-center rounded-[10px] bg-accent text-accent-foreground"><Globe className="size-4" /></span>本站信息</h3>
+            <h2 className="flex items-center gap-2.5 text-lg font-bold">
+              <span className="grid size-8 place-items-center rounded-[10px] bg-accent text-accent-foreground"><Globe className="size-4" /></span>本站信息</h2>
             <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" onClick={() => copy(siteInfoBlock)}>
               {copied ? <Check className="size-3 text-primary" /> : <Copy className="size-3" />}复制全部</Button>
           </div>
@@ -97,8 +97,8 @@ export default function Friends() {
           </div>
         </Card>
         <Card className="flex flex-col p-6">
-          <h3 className="mb-4 flex items-center gap-2.5 text-lg font-bold">
-            <span className="grid size-8 place-items-center rounded-[10px] bg-accent text-accent-foreground"><UserRound className="size-4" /></span>申请友链</h3>
+          <h2 className="mb-4 flex items-center gap-2.5 text-lg font-bold">
+            <span className="grid size-8 place-items-center rounded-[10px] bg-accent text-accent-foreground"><UserRound className="size-4" /></span>申请友链</h2>
           <ol className="flex-1 space-y-4">
             {steps.map((s, i) => (
               <li key={i} className="relative flex gap-3">
@@ -121,7 +121,7 @@ export default function Friends() {
         </Card>
       </div>
       <Card className="mb-4 p-5">
-        <h3 className="mb-3.5 flex items-center gap-2 text-base font-bold"><Info className="size-4 text-primary" />注意事项</h3>
+        <h2 className="mb-3.5 flex items-center gap-2 text-base font-bold"><Info className="size-4 text-primary" />注意事项</h2>
         <div className="grid gap-x-6 gap-y-0.5 sm:grid-cols-2">
           {friendNotes.map((note) => (
             <div key={note.title} className="flex items-baseline gap-2.5 py-[7px] text-sm text-muted-foreground">
