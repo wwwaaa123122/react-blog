@@ -102,6 +102,13 @@ export default function Markdown({ content }: { content: string }) {
     img: ({ src, alt }: any) => (
       <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" decoding="async" />
     ),
+    // 文章正文里的 # 标题降级为 h2：页面已有文章标题作为唯一的 h1，
+    // 避免文档大纲出现多个同级 h1（对读屏与大纲结构友好）
+    h1: ({ children }) => (
+      <h2 className="markdown-h1" id={slugify(headingText(children))}>
+        {children}
+      </h2>
+    ),
     h2: ({ children }) => <h2 id={slugify(headingText(children))}>{children}</h2>,
     h3: ({ children }) => <h3 id={slugify(headingText(children))}>{children}</h3>,
     h4: ({ children }) => <h4 id={slugify(headingText(children))}>{children}</h4>,

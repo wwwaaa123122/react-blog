@@ -16,7 +16,7 @@ import Giscus from "../components/Giscus";
 function extractToc(content: string) {
   const toc: { level: number; text: string }[] = [];
   for (const line of content.split("\n")) {
-    const m = line.match(/^(#{2,4})\s+(.+)$/);
+    const m = line.match(/^(#{1,4})\s+(.+)$/);
     if (m) {
       // 与 Markdown.tsx 的 headingText 对齐：图片整体去掉，链接只留文字，
       // 再去除粗体/斜体/代码标记（避免 TOC 锚点 href 与标题 id 失配）
@@ -25,7 +25,8 @@ function extractToc(content: string) {
         .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
         .replace(/[#*_`]/g, "")
         .trim();
-      toc.push({ level: m[1].length, text });
+      // 正文 # 标题在渲染时降级为 h2（页面已有文章标题 h1），目录按 level 2 对齐
+      toc.push({ level: Math.max(2, m[1].length), text });
     }
   }
   return toc;

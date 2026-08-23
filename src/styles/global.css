@@ -29,6 +29,8 @@
   scroll-margin-top: calc(var(--nav-height) + 24px);
 }
 .markdown h1 { font-size: 1.75em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+/* 正文 # 标题降级为 h2 后保留原 h1 的大字号视觉 */
+.markdown h2.markdown-h1 { font-size: 1.75em; padding-bottom: 0.3em; }
 .markdown h2 { font-size: 1.45em; padding-bottom: 0.25em; border-bottom: 1px solid var(--border); }
 .markdown h3 { font-size: 1.2em; }
 .markdown h4 { font-size: 1.05em; }
