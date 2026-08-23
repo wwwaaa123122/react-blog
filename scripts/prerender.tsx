@@ -150,7 +150,7 @@ function withHead(
     `<meta property="og:url" content="${esc(url)}">`,
     `<meta property="og:locale" content="zh_CN">`,
     ogImageUrl ? `<meta property="og:image" content="${esc(ogImageUrl)}">` : "",
-    `<meta name="twitter:card" content="${ogImageUrl ? "summary_large_image" : "summary"}">`,
+    `<meta name="twitter:card" content="${ogImageUrl && path.startsWith("/posts/") ? "summary_large_image" : "summary"}">`,
     `<meta name="twitter:title" content="${esc(fullTitle)}">`,
     `<meta name="twitter:description" content="${esc(desc)}">`,
     ogImageUrl ? `<meta name="twitter:image" content="${esc(ogImageUrl)}">` : "",

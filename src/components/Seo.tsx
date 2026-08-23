@@ -81,7 +81,8 @@ export default function Seo({
     setMeta("property", "og:type", ogType);
     setMeta("property", "og:url", url);
     setMeta("property", "og:locale", "zh_CN");
-    setMeta("name", "twitter:card", ogImageUrl ? "summary_large_image" : "summary");
+    // 文章（宽封面）用大图卡，站点/页面（方形头像等）用小图卡
+    setMeta("name", "twitter:card", ogImageUrl && ogType === "article" ? "summary_large_image" : "summary");
     setMeta("name", "twitter:title", fullTitle);
     setMeta("name", "twitter:description", desc);
 
