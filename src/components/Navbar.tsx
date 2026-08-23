@@ -74,7 +74,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-1">
           <Button asChild variant="ghost" size="icon" className="size-8 text-muted-foreground" aria-label="搜索">
-            <Link to="/posts?tag=">
+            <Link to="/posts">
               <Search className="size-4" />
             </Link>
           </Button>
