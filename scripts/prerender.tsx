@@ -27,6 +27,7 @@ import {
   websiteJsonLd,
 } from "../src/lib/seo";
 import siteData from "../src/data/site.json";
+import profileData from "../src/data/profile.json";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
@@ -189,7 +190,11 @@ function writePage(path: string, meta: PageMeta): void {
 
 // ---------- 预渲染主要页面 ----------
 // 首页标题与客户端 Seo 组件保持一致（"Starlr Blog - 爱你所爱"），避免水合后标题翻转
-writePage("/", { title: `${site.title} - ${site.subtitle}`, description: site.description });
+writePage("/", {
+  title: `${site.title} - ${site.subtitle}`,
+  description: site.description,
+  ogImage: profileData.avatar,
+});
 writePage("/posts/", {
   title: "文章",
   description: `共 ${publishedPosts.length} 篇文章 · 分享技术、生活与热爱`,
@@ -268,6 +273,7 @@ function buildRss(): string {
     <title>${esc(p.title)}</title>
     <link>${esc(postUrl)}</link>
     <guid isPermaLink="true">${esc(postUrl)}</guid>
+    ${p.category ? `<category>${esc(p.category)}</category>` : ""}
     <pubDate>${fmtRFC822(p.published)}</pubDate>
     <description>${esc(p.description || "")}</description>
     <content:encoded><![CDATA[${absBody}]]></content:encoded>

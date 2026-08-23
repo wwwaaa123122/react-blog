@@ -157,7 +157,7 @@ export default function Home() {
 
   return (
     <>
-      <Seo title={siteConfig.title + " - " + siteConfig.subtitle} description={siteConfig.description} path="/" keywords={siteConfig.keywords} />
+      <Seo title={siteConfig.title + " - " + siteConfig.subtitle} description={siteConfig.description} path="/" keywords={siteConfig.keywords} ogImage={profileConfig.avatar} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(websiteJsonLd()) }} />
 
       {/* Hero */}
