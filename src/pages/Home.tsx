@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Clock } from "lucide-react";
 import { publishedPosts, getAllTags, formatDate, readingTime } from "../lib/posts";
@@ -11,6 +12,8 @@ import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { TypingAnimation } from "@/components/magicui/typing-animation";
 
 function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
   const cover = post.image
@@ -74,6 +77,7 @@ export default function Home() {
   const posts = publishedPosts.slice(0, 8);
   const allTags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
+  const reducedMotion = useReducedMotion();
 
   // 文章列表"从下向上弹出"：隐藏类只在客户端渲染时加上（预渲染 HTML 不包含，
   // 爬虫/无 JS 场景保持可见），元素滚入视口后依次弹入
@@ -135,18 +139,35 @@ export default function Home() {
               {profileConfig.name}
             </h1>
             <p className="text-sm text-muted-foreground">{profileConfig.bio}</p>
-            <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed max-w-lg">
-              {siteConfig.description}
-            </p>
+            {reducedMotion ? (
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-lg">
+                {siteConfig.description}
+              </p>
+            ) : (
+              <TypingAnimation
+                as="p"
+                duration={28}
+                delay={300}
+                className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-lg"
+              >
+                {siteConfig.description}
+              </TypingAnimation>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
-          <Button asChild size="sm" className="h-8">
-            <Link to="/posts">
+          <ShimmerButton
+            asChild
+            className="h-9 px-5 text-sm"
+            background="#111827"
+            shimmerColor="#ffffff"
+            shimmerDuration="2.5s"
+          >
+            <Link to="/posts" className="inline-flex items-center gap-1.5">
               <BookOpen className="size-3.5" />
               阅读文章
             </Link>
-          </Button>
+          </ShimmerButton>
           {profileConfig.links.map((link) => (
             <a
               key={link.name}
