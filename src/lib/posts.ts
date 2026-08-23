@@ -131,6 +131,7 @@ function parsePosts(): Post[] {
       slug,
       title: String(data.title || slug),
       published: String(data.published || ""),
+      updated: data.updated ? String(data.updated) : undefined,
       description: String(data.description || ""),
       image: data.image ? String(data.image) : undefined,
       tags,

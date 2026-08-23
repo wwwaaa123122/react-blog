@@ -107,7 +107,7 @@ export default function Posts() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <Pagination className="mb-10">
+        <Pagination aria-label="分页" className="mb-10">
           <PaginationContent>
             <Button variant="outline" size="icon" disabled={current === 1} onClick={() => goToPage(current - 1)} aria-label="上一页">
               <ChevronLeft className="size-4" />

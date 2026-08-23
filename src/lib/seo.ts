@@ -42,7 +42,7 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
     headline: post.title,
     description: post.description || undefined,
     datePublished: post.published,
-    dateModified: post.published,
+    dateModified: post.updated || post.published,
     author: { "@type": "Person", name: siteConfig.author },
     publisher: {
       "@type": "Organization",

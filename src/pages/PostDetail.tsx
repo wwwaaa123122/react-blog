@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Home, ListTree } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Home, ListTree, RefreshCw } from "lucide-react";
 import { getPostBySlug, formatDate, readingTime, publishedPosts } from "../lib/posts";
 import Markdown, { slugify } from "../components/Markdown";
 import Seo from "../components/Seo";
@@ -58,6 +58,12 @@ export default function PostDetail() {
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-6 text-sm text-muted-foreground">
             <time dateTime={post.published}>{formatDate(post.published)}</time>
+            {post.updated && post.updated !== post.published && (
+              <span className="inline-flex items-center gap-1">
+                <RefreshCw className="size-3" />
+                <time dateTime={post.updated}>更新于 {formatDate(post.updated)}</time>
+              </span>
+            )}
             <span className="inline-flex items-center gap-1"><Clock className="size-3.5" />{readingTime(post.words)}</span>
             {post.category && <span className="inline-flex items-center gap-1"><BookOpen className="size-3.5" />{post.category}</span>}
           </div>

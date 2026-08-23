@@ -56,11 +56,11 @@ for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {
 {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await page.goto(base + "/posts", { waitUntil: "networkidle" });
-  await page.getByPlaceholder("搜索文章标题、描述或内容…").fill("Cloudflare");
+  await page.getByPlaceholder("搜索文章…").fill("Cloudflare");
   await page.waitForTimeout(400);
   await page.getByRole("button", { name: "清除搜索" }).click();
   await page.waitForTimeout(300);
-  const paginationVisible = await page.getByRole("navigation", { name: "pagination" }).count();
+  const paginationVisible = await page.getByRole("navigation", { name: "分页" }).count();
   if (paginationVisible > 0) {
     ok("文章列表分页出现");
     const totalBtns = await page.locator("[data-slot='pagination-content'] button").count();
