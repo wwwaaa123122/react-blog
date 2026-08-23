@@ -97,7 +97,7 @@ export default function PostDetail() {
           <Markdown content={post.content} />
 
           {/* 上一篇 / 下一篇 */}
-          <nav className="mt-10 pt-6 border-t border-border grid grid-cols-2 gap-4">
+          <nav aria-label="上一篇/下一篇" className="mt-10 pt-6 border-t border-border grid grid-cols-2 gap-4">
             <div>
               {prevPost && (
                 <Link to={"/posts/" + prevPost.slug} className="group block">
@@ -140,7 +140,7 @@ export default function PostDetail() {
           <aside className="hidden lg:block w-56 shrink-0">
             <div className="sticky top-20">
               <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目录</h4>
-              <nav className="space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
+              <nav aria-label="文章目录" className="space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
                 {toc.map((item, i) => (
                   <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
                     <a

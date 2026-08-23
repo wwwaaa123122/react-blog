@@ -54,7 +54,7 @@ export default function Navbar() {
           <span className="font-bold text-base tracking-tight">Starlr</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-1">
+        <nav aria-label="主导航" className="hidden md:flex items-center gap-1">
           {links.map((link) => (
             <NavLink
               key={link.to}
