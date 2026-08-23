@@ -154,7 +154,7 @@ function withHead(
     `<meta property="og:site_name" content="${esc(site.title)}">`,
     `<meta property="og:title" content="${esc(fullTitle)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
-    `<meta property="og:type" content="${path.startsWith("/posts/") ? "article" : "website"}">`,
+    `<meta property="og:type" content="${path.startsWith("/posts/") && path !== "/posts/" ? "article" : "website"}">`,
     `<meta property="og:url" content="${esc(url)}">`,
     `<meta property="og:locale" content="zh_CN">`,
     ogImageUrl ? `<meta property="og:image" content="${esc(ogImageUrl)}">` : "",
