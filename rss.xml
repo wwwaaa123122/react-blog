@@ -6,16 +6,17 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Sun, 23 Aug 2026 12:54:44 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 24 Aug 2026 00:41:40 GMT</lastBuildDate>
   <item>
     <title>archlinux使用体验</title>
     <link>https://xc-lr.cn/posts/archlinux/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/archlinux/</guid>
+    <category>tech</category>
     <pubDate>Fri, 14 Aug 2026 00:00:00 GMT</pubDate>
     <description>关于我的archlinux的使用体验</description>
-    <content:encoded><![CDATA[<div class="markdown"><h1>缘起</h1>
+    <content:encoded><![CDATA[<div class="markdown"><h2 class="markdown-h1" id="缘起">缘起</h2>
 <p>偶然间在B站上看到一个archlinux的使用视频，在观看完后，b站开始推送更多的arch视频，我也就开始了尝试</p>
-<h1>安装</h1>
+<h2 class="markdown-h1" id="安装">安装</h2>
 <p>arch安装对于安装到整个硬盘/虚拟机用户无疑是方便的，但在实际使用中，可能是windows/linux或想从debian/ubuntu迁移到archlinux。</p>
 <h2 id="分盘">分盘</h2>
 <h3 id="windows">windows</h3>
@@ -27,12 +28,12 @@
 <!-- -->:::</p>
 <h2 id="live系统安装">live系统安装</h2>
 <p>按自己主板方法进入live系统后，如果你是使用网线，可以一步到位直接使用archinstall命令。对于需使用无线网络的，使用iwctl。具体安装可以去B站自己搜索，这里给一个链接<a href="https://b23.tv/qo9xusQ" target="_blank" rel="noreferrer noopener">https://b23.tv/qo9xusQ</a></p>
-<h1>换源</h1>
+<h2 class="markdown-h1" id="换源">换源</h2>
 <p>安装系统后对于我们中国用户，第一件事必须是换源，这里推荐直接用成品一键脚本<a href="https://linuxmirrors.cn/" target="_blank" rel="noreferrer noopener">https://linuxmirrors.cn</a></p>
 <p>镜像源按自己喜好选</p>
-<h1>输入法</h1>
+<h2 class="markdown-h1" id="输入法">输入法</h2>
 <p>安装中文输入法应该算是第二步，b站教程也有，但这里说一下我踩的坑，我用的是GHOME桌面，设置里全翻了一遍也没找到pinyin，问豆沙包还让我选汉语，这里正确方式应该去应用列表里找到fcitx5配置，在这个应用里去选汉语</p>
-<h1>槽点</h1>
+<h2 class="markdown-h1" id="槽点">槽点</h2>
 <p>用惯了windows/debian系这些系统后，我相信下载应用习惯应该都是去浏览器搜索应用，而arch系由于没有使用apt，但拥有yay库，就出现了一个处境：<em>官网没有安装包，得单独搜yay包</em></p>
 <p>对于已经习惯用户，这个yay方式真的很麻烦</p></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/archlinux.png" medium="image"/>
@@ -41,24 +42,25 @@
     <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知</title>
     <link>https://xc-lr.cn/posts/kick-live-notify/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/kick-live-notify/</guid>
+    <category>tech</category>
     <pubDate>Sun, 14 Jun 2026 00:00:00 GMT</pubDate>
     <description>基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知</description>
-    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+    <content:encoded><![CDATA[<div class="markdown"><h2 class="markdown-h1" id="前言">前言</h2>
 <p>Kick 是一个比较新的直播平台，虽然没有 Twitch 那么火，但也吸引了不少主播。</p>
 <p>如果你想关注某个 Kick 主播，但又不想一直开着网页等他开播，那就可以用脚本自动监控，开播了直接推消息到 QQ。</p>
 <p>本文介绍一个用 Python 写的 Kick 开播提醒工具，通过 NapCat 对接 QQ，支持私聊和群聊通知。</p>
-<h1>Kick API 介绍</h1>
+<h2 class="markdown-h1" id="kick-api-介绍">Kick API 介绍</h2>
 <p>Kick 有一个私有 API 可以查询主播的直播状态：</p>
 <pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">GET https://api.kick.com/private/v1/channels/{channel}/livestream
 </code></pre>
 <p>其中 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">{channel}</code> 是主播的用户名（频道名），比如 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">xctraveller</code>。</p>
 <p>请求示例：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl <span class="hljs-string">&quot;https://api.kick.com/private/v1/channels/xctraveller/livestream&quot;</span> \
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">curl <span class="hljs-string">&quot;https://api.kick.com/private/v1/channels/xctraveller/livestream&quot;</span> \
   -H <span class="hljs-string">&quot;User-Agent: Mozilla/5.0&quot;</span> \
   -H <span class="hljs-string">&quot;Accept: application/json&quot;</span>
-</code></pre>
+</code></pre></div>
 <p>返回格式：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-punctuation">{</span>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">json</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-json"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
     <span class="hljs-attr">&quot;livestream&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123456</span><span class="hljs-punctuation">,</span>
@@ -72,7 +74,7 @@
     <span class="hljs-punctuation">}</span>
   <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span>
-</code></pre>
+</code></pre></div>
 <ul>
 <li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 存在且有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code> 字段，说明正在直播</li>
 <li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">null</code> 或没有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code>，说明未开播</li>
@@ -80,7 +82,7 @@
 <p>:::warning
 这是 Kick 的私有 API，没有官方文档，随时可能变动。目前不需要认证，但未来可能需要。
 :::</p>
-<h1>NapCat (OneBot 11) 简介</h1>
+<h2 class="markdown-h1" id="napcat-onebot-11-简介">NapCat (OneBot 11) 简介</h2>
 <p>NapCat 是一个基于 QQNT 的 Bot 框架，实现了 OneBot 11 协议。通过它可以：</p>
 <ul>
 <li>发送私聊消息</li>
@@ -88,7 +90,7 @@
 <li>以及更多 QQ Bot 功能</li>
 </ul>
 <p>OneBot 11 提供了 HTTP API，我们只需要调用 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">send_private_msg</code> 或 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">send_group_msg</code> 接口就能发送消息。</p>
-<h1>工作原理</h1>
+<h2 class="markdown-h1" id="工作原理">工作原理</h2>
 <p>整体流程很简单：</p>
 <ol>
 <li>定时请求 Kick API 查询主播状态</li>
@@ -97,9 +99,9 @@
 <li>使用一个 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">set</code> 记录已通知的主播，避免重复通知</li>
 </ol>
 <p>为了防止程序重启时误发通知，启动时会先同步一次当前状态，只记录不通知。</p>
-<h1>代码实现</h1>
+<h2 class="markdown-h1" id="代码实现">代码实现</h2>
 <h2 id="检查直播状态">检查直播状态</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_live</span>(<span class="hljs-params">channel: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">tuple</span>[<span class="hljs-built_in">bool</span>, <span class="hljs-built_in">dict</span> | <span class="hljs-literal">None</span>]:
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">python</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_live</span>(<span class="hljs-params">channel: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">tuple</span>[<span class="hljs-built_in">bool</span>, <span class="hljs-built_in">dict</span> | <span class="hljs-literal">None</span>]:
     url = <span class="hljs-string">f&quot;https://api.kick.com/private/v1/channels/<span class="hljs-subst">{channel}</span>/livestream&quot;</span>
     req = urllib.request.Request(url, headers={
         <span class="hljs-string">&quot;User-Agent&quot;</span>: <span class="hljs-string">&quot;Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36&quot;</span>,
@@ -116,7 +118,7 @@
             json.JSONDecodeError, OSError) <span class="hljs-keyword">as</span> e:
         <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[错误] 检查 <span class="hljs-subst">{channel}</span> 失败: <span class="hljs-subst">{e}</span>&quot;</span>, file=sys.stderr)
         <span class="hljs-keyword">return</span> (<span class="hljs-literal">True</span>, <span class="hljs-literal">None</span>)
-</code></pre>
+</code></pre></div>
 <p>返回值设计：</p>
 <ul>
 <li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">(False, livestream)</code> — 正在直播</li>
@@ -124,7 +126,7 @@
 <li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">(True, None)</code> — 查询失败，跳过本轮</li>
 </ul>
 <h2 id="发送-napcat-消息">发送 NapCat 消息</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">def</span> <span class="hljs-title function_">napcat_send</span>(<span class="hljs-params">config: <span class="hljs-built_in">dict</span>, endpoint: <span class="hljs-built_in">str</span>, params: <span class="hljs-built_in">dict</span></span>) -&gt; <span class="hljs-built_in">bool</span>:
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">python</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">napcat_send</span>(<span class="hljs-params">config: <span class="hljs-built_in">dict</span>, endpoint: <span class="hljs-built_in">str</span>, params: <span class="hljs-built_in">dict</span></span>) -&gt; <span class="hljs-built_in">bool</span>:
     napcat = config[<span class="hljs-string">&quot;napcat&quot;</span>]
     url = <span class="hljs-string">f&quot;http://<span class="hljs-subst">{napcat[<span class="hljs-string">&#x27;host&#x27;</span>]}</span>:<span class="hljs-subst">{napcat[<span class="hljs-string">&#x27;port&#x27;</span>]}</span>/<span class="hljs-subst">{endpoint}</span>&quot;</span>
     body = json.dumps(params).encode(<span class="hljs-string">&quot;utf-8&quot;</span>)
@@ -138,18 +140,18 @@
             <span class="hljs-keyword">return</span> result.get(<span class="hljs-string">&quot;retcode&quot;</span>) == <span class="hljs-number">0</span>
     <span class="hljs-keyword">except</span> (urllib.error.URLError, urllib.error.HTTPError, OSError):
         <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
-</code></pre>
+</code></pre></div>
 <h2 id="构造通知消息">构造通知消息</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">message = (
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">python</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-python">message = (
     <span class="hljs-string">f&quot;🔴 <span class="hljs-subst">{channel}</span> 开播了!\n&quot;</span>
     <span class="hljs-string">f&quot;标题: <span class="hljs-subst">{title}</span>\n&quot;</span>
     <span class="hljs-string">f&quot;分类: <span class="hljs-subst">{category}</span>\n&quot;</span>
     <span class="hljs-string">f&quot;观众: <span class="hljs-subst">{viewers}</span>\n&quot;</span>
     <span class="hljs-string">f&quot;链接: https://kick.com/<span class="hljs-subst">{channel}</span>&quot;</span>
 )
-</code></pre>
+</code></pre></div>
 <h2 id="主循环">主循环</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">notified: <span class="hljs-built_in">set</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-built_in">set</span>()
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">python</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-python">notified: <span class="hljs-built_in">set</span>[<span class="hljs-built_in">str</span>] = <span class="hljs-built_in">set</span>()
 
 <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
     <span class="hljs-keyword">for</span> channel <span class="hljs-keyword">in</span> streamers:
@@ -168,10 +170,10 @@
                 send_offline_notification(config, channel)
     
     time.sleep(interval)
-</code></pre>
-<h1>配置说明</h1>
+</code></pre></div>
+<h2 class="markdown-h1" id="配置说明">配置说明</h2>
 <p>配置文件 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">config.json</code>：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-punctuation">{</span>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">json</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-json"><span class="hljs-punctuation">{</span>
     <span class="hljs-attr">&quot;napcat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
         <span class="hljs-attr">&quot;host&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;127.0.0.1&quot;</span><span class="hljs-punctuation">,</span>
         <span class="hljs-attr">&quot;port&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3000</span><span class="hljs-punctuation">,</span>
@@ -187,32 +189,32 @@
     <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;check_interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span>
 <span class="hljs-punctuation">}</span>
-</code></pre>
+</code></pre></div>
 <table><thead><tr><th>字段</th><th>说明</th></tr></thead><tbody><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">napcat.host</code></td><td>NapCat HTTP 服务地址</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">napcat.port</code></td><td>NapCat HTTP 服务端口</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">napcat.token</code></td><td>NapCat 访问令牌（可选）</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">notify.private</code></td><td>私聊通知的 QQ 号列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">notify.group</code></td><td>群聊通知的群号列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">streamers</code></td><td>要监控的 Kick 主播用户名列表</td></tr><tr><td><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">check_interval</code></td><td>检查间隔（秒）</td></tr></tbody></table>
-<h1>部署运行</h1>
+<h2 class="markdown-h1" id="部署运行">部署运行</h2>
 <h2 id="环境要求">环境要求</h2>
 <ul>
 <li>Python 3.10+</li>
 <li>NapCat 已部署并运行</li>
 </ul>
 <h2 id="运行">运行</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-comment"># 直接运行</span>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash"><span class="hljs-comment"># 直接运行</span>
 python3 kick_notify.py
 
 <span class="hljs-comment"># 或者用脚本启动</span>
 <span class="hljs-built_in">chmod</span> +x run.sh
 ./run.sh
-</code></pre>
+</code></pre></div>
 <h2 id="后台运行">后台运行</h2>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-comment"># 使用 nohup</span>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash"><span class="hljs-comment"># 使用 nohup</span>
 <span class="hljs-built_in">nohup</span> python3 kick_notify.py &gt; kick.log 2&gt;&amp;1 &amp;
 
 <span class="hljs-comment"># 或者用 screen/tmux</span>
 screen -S kick
 python3 kick_notify.py
 <span class="hljs-comment"># Ctrl+A D 断开</span>
-</code></pre>
-<h1>效果示例</h1>
+</code></pre></div>
+<h2 class="markdown-h1" id="效果示例">效果示例</h2>
 <p>开播通知：</p>
 <pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">🔴 xctraveller 开播了!
 标题: 晚上打游戏
@@ -224,16 +226,16 @@ python3 kick_notify.py
 <pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">⚫ xctraveller 下播了
 链接: https://kick.com/xctraveller
 </code></pre>
-<h1>注意事项</h1>
+<h2 class="markdown-h1" id="注意事项">注意事项</h2>
 <ul>
 <li>Kick 的私有 API 没有官方保证，可能随时失效或变更</li>
 <li>检查间隔不要太短，30 秒到 1 分钟比较合理，避免被限流</li>
 <li>NapCat 需要先部署好，具体部署方法请参考 NapCat 官方文档</li>
 <li>程序重启时不会发送重复通知，会先同步当前状态</li>
 </ul>
-<h1>END</h1>
+<h2 class="markdown-h1" id="end">END</h2>
 <p>一个简单但实用的小工具。如果你也想监控 Kick 主播的开播状态，可以直接用这个脚本，改改配置就行。</p>
-<h1>额外感想</h1>
+<h2 class="markdown-h1" id="额外感想">额外感想</h2>
 <p>在制作之初，我是直接问ChatGPT如何做，甚至都没用搜索引擎查一下，ChatGPT说用webhook并使用fastapi封装，翻了十几分钟文档没咋看明白，直到直接用opencode+免费的mimo说了我要做开播提醒，mimo一开始其实也没多好，甚至想出来轮询每页找到目标，在他自己fetch几遍后直接用了kick的api，不过也算是完美完成了。</p></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/kick.png" medium="image"/>
   </item>
@@ -241,13 +243,14 @@ python3 kick_notify.py
     <title>MC免端口域名生成器使用与部署教程</title>
     <link>https://xc-lr.cn/posts/mc-srv-worker/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/mc-srv-worker/</guid>
+    <category>tech</category>
     <pubDate>Sun, 31 May 2026 00:00:00 GMT</pubDate>
     <description>基于Cloudflare Workers的Minecraft免端口域名服务，让你的MC服务器玩家无需输入端口号</description>
-    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+    <content:encoded><![CDATA[<div class="markdown"><h2 class="markdown-h1" id="前言">前言</h2>
 <p>玩Minecraft的都知道，开服的时候如果用了非默认端口（不是25565），连接的时候就得在域名后面加个冒号再填端口号，比如 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">play.example.com:25566</code>，对于不熟悉的人来说还挺麻烦的。</p>
 <p>有没有办法让玩家只输域名就能连上？有的兄弟，有的。</p>
 <p>今天介绍的 <strong>mc-srv-worker</strong> 就是干这个的——基于 Cloudflare Workers 自动创建 DNS SRV 记录，让 Minecraft Java 版服务器实现&quot;免端口&quot;连接。</p>
-<h1>这东西怎么工作的</h1>
+<h2 class="markdown-h1" id="这东西怎么工作的">这东西怎么工作的</h2>
 <p>Minecraft Java 版在连接服务器时支持 DNS SRV 记录查询。简单来说，就是可以在 DNS 层面把一个域名映射到指定的地址和端口，客户端会自动解析并连接。</p>
 <p>mc-srv-worker 就是利用了这个特性：</p>
 <ul>
@@ -256,7 +259,7 @@ python3 kick_notify.py
 <li>如果目标是 IP 地址，还会额外创建一个 A 记录（因为 Cloudflare 的 SRV 不支持直接填 IP）</li>
 <li>玩家在游戏中直接输入域名即可连接</li>
 </ul>
-<h1>使用方法</h1>
+<h2 class="markdown-h1" id="使用方法">使用方法</h2>
 <p>如果你只是想用别人部署好的服务，直接打开页面就行。</p>
 <h2 id="创建域名">创建域名</h2>
 <ol>
@@ -281,7 +284,7 @@ python3 kick_notify.py
 </ul>
 <h2 id="在-minecraft-中使用">在 Minecraft 中使用</h2>
 <p>拿到域名后，玩家在 Minecraft Java 版中直接输入这个域名就能连接，不需要加端口号。</p>
-<h1>自己部署</h1>
+<h2 class="markdown-h1" id="自己部署">自己部署</h2>
 <p>不想用公共实例？自己部署也很简单。</p>
 <h2 id="先决条件">先决条件</h2>
 <ul>
@@ -292,16 +295,16 @@ python3 kick_notify.py
 </ul>
 <h2 id="步骤">步骤</h2>
 <h3 id="1-克隆项目">1. 克隆项目</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">git <span class="hljs-built_in">clone</span> https://github.com/wwwaaa123122/mc-srv-worker.git
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/wwwaaa123122/mc-srv-worker.git
 <span class="hljs-built_in">cd</span> mc-srv-worker
-</code></pre>
+</code></pre></div>
 <h3 id="2-创建-kv-命名空间">2. 创建 KV 命名空间</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">npx wrangler kv:namespace create MC_KV
-</code></pre>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">npx wrangler kv:namespace create MC_KV
+</code></pre></div>
 <p>执行后会返回一个 KV 命名空间 ID，记下来。</p>
 <h3 id="3-配置-wrangler-toml">3. 配置 wrangler.toml</h3>
 <p>编辑 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">wrangler.toml</code>，填入你的信息：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-attr">name</span> = <span class="hljs-string">&quot;mc-srv-worker&quot;</span>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">toml</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-toml"><span class="hljs-attr">name</span> = <span class="hljs-string">&quot;mc-srv-worker&quot;</span>
 <span class="hljs-attr">main</span> = <span class="hljs-string">&quot;src/index.js&quot;</span>
 <span class="hljs-attr">compatibility_date</span> = <span class="hljs-string">&quot;2025-08-11&quot;</span>
 
@@ -318,44 +321,44 @@ python3 kick_notify.py
 <span class="hljs-section">[assets]</span>
 <span class="hljs-attr">directory</span> = <span class="hljs-string">&quot;./public&quot;</span>
 <span class="hljs-attr">binding</span> = <span class="hljs-string">&quot;ASSETS&quot;</span>
-</code></pre>
+</code></pre></div>
 <h3 id="4-设置-secrets">4. 设置 Secrets</h3>
 <p>敏感信息不要写在配置文件里，用 wrangler secret 设置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">npx wrangler secret put CF_API_TOKEN
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">npx wrangler secret put CF_API_TOKEN
 <span class="hljs-comment"># 输入你的 Cloudflare API Token</span>
 
 npx wrangler secret put CF_ZONE_ID
 <span class="hljs-comment"># 输入你的域名区域 ID（在 Cloudflare 域名概览页面底部可以找到）</span>
-</code></pre>
+</code></pre></div>
 <h3 id="5-部署">5. 部署</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">npx wrangler deploy
-</code></pre>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">npx wrangler deploy
+</code></pre></div>
 <p>部署成功后会给你一个 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">*.workers.dev</code> 的域名，也可以在 Cloudflare 面板绑定自定义域名。</p>
 <h2 id="api-接口">API 接口</h2>
 <p>如果你想自己写前端或者集成到其他地方，可以直接调用 API：</p>
-<h3 id="创建域名">创建域名</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl -X POST https://你的域名/api/create \
+<h3 id="创建域名-1">创建域名</h3>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">curl -X POST https://你的域名/api/create \
   -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
   -d <span class="hljs-string">&#x27;{&quot;address&quot;: &quot;1.2.3.4:25566&quot;, &quot;prefix&quot;: &quot;myserver&quot;}&#x27;</span>
-</code></pre>
+</code></pre></div>
 <p>返回：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-punctuation">{</span>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">json</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-json"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">&quot;success&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">&quot;domain&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myserver.example.com&quot;</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">&quot;authCode&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;a1b2c3d4e5f67890&quot;</span>
 <span class="hljs-punctuation">}</span>
-</code></pre>
+</code></pre></div>
 <h3 id="修改解析">修改解析</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl -X POST https://你的域名/api/update \
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">curl -X POST https://你的域名/api/update \
   -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
   -d <span class="hljs-string">&#x27;{&quot;sub&quot;: &quot;myserver&quot;, &quot;target&quot;: &quot;5.6.7.8&quot;, &quot;port&quot;: 25567, &quot;authCode&quot;: &quot;a1b2c3d4e5f67890&quot;}&#x27;</span>
-</code></pre>
+</code></pre></div>
 <h3 id="删除解析">删除解析</h3>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">curl -X POST https://你的域名/api/delete \
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">curl -X POST https://你的域名/api/delete \
   -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
   -d <span class="hljs-string">&#x27;{&quot;sub&quot;: &quot;myserver&quot;, &quot;authCode&quot;: &quot;a1b2c3d4e5f67890&quot;}&#x27;</span>
-</code></pre>
-<h1>注意事项</h1>
+</code></pre></div>
+<h2 class="markdown-h1" id="注意事项">注意事项</h2>
 <ul>
 <li>每个域名创建后会生成一个 <strong>授权码</strong>，修改或删除时必须提供，请妥善保存</li>
 <li>每 IP 每分钟有创建次数限制（默认 5 次），防止滥用</li>
@@ -363,9 +366,9 @@ npx wrangler secret put CF_ZONE_ID
 <li>端口范围：<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">1</code> ~ <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">65535</code></li>
 <li>授权码是 16 位的十六进制字符串，丢了就没了，记得备份</li>
 </ul>
-<h1>END</h1>
+<h2 class="markdown-h1" id="end">END</h2>
 <p>就这样，很简单的一个小工具。有公网服务器的可以自己部署一个，没有的用公共实例也行。祝大家开服愉快！</p>
-<h4 id="后记">后记</h4>
+<h3 id="后记">后记</h3>
 <p>纯纯不知道写啥了，稍稍水个文章qwq</p></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/mc-srv.webp" medium="image"/>
   </item>
@@ -373,6 +376,7 @@ npx wrangler secret put CF_ZONE_ID
     <title>关于本站迁移至Firefly</title>
     <link>https://xc-lr.cn/posts/Why-to-Firefly/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/Why-to-Firefly/</guid>
+    <category>tech</category>
     <pubDate>Mon, 18 May 2026 00:00:00 GMT</pubDate>
     <description>讲述从fuwari迁移至Firefly的一些原因</description>
     <content:encoded><![CDATA[<div class="markdown"><h2 id="缘起">缘起</h2>
@@ -407,6 +411,7 @@ npx wrangler secret put CF_ZONE_ID
     <title>Fuwari 主题背景图功能教程</title>
     <link>https://xc-lr.cn/posts/fuwari-background-image/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/fuwari-background-image/</guid>
+    <category>tech</category>
     <pubDate>Sun, 29 Mar 2026 00:00:00 GMT</pubDate>
     <description>为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程</description>
     <content:encoded><![CDATA[<div class="markdown"><p>本教程将介绍如何为 Fuwari 主题添加背景图功能，包括高斯模糊效果和用户可调节的模糊程度。</p>
@@ -421,18 +426,18 @@ npx wrangler secret put CF_ZONE_ID
 <h2 id="配置步骤">配置步骤</h2>
 <h3 id="1-配置背景图">1. 配置背景图</h3>
 <p>打开 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/config.ts</code> 文件，找到 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">siteConfig</code> 对象，添加或修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">background</code> 配置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
   <span class="hljs-comment">// ... 其他配置</span>
   
   <span class="hljs-attr">background</span>: {
     <span class="hljs-attr">enable</span>: <span class="hljs-literal">true</span>,              <span class="hljs-comment">// 是否启用背景图</span>
-    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,   <span class="hljs-comment">// 背景图片路径</span>
+    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webp&quot;</span>,   <span class="hljs-comment">// 背景图片路径</span>
     <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,                  <span class="hljs-comment">// 默认模糊程度（像素）</span>
   },
   
   <span class="hljs-comment">// ... 其他配置</span>
 };
-</code></pre>
+</code></pre></div>
 <p><strong>参数说明：</strong></p>
 <ul>
 <li><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">enable</code>: 布尔值，控制是否显示背景图</li>
@@ -456,23 +461,23 @@ npx wrangler secret put CF_ZONE_ID
 </ol>
 <h2 id="样式自定义">样式自定义</h2>
 <p>如果需要调整半透明效果，可以修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/styles/variables.styl</code> 文件：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">define({
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">stylus</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-stylus">define({
   // 卡片背景透明度（85% 不透明）
   --card-bg-transparent: oklch(1 0 0 / 0.85) oklch(0.23 0.015 var(--hue) / 0.85)
   
   // 导航栏背景透明度（80% 不透明）
   --navbar-bg: oklch(1 0 0 / 0.8) oklch(0.23 0.015 var(--hue) / 0.8)
 })
-</code></pre>
+</code></pre></div>
 <p>修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">0.85</code> 和 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">0.8</code> 可以调整透明度（0-1 之间，越小越透明）。</p>
 <h2 id="禁用背景图">禁用背景图</h2>
 <p>如果不想要背景图效果，只需在配置中设置 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">enable: false</code>：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-attr">background</span>: {
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript"><span class="hljs-attr">background</span>: {
   <span class="hljs-attr">enable</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,
+  <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webp&quot;</span>,
   <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,
 },
-</code></pre>
+</code></pre></div>
 <h2 id="效果展示">效果展示</h2>
 <p>启用背景图后，整个网站将拥有：</p>
 <ul>
@@ -485,7 +490,7 @@ npx wrangler secret put CF_ZONE_ID
 <p>如果你想从零开始实现这个功能，或者了解具体的技术细节，请按照以下步骤操作：</p>
 <h3 id="步骤-1-定义配置类型">步骤 1: 定义配置类型</h3>
 <p>首先在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/types/config.ts</code> 中添加背景图配置的类型定义：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">SiteConfig</span> = {
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">SiteConfig</span> = {
   <span class="hljs-comment">// ... 其他配置</span>
 
   <span class="hljs-attr">background</span>: {
@@ -496,24 +501,24 @@ npx wrangler secret put CF_ZONE_ID
 
   <span class="hljs-comment">// ... 其他配置</span>
 };
-</code></pre>
+</code></pre></div>
 <h3 id="步骤-2-添加配置项">步骤 2: 添加配置项</h3>
 <p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/config.ts</code> 中添加背景图配置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">siteConfig</span>: <span class="hljs-title class_">SiteConfig</span> = {
   <span class="hljs-comment">// ... 其他配置</span>
 
   <span class="hljs-attr">background</span>: {
     <span class="hljs-attr">enable</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webg&quot;</span>,
+    <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;/homeground.webp&quot;</span>,
     <span class="hljs-attr">blur</span>: <span class="hljs-number">10</span>,
   },
 
   <span class="hljs-comment">// ... 其他配置</span>
 };
-</code></pre>
+</code></pre></div>
 <h3 id="步骤-3-实现设置存储和读取">步骤 3: 实现设置存储和读取</h3>
 <p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/utils/setting-utils.ts</code> 中添加模糊度的存储和读取函数：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-comment">// 获取默认模糊度</span>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript"><span class="hljs-comment">// 获取默认模糊度</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getDefaultBlur</span>(<span class="hljs-params"></span>): <span class="hljs-built_in">number</span> {
   <span class="hljs-keyword">const</span> fallback = <span class="hljs-string">&quot;10&quot;</span>;
   <span class="hljs-keyword">const</span> configCarrier = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;config-carrier&quot;</span>);
@@ -535,57 +540,57 @@ npx wrangler secret put CF_ZONE_ID
   }
   r.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(<span class="hljs-string">&quot;--bg-blur&quot;</span>, <span class="hljs-title class_">String</span>(blur) + <span class="hljs-string">&quot;px&quot;</span>);
 }
-</code></pre>
+</code></pre></div>
 <h3 id="步骤-4-创建模糊设置组件">步骤 4: 创建模糊设置组件</h3>
 <p>创建 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/widget/BlurSettings.svelte</code> 文件：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;script lang=&quot;ts&quot;&gt;
-import I18nKey from &quot;@i18n/i18nKey&quot;;
-import { i18n } from &quot;@i18n/translation&quot;;
-import Icon from &quot;@iconify/svelte&quot;;
-import { getDefaultBlur, getBlur, setBlur } from &quot;@utils/setting-utils&quot;;
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">svelte</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-svelte"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;ts&quot;</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">import</span> I18nKey <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@i18n/i18nKey&quot;</span>;
+<span class="hljs-keyword">import</span> { i18n } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@i18n/translation&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Icon</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@iconify/svelte&quot;</span>;
+<span class="hljs-keyword">import</span> { getDefaultBlur, getBlur, setBlur } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@utils/setting-utils&quot;</span>;
 
-let blur = getBlur();
-const defaultBlur = getDefaultBlur();
+<span class="hljs-keyword">let</span> blur = <span class="hljs-title function_">getBlur</span>();
+<span class="hljs-keyword">const</span> defaultBlur = <span class="hljs-title function_">getDefaultBlur</span>();
 
-function resetBlur() {
-  blur = getDefaultBlur();
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">resetBlur</span>(<span class="hljs-params"></span>) {
+  blur = <span class="hljs-title function_">getDefaultBlur</span>();
 }
 
-$: if (blur || blur === 0) {
-  setBlur(blur);
+<span class="hljs-attr">$</span>: <span class="hljs-keyword">if</span> (blur || blur === <span class="hljs-number">0</span>) {
+  <span class="hljs-title function_">setBlur</span>(blur);
 }
-&lt;/script&gt;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-&lt;div id=&quot;blur-setting&quot; class=&quot;float-panel float-panel-closed absolute transition-all w-80 right-4 px-4 py-4&quot;&gt;
-    &lt;div class=&quot;flex flex-row gap-2 mb-3 items-center justify-between&quot;&gt;
-        &lt;div class=&quot;flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;blur-setting&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;float-panel float-panel-closed absolute transition-all w-80 right-4 px-4 py-4&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex flex-row gap-2 mb-3 items-center justify-between&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
             before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
-            before:absolute before:-left-3 before:top-[0.33rem]&quot;
-        &gt;
+            before:absolute before:-left-3 before:top-[0.33rem]&quot;</span>
+        &gt;</span>
             背景模糊
-            &lt;button aria-label=&quot;Reset to Default&quot; class=&quot;btn-regular w-7 h-7 rounded-md active:scale-90&quot;
-                    class:opacity-0={blur === defaultBlur} class:pointer-events-none={blur === defaultBlur} on:click={resetBlur}&gt;
-                &lt;div class=&quot;text-[var(--btn-content)]&quot;&gt;
-                    &lt;Icon icon=&quot;fa6-solid:arrow-rotate-left&quot; class=&quot;text-[0.875rem]&quot;&gt;&lt;/Icon&gt;
-                &lt;/div&gt;
-            &lt;/button&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;flex gap-1&quot;&gt;
-            &lt;div id=&quot;blurValue&quot; class=&quot;transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center
-            font-bold text-sm items-center text-[var(--btn-content)]&quot;&gt;
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Reset to Default&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-regular w-7 h-7 rounded-md active:scale-90&quot;</span>
+                    <span class="hljs-attr">class:opacity-0</span>=<span class="hljs-string">{blur</span> === <span class="hljs-string">defaultBlur}</span> <span class="hljs-attr">class:pointer-events-none</span>=<span class="hljs-string">{blur</span> === <span class="hljs-string">defaultBlur}</span> <span class="hljs-attr">on:click</span>=<span class="hljs-string">{resetBlur}</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-[var(--btn-content)]&quot;</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">icon</span>=<span class="hljs-string">&quot;fa6-solid:arrow-rotate-left&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-[0.875rem]&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">Icon</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex gap-1&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;blurValue&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center
+            font-bold text-sm items-center text-[var(--btn-content)]&quot;</span>&gt;</span>
                 {blur}
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none&quot;&gt;
-        &lt;input aria-label=&quot;Background Blur&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; bind:value={blur}
-               class=&quot;slider&quot; id=&quot;blurSlider&quot; step=&quot;1&quot; style=&quot;width: 100%&quot;&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Background Blur&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;range&quot;</span> <span class="hljs-attr">min</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">max</span>=<span class="hljs-string">&quot;50&quot;</span> <span class="hljs-attr">bind:value</span>=<span class="hljs-string">{blur}</span>
+               <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;slider&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;blurSlider&quot;</span> <span class="hljs-attr">step</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width: 100%&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre></div>
 <h3 id="步骤-5-更新-configcarrier-组件">步骤 5: 更新 ConfigCarrier 组件</h3>
 <p>修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/ConfigCarrier.astro</code> 以传递模糊度配置：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">---
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro">---
 import { siteConfig } from &quot;../config&quot;;
 
 interface Props {
@@ -595,39 +600,39 @@ interface Props {
 const { blur = siteConfig.background.blur || 10 } = Astro.props;
 ---
 
-&lt;div id=&quot;config-carrier&quot; data-hue={siteConfig.themeColor.hue} data-blur={blur}&gt;
-&lt;/div&gt;
-</code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;config-carrier&quot;</span> <span class="hljs-attr">data-hue</span>=<span class="hljs-string">{siteConfig.themeColor.hue}</span> <span class="hljs-attr">data-blur</span>=<span class="hljs-string">{blur}</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre></div>
 <h3 id="步骤-6-在-layout-中添加背景图">步骤 6: 在 Layout 中添加背景图</h3>
 <p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/layouts/Layout.astro</code> 中添加背景图元素和初始化脚本：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;body&gt;
-  &lt;ConfigCarrier blur={siteConfig.background.blur || 10}&gt;&lt;/ConfigCarrier&gt;
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ConfigCarrier</span> <span class="hljs-attr">blur</span>=<span class="hljs-string">{siteConfig.background.blur</span> || <span class="hljs-attr">10</span>}&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ConfigCarrier</span>&gt;</span>
   {siteConfig.background.enable &amp;&amp; (
-    &lt;div id=&quot;background-wrapper&quot; class=&quot;fixed inset-0 -z-10 overflow-hidden&quot;&gt;
-      &lt;img
-        id=&quot;background-image&quot;
-        src={url(siteConfig.background.src)}
-        alt=&quot;Background image&quot;
-        class=&quot;absolute inset-0 w-full h-full object-cover&quot;
-        style={`filter: blur(var(--bg-blur, 10px))`}
-      /&gt;
-    &lt;/div&gt;
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;background-wrapper&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;fixed inset-0 -z-10 overflow-hidden&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span>
+        <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;background-image&quot;</span>
+        <span class="hljs-attr">src</span>=<span class="hljs-string">{url(siteConfig.background.src)}</span>
+        <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Background image&quot;</span>
+        <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;absolute inset-0 w-full h-full object-cover&quot;</span>
+        <span class="hljs-attr">style</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">filter:</span> <span class="hljs-attr">blur</span>(<span class="hljs-attr">var</span>(<span class="hljs-attr">--bg-blur</span>, <span class="hljs-attr">10px</span>))`}
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   )}
-  &lt;slot /&gt;
-&lt;/body&gt;
-</code></pre>
+  <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+</code></pre></div>
 <p>并在内联脚本中添加模糊度加载：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;script is:inline&gt;
-  // 加载模糊度
-  const configCarrier = document.getElementById(&#x27;config-carrier&#x27;);
-  const defaultBlur = configCarrier?.dataset.blur || &#x27;10&#x27;;
-  const blur = localStorage.getItem(&#x27;blur&#x27;) || defaultBlur;
-  document.documentElement.style.setProperty(&#x27;--bg-blur&#x27;, `${blur}px`);
-&lt;/script&gt;
-</code></pre>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">is:inline</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 加载模糊度</span>
+  <span class="hljs-keyword">const</span> configCarrier = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;config-carrier&#x27;</span>);
+  <span class="hljs-keyword">const</span> defaultBlur = configCarrier?.<span class="hljs-property">dataset</span>.<span class="hljs-property">blur</span> || <span class="hljs-string">&#x27;10&#x27;</span>;
+  <span class="hljs-keyword">const</span> blur = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;blur&#x27;</span>) || defaultBlur;
+  <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(<span class="hljs-string">&#x27;--bg-blur&#x27;</span>, <span class="hljs-string">`<span class="hljs-subst">${blur}</span>px`</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre></div>
 <h3 id="步骤-7-添加-css-变量">步骤 7: 添加 CSS 变量</h3>
 <p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/styles/variables.styl</code> 中添加 CSS 变量：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">:root
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">stylus</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-stylus">:root
   --radius-large 1rem
   --content-delay 150ms
   --bg-blur 10px
@@ -637,43 +642,43 @@ define({
   --card-bg-transparent: oklch(1 0 0 / 0.85) oklch(0.23 0.015 var(--hue) / 0.85)
   --navbar-bg: oklch(1 0 0 / 0.8) oklch(0.23 0.015 var(--hue) / 0.8)
 })
-</code></pre>
+</code></pre></div>
 <h3 id="步骤-8-在导航栏添加模糊设置按钮">步骤 8: 在导航栏添加模糊设置按钮</h3>
 <p>修改 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/components/Navbar.astro</code>，添加模糊设置按钮和面板：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;Search client:only=&quot;svelte&quot;&gt;&lt;/Search&gt;
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro"><span class="hljs-tag">&lt;<span class="hljs-name">Search</span> <span class="hljs-attr">client:only</span>=<span class="hljs-string">&quot;svelte&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">Search</span>&gt;</span>
 {siteConfig.background.enable &amp;&amp; (
-  &lt;button aria-label=&quot;Blur Settings&quot; class=&quot;btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90&quot; id=&quot;blur-settings-switch&quot;&gt;
-    &lt;Icon name=&quot;material-symbols:blur-on&quot; class=&quot;text-[1.25rem]&quot;&gt;&lt;/Icon&gt;
-  &lt;/button&gt;
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;Blur Settings&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;blur-settings-switch&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;material-symbols:blur-on&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-[1.25rem]&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">Icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 )}
-&lt;LightDarkSwitch client:only=&quot;svelte&quot;&gt;&lt;/LightDarkSwitch&gt;
+<span class="hljs-tag">&lt;<span class="hljs-name">LightDarkSwitch</span> <span class="hljs-attr">client:only</span>=<span class="hljs-string">&quot;svelte&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">LightDarkSwitch</span>&gt;</span>
 
-&lt;!-- ... --&gt;
+<span class="hljs-comment">&lt;!-- ... --&gt;</span>
 
-{siteConfig.background.enable &amp;&amp; &lt;BlurSettings client:only=&quot;svelte&quot;&gt;&lt;/BlurSettings&gt;}
-</code></pre>
+{siteConfig.background.enable &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">BlurSettings</span> <span class="hljs-attr">client:only</span>=<span class="hljs-string">&quot;svelte&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">BlurSettings</span>&gt;</span>}
+</code></pre></div>
 <p>并添加按钮点击事件处理：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;script&gt;
-function loadButtonScript() {
-  // ... 其他按钮
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">loadButtonScript</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// ... 其他按钮</span>
 
-  let blurSettingBtn = document.getElementById(&quot;blur-settings-switch&quot;);
-  if (blurSettingBtn) {
-    blurSettingBtn.onclick = function () {
-      let blurSettingPanel = document.getElementById(&quot;blur-setting&quot;);
-      if (blurSettingPanel) {
-        blurSettingPanel.classList.toggle(&quot;float-panel-closed&quot;);
+  <span class="hljs-keyword">let</span> blurSettingBtn = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;blur-settings-switch&quot;</span>);
+  <span class="hljs-keyword">if</span> (blurSettingBtn) {
+    blurSettingBtn.<span class="hljs-property">onclick</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">let</span> blurSettingPanel = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;blur-setting&quot;</span>);
+      <span class="hljs-keyword">if</span> (blurSettingPanel) {
+        blurSettingPanel.<span class="hljs-property">classList</span>.<span class="hljs-title function_">toggle</span>(<span class="hljs-string">&quot;float-panel-closed&quot;</span>);
       }
     };
   }
 }
 
-loadButtonScript();
-&lt;/script&gt;
-</code></pre>
+<span class="hljs-title function_">loadButtonScript</span>();
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre></div>
 <h3 id="步骤-9-添加半透明卡片样式">步骤 9: 添加半透明卡片样式</h3>
 <p>在 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/styles/main.css</code> 中添加半透明卡片样式：</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">@layer</span> components {
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">css</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-css"><span class="hljs-keyword">@layer</span> components {
   <span class="hljs-selector-class">.card-base</span> {
     <span class="hljs-keyword">@apply</span> rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
   }
@@ -682,7 +687,7 @@ loadButtonScript();
     <span class="hljs-keyword">@apply</span> rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg-transparent)] backdrop-blur-md transition;
   }
 }
-</code></pre>
+</code></pre></div>
 <p>然后将各个组件的 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">card-base</code> 类替换为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">card-base-transparent</code> 以使用半透明效果。</p>
 <h2 id="技术实现">技术实现</h2>
 <p>功能实现涉及以下文件：</p>
@@ -711,17 +716,18 @@ loadButtonScript();
 <!-- -->A: 当前版本所有页面使用同一背景图，如需不同背景需要修改代码。</p>
 <hr/>
 <p>希望这个教程能帮助你更好地使用 Fuwari 主题的背景图功能！</p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/homeground.webg" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/homeground.webp" medium="image"/>
   </item>
   <item>
     <title>通过Cloudflare Tunnel使用SSH</title>
     <link>https://xc-lr.cn/posts/ssh-by-tunnel/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/ssh-by-tunnel/</guid>
+    <category>tech</category>
     <pubDate>Wed, 04 Feb 2026 00:00:00 GMT</pubDate>
     <description>通过Cloudflare Tunnel连接无公网IP的服务</description>
-    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+    <content:encoded><![CDATA[<div class="markdown"><h2 class="markdown-h1" id="前言">前言</h2>
 <p>在没有公网的条件下我们想访问无公网IP往往只能通过FRP或IPv6，本篇文章将介绍使用Cloudflare Tunnel连接内网中的SSH服务</p>
-<h1>准备</h1>
+<h2 class="markdown-h1" id="准备">准备</h2>
 <h2 id="先决条件">先决条件</h2>
 <ul>
 <li><a href="https://dash.cloudflare.com" target="_blank" rel="noreferrer noopener">Cloudflare</a>账号，没有的自行注册一个，并需绑定一张信用卡（不会扣费）</li>
@@ -731,7 +737,7 @@ loadButtonScript();
 <p>打开<a href="https://one.dash.cloudflare.com" target="_blank" rel="noreferrer noopener">Zero Trust</a>团队名随便写一个，在左侧边栏找到 <strong>网络</strong> ，选择 <strong>连接器</strong> 。进来后点击 <strong>添加隧道</strong> ，隧道类型选项 <strong>Cloudflared</strong> ，名称依旧随便取，保存隧道后选择系统类型，下面我以ubuntu 64-bit 为例</p>
 <h3 id="安装-cloudflared">安装 cloudflared</h3>
 <p>可将给的shell脚本保存为.sh执行，连上需远程ssh的终端，执行</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash"><span class="hljs-built_in">cat</span> &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span> &gt; Install_cloudflared.sh
 <span class="hljs-comment">#!/bin/bash</span>
 
 <span class="hljs-comment"># Add cloudflare gpg key</span>
@@ -744,20 +750,20 @@ curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | <span class="hl
 <span class="hljs-comment"># install cloudflared</span>
 <span class="hljs-built_in">sudo</span> apt-get update &amp;&amp; <span class="hljs-built_in">sudo</span> apt-get install cloudflared
 EOF
-</code></pre>
+</code></pre></div>
 <p>赋予权限</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
-</code></pre>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash"><span class="hljs-built_in">chmod</span> +x Install_cloudflared.sh
+</code></pre></div>
 <p>执行脚本安装</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">./Install_cloudflared.sh
-</code></pre>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">./Install_cloudflared.sh
+</code></pre></div>
 <h3 id="连接">连接</h3>
 <p>执行连接页面给的 <em>让计算机每次启动时自动运行隧道</em> 这条命令</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
-</code></pre>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash"><span class="hljs-built_in">sudo</span> cloudflared service install &lt;你的令牌&gt;
+</code></pre></div>
 <p>若 <strong>Connectors</strong> 列表中出现了您的设备，则说明安装成功。</p>
-<h1>配置Tunnel及应用</h1>
-<h4 id="发布应用程序路由">发布应用程序路由</h4>
+<h2 class="markdown-h1" id="配置tunnel及应用">配置Tunnel及应用</h2>
+<h3 id="发布应用程序路由">发布应用程序路由</h3>
 <ul>
 <li>子域：随便填 示例：ssh</li>
 <li>域：选择你的域名</li>
@@ -773,7 +779,7 @@ EOF
 <!-- -->浏览器呈现选择<strong>SSH</strong><br/>
 <!-- -->下面需创建一个策略，名称依旧随便写，操作选择<em>允许</em><br/>
 <!-- -->认证方式自己选一个方便的，我这里选的是EMAIL即邮箱，其它的看自己最后点保存，回到配置页面，选择好刚刚配置的规则，没其它要求一直点下一步，至此配置就结束了。</p>
-<h1>最终体验</h1>
+<h2 class="markdown-h1" id="最终体验">最终体验</h2>
 <p>打开你的域名，此时应会跳转到Cloudflare的验证界面，按照你自己选择的验证方式过后应该就会跳转到输入<em>User</em> 的界面，输入你的用户名提交后输入密码，至此就大功告成了。</p></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/SSH_Cloudflare.webp" medium="image"/>
   </item>
@@ -781,12 +787,13 @@ EOF
     <title>Bot使用文档</title>
     <link>https://xc-lr.cn/posts/how-use-bot/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/how-use-bot/</guid>
+    <category>tech</category>
     <pubDate>Sat, 25 Oct 2025 00:00:00 GMT</pubDate>
     <description>星辰旅人Bot使用文档</description>
     <content:encoded><![CDATA[<div class="markdown"><p>:::warning
 变量部分均使用{}包裹，多选项用/分隔
 :::</p>
-<h1>LLM</h1>
+<h2 class="markdown-h1" id="llm">LLM</h2>
 <h2 id="deepseek">Deepseek</h2>
 <p>切换命令：<strong>#Deepseek</strong>
 常用模型，回复速度快，稳定
@@ -799,82 +806,82 @@ EOF
 <p>切换命令：#GPT4/#GPT
 此模型为替代模型，可联网搜索
 缺点：由于是非官方API，服务可能不稳</p>
-<h1>rua</h1>
+<h2 class="markdown-h1" id="rua">rua</h2>
 <p>命令：#rua {@一个用户/QQ号}
 介绍：生成rua表情</p>
-<h1>发电</h1>
+<h2 class="markdown-h1" id="发电">发电</h2>
 <p>命令：#发电{目标名称}
 介绍：生成一段表白话(?</p>
-<h1>我今天棒不棒</h1>
+<h2 class="markdown-h1" id="我今天棒不棒">我今天棒不棒</h2>
 <p>命令：我今天棒不棒
 介绍：给出你今天的分数</p>
-<h1>enc解密</h1>
+<h2 class="markdown-h1" id="enc解密">enc解密</h2>
 <p>命令：#enc解密 {解密内容}
 介绍：解密被enc加密过的内容</p>
-<h1>生图</h1>
+<h2 class="markdown-h1" id="生图">生图</h2>
 <p>命令：#生图 {Pixiv/ACG}  {标签}
 介绍：</p>
 <ul>
 <li>Pixiv为从p站拉取一张图</li>
 <li>ACG的标签只有：随机、电脑壁纸、头像、手机背景、壁纸</li>
 </ul>
-<h1>http</h1>
+<h2 class="markdown-h1" id="http">http</h2>
 <p>命令：#http {网址}
 介绍：测试网站是否能访问并返回状态码</p>
-<h1>Banme</h1>
+<h2 class="markdown-h1" id="banme">Banme</h2>
 <p>命令：banme
 介绍：当bot为该群管理时会禁用1~5小时，适用于安心睡觉</p>
-<h1>今日运势</h1>
+<h2 class="markdown-h1" id="今日运势">今日运势</h2>
 <p>命令：今日运势
 介绍：返回今日运势</p>
-<h1>名人名言</h1>
+<h2 class="markdown-h1" id="名人名言">名人名言</h2>
 <p>命令：#名人名言 {引用一条消息}
 介绍：制作一个名言图片</p>
-<h1>MC服务器状态</h1>
+<h2 class="markdown-h1" id="mc服务器状态">MC服务器状态</h2>
 <p>命令：#mcs {服务器地址}
 介绍：查看此服务器状态及在线人数</p>
-<h1>名言</h1>
+<h2 class="markdown-h1" id="名言">名言</h2>
 <p>命令：#名言 {引用一条消息}
 介绍：同上名人名言</p>
-<h1>抖音解析</h1>
+<h2 class="markdown-h1" id="抖音解析">抖音解析</h2>
 <p>命令：发送抖音链接触发
 介绍：解析抖音视频并发送</p>
-<h1>点歌</h1>
+<h2 class="markdown-h1" id="点歌">点歌</h2>
 <p>命令：#点歌 {歌名/歌曲id}
 介绍：仅能解析网易云歌曲</p>
-<h1>狐狸图</h1>
+<h2 class="markdown-h1" id="狐狸图">狐狸图</h2>
 <p>命令：狐狸图
 介绍：随机发送一张狐狸图</p>
-<h1>一言</h1>
+<h2 class="markdown-h1" id="一言">一言</h2>
 <p>命令：#名言
 介绍：找一句好听的名言</p>
-<h1>天气</h1>
+<h2 class="markdown-h1" id="天气">天气</h2>
 <p>命令：#天气 {城市名称}
 介绍：当前天气及未来三天天气</p>
-<h1>签到</h1>
+<h2 class="markdown-h1" id="签到">签到</h2>
 <p>命令：签到
 介绍：签到功能</p>
-<h1>转码</h1>
+<h2 class="markdown-h1" id="转码">转码</h2>
 <p>命令：#转码 {文字/网址(需带https)}
 介绍：将文字或网页转换为二维码</p>
-<h1>ping</h1>
+<h2 class="markdown-h1" id="ping">ping</h2>
 <p>命令：#ping {域名/ip}
 介绍：由bot所运行的服务器ping 4次目标地址</p>
-<h1>大头照</h1>
+<h2 class="markdown-h1" id="大头照">大头照</h2>
 <p>命令：#大头照 {@一个用户/QQ号}
 介绍：发送该用户的QQ头像</p>
-<h1>whois</h1>
+<h2 class="markdown-h1" id="whois">whois</h2>
 <p>命令：#whois {域名}
 介绍：查询该域名信息</p>
-<h1>点赞</h1>
+<h2 class="markdown-h1" id="点赞">点赞</h2>
 <p>命令：赞我/超我
 介绍：给你QQ名片点赞</p>
-<h1>伪造消息</h1>
+<h2 class="markdown-h1" id="伪造消息">伪造消息</h2>
 <p>命令：#伪造消息 {QQ号/@一个用户}说{内容}<br/>
 <!-- -->多条消息格式：#伪造消息 {QQ号/@一个用户}说{消息1}|{QQ号/@一个用户}说{消息2}<br/>
 <!-- -->更多条以此类推
 介绍：转发伪造合并转发的消息</p>
-<h1>角色扮演</h1>
+<h2 class="markdown-h1" id="角色扮演">角色扮演</h2>
 <p>命令：#角色扮演<br/>
 <!-- -->介绍：查看Bot的所有预设</p></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/how-use-bot-cover.webp" medium="image"/>
@@ -883,14 +890,15 @@ EOF
     <title>fuwari修复RSS图片不显示</title>
     <link>https://xc-lr.cn/posts/fuwari-rss/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/fuwari-rss/</guid>
+    <category>tech</category>
     <pubDate>Sat, 27 Sep 2025 00:00:00 GMT</pubDate>
     <description>修复RSS图片链接问题</description>
-    <content:encoded><![CDATA[<div class="markdown"><h1>前言</h1>
+    <content:encoded><![CDATA[<div class="markdown"><h2 class="markdown-h1" id="前言">前言</h2>
 <p>啊大家都知道，fuwari的RSS如果你用的是相对路径，那么生成的RSS将也是相对路径，但这样就看不了图了啊，所以本章将带你修复它</p>
-<h1>修改RSS配置文件</h1>
+<h2 class="markdown-h1" id="修改rss配置文件">修改RSS配置文件</h2>
 <p>打开<strong>src/pages/rss.xml.ts</strong>，当然你也可以直接删了<br/>
 <!-- -->直接一个全选删除再将下面的配置粘贴填入</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]"><span class="hljs-keyword">import</span> rss <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript"><span class="hljs-keyword">import</span> rss <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@astrojs/rss&#x27;</span>;
 <span class="hljs-keyword">import</span> sanitizeHtml <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;sanitize-html&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">MarkdownIt</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;markdown-it&#x27;</span>;
 <span class="hljs-keyword">import</span> { getCollection } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;astro:content&#x27;</span>;
@@ -974,10 +982,10 @@ EOF
 		<span class="hljs-attr">customData</span>: <span class="hljs-string">`&lt;language&gt;<span class="hljs-subst">${siteConfig.lang}</span>&lt;/language&gt;`</span>,
 	});
 }
-</code></pre>
+</code></pre></div>
 <p>保存了，还需要安装一个pnpm包，不用管是什么，能帮我们转换成链接就是的了</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">pnpm add node-html-parser
-</code></pre>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">pnpm add node-html-parser
+</code></pre></div>
 <p>:::warning
 在推送到仓库时，你可能会遇到warning: in the working copy of &#x27;pnpm-lock.yaml&#x27;, LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可
 :::</p></div>]]></content:encoded>
@@ -987,12 +995,13 @@ EOF
     <title>为fuwari增加一个404界面</title>
     <link>https://xc-lr.cn/posts/fuwari-404/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/fuwari-404/</guid>
+    <category>tech</category>
     <pubDate>Wed, 24 Sep 2025 00:00:00 GMT</pubDate>
     <description>为fuwari添加一个好看的404界面</description>
-    <content:encoded><![CDATA[<div class="markdown"><h1>本文章分为两部分</h1>
+    <content:encoded><![CDATA[<div class="markdown"><h2 class="markdown-h1" id="本文章分为两部分">本文章分为两部分</h2>
 <h3 id="适配多语言的404界面">适配多语言的404界面</h3>
 <p>打开<strong>src/i18n/i18nKey.ts</strong></p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">	license = <span class="hljs-string">&quot;license&quot;</span>,
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript">	license = <span class="hljs-string">&quot;license&quot;</span>,
 	friends = <span class="hljs-string">&quot;friends&quot;</span>,
 
 	<span class="hljs-comment">// 404 page</span>
@@ -1001,10 +1010,10 @@ EOF
 	notFoundMessage = <span class="hljs-string">&quot;notFoundMessage&quot;</span>,
 	backToHome = <span class="hljs-string">&quot;backToHome&quot;</span>,
 	viewArchive = <span class="hljs-string">&quot;viewArchive&quot;</span>,
-</code></pre>
+</code></pre></div>
 <p>再分别打开languages下的<strong>en.ts</strong>和<strong>zh_CN.ts</strong><br/>
 <!-- -->en.ts</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;License&quot;</span>,
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;License&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">friends</span>]: <span class="hljs-string">&quot;Friends&quot;</span>,
 
 	<span class="hljs-comment">// 404 page</span>
@@ -1013,9 +1022,9 @@ EOF
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFoundMessage</span>]: <span class="hljs-string">&quot;The page you are looking for doesn&#x27;t exist. It may have been moved or deleted.&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">backToHome</span>]: <span class="hljs-string">&quot;Back to Home&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">viewArchive</span>]: <span class="hljs-string">&quot;View Archive&quot;</span>,
-</code></pre>
+</code></pre></div>
 <p>zh_CN.ts</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;许可协议&quot;</span>,
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">typescript</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-typescript">	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">license</span>]: <span class="hljs-string">&quot;许可协议&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">friends</span>]: <span class="hljs-string">&quot;友链&quot;</span>,
 
 	<span class="hljs-comment">// 404 page</span>
@@ -1024,9 +1033,9 @@ EOF
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">notFoundMessage</span>]: <span class="hljs-string">&quot;您访问的页面不存在，可能已被删除或链接有误。&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">backToHome</span>]: <span class="hljs-string">&quot;返回首页&quot;</span>,
 	[<span class="hljs-title class_">Key</span>.<span class="hljs-property">viewArchive</span>]: <span class="hljs-string">&quot;查看归档&quot;</span>,
-</code></pre>
+</code></pre></div>
 <p>最后在<strong>src/pages</strong>目录下创建<strong>404.astro</strong></p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">---
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro">---
 import { Icon } from &quot;astro-icon/components&quot;;
 import MainGridLayout from &quot;../layouts/MainGridLayout.astro&quot;;
 import I18nKey from &quot;../i18n/i18nKey&quot;;
@@ -1035,202 +1044,204 @@ import { url } from &quot;../utils/url-utils&quot;;
 import { siteConfig } from &quot;../config&quot;;
 ---
 
-&lt;MainGridLayout title={i18n(I18nKey.notFound)} description={i18n(I18nKey.notFoundMessage)}&gt;
-    &lt;div class=&quot;flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-96&quot;&gt;
-        &lt;div class=&quot;card-base z-10 px-6 md:px-12 py-8 md:py-12 relative w-full&quot;&gt;
-            &lt;!-- 404 Content --&gt;
-            &lt;div class=&quot;flex flex-col items-center text-center space-y-6&quot;&gt;
-                &lt;!-- Large 404 Number --&gt;
-                &lt;div class=&quot;relative opacity-0 animate-fade-in-up&quot;&gt;
-                    &lt;div class=&quot;text-8xl md:text-9xl font-bold bg-gradient-to-br from-[var(--primary)] to-[oklch(0.65_0.18_var(--hue))] bg-clip-text text-transparent select-none&quot;&gt;
+<span class="hljs-tag">&lt;<span class="hljs-name">MainGridLayout</span> <span class="hljs-attr">title</span>=<span class="hljs-string">{i18n(I18nKey.notFound)}</span> <span class="hljs-attr">description</span>=<span class="hljs-string">{i18n(I18nKey.notFoundMessage)}</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-96&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card-base z-10 px-6 md:px-12 py-8 md:py-12 relative w-full&quot;</span>&gt;</span>
+            <span class="hljs-comment">&lt;!-- 404 Content --&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex flex-col items-center text-center space-y-6&quot;</span>&gt;</span>
+                <span class="hljs-comment">&lt;!-- Large 404 Number --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;relative opacity-0 animate-fade-in-up&quot;</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-8xl md:text-9xl font-bold bg-gradient-to-br from-[var(--primary)] to-[oklch(0.65_0.18_var(--hue))] bg-clip-text text-transparent select-none&quot;</span>&gt;</span>
                         404
-                    &lt;/div&gt;
-                    &lt;!-- Decorative elements --&gt;
-                    &lt;div class=&quot;absolute -top-4 -right-4 w-8 h-8 bg-[var(--primary)] rounded-full opacity-20 animate-pulse&quot;&gt;&lt;/div&gt;
-                    &lt;div class=&quot;absolute -bottom-2 -left-2 w-6 h-6 bg-[var(--primary)] rounded-full opacity-30 animate-pulse&quot; style=&quot;animation-delay: 0.5s;&quot;&gt;&lt;/div&gt;
-                &lt;/div&gt;
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- Decorative elements --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;absolute -top-4 -right-4 w-8 h-8 bg-[var(--primary)] rounded-full opacity-20 animate-pulse&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;absolute -bottom-2 -left-2 w-6 h-6 bg-[var(--primary)] rounded-full opacity-30 animate-pulse&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;animation-delay: 0.5s;&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-                &lt;!-- Title and Message --&gt;
-                &lt;div class=&quot;space-y-3 max-w-md opacity-0 animate-fade-in-up animate-delay-100&quot;&gt;
-                    &lt;h1 class=&quot;text-2xl md:text-3xl font-bold text-[var(--primary)]&quot;&gt;
+                <span class="hljs-comment">&lt;!-- Title and Message --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;space-y-3 max-w-md opacity-0 animate-fade-in-up animate-delay-100&quot;</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-2xl md:text-3xl font-bold text-[var(--primary)]&quot;</span>&gt;</span>
                         {i18n(I18nKey.notFoundTitle)}
-                    &lt;/h1&gt;
-                    &lt;p class=&quot;text-75 text-base md:text-lg leading-relaxed&quot;&gt;
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-75 text-base md:text-lg leading-relaxed&quot;</span>&gt;</span>
                         {i18n(I18nKey.notFoundMessage)}
-                    &lt;/p&gt;
-                &lt;/div&gt;
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-                &lt;!-- Illustration --&gt;
-                &lt;div class=&quot;py-4 opacity-0 animate-fade-in-up animate-delay-200&quot;&gt;
-                    &lt;div class=&quot;relative w-32 h-32 mx-auto animate-float&quot;&gt;
-                        &lt;!-- Simple geometric illustration --&gt;
-                        &lt;div class=&quot;absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-[oklch(0.65_0.18_var(--hue))] rounded-full opacity-10&quot;&gt;&lt;/div&gt;
-                        &lt;div class=&quot;absolute inset-4 bg-[var(--card-bg)] rounded-full border-2 border-[var(--primary)] border-opacity-20&quot;&gt;&lt;/div&gt;
-                        &lt;div class=&quot;absolute inset-0 flex items-center justify-center&quot;&gt;
-                            &lt;Icon name=&quot;fa6-solid:location-crosshairs&quot; class=&quot;w-12 h-12 text-[var(--primary)] opacity-60&quot; /&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
+                <span class="hljs-comment">&lt;!-- Illustration --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;py-4 opacity-0 animate-fade-in-up animate-delay-200&quot;</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;relative w-32 h-32 mx-auto animate-float&quot;</span>&gt;</span>
+                        <span class="hljs-comment">&lt;!-- Simple geometric illustration --&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-[oklch(0.65_0.18_var(--hue))] rounded-full opacity-10&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;absolute inset-4 bg-[var(--card-bg)] rounded-full border-2 border-[var(--primary)] border-opacity-20&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;absolute inset-0 flex items-center justify-center&quot;</span>&gt;</span>
+                            <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:location-crosshairs&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;w-12 h-12 text-[var(--primary)] opacity-60&quot;</span> /&gt;</span>
+                        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-                &lt;!-- Action Buttons --&gt;
-                &lt;div class=&quot;flex flex-col sm:flex-row gap-3 pt-4 opacity-0 animate-fade-in-up animate-delay-300&quot;&gt;
-                    &lt;a href={url(&quot;/&quot;)} 
-                       class=&quot;btn-regular px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2&quot;&gt;
-                        &lt;Icon name=&quot;fa6-solid:house&quot; class=&quot;w-4 h-4&quot; /&gt;
+                <span class="hljs-comment">&lt;!-- Action Buttons --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex flex-col sm:flex-row gap-3 pt-4 opacity-0 animate-fade-in-up animate-delay-300&quot;</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{url(</span>&quot;/&quot;)} 
+                       <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-regular px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2&quot;</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:house&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;w-4 h-4&quot;</span> /&gt;</span>
                         {i18n(I18nKey.backToHome)}
-                    &lt;/a&gt;
-                    &lt;a href={url(&quot;/archive&quot;)} 
-                       class=&quot;btn-card px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[var(--line-divider)]&quot;&gt;
-                        &lt;Icon name=&quot;fa6-solid:box-archive&quot; class=&quot;w-4 h-4&quot; /&gt;
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{url(</span>&quot;/<span class="hljs-attr">archive</span>&quot;)} 
+                       <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-card px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[var(--line-divider)]&quot;</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:box-archive&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;w-4 h-4&quot;</span> /&gt;</span>
                         {i18n(I18nKey.viewArchive)}
-                    &lt;/a&gt;
-                    &lt;a href={url(&quot;/about&quot;)} 
-                       class=&quot;btn-card px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[var(--line-divider)]&quot;&gt;
-                        &lt;Icon name=&quot;fa6-solid:circle-info&quot; class=&quot;w-4 h-4&quot; /&gt;
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{url(</span>&quot;/<span class="hljs-attr">about</span>&quot;)} 
+                       <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-card px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[var(--line-divider)]&quot;</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:circle-info&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;w-4 h-4&quot;</span> /&gt;</span>
                         {i18n(I18nKey.about)}
-                    &lt;/a&gt;
-                &lt;/div&gt;
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-                &lt;!-- Additional Help Text --&gt;
-                &lt;div class=&quot;pt-6 text-sm text-50&quot;&gt;
-                    &lt;p class=&quot;transition-all duration-300&quot;&gt;
+                <span class="hljs-comment">&lt;!-- Additional Help Text --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;pt-6 text-sm text-50&quot;</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;transition-all duration-300&quot;</span>&gt;</span>
                         {siteConfig.lang === &#x27;zh_CN&#x27; ? &#x27;如果您认为这是一个错误，请联系网站管理员。&#x27; : &#x27;If you believe this is an error, please contact the site administrator.&#x27;}
-                    &lt;/p&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/MainGridLayout&gt;
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">MainGridLayout</span>&gt;</span>
 
-&lt;style&gt;
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+    <span class="hljs-keyword">@keyframes</span> float {
+        <span class="hljs-number">0%</span>, <span class="hljs-number">100%</span> { <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(<span class="hljs-number">0px</span>); }
+        <span class="hljs-number">50%</span> { <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(-<span class="hljs-number">10px</span>); }
     }
     
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
+    <span class="hljs-keyword">@keyframes</span> fadeInUp {
+        <span class="hljs-selector-tag">from</span> {
+            <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
+            <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(<span class="hljs-number">30px</span>);
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        <span class="hljs-selector-tag">to</span> {
+            <span class="hljs-attribute">opacity</span>: <span class="hljs-number">1</span>;
+            <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(<span class="hljs-number">0</span>);
         }
     }
     
-    .animate-float {
-        animation: float 3s ease-in-out infinite;
+    <span class="hljs-selector-class">.animate-float</span> {
+        <span class="hljs-attribute">animation</span>: float <span class="hljs-number">3s</span> ease-in-out infinite;
     }
     
-    .animate-fade-in-up {
-        animation: fadeInUp 0.6s ease-out forwards;
+    <span class="hljs-selector-class">.animate-fade-in-up</span> {
+        <span class="hljs-attribute">animation</span>: fadeInUp <span class="hljs-number">0.6s</span> ease-out forwards;
     }
     
-    .animate-delay-100 {
-        animation-delay: 0.1s;
+    <span class="hljs-selector-class">.animate-delay-100</span> {
+        <span class="hljs-attribute">animation-delay</span>: <span class="hljs-number">0.1s</span>;
     }
     
-    .animate-delay-200 {
-        animation-delay: 0.2s;
+    <span class="hljs-selector-class">.animate-delay-200</span> {
+        <span class="hljs-attribute">animation-delay</span>: <span class="hljs-number">0.2s</span>;
     }
     
-    .animate-delay-300 {
-        animation-delay: 0.3s;
+    <span class="hljs-selector-class">.animate-delay-300</span> {
+        <span class="hljs-attribute">animation-delay</span>: <span class="hljs-number">0.3s</span>;
     }
     
-    .animate-delay-400 {
-        animation-delay: 0.4s;
+    <span class="hljs-selector-class">.animate-delay-400</span> {
+        <span class="hljs-attribute">animation-delay</span>: <span class="hljs-number">0.4s</span>;
     }
-&lt;/style&gt;
-</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+</code></pre></div>
 <h3 id="单语言404-astro">单语言404.astro</h3>
 <p>此方法直接在<strong>src/pages</strong>目录下创建404.astro即可<br/>
 <!-- -->由于我没有语言的404，这里附上二叉树树的404界面<br/>
-<!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.jpg" alt="2x-404" loading="lazy"/></p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">---
+<!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.jpg" alt="2x-404" loading="lazy" decoding="async"/></p>
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro">---
 import Layout from &quot;@/layouts/Layout.astro&quot;;
 import MainGridLayout from &quot;@/layouts/MainGridLayout.astro&quot;;
 import { Icon } from &quot;astro-icon/components&quot;;
 import { siteConfig } from &quot;@/config&quot;;
 ---
 
-&lt;Layout title=&quot;页面未找到&quot;&gt;
-        &lt;MainGridLayout&gt;
-                &lt;div class=&quot;flex flex-col items-center justify-center min-h-[60vh] text-center px-4&quot;&gt;
-                        &lt;!-- 404 图标 --&gt;
-                        &lt;div class=&quot;mb-8&quot;&gt;
-                                &lt;div class=&quot;relative&quot;&gt;
-                                        &lt;div class=&quot;text-8xl md:text-9xl font-bold text-[var(--primary)] opacity-20&quot;&gt;
+<span class="hljs-tag">&lt;<span class="hljs-name">Layout</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;页面未找到&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">MainGridLayout</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex flex-col items-center justify-center min-h-[60vh] text-center px-4&quot;</span>&gt;</span>
+                        <span class="hljs-comment">&lt;!-- 404 图标 --&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;mb-8&quot;</span>&gt;</span>
+                                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;relative&quot;</span>&gt;</span>
+                                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-8xl md:text-9xl font-bold text-[var(--primary)] opacity-20&quot;</span>&gt;</span>
                                                 404
-                                        &lt;/div&gt;
-                                        &lt;div class=&quot;absolute inset-0 flex items-center justify-center&quot;&gt;
-                                                &lt;Icon name=&quot;fa6-solid:face-sad-tear&quot; class=&quot;text-6xl md:text-7xl text-[var(--primary)]&quot; /&gt;
-                                        &lt;/div&gt;
-                                &lt;/div&gt;
-                        &lt;/div&gt;
+                                        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;absolute inset-0 flex items-center justify-center&quot;</span>&gt;</span>
+                                                <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:face-sad-tear&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-6xl md:text-7xl text-[var(--primary)]&quot;</span> /&gt;</span>
+                                        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-                        &lt;!-- 错误信息 --&gt;
-                        &lt;div class=&quot;card-base p-8 max-w-md mx-auto mb-8&quot;&gt;
-                                &lt;h1 class=&quot;text-2xl md:text-3xl font-bold text-90 mb-4&quot;&gt;
+                        <span class="hljs-comment">&lt;!-- 错误信息 --&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card-base p-8 max-w-md mx-auto mb-8&quot;</span>&gt;</span>
+                                <span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-2xl md:text-3xl font-bold text-90 mb-4&quot;</span>&gt;</span>
                                         页面走丢了
-                                &lt;/h1&gt;
-                                &lt;p class=&quot;text-75 mb-6 leading-relaxed&quot;&gt;
+                                <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+                                <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-75 mb-6 leading-relaxed&quot;</span>&gt;</span>
                                         抱歉，您访问的页面不存在或已被移动。
-                                        &lt;br&gt;
+                                        <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
                                         请检查URL是否正确，或者返回首页继续浏览。
-                                &lt;/p&gt;
+                                <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
 
-                                &lt;!-- 导航按钮 --&gt;
-                                &lt;div class=&quot;flex flex-col sm:flex-row gap-3 justify-center&quot;&gt;
-                                        &lt;a href=&quot;/&quot; class=&quot;btn-regular-dark px-6 py-3 rounded-lg text-white font-medium&quot;&gt;
-                                                &lt;Icon name=&quot;fa6-solid:house&quot; class=&quot;mr-2&quot; /&gt;
+                                <span class="hljs-comment">&lt;!-- 导航按钮 --&gt;</span>
+                                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex flex-col sm:flex-row gap-3 justify-center&quot;</span>&gt;</span>
+                                        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-regular-dark px-6 py-3 rounded-lg text-white font-medium&quot;</span>&gt;</span>
+                                                <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:house&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;mr-2&quot;</span> /&gt;</span>
                                                 返回首页
-                                        &lt;/a&gt;
-                                        &lt;a href=&quot;/archive/&quot; class=&quot;btn-regular px-6 py-3 rounded-lg font-medium&quot;&gt;
-                                                &lt;Icon name=&quot;fa6-solid:box-archive&quot; class=&quot;mr-2&quot; /&gt;
+                                        <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+                                        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/archive/&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn-regular px-6 py-3 rounded-lg font-medium&quot;</span>&gt;</span>
+                                                <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:box-archive&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;mr-2&quot;</span> /&gt;</span>
                                                 文章归档
-                                        &lt;/a&gt;
-                                &lt;/div&gt;
-                        &lt;/div&gt;
+                                        <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+                                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-                        &lt;!-- 返回提示 --&gt;
-                        &lt;div class=&quot;mt-8 text-50 text-sm&quot;&gt;
-                                &lt;p class=&quot;flex items-center justify-center&quot;&gt;
-                                        &lt;Icon name=&quot;fa6-solid:clock-rotate-left&quot; class=&quot;mr-2&quot; /&gt;
+                        <span class="hljs-comment">&lt;!-- 返回提示 --&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;mt-8 text-50 text-sm&quot;</span>&gt;</span>
+                                <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;flex items-center justify-center&quot;</span>&gt;</span>
+                                        <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;fa6-solid:clock-rotate-left&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;mr-2&quot;</span> /&gt;</span>
                                         您也可以使用浏览器的后退按钮返回上一页
-                                &lt;/p&gt;
-                        &lt;/div&gt;
-                &lt;/div&gt;
-        &lt;/MainGridLayout&gt;
-&lt;/Layout&gt;
-</code></pre></div>]]></content:encoded>
+                                <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+                        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">MainGridLayout</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Layout</span>&gt;</span>
+</code></pre></div></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/fuwari-404.jpg" medium="image"/>
   </item>
   <item>
     <title>BA周年庆直接9个彩</title>
     <link>https://xc-lr.cn/posts/ba2th/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/ba2th/</guid>
+    <category>daily</category>
     <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
     <description>两个亚子还有礼服日奈</description>
     <content:encoded><![CDATA[<div class="markdown"><p>快哉快哉
-<img src="https://xc-lr.cn/react-blog/images/yazi.jpg" alt="亚子" loading="lazy"/><br/>
-<img src="https://xc-lr.cn/react-blog/images/rinai.jpg" alt="日奈" loading="lazy"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/yazi.webp" alt="亚子" loading="lazy" decoding="async"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/rinai.webp" alt="日奈" loading="lazy" decoding="async"/><br/>
 <!-- -->还有我的支付宝和QQ主题😋<br/>
-<img src="https://xc-lr.cn/react-blog/images/ba-alipay.jpg" alt="支付宝" loading="lazy"/><br/>
-<img src="https://xc-lr.cn/react-blog/images/ba-qq.jpg" alt="QQ" loading="lazy"/></p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/ba3cai.jpg" medium="image"/>
+<img src="https://xc-lr.cn/react-blog/images/ba-alipay.webp" alt="支付宝" loading="lazy" decoding="async"/><br/>
+<img src="https://xc-lr.cn/react-blog/images/ba-qq.webp" alt="QQ" loading="lazy" decoding="async"/></p></div>]]></content:encoded>
+    <media:content url="https://xc-lr.cn/react-blog/images/ba3cai.webp" medium="image"/>
   </item>
   <item>
     <title>fuwari接入评论功能</title>
     <link>https://xc-lr.cn/posts/comment/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/comment/</guid>
+    <category>tech</category>
     <pubDate>Mon, 04 Aug 2025 00:00:00 GMT</pubDate>
     <description>让你的fuwari接入评论，并让它在文章末显示出</description>
-    <content:encoded><![CDATA[<div class="markdown"><h1>Giscus</h1>
+    <content:encoded><![CDATA[<div class="markdown"><h2 class="markdown-h1" id="giscus">Giscus</h2>
 <p>想要接入评论，肯定需要一个三方平台 <a href="https://giscus.app/zh-CN" target="_blank" rel="noreferrer noopener">Giscus</a>
 Giscus就是一个非常合适的平台</p>
-<h1>配置Giscus</h1>
+<h2 class="markdown-h1" id="配置giscus">配置Giscus</h2>
 <p>首先去github创建一个存储库，<strong>一定要是公开库</strong>
 然后在仓库设置中<strong>启用</strong><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">Discussion</code>功能<br/>
 <!-- -->前往<a href="https://giscus.app/zh-CN" target="_blank" rel="noreferrer noopener">https://giscus.app/zh-CN</a>
@@ -1242,12 +1253,12 @@ Giscus就是一个非常合适的平台</p>
 <!-- -->特性个人建议勾选<strong>1 3 4</strong><br/>
 <!-- -->主题默认即可，也可以尝试官方的其它主题<br/>
 <!-- -->最后将给出的JS复制</p>
-<h1>配置fuwari</h1>
+<h2 class="markdown-h1" id="配置fuwari">配置fuwari</h2>
 <p>在<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">src/pages/posts/</code>目录下找到<code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">[...slug].astro</code>，在它的<strong>135行</strong>插入</p>
-<pre class="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto"><code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">&lt;div id=&quot;giscus-comments&quot; style=&quot;margin-top: 3rem;&quot;&gt;
+<div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">astro</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-astro"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;giscus-comments&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin-top: 3rem;&quot;</span>&gt;</span>
   你的JS
-&lt;/div&gt;
-</code></pre>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre></div>
 <p>最后本地测试一下，没问题就可以部署到服务器了</p></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/comment.jpg" medium="image"/>
   </item>
@@ -1255,6 +1266,7 @@ Giscus就是一个非常合适的平台</p>
     <title>edgeone加速worker</title>
     <link>https://xc-lr.cn/posts/edgeone-worker/</link>
     <guid isPermaLink="true">https://xc-lr.cn/posts/edgeone-worker/</guid>
+    <category>tech</category>
     <pubDate>Tue, 29 Jul 2025 00:00:00 GMT</pubDate>
     <description>如何使用edgeone加速cf worker</description>
     <content:encoded><![CDATA[<div class="markdown"><p>有人问：主包主包cloudflare worker访问速度太慢了，有没有更强势的访问速度呢？</p>
@@ -1263,7 +1275,7 @@ Giscus就是一个非常合适的平台</p>
 <p>回到我们的cloudflare，选择你想加速的worker，添加自定义域，<strong>选择路由</strong>，选择你要加速的根域名，在你想要加速的子域+eo（方便区分），如我要加速www.91sssvip.top，就填wwweo.91sssvip.top/*，在去cloudflare添加dns解析A记录随便指向一个IP，但<strong>一定要开小黄云</strong>，保存回到edgeone</p>
 <p>添加加速域名，我就填www，v6随便，我个人选择关闭，源站就写刚刚路由的域名协议https即可，<strong>回源Host头一定要选使用源站域名</strong>，最后保存就好啦</p>
 <p>END</p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/aluona.jpg" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/aluona.webp" medium="image"/>
   </item>
   </channel>
 </rss>

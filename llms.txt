@@ -9,9 +9,9 @@
 
 - [首页](https://xc-lr.cn/): 个人资料与最新文章
 - [文章列表](https://xc-lr.cn/posts/): 全部技术文章
-- [归档](https://xc-lr.cn/archive): 按年份归档
-- [友链](https://xc-lr.cn/friends): 友情链接与申请方式
-- [关于](https://xc-lr.cn/about): 关于作者
+- [归档](https://xc-lr.cn/archive/): 按年份归档
+- [友链](https://xc-lr.cn/friends/): 友情链接与申请方式
+- [关于](https://xc-lr.cn/about/): 关于作者
 
 ## 文章
 
