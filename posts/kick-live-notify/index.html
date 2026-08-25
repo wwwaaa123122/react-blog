@@ -39,9 +39,9 @@
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     
-    <script type="module" crossorigin src="/react-blog/assets/index-kWrrnlxn.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-DF-dBSeq.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
-    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-DCXAJGa2.css">
+    <link rel="stylesheet" crossorigin href="/react-blog/assets/index-BTfRX6GL.css">
   <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知 · Starlr Blog</title>
 <meta name="description" content="基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知">
 <link rel="canonical" href="https://xc-lr.cn/posts/kick-live-notify/">
@@ -94,9 +94,7 @@
 <li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 存在且有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code> 字段，说明正在直播</li>
 <li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">null</code> 或没有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code>，说明未开播</li>
 </ul>
-<p>:::warning
-这是 Kick 的私有 API，没有官方文档，随时可能变动。目前不需要认证，但未来可能需要。
-:::</p>
+<div class="admonition admonition-warning" role="note"><div class="admonition-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="admonition-content"><p class="admonition-title">警告</p><div class="admonition-body">这是 Kick 的私有 API，没有官方文档，随时可能变动。目前不需要认证，但未来可能需要。</div></div></div>
 <h2 class="markdown-h1" id="napcat-onebot-11-简介">NapCat (OneBot 11) 简介</h2>
 <p>NapCat 是一个基于 QQNT 的 Bot 框架，实现了 OneBot 11 协议。通过它可以：</p>
 <ul>

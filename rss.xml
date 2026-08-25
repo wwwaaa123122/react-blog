@@ -6,7 +6,7 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Mon, 24 Aug 2026 00:41:40 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 25 Aug 2026 07:10:30 GMT</lastBuildDate>
   <item>
     <title>archlinux使用体验</title>
     <link>https://xc-lr.cn/posts/archlinux/</link>
@@ -23,9 +23,7 @@
 <p>windows装双系统算是简单的了，进PE分一个100G的盘基本就够archlinux的日常使用了。</p>
 <h3 id="linux">linux</h3>
 <p>linux想要安装双系统，分盘时给我的感觉非常麻烦，他不能像windows一样进PE（大部分pe都是windows内核，所以对ext4分区不太友好，显示错误）。经过我一个多小时各种尝试，最终选择整盘安装😅。这玩意用linux应用分区又提示不支持，我整盘安装是因为这个盘就是给linux的原debian没什么重要数据。</p>
-<p>:::warning<br/>
-<!-- -->数据无价，在格式化硬盘前请先确认已备份重要数据<br/>
-<!-- -->:::</p>
+<div class="admonition admonition-warning" role="note"><div class="admonition-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="admonition-content"><p class="admonition-title">警告</p><div class="admonition-body">数据无价，在格式化硬盘前请先确认已备份重要数据</div></div></div>
 <h2 id="live系统安装">live系统安装</h2>
 <p>按自己主板方法进入live系统后，如果你是使用网线，可以一步到位直接使用archinstall命令。对于需使用无线网络的，使用iwctl。具体安装可以去B站自己搜索，这里给一个链接<a href="https://b23.tv/qo9xusQ" target="_blank" rel="noreferrer noopener">https://b23.tv/qo9xusQ</a></p>
 <h2 class="markdown-h1" id="换源">换源</h2>
@@ -79,9 +77,7 @@
 <li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 存在且有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code> 字段，说明正在直播</li>
 <li>如果 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">livestream</code> 为 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">null</code> 或没有 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">id</code>，说明未开播</li>
 </ul>
-<p>:::warning
-这是 Kick 的私有 API，没有官方文档，随时可能变动。目前不需要认证，但未来可能需要。
-:::</p>
+<div class="admonition admonition-warning" role="note"><div class="admonition-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="admonition-content"><p class="admonition-title">警告</p><div class="admonition-body">这是 Kick 的私有 API，没有官方文档，随时可能变动。目前不需要认证，但未来可能需要。</div></div></div>
 <h2 class="markdown-h1" id="napcat-onebot-11-简介">NapCat (OneBot 11) 简介</h2>
 <p>NapCat 是一个基于 QQNT 的 Bot 框架，实现了 OneBot 11 协议。通过它可以：</p>
 <ul>
@@ -273,9 +269,7 @@ python3 kick_notify.py
 <li>点击「生成域名」</li>
 <li>成功后会返回一个类似 <code class="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">mc-abc123.zako.mom</code> 的域名和一个 <strong>16位授权码</strong></li>
 </ol>
-<p>:::warning
-授权码很重要！修改和删除记录时都需要它，丢了就只能等记录过期了
-:::</p>
+<div class="admonition admonition-warning" role="note"><div class="admonition-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="admonition-content"><p class="admonition-title">警告</p><div class="admonition-body">授权码很重要！修改和删除记录时都需要它，丢了就只能等记录过期了</div></div></div>
 <h2 id="管理域名">管理域名</h2>
 <p>页面下方有管理区域，可以对已创建的域名进行修改或删除：</p>
 <ul>
@@ -790,9 +784,7 @@ EOF
     <category>tech</category>
     <pubDate>Sat, 25 Oct 2025 00:00:00 GMT</pubDate>
     <description>星辰旅人Bot使用文档</description>
-    <content:encoded><![CDATA[<div class="markdown"><p>:::warning
-变量部分均使用{}包裹，多选项用/分隔
-:::</p>
+    <content:encoded><![CDATA[<div class="markdown"><div class="admonition admonition-warning" role="note"><div class="admonition-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="admonition-content"><p class="admonition-title">警告</p><div class="admonition-body">变量部分均使用{}包裹，多选项用/分隔</div></div></div>
 <h2 class="markdown-h1" id="llm">LLM</h2>
 <h2 id="deepseek">Deepseek</h2>
 <p>切换命令：<strong>#Deepseek</strong>
@@ -986,9 +978,7 @@ EOF
 <p>保存了，还需要安装一个pnpm包，不用管是什么，能帮我们转换成链接就是的了</p>
 <div class="my-4 rounded-[var(--radius)] border border-border overflow-hidden"><div class="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border"><span class="font-medium">bash</span><button class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-3" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span class="text-[11px]">复制</span></button></div><pre class="!m-0 !border-0 !rounded-none overflow-x-auto" tabindex="0"><code class="language-bash">pnpm add node-html-parser
 </code></pre></div>
-<p>:::warning
-在推送到仓库时，你可能会遇到warning: in the working copy of &#x27;pnpm-lock.yaml&#x27;, LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可
-:::</p></div>]]></content:encoded>
+<div class="admonition admonition-warning" role="note"><div class="admonition-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert size-[18px]" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="admonition-content"><p class="admonition-title">警告</p><div class="admonition-body">在推送到仓库时，你可能会遇到warning: in the working copy of &#x27;pnpm-lock.yaml&#x27;, LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可</div></div></div></div>]]></content:encoded>
     <media:content url="https://xc-lr.cn/react-blog/images/fuwari-rss-fix.jpg" medium="image"/>
   </item>
   <item>
