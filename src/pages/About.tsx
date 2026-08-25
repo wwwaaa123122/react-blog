@@ -74,7 +74,7 @@ export default function About() {
             <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="github" size={14} /> GitHub</a>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
-            <a href="mailto:i@mcxclr.top"><Mail className="size-3.5" /> 邮箱</a>
+            <a href="mailto:wwwaaa123122@outlook.com"><Mail className="size-3.5" /> 邮箱</a>
           </Button>
         </div>
 
