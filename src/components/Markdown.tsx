@@ -5,7 +5,18 @@ import rehypeHighlight from "rehype-highlight";
 import type { Components } from "react-markdown";
 import { rewriteImagePaths } from "../lib/posts";
 import { assetUrl } from "../lib/base";
-import { Check, Copy } from "lucide-react";
+import remarkAdmonitions from "../lib/remark-admonition";
+import {
+  Check,
+  CircleCheck,
+  CircleX,
+  Copy,
+  Info,
+  Lightbulb,
+  OctagonAlert,
+  TriangleAlert,
+  type LucideIcon,
+} from "lucide-react";
 
 export function slugify(text: string): string {
   return text.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
@@ -114,6 +125,57 @@ function CodeBlock({
   );
 }
 
+// ===== 提示卡片（:::warning 等 admonition 容器） =====
+// 颜色由 global.css 里的 .admonition / .admonition-<type> 按主题提供
+
+type AdmonitionType =
+  | "warning"
+  | "danger"
+  | "caution"
+  | "tip"
+  | "success"
+  | "error"
+  | "note"
+  | "info";
+
+const ADMONITION_META: Record<
+  AdmonitionType,
+  { icon: LucideIcon; defaultTitle: string }
+> = {
+  warning: { icon: TriangleAlert, defaultTitle: "警告" },
+  danger: { icon: OctagonAlert, defaultTitle: "危险" },
+  caution: { icon: OctagonAlert, defaultTitle: "小心" },
+  tip: { icon: Lightbulb, defaultTitle: "提示" },
+  success: { icon: CircleCheck, defaultTitle: "成功" },
+  error: { icon: CircleX, defaultTitle: "错误" },
+  note: { icon: Info, defaultTitle: "注意" },
+  info: { icon: Info, defaultTitle: "信息" },
+};
+
+function Admonition({
+  type,
+  title,
+  children,
+}: {
+  type: string;
+  title?: string;
+  children: ReactNode;
+}) {
+  const meta = ADMONITION_META[type as AdmonitionType] ?? ADMONITION_META.warning;
+  const Icon = meta.icon;
+  return (
+    <div className={`admonition admonition-${type}`} role="note">
+      <div className="admonition-icon" aria-hidden="true">
+        <Icon className="size-[18px]" strokeWidth={2.2} />
+      </div>
+      <div className="admonition-content">
+        <p className="admonition-title">{title || meta.defaultTitle}</p>
+        <div className="admonition-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function Markdown({ content }: { content: string }) {
   // 每次渲染新建 slugger：同一文档内标题 id 唯一（重复标题追加 -1/-2）
   const slug = createSlugger();
@@ -149,6 +211,34 @@ export default function Markdown({ content }: { content: string }) {
         </a>
       );
     },
+    // remarkAdmonitions 生成的提示卡片：<div class="admonition admonition-warning">
+    // 注意：不要解构 key —— React 会把 key 从 props 中摘走，组件内拿不到
+    div: ({ node, className, children, ...props }: any) => {
+      const cls =
+        typeof className === "string"
+          ? className
+          : Array.isArray(className)
+            ? className.join(" ")
+            : "";
+      if (/\badmonition\b/.test(cls)) {
+        const type = cls.match(/admonition-([a-z]+)/)?.[1] ?? "warning";
+        const title =
+          typeof node?.properties?.["data-admonition-title"] === "string"
+            ? node.properties["data-admonition-title"]
+            : "";
+        return (
+          <Admonition type={type} title={title}>
+            {children}
+          </Admonition>
+        );
+      }
+      // 普通 div 原样透传（不把 hast node 传给 DOM）
+      return (
+        <div className={className} {...props}>
+          {children}
+        </div>
+      );
+    },
     img: ({ src, alt }: any) => (
       <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" decoding="async" />
     ),
@@ -166,7 +256,7 @@ export default function Markdown({ content }: { content: string }) {
 
   return (
     <div className="markdown">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeHighlight, { subset: HIGHLIGHT_SUBSET, aliases: HIGHLIGHT_ALIASES }]]} components={components}>
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkAdmonitions]} rehypePlugins={[[rehypeHighlight, { subset: HIGHLIGHT_SUBSET, aliases: HIGHLIGHT_ALIASES }]]} components={components}>
         {rewriteImagePaths(content)}
       </ReactMarkdown>
     </div>

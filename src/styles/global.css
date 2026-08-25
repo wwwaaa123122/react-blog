@@ -46,6 +46,87 @@
   color: var(--muted-foreground);
 }
 .markdown blockquote p { margin: 0.3em 0; }
+
+/* ===== 提示卡片（:::warning 等 admonition 容器） ===== */
+:root {
+  --admon-warning: #d97706;
+  --admon-danger: #dc2626;
+  --admon-caution: #ea580c;
+  --admon-tip: #059669;
+  --admon-success: #16a34a;
+  --admon-error: #e11d48;
+  --admon-note: #64748b;
+  --admon-info: #2563eb;
+}
+.dark {
+  --admon-warning: #fbbf24;
+  --admon-danger: #f87171;
+  --admon-caution: #fb923c;
+  --admon-tip: #34d399;
+  --admon-success: #4ade80;
+  --admon-error: #fb7185;
+  --admon-note: #94a3b8;
+  --admon-info: #60a5fa;
+}
+/* 基础样式即 warning（最常用），其他类型只覆盖 --admon-accent，
+   柔和底色 / 边框 / 图标底 / 文字色都由 accent 通过 color-mix 推导，
+   明暗主题自动适配（--card / --foreground 随主题切换） */
+.admonition {
+  --admon-accent: var(--admon-warning);
+  --admon-bg: color-mix(in srgb, var(--admon-accent) 7%, var(--card));
+  --admon-border: color-mix(in srgb, var(--admon-accent) 26%, transparent);
+  --admon-icon-bg: color-mix(in srgb, var(--admon-accent) 14%, transparent);
+  --admon-text: color-mix(in srgb, var(--admon-accent) 58%, var(--foreground));
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.7em 0.9em;
+  align-items: start;
+  margin: 1.5em 0;
+  padding: 1em 1.1em;
+  border: 1px solid var(--admon-border);
+  border-left: 3px solid var(--admon-accent);
+  border-radius: var(--radius);
+  background: var(--admon-bg);
+  color: var(--admon-text);
+  font-size: 0.95em;
+  line-height: 1.7;
+  overflow: hidden;
+}
+.admonition-danger { --admon-accent: var(--admon-danger); }
+.admonition-caution { --admon-accent: var(--admon-caution); }
+.admonition-tip { --admon-accent: var(--admon-tip); }
+.admonition-success { --admon-accent: var(--admon-success); }
+.admonition-error { --admon-accent: var(--admon-error); }
+.admonition-note { --admon-accent: var(--admon-note); }
+.admonition-info { --admon-accent: var(--admon-info); }
+
+.admonition-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-top: 1px;
+  border-radius: 9px;
+  background: var(--admon-icon-bg);
+  color: var(--admon-accent);
+  flex-shrink: 0;
+}
+.admonition-content { min-width: 0; }
+.markdown .admonition-title {
+  margin: 0.1em 0 0.35em;
+  font-size: 0.92em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--admon-accent);
+}
+.markdown .admonition-body p { margin: 0.4em 0; }
+.markdown .admonition-body > :first-child { margin-top: 0; }
+.markdown .admonition-body > :last-child { margin-bottom: 0; }
+.markdown .admonition-body ul,
+.markdown .admonition-body ol { margin: 0.5em 0; }
+.markdown .admonition-body pre { margin: 0.6em 0; }
 .markdown ul, .markdown ol { margin: 0.9em 0; padding-left: 1.5em; }
 .markdown li { margin: 0.3em 0; }
 .markdown li::marker { color: var(--primary); }
