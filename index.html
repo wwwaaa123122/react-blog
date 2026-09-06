@@ -7,10 +7,8 @@
       (function () {
         try {
           var saved = localStorage.getItem("theme");
-          var dark =
-            saved === "dark" ||
-            (saved !== "light" &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          // 默认深色：仅当用户明确保存过 "light" 时才用浅色
+          var dark = saved !== "light";
           document.documentElement.classList.toggle("dark", dark);
           // 更新不带 media 限定的 theme-color meta（取最后一个）
           var metas = document.querySelectorAll('meta[name="theme-color"]');
@@ -34,12 +32,12 @@
          旧版 iOS Safari 也能按系统明暗自动取色 -->
     <meta name="theme-color" content="#f8f9fc" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0b0e14" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f8f9fc" />
+    <meta name="theme-color" content="#0b0e14" />
     
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     
-    <script type="module" crossorigin src="/react-blog/assets/index-CYOUg3w5.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-L0e_0t6_.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
     <link rel="stylesheet" crossorigin href="/react-blog/assets/index-BTfRX6GL.css">
   <title>Starlr Blog - 爱你所爱</title>
