@@ -26,6 +26,15 @@
       "tags": ["Blog"],
       "weight": 8,
       "enabled": true
+    },
+    {
+      "title": "TNTのBLOG",
+      "imgurl": "https://q.qlogo.cn/g?b=qq&nk=3589326078&s=640",
+      "desc": "萝卜青菜，各有所爱~",
+      "siteurl": "https://www.275.pub",
+      "tags": ["Blog"],
+      "weight": 7,
+      "enabled": true
     }
   ],
   "siteInfo": {

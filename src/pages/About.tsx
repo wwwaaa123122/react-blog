@@ -6,7 +6,7 @@ import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { jsonLd, personJsonLd } from "../lib/seo";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 const ADULT_DATE = new Date("2030-07-20T00:00:00").getTime();
 
@@ -49,7 +49,6 @@ export default function About() {
         <div className="flex items-center gap-4 mb-6">
           <Avatar size="lg" className="size-14">
             <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
-            <AvatarFallback>{profileConfig.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
             <h2 className="text-lg font-bold">{profileConfig.name}</h2>

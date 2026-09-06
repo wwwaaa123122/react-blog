@@ -36,16 +36,9 @@ function CopyIconButton({ text, label = "复制" }: { text: string; label?: stri
   );
 }
 
-// 友链头像：图片加载失败时回退为首字母占位（外部头像源可能失效）
+// 友链头像：直接展示图片，不使用占位符
 function FriendAvatar({ title, imgurl }: { title: string; imgurl?: string }) {
-  const [failed, setFailed] = useState(false);
-  if (!imgurl || failed) {
-    return (
-      <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/20 to-accent text-lg font-bold text-primary">
-        {title.charAt(0)}
-      </span>
-    );
-  }
+  if (!imgurl) return null;
   return (
     <img
       className="size-12 shrink-0 rounded-xl border border-border object-cover transition-transform duration-200 group-hover:scale-105"
@@ -53,7 +46,6 @@ function FriendAvatar({ title, imgurl }: { title: string; imgurl?: string }) {
       alt={title}
       loading="lazy"
       decoding="async"
-      onError={() => setFailed(true)}
     />
   );
 }
