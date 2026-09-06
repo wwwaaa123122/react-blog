@@ -54,7 +54,7 @@ jobs:
           FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR || '.' }}
         timeout-minutes: 15
         run: |
-          lftp --env-password -u "$FTP_USERNAME" -p "$FTP_PORT" "$FTP_HOST" <<'EOF'
+          lftp --env-password -u "$FTP_USERNAME" -p "$FTP_PORT" "$FTP_HOST" <<EOF
           set ftp:ssl-allow no
           set ssl:verify-certificate no
           set net:timeout 30
