@@ -104,10 +104,10 @@ export default function PostDetail() {
   const cover = post.image ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/")) : undefined;
   const currentYear = new Date().getFullYear();
 
-  // 上一篇 = 更早发布的文章，下一篇 = 更新的文章（列表按发布时间倒序）
+  // 上一篇 = 更新的文章（后发），下一篇 = 更早的文章（先发）；列表按发布时间倒序
   const currentIdx = publishedPosts.findIndex((p) => p.slug === slug);
-  const prevPost = currentIdx < publishedPosts.length - 1 ? publishedPosts[currentIdx + 1] : null;
-  const nextPost = currentIdx > 0 ? publishedPosts[currentIdx - 1] : null;
+  const prevPost = currentIdx > 0 ? publishedPosts[currentIdx - 1] : null;
+  const nextPost = currentIdx < publishedPosts.length - 1 ? publishedPosts[currentIdx + 1] : null;
 
   return (
     <>
