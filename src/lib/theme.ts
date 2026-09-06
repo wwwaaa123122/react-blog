@@ -15,7 +15,7 @@ export function resolveTheme(theme: Theme): ResolvedTheme {
   return theme === "system" ? systemTheme() : theme;
 }
 
-/** 读取用户明确保存的主题；未保存或值非法时返回 null（视为跟随系统） */
+/** 读取用户明确保存的主题；未保存或值非法时返回 null（视为默认深色） */
 export function getStoredTheme(): Theme | null {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -28,9 +28,9 @@ export function getStoredTheme(): Theme | null {
   return null;
 }
 
-/** 初始主题：默认跟随系统，仅在用户明确选择过时用其选择 */
+/** 初始主题：默认深色，仅在用户明确选择过时用其选择 */
 export function getInitialTheme(): Theme {
-  return getStoredTheme() ?? "system";
+  return getStoredTheme() ?? "dark";
 }
 
 // shadcn/ui 深色模式约定：在 <html> 上切换 .dark class
@@ -59,7 +59,7 @@ export function applyTheme(
     meta.setAttribute("content", resolved === "dark" ? "#0b0e14" : "#f8f9fc");
   }
   // 仅在用户明确选择时写入 localStorage；跟随系统时清除保存值，
-  // 这样"默认跟随系统"不会因首次访问把系统主题写死成用户选择。
+  // 这样"默认深色"不会因首次访问把默认主题写死成用户选择。
   if (!persist) return;
   try {
     if (theme === "system") {

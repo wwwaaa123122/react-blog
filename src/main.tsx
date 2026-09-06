@@ -8,7 +8,7 @@ import { applyTheme, getInitialTheme } from "./lib/theme";
 import { routerBase } from "./lib/base";
 
 // 首屏前应用主题，避免闪烁（<head> 内联脚本已提前应用；此处不写入 localStorage，
-// 以免把系统主题写死成用户选择，破坏"默认跟随系统"）
+// 以免把默认主题写死成用户选择，破坏"默认深色"）
 applyTheme(getInitialTheme(), { persist: false });
 
 // Umami 统计分析
