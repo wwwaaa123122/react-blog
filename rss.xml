@@ -6,7 +6,7 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Sun, 06 Sep 2026 13:02:40 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 06 Sep 2026 13:04:30 GMT</lastBuildDate>
   <item>
     <title>使用tunnelbroker隧道与warp获取任意地区IP（朝鲜）</title>
     <link>https://xc-lr.cn/posts/warp-ip-kp/</link>
