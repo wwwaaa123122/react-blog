@@ -60,6 +60,6 @@ jobs:
           set net:timeout 30
           set net:max-retries 2
           set ftp:passive-mode on
-          mirror --reverse --delete --only-newer --no-perms --parallel=4 --verbose "dist/" "$FTP_REMOTE_DIR"
+          mirror --reverse --delete --only-newer --no-perms --parallel=4 --verbose --exclude-glob .user.ini "dist/" "$FTP_REMOTE_DIR"
           quit
           EOF
