@@ -24,7 +24,7 @@ lang: zh_CN
 
 打开[tunnelbroker注册页面](https://tunnelbroker.net/register.php)邮箱使用你的域名，邮箱国家，选择你想要IP地址的国家，也可以后续在个人信息页面修改
 
-创建完账号登录后，打开[个人信息页面](https://tunnelbroker.net/account.php)，这里可以抓包，也可以直接用**[脚本（推荐）](https://greasyfork.org/zh-CN/scripts/541616-tunnelbroker-%E6%9B%B4%E5%A4%9A%E5%9C%B0%E5%8C%BA)**安装插件后再次选择国家，就会出现朝鲜、南极洲等原来不可见地区，脚本需要记住国家代码，f12将原有的国家代码改为你要的国家的代码。
+创建完账号登录后，打开[个人信息页面](https://tunnelbroker.net/account.php)，这里可以抓包，也可以直接用[脚本（推荐）](https://greasyfork.org/zh-CN/scripts/541616-tunnelbroker-%E6%9B%B4%E5%A4%9A%E5%9C%B0%E5%8C%BA)安装插件后再次选择国家，就会出现朝鲜、南极洲等原来不可见地区，脚本需要记住国家代码，f12将原有的国家代码改为你要的国家的代码。
 
 ### 创建隧道
 
