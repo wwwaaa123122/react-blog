@@ -6,7 +6,7 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Sun, 06 Sep 2026 05:39:51 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 06 Sep 2026 05:48:56 GMT</lastBuildDate>
   <item>
     <title>使用tunnelbroker隧道与warp获取任意地区IP（朝鲜）</title>
     <link>https://xc-lr.cn/posts/warp-ip-kp/</link>
@@ -19,7 +19,7 @@
 <h2 id="tunelbroker">tunelbroker</h2>
 <h3 id="注册">注册</h3>
 <p>打开<a href="https://tunnelbroker.net/register.php" target="_blank" rel="noreferrer noopener">tunnelbroker注册页面</a>邮箱使用你的域名，邮箱国家，选择你想要IP地址的国家，也可以后续在个人信息页面修改</p>
-<p>创建完账号登录后，打开<a href="https://tunnelbroker.net/account.php" target="_blank" rel="noreferrer noopener">个人信息页面</a>，这里可以抓包，也可以直接用**<a href="https://greasyfork.org/zh-CN/scripts/541616-tunnelbroker-%E6%9B%B4%E5%A4%9A%E5%9C%B0%E5%8C%BA" target="_blank" rel="noreferrer noopener">脚本（推荐）</a>**安装插件后再次选择国家，就会出现朝鲜、南极洲等原来不可见地区，脚本需要记住国家代码，f12将原有的国家代码改为你要的国家的代码。</p>
+<p>创建完账号登录后，打开<a href="https://tunnelbroker.net/account.php" target="_blank" rel="noreferrer noopener">个人信息页面</a>，这里可以抓包，也可以直接用<a href="https://greasyfork.org/zh-CN/scripts/541616-tunnelbroker-%E6%9B%B4%E5%A4%9A%E5%9C%B0%E5%8C%BA" target="_blank" rel="noreferrer noopener">脚本（推荐）</a>安装插件后再次选择国家，就会出现朝鲜、南极洲等原来不可见地区，脚本需要记住国家代码，f12将原有的国家代码改为你要的国家的代码。</p>
 <h3 id="创建隧道">创建隧道</h3>
 <p>打开创建<a href="https://tunnelbroker.net/new_tunnel.php" target="_blank" rel="noreferrer noopener">隧道页面</a>，IPv4 Endpoint填你的公网IPv4 地址，下面选择一个隧道服务器，可以直接选择你服务器附近地区的隧道服务器，也可以全部 ping 一遍，选择延迟最低的。推荐使用/48 作为服务器IPv6 段，但由于新账号的原因，可能需要 24~72 小时才能分配，就像这样</p>
 <p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-12-45-14-660commicrosoftemmx.png" alt="" loading="lazy" decoding="async"/></p>
