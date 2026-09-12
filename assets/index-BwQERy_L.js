@@ -463,14 +463,15 @@ import { siteConfig } from "@/config";
 `,fm=`---
 title: Fuwari 主题背景图功能教程
 published: 2026-03-29
-description: '为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程'
-image: '/homeground.webp'
-tags: [fuwari]
-category: 'tech'
-draft: false
-lang: 'zh_CN'
+description: 为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程
+image: /homeground.webp
+tags:
+  - fuwari
+category: tech
+draft: true
+lang: zh_CN
+updated: 2026-09-12
 ---
-
 本教程将介绍如何为 Fuwari 主题添加背景图功能，包括高斯模糊效果和用户可调节的模糊程度。
 
 ## 功能特性
@@ -502,6 +503,7 @@ export const siteConfig: SiteConfig = {
 \`\`\`
 
 **参数说明：**
+
 - \`enable\`: 布尔值，控制是否显示背景图
 - \`src\`: 图片路径，以 \`/\` 开头表示相对于 \`/public\` 目录，否则相对于 \`/src\` 目录
 - \`blur\`: 数字，默认模糊程度，范围建议 0-50
@@ -511,6 +513,7 @@ export const siteConfig: SiteConfig = {
 将你的背景图片放到 \`/public\` 目录下（如果路径以 \`/\` 开头）或 \`/src\` 目录下。建议使用高分辨率的图片以获得最佳效果。
 
 **推荐图片规格：**
+
 - 分辨率：至少 1920x1080
 - 格式：WebP（推荐）、JPG、PNG
 - 大小：建议小于 2MB
@@ -554,6 +557,7 @@ background: {
 ## 效果展示
 
 启用背景图后，整个网站将拥有：
+
 - 固定在底层的全屏背景图
 - 可调节的高斯模糊效果
 - 半透明的卡片和导航栏
@@ -810,6 +814,7 @@ loadButtonScript();
 ## 技术实现
 
 功能实现涉及以下文件：
+
 - \`src/types/config.ts\` - 配置类型定义
 - \`src/config.ts\` - 配置项
 - \`src/layouts/Layout.astro\` - 背景图渲染
@@ -838,8 +843,7 @@ A: 当前版本所有页面使用同一背景图，如需不同背景需要修�
 
 ---
 
-希望这个教程能帮助你更好地使用 Fuwari 主题的背景图功能！
-`,pm=`---
+希望这个教程能帮助你更好地使用 Fuwari 主题的背景图功能！`,pm=`---
 title: fuwari修复RSS图片不显示
 published: 2025-09-27
 description: '修复RSS图片链接问题'

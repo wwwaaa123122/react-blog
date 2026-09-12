@@ -20,7 +20,6 @@
 - [Kick 开播提醒：用 Python 监控直播并推送 QQ 通知](https://xc-lr.cn/posts/kick-live-notify/): 基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知
 - [MC免端口域名生成器使用与部署教程](https://xc-lr.cn/posts/mc-srv-worker/): 基于Cloudflare Workers的Minecraft免端口域名服务，让你的MC服务器玩家无需输入端口号
 - [关于本站迁移至Firefly](https://xc-lr.cn/posts/Why-to-Firefly/): 讲述从fuwari迁移至Firefly的一些原因
-- [Fuwari 主题背景图功能教程](https://xc-lr.cn/posts/fuwari-background-image/): 为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程
 - [通过Cloudflare Tunnel使用SSH](https://xc-lr.cn/posts/ssh-by-tunnel/): 通过Cloudflare Tunnel连接无公网IP的服务
 - [Bot使用文档](https://xc-lr.cn/posts/how-use-bot/): 星辰旅人Bot使用文档
 - [fuwari修复RSS图片不显示](https://xc-lr.cn/posts/fuwari-rss/): 修复RSS图片链接问题
