@@ -4,3 +4,17 @@ dist
 .DS_Store
 
 artifacts/
+
+# 本地临时抓取/调试残留：curl 保存的页面、主机面板导出、cookie jar 等
+# ⚠️ 这些文件可能含会话凭据（如 .cj.txt 里的 PHPSESSID/user_token），切勿入库
+.bind.html
+.cj.txt
+.fn-hs.js
+.index.html
+.login.html
+.site.html
+.site2.html
+.stats.html
+.sy.html
+.url.html
+.yxml.html
