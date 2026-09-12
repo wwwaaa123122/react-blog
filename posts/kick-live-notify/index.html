@@ -2,13 +2,19 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <!-- 首屏前同步应用主题，避免刷新时先亮色再暗色的闪烁 -->
+    <!-- 首屏前同步应用主题，避免刷新时先亮色再暗色的闪烁（默认跟随系统） -->
     <script>
       (function () {
         try {
           var saved = localStorage.getItem("theme");
-          // 默认深色：仅当用户明确保存过 "light" 时才用浅色
-          var dark = saved !== "light";
+          // 默认跟随系统：用户明确选择过 light/dark 时优先，否则读系统偏好
+          var dark =
+            saved === "dark"
+              ? true
+              : saved === "light"
+                ? false
+                : !!(window.matchMedia &&
+                     window.matchMedia("(prefers-color-scheme: dark)").matches);
           document.documentElement.classList.toggle("dark", dark);
           // 更新不带 media 限定的 theme-color meta（取最后一个）
           var metas = document.querySelectorAll('meta[name="theme-color"]');
@@ -37,7 +43,7 @@
     <link rel="alternate" type="text/markdown" href="/react-blog/llms.txt" title="llms.txt" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/react-blog/rss.xml" />
     
-    <script type="module" crossorigin src="/react-blog/assets/index-CplEE8Vi.js"></script>
+    <script type="module" crossorigin src="/react-blog/assets/index-BmZl8ftl.js"></script>
     <link rel="modulepreload" crossorigin href="/react-blog/assets/rolldown-runtime-hePW80VL.js">
     <link rel="stylesheet" crossorigin href="/react-blog/assets/index-BUA4sKlW.css">
   <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知 · Starlr Blog</title>
