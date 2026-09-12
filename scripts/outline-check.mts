@@ -7,11 +7,19 @@ const { renderToString } = await import("react-dom/server");
 const { MemoryRouter } = await import("react-router-dom");
 const React = (await import("react")).default;
 const { default: App } = await import("../src/App");
+const { publishedPosts } = await import("../src/lib/posts");
+
+// 文章路由由 publishedPosts 派生，而不是硬编码 slug：
+// 草稿（draft: true）会被自动排除，避免「文章转为草稿」时这里拿不到文章、
+// PostDetail 落到「文章不存在」分支（无 h1）而误报为大纲问题。
+if (publishedPosts.length === 0) {
+  console.error("✗ 未加载到任何已发布文章，文章加载管线可能已损坏");
+  process.exit(1);
+}
 
 const routes = [
   "/", "/posts/", "/archive", "/friends", "/about",
-  "/posts/ssh-by-tunnel/", "/posts/mc-srv-worker/", "/posts/kick-live-notify/",
-  "/posts/comment/", "/posts/fuwari-background-image/", "/posts/how-use-bot/",
+  ...publishedPosts.map((p) => `/posts/${p.slug}/`),
 ];
 
 let issues = 0;
