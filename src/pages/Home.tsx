@@ -93,6 +93,7 @@ export default function Home() {
   const posts = publishedPosts.slice(0, 8);
   const allTags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
+  const totalWords = publishedPosts.reduce((sum, p) => sum + (p.words || 0), 0);
   const reducedMotion = usePrefersReducedMotion();
   // 打字机动画每会话只播一次：老访客直接看到完整文字，不必等待逐字打完
   const [typingPlayed, setTypingPlayed] = useState(true);
@@ -255,7 +256,7 @@ export default function Home() {
                 {siteConfig.subtitle} · 分享技术、生活与热爱
               </p>
               <p className="mt-2 text-xs text-muted-foreground/80">
-                {publishedPosts.length} 篇文章 · {siteConfig.since} 年建站
+                {publishedPosts.length} 篇文章 · 总计 {totalWords.toLocaleString("zh-CN")} 字
               </p>
             </div>
 
