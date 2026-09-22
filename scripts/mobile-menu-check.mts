@@ -13,6 +13,11 @@ import { MemoryRouter } from "react-router-dom";
 import Navbar from "../src/components/Navbar";
 import ThemeToggle from "../src/components/theme-toggle";
 
+// 布局相关的组件在 Node 下渲染需要文章目录（与 scripts/prerender.tsx 同样的注入）
+process.env.POSTS_DIR = process.env.POSTS_DIR || "src/posts";
+(globalThis as unknown as { __BASE_URL__?: string }).__BASE_URL__ = "/";
+(globalThis as unknown as { __POSTS_DIR__?: string }).__POSTS_DIR__ = "src/posts";
+
 const failures: string[] = [];
 const passes: string[] = [];
 
@@ -54,6 +59,44 @@ if (/data-scroll-locked|aria-modal="true"/.test(markup)) {
 } else {
   passes.push("导航菜单渲染输出无模态标记");
 }
+
+// 3) 移动端主交互元素：逐个整页渲染，捕获 Slot/Slottable 之类的结构性错误，
+//    以及"回到顶部"这类必须存在的移动端交互入口
+const pages: Array<[string, () => Promise<{ default: React.ComponentType }>]> = [
+  ["Home", () => import("../src/pages/Home")],
+  ["Posts", () => import("../src/pages/Posts")],
+  ["Components", () => import("../src/pages/Components")],
+];
+for (const [name, load] of pages) {
+  try {
+    const mod = await load();
+    const html = renderToStaticMarkup(
+      React.createElement(MemoryRouter, null, React.createElement(mod.default))
+    );
+    passes.push(`${name}: 整页渲染通过 (${html.length} 字节)`);
+  } catch (e) {
+    failures.push(`${name}: 整页渲染失败 -> ${(e as Error).message}`);
+  }
+}
+
+// 4) 移动端固定元素检查：回到顶部按钮必须存在且不被 Tooltip 包裹（触屏无 hover）
+const backToTopSrc = readFileSync(join(root, "src/components/BackToTop.tsx"), "utf-8");
+if (!/aria-label="回到顶部"/.test(backToTopSrc)) {
+  failures.push("BackToTop: 缺少 aria-label=\"回到顶部\"");
+} else if (/TooltipProvider/.test(backToTopSrc)) {
+  failures.push("BackToTop: 仍被 Tooltip 包裹（触屏长按会弹系统菜单）");
+} else {
+  passes.push("BackToTop: 移动端无 Tooltip、含可访问名称");
+}
+
+// 已知第三方噪音：input-otp 未受控时会同时传 value 与 defaultValue 给内部 input，
+// 渲染 Components 页时 React 会打印受控/非受控警告，这里静默掉。
+const originalWarn = console.warn.bind(console);
+console.warn = (...args: unknown[]): void => {
+  const first = typeof args[0] === "string" ? args[0] : "";
+  if (first.includes("both value and defaultValue props")) return;
+  originalWarn(...args);
+};
 
 console.log("\n=== 移动端菜单布局回归检查 ===");
 for (const p of passes) console.log("  ✓ " + p);

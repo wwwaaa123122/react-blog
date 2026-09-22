@@ -198,23 +198,25 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2.5">
+        {/* 按钮行：统一用 size="lg" 等宽高，避免与相邻按钮高度不一致而看起来"歪" */}
+        <div className="flex flex-wrap items-center gap-2">
           <ShimmerButton
             asChild
-            className="h-9 px-5 text-sm"
+            size="lg"
+            className="px-5"
             background="#111827"
             shimmerColor="#ffffff"
             shimmerDuration="2.5s"
           >
-            <Link to="/posts" data-icon="inline-start" className="inline-flex items-center gap-1.5">
-              <BookOpen className="size-3.5" />
+            <Link to="/posts">
+              <BookOpen data-icon="inline-start" />
               阅读文章
             </Link>
           </ShimmerButton>
           {profileConfig.links.map((link) => (
-            <Button asChild key={link.name} variant="outline" size="sm" className="h-8" data-icon="inline-start">
+            <Button asChild key={link.name} variant="outline" size="lg" data-icon="inline-start">
               <a href={link.url} target="_blank" rel="noreferrer noopener">
-                {link.icon === "mail" ? <Mail className="size-3.5" /> : <Icon name={link.icon} size={14} />}
+                {link.icon === "mail" ? <Mail /> : <Icon name={link.icon} size={16} />}
                 {link.name}
               </a>
             </Button>

@@ -2,14 +2,9 @@ import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
-// 回到顶部：shadcn Button（圆形 + 阴影）+ Tooltip 提示
+// 回到顶部：shadcn Button（圆形 + 主色），移动端更靠边、不遮挡正文。
+// 刻意不套 Tooltip：触屏没有 hover，长按还会弹出系统菜单，反而碍事。
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
 
@@ -21,26 +16,20 @@ export default function BackToTop() {
   }, []);
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon-lg"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            aria-label="回到顶部"
-            className={
-              "fixed bottom-6 right-5 z-40 rounded-full bg-background/90 shadow-lg backdrop-blur transition-all duration-200 " +
-              (visible
-                ? "translate-y-0 opacity-100"
-                : "pointer-events-none translate-y-3 opacity-0")
-            }
-          >
-            <ArrowUp className="size-5" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="left">回到顶部</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Button
+      variant="default"
+      size="icon"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      aria-label="回到顶部"
+      title="回到顶部"
+      className={
+        "fixed bottom-4 right-4 z-40 size-10 rounded-full shadow-lg ring-1 ring-black/5 transition-all duration-200 sm:bottom-6 sm:right-6 sm:size-11 dark:ring-white/10 " +
+        (visible
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-3 opacity-0")
+      }
+    >
+      <ArrowUp className="size-4 sm:size-5" />
+    </Button>
   );
 }
