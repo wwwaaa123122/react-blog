@@ -12,6 +12,7 @@
 | `/friends` | 友链：友链卡片（头像/描述/标签）、本站信息（一键复制）、申请模板、注意事项 |
 | `/about` | 关于我：自我介绍、联系方式、成年倒计时 |
 | `/archive` | 归档：按年份分组 |
+| `/components` | 全组件预览：shadcn/ui 组件库每个组件一格（不在导航中，直接访问） |
 | `*` | 404 页面 |
 
 ### 其它特性
@@ -23,7 +24,27 @@
 - 🖼️ 图片路径自动重写（`../images/` → `/images/`）
 
 ## 技术栈
-React 19 · React Router 7 · react-markdown + remark-gfm + rehype-highlight · Vite 8 · TypeScript
+React 19 · React Router 7 · **shadcn/ui + Tailwind v4 + Radix UI** · react-markdown + remark-gfm + rehype-highlight · Vite 8 · TypeScript
+
+### UI 组件库（shadcn/ui）
+
+界面全部由 shadcn/ui 组件搭建，不使用手写的样式型控件：
+
+- 组件源码统一放在 `src/components/ui/`（rdx-nova 风格，`components.json` 中 `style: radix-nova`），
+  页面只负责组合，不再自己拼装按钮、卡片、表单控件；
+- 主题走 shadcn 官方推荐方案：`next-themes` 的 `ThemeProvider`（`src/components/theme-provider.tsx`）
+  切换 `<html class="dark">`，配色 token 定义在 `src/index.css`（亮/暗双套）；
+- 反馈统一用 Sonner（`toast`），浮层统一用 Dialog/Sheet/Drawer/Popover/Tooltip；
+- 文章正文的提示块（`:::warning` 等）与代码块也使用组件库：`Alert` / `Badge` / `Button` / `Separator`；
+- `/components` 页面把全部组件按 acofork 风格的「编号 + 网格」逐个预览，
+  示例集中在 `src/components/showcase/demos.tsx`。
+
+组件源码来自官方 registry，由脚本拉取并按本项目规则适配（别名 `@/lib/utils`、
+registry 内部导入改写、`IconPlaceholder` 展开为 lucide-react 图标）：
+
+```bash
+node scripts/fetch-shadcn.mjs dialog sheet table tabs   # 拉取 / 更新指定组件
+```
 
 ## 快速开始
 
@@ -38,12 +59,15 @@ pnpm preview    # 预览生产构建
 
 ```
 src/
-├── config/      # 站点、个人资料、友链配置（数据来自 Firefly）
-├── lib/         # 文章加载与 frontmatter 解析、主题
-├── components/  # 布局与通用组件
-├── pages/       # 各路由页面
-├── posts/       # Markdown 文章（从 Firefly 迁移）
-└── styles/      # 全局样式（亮/暗双主题）
+├── config/          # 站点、个人资料、友链配置（数据来自 Firefly）
+├── lib/             # 文章加载与 frontmatter 解析、主题小工具
+├── components/
+│   ├── ui/          # shadcn/ui 组件库（唯一样式来源）
+│   ├── showcase/    # /components 预览页的示例单元
+│   └── ...          # 布局与业务组件（Navbar / Footer / Markdown / Seo …）
+├── pages/           # 各路由页面
+├── posts/           # Markdown 文章（从 Firefly 迁移）
+└── styles/          # 内容排版样式（正文 / 代码高亮）
 ```
 
 ## 截图

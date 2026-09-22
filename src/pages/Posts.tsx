@@ -5,12 +5,64 @@ import { publishedPosts, getAllTags } from "../lib/posts";
 import PostCard from "../components/PostCard";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Pagination, PaginationContent } from "@/components/ui/pagination";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from "@/components/ui/pagination";
+import { Separator } from "@/components/ui/separator";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const PAGE_SIZE = 9;
+
+// 筛选组：标题 + 一组 ToggleGroup 形式的「标签页」（选中态由组件库的 data-state 提供）
+function FilterGroup({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: string[];
+  onChange: (v: string) => void;
+}) {
+  if (options.length === 0) return null;
+  return (
+    <div className="mb-3">
+      <div className="mb-1.5 text-xs text-muted-foreground">{label}</div>
+      <ToggleGroup
+        type="single"
+        variant="outline"
+        size="sm"
+        spacing={1}
+        value={value === "" ? "all" : value}
+        onValueChange={(v) => {
+          // 再次点击已选中项时 v 为空字符串，视为回到「全部」
+          onChange(v === "" || v === "all" ? "" : v);
+        }}
+        className="flex-wrap justify-start"
+      >
+        <ToggleGroupItem value="all" className="rounded-full px-3 text-xs">
+          全部
+        </ToggleGroupItem>
+        {options.map((o) => (
+          <ToggleGroupItem key={o} value={o} className="rounded-full px-3 text-xs">
+            {o}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+    </div>
+  );
+}
 
 export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,7 +74,7 @@ export default function Posts() {
   const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
 
   const tags = getAllTags();
-  const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
+  const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))] as string[];
 
   const filtered = useMemo(() => {
     let list = publishedPosts;
@@ -56,7 +108,6 @@ export default function Posts() {
   };
 
   const selectTag = (t: string) => {
-    // 点击当前激活的标签 = 取消；点击其它 = 切换；点击"全部" = 清空参数
     updateParams((sp) => {
       if (t === tag || !t) sp.delete("tag");
       else sp.set("tag", t);
@@ -102,83 +153,95 @@ export default function Posts() {
         </p>
       </div>
 
-      {/* Search */}
-      <div className="relative mb-4">
-        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          type="search" value={keyword} onChange={(e) => onKeywordChange(e.target.value)}
-          placeholder="搜索文章…" aria-label="搜索文章" className="h-10 pl-9 pr-10 text-sm rounded-xl [&::-webkit-search-cancel-button]:hidden"
+      {/* 搜索：shadcn InputGroup（前缀图标 + 后缀清除按钮） */}
+      <InputGroup className="mb-4 h-10 rounded-xl">
+        <InputGroupAddon align="inline-start">
+          <Search />
+        </InputGroupAddon>
+        <InputGroupInput
+          type="search"
+          value={keyword}
+          onChange={(e) => onKeywordChange(e.target.value)}
+          placeholder="搜索文章…"
+          aria-label="搜索文章"
+          className="text-sm [&::-webkit-search-cancel-button]:hidden"
         />
         {keyword && (
-          <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 size-8" onClick={() => onKeywordChange("")} aria-label="清除搜索">
-            <X className="size-3.5" />
-          </Button>
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton
+              size="icon-xs"
+              onClick={() => onKeywordChange("")}
+              aria-label="清除搜索"
+            >
+              <X />
+            </InputGroupButton>
+          </InputGroupAddon>
         )}
+      </InputGroup>
+
+      <FilterGroup label="分类" value={cat} options={categories} onChange={selectCat} />
+      <div className="mb-6">
+        <FilterGroup label="标签" value={tag} options={tags} onChange={selectTag} />
       </div>
 
-      {/* Categories */}
-      {categories.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 mb-3">
-          <span className="text-xs text-muted-foreground mr-1">分类</span>
-          <Badge variant={cat === "" ? "default" : "secondary"} asChild>
-            <button type="button" className="cursor-pointer" onClick={() => selectCat("")}>全部</button>
-          </Badge>
-          {categories.map((c) => (
-            <Badge key={c} variant={cat === c ? "default" : "secondary"} asChild>
-              <button type="button" className="cursor-pointer" onClick={() => selectCat(c)}>{c}</button>
-            </Badge>
-          ))}
-        </div>
-      )}
+      <Separator className="mb-6" />
 
-      {/* Tags */}
-      <div className="flex flex-wrap items-center gap-1.5 mb-6">
-        <span className="text-xs text-muted-foreground mr-1">标签</span>
-        <Badge variant={tag === "" ? "default" : "secondary"} asChild>
-          <button type="button" className="cursor-pointer" onClick={() => selectTag("")}>全部</button>
-        </Badge>
-        {tags.map((t) => (
-          <Badge key={t} variant={tag === t ? "default" : "secondary"} asChild>
-            <button type="button" className="cursor-pointer" onClick={() => selectTag(t)}>{t}</button>
-          </Badge>
-        ))}
-      </div>
-
-      {/* Grid */}
+      {/* 列表 / 空状态 */}
       {pagePosts.length === 0 ? (
-        <div className="py-20 text-center">
-          <Search className="mx-auto size-8 text-muted-foreground opacity-40 mb-3" />
-          <p className="text-sm text-muted-foreground">没有找到相关文章</p>
-        </div>
+        <Empty className="border py-16">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Search />
+            </EmptyMedia>
+            <EmptyTitle>没有找到相关文章</EmptyTitle>
+            <EmptyDescription>换个关键词，或清除筛选条件试试。</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+        <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {pagePosts.map((post) => <PostCard key={post.slug} post={post} />)}
         </div>
       )}
 
-      {/* Pagination */}
+      {/* 分页：shadcn Pagination */}
       {totalPages > 1 && (
         <Pagination aria-label="分页" className="mb-10">
           <PaginationContent>
-            <Button variant="outline" size="icon" disabled={current === 1} onClick={() => goToPage(current - 1)} aria-label="上一页">
-              <ChevronLeft className="size-4" />
-            </Button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+            <PaginationItem>
               <Button
-                key={n}
-                variant={n === current ? "default" : "outline"}
+                variant="outline"
                 size="icon"
-                className="size-9 text-sm"
-                onClick={() => goToPage(n)}
-                aria-label={"第 " + n + " 页"}
-                aria-current={n === current ? "page" : undefined}
+                disabled={current === 1}
+                onClick={() => goToPage(current - 1)}
+                aria-label="上一页"
               >
-                {n}
+                <ChevronLeft />
               </Button>
+            </PaginationItem>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+              <PaginationItem key={n}>
+                <Button
+                  variant={n === current ? "default" : "outline"}
+                  size="icon"
+                  onClick={() => goToPage(n)}
+                  aria-label={"第 " + n + " 页"}
+                  aria-current={n === current ? "page" : undefined}
+                >
+                  {n}
+                </Button>
+              </PaginationItem>
             ))}
-            <Button variant="outline" size="icon" disabled={current === totalPages} onClick={() => goToPage(current + 1)} aria-label="下一页">
-              <ChevronRight className="size-4" />
-            </Button>
+            <PaginationItem>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled={current === totalPages}
+                onClick={() => goToPage(current + 1)}
+                aria-label="下一页"
+              >
+                <ChevronRight />
+              </Button>
+            </PaginationItem>
           </PaginationContent>
         </Pagination>
       )}

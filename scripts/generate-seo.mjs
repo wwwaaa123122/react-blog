@@ -32,6 +32,7 @@ const staticPages = [
   { path: "/archive/", lastmod: today, priority: "0.5", changefreq: "weekly" },
   { path: "/friends/", lastmod: today, priority: "0.5", changefreq: "weekly" },
   { path: "/about/", lastmod: today, priority: "0.5", changefreq: "monthly" },
+  { path: "/components/", lastmod: today, priority: "0.4", changefreq: "monthly" },
 ];
 
 const urls = [

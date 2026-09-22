@@ -1,7 +1,6 @@
 import * as React from "react"
-import { Slot } from "radix-ui"
-
 import { cn } from "@/lib/utils"
+import { Slot } from "radix-ui"
 import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
@@ -83,7 +82,9 @@ function BreadcrumbSeparator({
       {...props}
     >
       {children ?? (
-        <ChevronRightIcon />
+        <ChevronRightIcon
+          className="cn-rtl-flip"
+        />
       )}
     </li>
   )

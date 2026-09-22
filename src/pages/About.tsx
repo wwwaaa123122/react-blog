@@ -7,6 +7,9 @@ import Breadcrumb from "../components/Breadcrumb";
 import { jsonLd, personJsonLd } from "../lib/seo";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const ADULT_DATE = new Date("2030-07-20T00:00:00").getTime();
 
@@ -28,10 +31,16 @@ function Countdown() {
     return () => clearInterval(timer);
   }, []);
   return (
-    <div className="countdown">
-      <p className="countdown-title">成年倒计时</p>
-      <p className="countdown-value">{text}</p>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-sm">
+          <Badge variant="secondary" className="text-xs">成年倒计时</Badge>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-xl font-semibold tabular-nums">{text}</p>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -77,6 +86,7 @@ export default function About() {
           </Button>
         </div>
 
+        <Separator className="mb-6" />
         <Countdown />
       </div>
     </>

@@ -10,6 +10,14 @@ import { siteConfig } from "../config/site";
 import { assetUrl } from "../lib/base";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import Giscus from "../components/Giscus";
 
@@ -93,10 +101,23 @@ export default function PostDetail() {
     return (
       <>
         <Seo title="文章不存在" description="文章不存在或已被删除" noindex />
-        <div className="py-20 text-center">
-          <p className="text-lg text-muted-foreground mb-4">文章不存在或已被删除</p>
-          <Button asChild variant="outline"><Link to="/posts">返回文章列表</Link></Button>
-        </div>
+        <Empty className="py-20">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <BookOpen />
+            </EmptyMedia>
+            <EmptyTitle>文章不存在或已被删除</EmptyTitle>
+            <EmptyDescription>链接可能已失效，或这篇文章已被移除。</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button asChild variant="outline">
+              <Link to="/posts">
+                <ArrowLeft data-icon="inline-start" />
+                返回文章列表
+              </Link>
+            </Button>
+          </EmptyContent>
+        </Empty>
       </>
     );
   }
@@ -124,16 +145,26 @@ export default function PostDetail() {
             {post.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-6 text-sm text-muted-foreground">
-            <time dateTime={post.published}>{formatDate(post.published)}</time>
+          <div className="mb-6 flex flex-wrap items-center gap-2 text-muted-foreground">
+            <Badge variant="secondary" className="font-normal">
+              <time dateTime={post.published}>{formatDate(post.published)}</time>
+            </Badge>
             {post.updated && post.updated !== post.published && (
-              <span className="inline-flex items-center gap-1">
-                <RefreshCw className="size-3" />
+              <Badge variant="secondary" className="font-normal">
+                <RefreshCw data-icon="inline-start" />
                 <time dateTime={post.updated}>更新于 {formatDate(post.updated)}</time>
-              </span>
+              </Badge>
             )}
-            <span className="inline-flex items-center gap-1"><Clock className="size-3.5" />{readingTime(post.words)}</span>
-            {post.category && <span className="inline-flex items-center gap-1"><BookOpen className="size-3.5" />{post.category}</span>}
+            <Badge variant="secondary" className="font-normal">
+              <Clock data-icon="inline-start" />
+              {readingTime(post.words)}
+            </Badge>
+            {post.category && (
+              <Badge variant="secondary" className="font-normal">
+                <BookOpen data-icon="inline-start" />
+                {post.category}
+              </Badge>
+            )}
           </div>
 
           {post.tags.length > 0 && (
@@ -153,53 +184,81 @@ export default function PostDetail() {
             </div>
           )}
 
-          {/* 移动端：折叠目录 */}
+          {/* 移动端：折叠目录（shadcn Collapsible） */}
           {toc.length > 1 && (
-            <details className="mb-6 lg:hidden">
-              <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-muted-foreground [&::-webkit-details-marker]:hidden">
-                <ListTree className="size-4" /> 目录
-              </summary>
-              <ul className="mt-2 max-h-72 overflow-y-auto space-y-0.5 border-l-2 border-border pl-4 text-sm leading-7 text-muted-foreground">
-                {toc.map((item, i) => (
-                  <li key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
-                    <a href={"#" + item.id} data-toc-id={item.id} className="transition-colors hover:text-foreground">{item.text}</a>
-                  </li>
-                ))}
-              </ul>
-            </details>
+            <Collapsible className="mb-6 lg:hidden">
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-muted-foreground">
+                  <ListTree data-icon="inline-start" />
+                  目录
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <nav
+                  aria-label="文章目录"
+                  className="mt-2 max-h-72 overflow-y-auto space-y-0.5 border-l-2 border-border pl-4 text-sm leading-7 text-muted-foreground"
+                >
+                  {toc.map((item, i) => (
+                    <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
+                      <a href={"#" + item.id} data-toc-id={item.id} className="transition-colors hover:text-foreground">
+                        {item.text}
+                      </a>
+                    </div>
+                  ))}
+                </nav>
+              </CollapsibleContent>
+            </Collapsible>
           )}
 
           <Markdown content={post.content} />
 
-          {/* 上一篇 / 下一篇（只渲染存在的邻居，避免空单元格） */}
-          <nav aria-label="上一篇/下一篇" className="mt-10 pt-6 border-t border-border flex items-center gap-4">
+          {/* 上一篇 / 下一篇（shadcn Item，只渲染存在的邻居） */}
+          <Separator className="mt-10" />
+          <nav aria-label="上一篇/下一篇" className="grid gap-3 sm:grid-cols-2">
             {prevPost && (
-              <Link to={"/posts/" + prevPost.slug} className="group block min-w-0">
-                <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                  <ArrowLeft className="size-3" /> 上一篇
-                </span>
-                <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                  {prevPost.title}
-                </span>
-              </Link>
+              <Item asChild variant="outline" className="hover:border-primary/40 transition-colors">
+                <Link to={"/posts/" + prevPost.slug}>
+                  <ItemContent>
+                    <ItemDescription className="flex items-center gap-1">
+                      <ArrowLeft data-icon="inline-start" /> 上一篇
+                    </ItemDescription>
+                    <ItemTitle className="line-clamp-1">{prevPost.title}</ItemTitle>
+                  </ItemContent>
+                </Link>
+              </Item>
             )}
             {nextPost && (
-              <Link to={"/posts/" + nextPost.slug} className="group block min-w-0 ml-auto text-right">
-                <span className="text-xs text-muted-foreground mb-1 flex items-center gap-1 justify-end">
-                  下一篇 <ArrowRight className="size-3" />
-                </span>
-                <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                  {nextPost.title}
-                </span>
-              </Link>
+              <Item asChild variant="outline" className="text-right hover:border-primary/40 transition-colors sm:col-start-2">
+                <Link to={"/posts/" + nextPost.slug}>
+                  <ItemContent className="items-end">
+                    <ItemDescription className="flex items-center gap-1">
+                      下一篇 <ArrowRight data-icon="inline-end" />
+                    </ItemDescription>
+                    <ItemTitle className="line-clamp-1">{nextPost.title}</ItemTitle>
+                  </ItemContent>
+                </Link>
+              </Item>
             )}
           </nav>
 
-          <footer className="mt-6 pt-4 border-t border-border text-sm text-muted-foreground">
-            <p className="mb-4">本文发布于 {formatDate(post.published)} · &copy; {currentYear} {siteConfig.author}</p>
+          <Separator className="mt-6" />
+          <footer className="pt-4 text-sm text-muted-foreground">
+            <p className="mb-4">
+              本文发布于 {formatDate(post.published)} · &copy; {currentYear} {siteConfig.author}
+            </p>
             <div className="flex flex-wrap gap-3">
-              <Button asChild variant="ghost" size="sm"><Link to="/posts"><ArrowLeft className="size-3.5" /> 返回文章列表</Link></Button>
-              <Button asChild variant="ghost" size="sm"><Link to="/"><Home className="size-3.5" /> 首页</Link></Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/posts">
+                  <ArrowLeft data-icon="inline-start" />
+                  返回文章列表
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/">
+                  <Home data-icon="inline-start" />
+                  首页
+                </Link>
+              </Button>
             </div>
           </footer>
 

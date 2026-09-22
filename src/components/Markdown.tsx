@@ -17,6 +17,10 @@ import {
   TriangleAlert,
   type LucideIcon,
 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 export function slugify(text: string): string {
   return text.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
@@ -102,31 +106,36 @@ function CodeBlock({
   };
 
   return (
-    <div className="my-4 rounded-[var(--radius)] border border-border overflow-hidden">
-      {/* Header — 固定在外部，不随代码滚动 */}
-      <div className="flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground bg-muted/50 border-b border-border">
-        <span className="font-medium">{lang || "code"}</span>
-        <button
+    <div className="my-4 overflow-hidden rounded-[var(--radius)] border border-border">
+      {/* 头部：shadcn Badge（语言）+ Button（复制），固定在外部不随代码滚动 */}
+      <div className="flex items-center justify-between gap-2 bg-muted/50 px-3 py-1.5">
+        <Badge variant="secondary" className="font-mono text-[11px]">
+          {lang || "code"}
+        </Badge>
+        <Button
+          variant="ghost"
+          size="xs"
           onClick={copy}
-          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           aria-label={copied ? "已复制" : "复制代码"}
           aria-live="polite"
+          className="text-muted-foreground"
         >
-          {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
-          <span className="text-[11px]">{copied ? "已复制" : "复制"}</span>
-        </button>
+          {copied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
+          {copied ? "已复制" : "复制"}
+        </Button>
       </div>
-      {/* 代码区 — 独立横向滚动；highlighted 保留 rehype-highlight 生成的 span，
+      <Separator />
+      {/* 代码区：独立横向滚动；highlighted 保留 rehype-highlight 生成的 span，
           code 纯文本供复制按钮使用 */}
-      <pre className="!m-0 !border-0 !rounded-none overflow-x-auto" tabIndex={0}>
+      <pre className="!m-0 !rounded-none !border-0 overflow-x-auto" tabIndex={0}>
         <code className={"language-" + lang}>{highlighted}</code>
       </pre>
     </div>
   );
 }
 
-// ===== 提示卡片（:::warning 等 admonition 容器） =====
-// 颜色由 global.css 里的 .admonition / .admonition-<type> 按主题提供
+// ===== 提示卡片（:::warning 等 admonition 容器）=====
+// 使用 shadcn Alert 渲染，语义色统一由组件库的 token 提供
 
 type AdmonitionType =
   | "warning"
@@ -152,6 +161,19 @@ const ADMONITION_META: Record<
   info: { icon: Info, defaultTitle: "信息" },
 };
 
+// 各类型的图标与 shadcn Alert 语义色（Alert 只有 default / destructive 两个 variant，
+// 其余语义色按组件库的写法用文字色 + 描述色覆盖）
+const ADMONITION_STYLE: Record<AdmonitionType, string> = {
+  warning: "text-chart-3 *:data-[slot=alert-description]:text-chart-3/90",
+  caution: "text-chart-3 *:data-[slot=alert-description]:text-chart-3/90",
+  danger: "text-destructive *:data-[slot=alert-description]:text-destructive/90",
+  error: "text-destructive *:data-[slot=alert-description]:text-destructive/90",
+  success: "text-chart-5 *:data-[slot=alert-description]:text-chart-5/90",
+  tip: "text-primary *:data-[slot=alert-description]:text-primary/90",
+  note: "text-primary *:data-[slot=alert-description]:text-primary/90",
+  info: "text-primary *:data-[slot=alert-description]:text-primary/90",
+};
+
 function Admonition({
   type,
   title,
@@ -161,18 +183,15 @@ function Admonition({
   title?: string;
   children: ReactNode;
 }) {
-  const meta = ADMONITION_META[type as AdmonitionType] ?? ADMONITION_META.warning;
+  const key = (type as AdmonitionType) in ADMONITION_META ? (type as AdmonitionType) : "warning";
+  const meta = ADMONITION_META[key];
   const Icon = meta.icon;
   return (
-    <div className={`admonition admonition-${type}`} role="note">
-      <div className="admonition-icon" aria-hidden="true">
-        <Icon className="size-[18px]" strokeWidth={2.2} />
-      </div>
-      <div className="admonition-content">
-        <p className="admonition-title">{title || meta.defaultTitle}</p>
-        <div className="admonition-body">{children}</div>
-      </div>
-    </div>
+    <Alert className={`my-4 ${ADMONITION_STYLE[key]}`}>
+      <Icon />
+      <AlertTitle>{title || meta.defaultTitle}</AlertTitle>
+      <AlertDescription className="[&_p:first-child]:mt-1">{children}</AlertDescription>
+    </Alert>
   );
 }
 
@@ -192,7 +211,7 @@ export default function Markdown({ content }: { content: string }) {
         return <CodeBlock lang={lang} code={code} highlighted={child.props.children} />;
       }
       // 普通 pre（非代码块）保持原样
-      return <pre className="my-4 rounded-[var(--radius)] border border-border bg-muted/50 p-4 overflow-x-auto">{children}</pre>;
+      return <pre className="my-4 overflow-x-auto rounded-[var(--radius)] border border-border bg-card-nested p-4">{children}</pre>;
     },
     // 让 <code> 自带的 pre 不干扰
     code: ({ className, children }: any) => {

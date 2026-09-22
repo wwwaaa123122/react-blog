@@ -1,81 +1,35 @@
-export type Theme = "light" | "dark" | "system";
-export type ResolvedTheme = "light" | "dark";
+// 主题相关的小工具。
+// 主题状态本身由 next-themes（见 src/components/theme-provider.tsx）统一管理：
+// 存储键 "theme"、取值 light / dark / system，通过 <html class="dark"> 生效。
+// 这里只保留「同步移动端地址栏/状态栏底色」这一与主题状态无关的副作用。
 
-const STORAGE_KEY = "theme";
-const DARK_MEDIA = "(prefers-color-scheme: dark)";
+const LIGHT_BG = "#f8f9fc";
+const DARK_BG = "#0b0e14";
 
-/** 当前系统主题 */
-export function systemTheme(): ResolvedTheme {
-  if (typeof window === "undefined" || !window.matchMedia) return "light"; // Node 预渲染
-  return window.matchMedia(DARK_MEDIA).matches ? "dark" : "light";
-}
-
-/** 把用户主题（含 system）解析为实际亮/暗 */
-export function resolveTheme(theme: Theme): ResolvedTheme {
-  return theme === "system" ? systemTheme() : theme;
-}
-
-/** 读取用户明确保存的主题；未保存或值非法时返回 null（视为默认跟随系统） */
-export function getStoredTheme(): Theme | null {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === "light" || saved === "dark" || saved === "system") {
-      return saved;
-    }
-  } catch {
-    /* ignore */
+/** 把不带 media 限定的 theme-color meta 更新为当前实际主题底色 */
+function syncThemeColor(): void {
+  if (typeof document === "undefined") return;
+  const metas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
+  let meta: HTMLMetaElement | null = null;
+  for (const m of metas) {
+    if (!m.hasAttribute("media")) meta = m;
   }
-  return null;
-}
-
-/** 初始主题：默认跟随系统，仅在用户明确选择过时用其选择 */
-export function getInitialTheme(): Theme {
-  return getStoredTheme() ?? "system";
-}
-
-// shadcn/ui 深色模式约定：在 <html> 上切换 .dark class
-export function applyTheme(
-  theme: Theme,
-  options: { persist?: boolean } = {}
-): void {
-  const { persist = true } = options;
-  if (typeof document !== "undefined") {
-    const resolved = resolveTheme(theme);
-    document.documentElement.classList.toggle("dark", resolved === "dark");
-    // 同步浏览器地址栏/状态栏底色（移动端），与背景色一致避免突兀色块
-    // 更新不带 media 限定的 meta（media 变体由浏览器按系统明暗自行匹配）
-    const metas = document.querySelectorAll<HTMLMetaElement>(
-      'meta[name="theme-color"]'
-    );
-    let meta: HTMLMetaElement | null = null;
-    for (const m of metas) {
-      if (!m.hasAttribute("media")) meta = m;
-    }
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.setAttribute("name", "theme-color");
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute("content", resolved === "dark" ? "#0b0e14" : "#f8f9fc");
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.setAttribute("name", "theme-color");
+    document.head.appendChild(meta);
   }
-  // 仅在用户明确选择时写入 localStorage；跟随系统时清除保存值，
-  // 这样"默认跟随系统"不会因首次访问把默认主题写死成用户选择。
-  if (!persist) return;
-  try {
-    if (theme === "system") {
-      localStorage.removeItem(STORAGE_KEY);
-    } else {
-      localStorage.setItem(STORAGE_KEY, theme);
-    }
-  } catch {
-    /* ignore */
-  }
+  const dark = document.documentElement.classList.contains("dark");
+  meta.setAttribute("content", dark ? DARK_BG : LIGHT_BG);
 }
 
-/** 监听系统主题变化（仅当主题为 system 时由调用方订阅） */
-export function watchSystemTheme(listener: () => void): () => void {
-  if (typeof window === "undefined" || !window.matchMedia) return () => {};
-  const mq = window.matchMedia(DARK_MEDIA);
-  mq.addEventListener("change", listener);
-  return () => mq.removeEventListener("change", listener);
+/** 监听 .dark class 变化（next-themes 切换主题时）并同步 theme-color */
+export function watchThemeColor(): void {
+  if (typeof document === "undefined") return;
+  syncThemeColor();
+  const observer = new MutationObserver(syncThemeColor);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
 }

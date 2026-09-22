@@ -13,7 +13,7 @@ import React from "react";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { renderToString } from "react-dom/server";
+import { renderToStaticMarkup, renderToString } from "react-dom/server";
 import { MemoryRouter } from "react-router-dom";
 import App from "../src/App";
 import { routerBase, assetUrl } from "../src/lib/base";
@@ -31,6 +31,15 @@ import profileData from "../src/data/profile.json";
 import coverSizes from "../src/data/cover-sizes.json";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+// 已知的第三方噪音：input-otp 在未受控时会同时把 value 与 defaultValue 传给内部 <input>，
+// 预渲染 /components 页时 React 会打印受控/非受控警告。这里过滤掉该条，保持构建日志干净。
+const originalWarn = console.warn.bind(console);
+console.warn = (...args: unknown[]): void => {
+  const first = typeof args[0] === "string" ? args[0] : "";
+  if (first.includes("both value and defaultValue props")) return;
+  originalWarn(...args);
+};
 const dist = join(root, "dist");
 
 // 注入构建环境（与 vite.config 的 base 保持一致）
@@ -106,6 +115,7 @@ function jsonLdFor(path: string): string[] {
       "/archive/": "归档",
       "/friends/": "友链",
       "/about/": "关于我",
+      "/components/": "组件预览",
     };
     const label = labelMap[path];
     if (label) {
@@ -222,6 +232,27 @@ writePage("/friends/", {
   description: "友情链接与友链申请方式，与优秀的朋友们一起成长",
 });
 writePage("/about/", { title: "关于我", description: "认识一下这个博客的主人" });
+// 组件预览页：不进导航，但可被直接访问/收录
+// /components 走 React.lazy 分包，需先等模块加载完成再用 renderToStaticMarkup 渲染，
+// 否则静态 HTML 只会序列化出 Suspense fallback。
+async function prerenderComponents(): Promise<void> {
+  const { default: Components } = await import("../src/pages/Components");
+  const appHtml = renderToStaticMarkup(
+    <MemoryRouter basename={routerBase} initialEntries={[routerBase + "/components"]}>
+      <Components />
+    </MemoryRouter>
+  );
+  const doc = template.replace("<div id=\"root\"></div>", "<div id=\"root\">" + appHtml + "</div>");
+  const html = withHead(doc, "/components/", {
+    title: "全组件预览",
+    description:
+      "以 shadcn/ui 组件库搭建的界面组件预览：按钮、表单、数据展示、浮层与反馈等全部组件一次看全。",
+  });
+  const filePath = join(dist, "components", "index.html");
+  mkdirSync(dirname(filePath), { recursive: true });
+  writeFileSync(filePath, html, "utf-8");
+  console.log("[prerender] /components/ (" + Buffer.byteLength(html) + " bytes, lazy)");
+}
 
 // 每篇文章：/posts/<slug>/ （GitHub Pages 静态目录形态，sitemap/canonical 与之对应）
 for (const post of publishedPosts) {
@@ -231,6 +262,8 @@ for (const post of publishedPosts) {
     ogImage: post.image,
   });
 }
+
+await prerenderComponents();
 
 // 404 页面：GitHub Pages 等静态托管以 404.html 承载（HTTP 404 状态）。
 // 用真实 NotFound 组件渲染并标记 noindex，避免爬虫把软 404 当正常页面收录。

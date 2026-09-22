@@ -12,10 +12,12 @@
     Arial, sans-serif;
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 
-  /* Magic UI 动画 */
+  /* 动画（shadcn 组件 + 本站动效） */
   --animate-shimmer-slide: shimmer-slide var(--speed) linear infinite;
   --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
   --animate-blink-cursor: blink-cursor 1s step-end infinite;
+  --animate-caret-blink: caret-blink 1s steps(1) infinite;
+  --animate-typing: typing var(--typing-duration, 2.4s) steps(var(--typing-steps, 32), end) both;
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -50,6 +52,8 @@
   --color-background: var(--background);
   /* 博客自定义：柔和主题色背景（--primary-soft 见 :root/.dark） */
   --color-primary-soft: var(--primary-soft);
+  /* 卡片内嵌区块（shadcn Card 内嵌内容 / Alert 变体） */
+  --color-card-nested: var(--card-nested);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -95,6 +99,7 @@
   --sidebar-ring: #2563eb;
   /* 博客自定义 */
   --primary-soft: hsl(221 83% 53% / 10%);
+  --card-nested: #f4f6fa;
   --code-bg: #f6f8fa;
   --text-tertiary: #9ca3af;
   --nav-height: 56px;
@@ -135,6 +140,7 @@
   --sidebar-ring: #60a5fa;
   /* 博客自定义 */
   --primary-soft: hsl(214 94% 67% / 12%);
+  --card-nested: #171c2a;
   --code-bg: #0f1420;
   --text-tertiary: #64748b;
 }
@@ -182,7 +188,9 @@
   }
 }
 
-/* ===== 路由切换：顶部加载进度条（nprogress 风格） ===== */
+/* ===== 路由切换：顶部加载进度条（基于 shadcn Progress） =====
+   外层 .route-loading-bar 是 Progress 的 Root（固定到视口顶部的细条），
+   内层 [data-slot=progress-indicator] 由 Progress 渲染，这里覆盖成品牌渐变并播放一次扫过动画。 */
 .route-loading-bar {
   position: fixed;
   top: 0;
@@ -192,14 +200,12 @@
   z-index: 100;
   overflow: hidden;
   pointer-events: none;
+  border-radius: 0;
 }
-.route-loading-bar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 100%;
+.route-loading-bar [data-slot="progress-indicator"] {
+  /* Progress 用 translateX 表达进度，这里改为纯 CSS 的扫过动画，需要覆盖 inline transform */
+  transform: none !important;
+  transition: none;
   background: linear-gradient(
     90deg,
     var(--primary),
@@ -297,6 +303,25 @@
   }
   100% {
     transform: translateZ(0) rotate(360deg);
+  }
+}
+@keyframes caret-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--typing-width, 100%);
   }
 }
 @keyframes blink-cursor {
