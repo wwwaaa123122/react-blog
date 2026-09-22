@@ -98,6 +98,21 @@ console.warn = (...args: unknown[]): void => {
   originalWarn(...args);
 };
 
+// 5) 诊断面板默认不可见：?diag=1 时才渲染，不能影响正常访问
+{
+  const probeSrc = readFileSync(join(root, "src/components/DebugProbe.tsx"), "utf-8");
+  const layoutSrc = readFileSync(join(root, "src/components/Layout.tsx"), "utf-8");
+  if (!/diag.*===.*"1"|get\("diag"\)/.test(probeSrc)) {
+    failures.push("DebugProbe: 未用 ?diag=1 作为开关");
+  } else if (!/if \(!enabled\) return null/.test(probeSrc)) {
+    failures.push("DebugProbe: 关闭状态没有 return null，会污染正常页面");
+  } else if (!/DebugProbe/.test(layoutSrc)) {
+    failures.push("DebugProbe: 未接入 Layout");
+  } else {
+    passes.push("DebugProbe: 默认不渲染，仅 ?diag=1 生效");
+  }
+}
+
 console.log("\n=== 移动端菜单布局回归检查 ===");
 for (const p of passes) console.log("  ✓ " + p);
 for (const f of failures) console.log("  ✗ " + f);
