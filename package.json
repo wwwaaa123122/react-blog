@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/cover-sizes.mjs && tsc --noEmit && vite build && node scripts/generate-seo.mjs && npx tsx scripts/prerender-entry.mjs && npx tsx scripts/outline-check.mts",
+    "build": "node scripts/cover-sizes.mjs && tsc --noEmit && vite build && node scripts/generate-seo.mjs && npx tsx scripts/prerender-entry.mjs && npx tsx scripts/outline-check.mts && npx tsx scripts/mobile-menu-check.mts",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "generate:seo": "node scripts/generate-seo.mjs",
     "prerender": "npx tsx scripts/prerender-entry.mjs",
-    "check:outline": "npx tsx scripts/outline-check.mts"
+    "check:outline": "npx tsx scripts/outline-check.mts",
+    "check:mobile-menu": "npx tsx scripts/mobile-menu-check.mts"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",

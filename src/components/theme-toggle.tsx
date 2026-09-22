@@ -14,7 +14,9 @@ export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()
 
   return (
-    <DropdownMenu>
+    // modal={false}：与移动端导航菜单同理，避免展开时给 <body> 注入
+    // margin-right 补偿（桌面端有滚动条时会额外平移居中容器）
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"

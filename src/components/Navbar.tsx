@@ -90,7 +90,12 @@ export default function Navbar() {
           </Button>
           <ThemeToggle />
           <div className="md:hidden">
-            <DropdownMenu>
+            {/* modal={false}：导航菜单不需要锁定页面滚动。
+                Radix 的 modal 菜单会通过 RemoveScroll 消除滚动条并给 <body> 注入
+                margin-right: <滚动条宽度>px !important（gapMode 默认 "margin"），
+                滚动条宽度在移动端首次展开时被测量并作为单例缓存，
+                于是 body 右侧多出十几像素，居中容器看起来整体左移。 */}
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="size-8 text-muted-foreground" aria-label="菜单">
                   <Menu className="size-4" />
