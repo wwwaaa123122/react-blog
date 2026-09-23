@@ -23,7 +23,7 @@ export default function BackToTop() {
       aria-label="回到顶部"
       title="回到顶部"
       className={
-        "fixed bottom-4 right-4 z-40 size-10 rounded-full shadow-lg ring-1 ring-black/5 transition-all duration-200 sm:bottom-6 sm:right-6 sm:size-11 dark:ring-white/10 " +
+        "fixed bottom-4 right-4 z-40 size-10 rounded-full shadow-lg ring-1 ring-foreground/10 transition-all duration-200 sm:bottom-6 sm:right-6 sm:size-11 " +
         (visible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-3 opacity-0")

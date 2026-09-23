@@ -55,10 +55,14 @@ function ShimmerButton({
         "group/shimmer relative isolate overflow-hidden rounded-[var(--radius)] whitespace-nowrap",
         // 固定底色：Button 默认变体带 hover:bg-primary/80，会盖掉流光底色
         "bg-[var(--shimmer-bg)] hover:bg-[var(--shimmer-bg)] text-primary-foreground",
-        // 描边：浅色模式下透明（本身对比已足够），深色模式下描一圈白边
+        // 描边跟库里其他按钮保持同一套做法：用 border + 语义色 token，
+        // 不用额外的 ring（ring 会盖住 Button 自带的 focus-visible 焦点样式）。
+        // 浅色模式 border 保持透明（深色按钮本身对比已足够）；
+        // 深色模式用 foreground/25 —— 比 outline 变体的 --input(#1e293b) 亮一档，
+        // 足以从同样很暗的页面背景里分出来，又不会像纯白那样突兀。
         background
           ? "border border-transparent"
-          : "border border-transparent ring-1 ring-inset ring-white/0 dark:ring-white/75",
+          : "border border-transparent dark:border-foreground/25",
         "transition-transform duration-300 ease-in-out active:translate-y-px",
         className
       )}

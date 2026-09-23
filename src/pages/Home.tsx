@@ -200,8 +200,8 @@ export default function Home() {
         </div>
         {/* 按钮行：统一用 size="lg" 等宽高，避免与相邻按钮高度不一致而看起来"歪" */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* 深色按钮 + 白字：浅色模式靠自身对比，深色模式靠 white 描边
-              与 #0b0e14 的页面背景分开（见 ShimmerButton 的 dark:ring-white/75） */}
+          {/* 深色按钮 + 白字：浅色模式靠自身对比即可，
+              深色模式由 ShimmerButton 用 dark:border-foreground/25 描边与背景分开 */}
           <ShimmerButton
             asChild
             size="lg"
