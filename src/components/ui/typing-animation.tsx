@@ -4,11 +4,16 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-// 打字机文字：shadcn 风格组件。
-// 与旧的 magicui 实现相比去掉了逐帧 setInterval，改为纯 CSS：
-//   - 外层用 --typing-width 控制展开宽度（index.css 的 @keyframes typing）
-//   - 光标用 ::after + @keyframes caret-blink（Twitch 的 animate-caret-blink 亦可）
-// 这样 SSR 输出即稳定文本（爬虫可读），也不需要逐字操作 DOM。
+// 打字机文字：shadcn 风格组件，纯 CSS（无逐帧 setInterval），SSR 输出即稳定文本。
+//
+// 布局要点（旧实现的 bug）：以前用 --typing-width（按字符数估算的 em 宽度）
+// 控制展开宽度，估算值偏窄时文本先在一行显示，动画越过估算宽度后才换行，
+// 于是"首次加载先一行、之后才自动换行"。现在改为三层同步动画：
+//   1) 备位层  完整文本 + visibility:hidden —— 撑出真实的换行与高度
+//   2) 揭示层  与备位层重叠，clip-path 从左到右揭示（只影响绘制，不影响布局）
+//   3) 光标层  width 0→100%，把 ::after 光标推到"当前打字位置"
+// 三层的字体/宽度完全一致，且揭示与光标用同一个 steps 时序，
+// 因此换行位置从第一帧起就是最终结果，不会回流。
 export interface TypingAnimationProps
   extends React.ComponentPropsWithoutRef<"span"> {
   /** 逐字打字速度（毫秒/字），仅用于换算动画时长 */
@@ -35,45 +40,51 @@ function TypingAnimation({
   ...props
 }: TypingAnimationProps) {
   const text = typeof children === "string" ? children : String(children ?? "")
-  // 宽度按字符数估算：中文/全角按 1em，其余按 0.55em（近似半个西文字符宽）。
-  // 允许有一点误差（宁可略宽也不要截断），因为动画只作用于可见宽度，
-  // 布局宽度始终由真实文本占位，不依赖这个估算值。
-  const widthEm = [...text].reduce((sum, ch) => {
-    const full = /[\u2E80-\u9FFF\uF900-\uFAFF\uFF00-\uFFEF\u3000-\u303F]/.test(ch);
-    return sum + (full ? 1 : 0.55);
-  }, 0)
   const steps = Math.max([...text].length, 1)
   const Comp = as
 
   return (
     <Comp
       data-slot="typing-animation"
-      className={cn(
-        "inline-flex items-baseline",
-        showCursor &&
-          "after:ml-0.5 after:animate-caret-blink after:text-primary after:content-[attr(data-cursor)]",
-        className
-      )}
+      className={cn("relative grid", className)}
       data-cursor={cursorText}
       style={
         {
           "--typing-duration": `calc(${steps} * ${duration}ms)`,
           "--typing-steps": steps,
-          "--typing-width": `${widthEm.toFixed(2)}em`,
           animationDelay: `${delay}ms`,
           ...style,
         } as React.CSSProperties
       }
       {...props}
     >
-      {/* 完整文本直接保留在 DOM 中（爬虫/读屏可读），只有视觉展开由动画控制；
-          prefers-reduced-motion 下不播放动画，文本直接完整显示 */}
+      {/* 读屏用文本：视觉上不可见，保证可访问名称只出现一次 */}
+      <span className="sr-only">{text}</span>
+
+      {/* 1) 备位层：不可见但参与布局，保证换行/高度从首帧即最终形态 */}
+      <span aria-hidden="true" className="invisible col-start-1 row-start-1">
+        {text}
+      </span>
+
+      {/* 2) 揭示层：与备位层完全重叠，clip-path 逐步揭示 */}
       <span
-        className="inline-block overflow-hidden whitespace-nowrap align-bottom motion-safe:animate-typing"
-        style={{ width: "var(--typing-width)" }}
+        aria-hidden="true"
+        className="col-start-1 row-start-1 motion-safe:animate-type-reveal"
       >
         {text}
       </span>
+
+      {/* 3) 光标层：宽度随打字进度增长，::after 光标贴在右缘 */}
+      {showCursor && (
+        <span
+          aria-hidden="true"
+          data-cursor={cursorText}
+          className={cn(
+            "col-start-1 row-start-1 block w-0 motion-safe:animate-typing-grow",
+            "after:ml-0.5 after:inline-block after:animate-caret-blink after:font-normal after:text-primary after:content-[attr(data-cursor)]"
+          )}
+        />
+      )}
     </Comp>
   )
 }

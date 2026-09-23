@@ -18,7 +18,10 @@
   --animate-blink-cursor: blink-cursor 1s step-end infinite;
   --animate-caret-blink: caret-blink 1s steps(1) infinite;
   --animate-shimmer-sweep: shimmer-sweep var(--speed, 3s) ease-in-out infinite;
-  --animate-typing: typing var(--typing-duration, 2.4s) steps(var(--typing-steps, 32), end) both;
+  --animate-type-reveal: type-reveal var(--typing-duration, 2.4s)
+    steps(var(--typing-steps, 32), end) both;
+  --animate-typing-grow: typing-grow var(--typing-duration, 2.4s)
+    steps(var(--typing-steps, 32), end) both;
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -327,12 +330,24 @@
     opacity: 0;
   }
 }
-@keyframes typing {
+/* 打字机揭示：clip-path 只影响绘制，不参与布局，
+   因此文本的真实换行与高度从第一帧起就固定 */
+/* 光标层宽度增长：与 type-reveal 使用同一 duration/steps，两者严格同步 */
+@keyframes typing-grow {
   from {
-    width: 0;
+    width: 0%;
   }
   to {
-    width: var(--typing-width, 100%);
+    width: 100%;
+  }
+}
+
+@keyframes type-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 @keyframes blink-cursor {

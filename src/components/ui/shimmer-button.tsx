@@ -28,10 +28,14 @@ export interface ShimmerButtonProps
 }
 
 function ShimmerButton({
-  shimmerColor = "hsl(0 0% 100% / 42%)",
+  shimmerColor = "hsl(0 0% 100% / 28%)",
   shimmerDuration = "3s",
   background,
   borderRadius = "9999px",
+  // 默认用语义色 token：浅色模式下是深色按钮 + 浅色文字，
+  // 深色模式下自动反转成浅色按钮 + 深色文字，绝不会和背景融在一起。
+  // 需要固定底色时再显式传 background（如品牌色）。
+  
   className,
   children,
   ...props
@@ -44,12 +48,13 @@ function ShimmerButton({
           "--shimmer-color": shimmerColor,
           "--speed": shimmerDuration,
           "--radius": borderRadius,
-          "--shimmer-bg": background ?? "var(--primary)",
+          "--shimmer-bg": background ?? "var(--foreground)",
         } as React.CSSProperties
       }
       className={cn(
         "group/shimmer relative isolate overflow-hidden rounded-[var(--radius)] border border-transparent",
-        "bg-[var(--shimmer-bg)] text-primary-foreground whitespace-nowrap",
+        "bg-[var(--shimmer-bg)] whitespace-nowrap",
+        background ? "text-primary-foreground" : "text-background",
         "transition-transform duration-300 ease-in-out active:translate-y-px",
         className
       )}

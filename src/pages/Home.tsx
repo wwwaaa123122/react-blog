@@ -200,12 +200,13 @@ export default function Home() {
         </div>
         {/* 按钮行：统一用 size="lg" 等宽高，避免与相邻按钮高度不一致而看起来"歪" */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* 不写死底色：默认走 --foreground/--background 语义色，
+              深色模式下自动反转，不会和页面背景融为一体 */}
           <ShimmerButton
             asChild
             size="lg"
             className="px-5"
-            background="#111827"
-            shimmerColor="#ffffff"
+            shimmerColor="hsl(0 0% 100% / 28%)"
             shimmerDuration="2.5s"
           >
             <Link to="/posts">

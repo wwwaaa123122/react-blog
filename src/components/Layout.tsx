@@ -4,7 +4,6 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import LoadingBar from "./LoadingBar";
 import BackToTop from "./BackToTop";
-import DebugProbe from "./DebugProbe";
 
 export default function Layout() {
   const loc = useLocation();
@@ -58,7 +57,6 @@ export default function Layout() {
       </main>
       <Footer />
       <BackToTop />
-      <DebugProbe />
     </div>
   );
 }
