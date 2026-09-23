@@ -32,9 +32,9 @@ function ShimmerButton({
   shimmerDuration = "3s",
   background,
   borderRadius = "9999px",
-  // 默认用语义色 token：浅色模式下是深色按钮 + 浅色文字，
-  // 深色模式下自动反转成浅色按钮 + 深色文字，绝不会和背景融在一起。
-  // 需要固定底色时再显式传 background（如品牌色）。
+  // 深色按钮 + 白字在两种主题下保持一致（浅色页面背景上本来就是深色块）。
+  // 深色模式下页面背景也很暗，靠"描白边"把按钮从背景里分出来，
+  // 而不是把按钮翻成白底黑字。需要固定底色时再显式传 background（如品牌色）。
   
   className,
   children,
@@ -48,13 +48,17 @@ function ShimmerButton({
           "--shimmer-color": shimmerColor,
           "--speed": shimmerDuration,
           "--radius": borderRadius,
-          "--shimmer-bg": background ?? "var(--foreground)",
+          "--shimmer-bg": background ?? "#111827",
         } as React.CSSProperties
       }
       className={cn(
-        "group/shimmer relative isolate overflow-hidden rounded-[var(--radius)] border border-transparent",
-        "bg-[var(--shimmer-bg)] whitespace-nowrap",
-        background ? "text-primary-foreground" : "text-background",
+        "group/shimmer relative isolate overflow-hidden rounded-[var(--radius)] whitespace-nowrap",
+        // 固定底色：Button 默认变体带 hover:bg-primary/80，会盖掉流光底色
+        "bg-[var(--shimmer-bg)] hover:bg-[var(--shimmer-bg)] text-primary-foreground",
+        // 描边：浅色模式下透明（本身对比已足够），深色模式下描一圈白边
+        background
+          ? "border border-transparent"
+          : "border border-transparent ring-1 ring-inset ring-white/0 dark:ring-white/75",
         "transition-transform duration-300 ease-in-out active:translate-y-px",
         className
       )}
