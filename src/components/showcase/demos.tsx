@@ -356,8 +356,8 @@ export const demoCells: DemoCell[] = [
         <Badge variant="outline">描边</Badge>
         <Badge variant="destructive">危险</Badge>
         <Badge variant="ghost">幽灵</Badge>
-        <Badge className="bg-chart-5/15 text-chart-5">成功</Badge>
-        <Badge className="bg-chart-3/15 text-chart-3">警告</Badge>
+        <Badge variant="success">成功</Badge>
+        <Badge variant="warning">警告</Badge>
         <Badge variant="outline">
           <CheckIcon data-icon="inline-start" />
           已验证
@@ -381,12 +381,13 @@ export const demoCells: DemoCell[] = [
     name: "Textarea",
     label: "多行输入",
     demo: (
-      <Textarea
-        className="max-w-72"
-        rows={3}
-        placeholder="写点什么…"
-        defaultValue="这个页面用 shadcn/ui 组件库搭建。"
-      />
+      <div className="w-full max-w-72">
+        <Textarea
+          rows={3}
+          placeholder="写点什么…"
+          defaultValue="这个页面用 shadcn/ui 组件库搭建。"
+        />
+      </div>
     ),
   },
   {
@@ -481,18 +482,20 @@ export const demoCells: DemoCell[] = [
     label: "选中 / 未选 / 禁用",
     demo: (
       <div className="grid gap-3">
-        <Label className="gap-2">
+        <Label>
           <Checkbox defaultChecked />
           同步到远端仓库
         </Label>
-        <Label className="gap-2">
+        <Label>
           <Checkbox />
           构建时生成 sitemap
         </Label>
-        <Label className="gap-2 opacity-60">
-          <Checkbox disabled />
-          历史版本归档（暂不可用）
-        </Label>
+        <div className="opacity-60">
+          <Label>
+            <Checkbox disabled />
+            历史版本归档（暂不可用）
+          </Label>
+        </div>
       </div>
     ),
   },
@@ -500,19 +503,21 @@ export const demoCells: DemoCell[] = [
     name: "RadioGroup",
     label: "单选",
     demo: (
-      <RadioGroup defaultValue="ssg" className="gap-3">
-        <Label className="gap-2">
+      <RadioGroup defaultValue="ssg">
+        <Label>
           <RadioGroupItem value="ssg" />
           静态预渲染（SSG）
         </Label>
-        <Label className="gap-2">
+        <Label>
           <RadioGroupItem value="ssr" />
           服务端渲染（SSR）
         </Label>
-        <Label className="gap-2 opacity-60">
-          <RadioGroupItem value="csr" disabled />
-          纯客户端渲染（CSR）
-        </Label>
+        <div className="opacity-60">
+          <Label>
+            <RadioGroupItem value="csr" disabled />
+            纯客户端渲染（CSR）
+          </Label>
+        </div>
       </RadioGroup>
     ),
   },
@@ -521,18 +526,20 @@ export const demoCells: DemoCell[] = [
     label: "default / sm / 禁用",
     demo: (
       <div className="grid gap-3">
-        <Label className="gap-2">
+        <Label>
           <Switch defaultChecked />
           跟随系统主题
         </Label>
-        <Label className="gap-2">
+        <Label>
           <Switch size="sm" defaultChecked />
           紧凑尺寸
         </Label>
-        <Label className="gap-2 opacity-60">
-          <Switch disabled />
-          禁用
-        </Label>
+        <div className="opacity-60">
+          <Label>
+            <Switch disabled />
+            禁用
+          </Label>
+        </div>
       </div>
     ),
   },
@@ -617,11 +624,15 @@ export const demoCells: DemoCell[] = [
           <TabsTrigger value="account">账户</TabsTrigger>
           <TabsTrigger value="security">安全</TabsTrigger>
         </TabsList>
-        <TabsContent value="account" className="text-muted-foreground text-sm">
-          账户面板内容：昵称、头像与站点信息。
+        <TabsContent value="account">
+          <div className="text-muted-foreground">
+            账户面板内容：昵称、头像与站点信息。
+          </div>
         </TabsContent>
-        <TabsContent value="security" className="text-muted-foreground text-sm">
-          安全面板内容：登录设备与访问令牌。
+        <TabsContent value="security">
+          <div className="text-muted-foreground">
+            安全面板内容：登录设备与访问令牌。
+          </div>
         </TabsContent>
       </Tabs>
     ),
@@ -636,14 +647,14 @@ export const demoCells: DemoCell[] = [
           <TabsTrigger value="logs">日志</TabsTrigger>
           <TabsTrigger value="usage">用量</TabsTrigger>
         </TabsList>
-        <TabsContent value="overview" className="text-muted-foreground text-sm">
-          概览内容
+        <TabsContent value="overview">
+          <div className="text-muted-foreground">概览内容</div>
         </TabsContent>
-        <TabsContent value="logs" className="text-muted-foreground text-sm">
-          日志内容
+        <TabsContent value="logs">
+          <div className="text-muted-foreground">日志内容</div>
         </TabsContent>
-        <TabsContent value="usage" className="text-muted-foreground text-sm">
-          用量内容
+        <TabsContent value="usage">
+          <div className="text-muted-foreground">用量内容</div>
         </TabsContent>
       </Tabs>
     ),
@@ -663,16 +674,20 @@ export const demoCells: DemoCell[] = [
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell className="font-medium">xc-lr.cn</TableCell>
             <TableCell>
-              <Badge className="bg-chart-5/15 text-chart-5">运行中</Badge>
+              <span className="font-medium">xc-lr.cn</span>
+            </TableCell>
+            <TableCell>
+              <Badge variant="success">运行中</Badge>
             </TableCell>
             <TableCell className="text-right">82%</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="font-medium">blog-worker</TableCell>
             <TableCell>
-              <Badge className="bg-chart-3/15 text-chart-3">排队</Badge>
+              <span className="font-medium">blog-worker</span>
+            </TableCell>
+            <TableCell>
+              <Badge variant="warning">排队</Badge>
             </TableCell>
             <TableCell className="text-right">45%</TableCell>
           </TableRow>
@@ -701,8 +716,10 @@ export const demoCells: DemoCell[] = [
             </Badge>
           </CardAction>
         </CardHeader>
-        <CardContent className="text-muted-foreground">
-          独立访客 4,218 人，页面浏览 11,902 次。
+        <CardContent>
+          <div className="text-muted-foreground">
+            独立访客 4,218 人，页面浏览 11,902 次。
+          </div>
         </CardContent>
         <CardFooter className="justify-end gap-2">
           <Button variant="ghost" size="sm">
@@ -723,12 +740,12 @@ export const demoCells: DemoCell[] = [
           <AlertTitle>计划维护</AlertTitle>
           <AlertDescription>今晚 03:00 进行常规巡检。</AlertDescription>
         </Alert>
-        <Alert className="text-chart-5 *:data-[slot=alert-description]:text-chart-5/90">
+        <Alert variant="success">
           <CheckIcon />
           <AlertTitle>部署成功</AlertTitle>
           <AlertDescription>静态资源已同步到 CDN。</AlertDescription>
         </Alert>
-        <Alert className="text-chart-3 *:data-[slot=alert-description]:text-chart-3/90">
+        <Alert variant="warning">
           <TriangleAlertIcon />
           <AlertTitle>流量偏高</AlertTitle>
           <AlertDescription>本月已用配额 88%。</AlertDescription>
@@ -757,7 +774,7 @@ export const demoCells: DemoCell[] = [
         </Avatar>
         <Avatar>
           <AvatarFallback>二叉</AvatarFallback>
-          <AvatarBadge className="bg-chart-5" />
+          <AvatarBadge variant="success" />
         </Avatar>
         <Avatar size="lg">
           <AvatarFallback>LR</AvatarFallback>
@@ -788,10 +805,16 @@ export const demoCells: DemoCell[] = [
     label: "骨架屏",
     demo: (
       <div className="flex w-full max-w-72 items-center gap-3">
-        <Skeleton className="size-10 rounded-full" />
+        <div className="size-10 overflow-hidden rounded-full">
+          <Skeleton className="h-full w-full" />
+        </div>
         <div className="grid flex-1 gap-2">
-          <Skeleton className="h-3 w-3/4" />
-          <Skeleton className="h-3 w-1/2" />
+          <div className="h-3 w-3/4">
+            <Skeleton className="h-full w-full" />
+          </div>
+          <div className="h-3 w-1/2">
+            <Skeleton className="h-full w-full" />
+          </div>
         </div>
       </div>
     ),
@@ -904,21 +927,23 @@ export const demoCells: DemoCell[] = [
     name: "Empty",
     label: "空状态",
     demo: (
-      <Empty className="w-full max-w-80 border">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <InboxIcon />
-          </EmptyMedia>
-          <EmptyTitle>暂无草稿</EmptyTitle>
-          <EmptyDescription>新建的文章会先保存在这里。</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button size="sm">
-            <PlusIcon data-icon="inline-start" />
-            新建文章
-          </Button>
-        </EmptyContent>
-      </Empty>
+      <div className="w-full max-w-80 rounded-xl border">
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <InboxIcon />
+            </EmptyMedia>
+            <EmptyTitle>暂无草稿</EmptyTitle>
+            <EmptyDescription>新建的文章会先保存在这里。</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button size="sm">
+              <PlusIcon data-icon="inline-start" />
+              新建文章
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </div>
     ),
   },
   {
@@ -928,14 +953,18 @@ export const demoCells: DemoCell[] = [
       <Accordion type="single" collapsible className="w-full max-w-80">
         <AccordionItem value="a">
           <AccordionTrigger>如何自定义主题色？</AccordionTrigger>
-          <AccordionContent className="text-muted-foreground">
-            修改 src/index.css 中的 --primary 等 CSS 变量即可，亮暗两套分别定义。
+          <AccordionContent>
+            <div className="text-muted-foreground">
+              修改 src/index.css 中的 --primary 等 CSS 变量即可，亮暗两套分别定义。
+            </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="b">
           <AccordionTrigger>组件放在哪里？</AccordionTrigger>
-          <AccordionContent className="text-muted-foreground">
-            全部收敛在 src/components/ui 目录，页面只负责组合。
+          <AccordionContent>
+            <div className="text-muted-foreground">
+              全部收敛在 src/components/ui 目录，页面只负责组合。
+            </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
@@ -945,21 +974,25 @@ export const demoCells: DemoCell[] = [
     name: "Collapsible",
     label: "可折叠区域",
     demo: (
-      <Collapsible className="w-full max-w-80 space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">高级选项</span>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="icon-sm" aria-label="展开">
-              <ChevronDownIcon />
-            </Button>
-          </CollapsibleTrigger>
+      <Collapsible className="w-full max-w-80">
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">高级选项</span>
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="icon-sm" aria-label="展开">
+                <ChevronDownIcon />
+              </Button>
+            </CollapsibleTrigger>
+          </div>
+          <div className="rounded-lg border px-3 py-2 text-sm text-muted-foreground">
+            构建缓存已命中
+          </div>
+          <CollapsibleContent>
+            <div className="rounded-lg border px-3 py-2 text-sm text-muted-foreground">
+              额外选项：并行构建、图片压缩、链接检查。
+            </div>
+          </CollapsibleContent>
         </div>
-        <div className="rounded-lg border px-3 py-2 text-sm text-muted-foreground">
-          构建缓存已命中
-        </div>
-        <CollapsibleContent className="rounded-lg border px-3 py-2 text-sm text-muted-foreground">
-          额外选项：并行构建、图片压缩、链接检查。
-        </CollapsibleContent>
       </Collapsible>
     ),
   },
@@ -1050,13 +1083,17 @@ export const demoCells: DemoCell[] = [
             <DrawerDescription>选择分享渠道。</DrawerDescription>
           </DrawerHeader>
           <div className="grid gap-2 px-4 text-sm">
-            <Button variant="ghost" className="justify-start">
-              <ShareIcon data-icon="inline-start" />
-              复制链接
+            <Button variant="ghost" className="w-full">
+              <span className="flex w-full items-center justify-start">
+                <ShareIcon data-icon="inline-start" />
+                复制链接
+              </span>
             </Button>
-            <Button variant="ghost" className="justify-start">
-              <BookmarkIcon data-icon="inline-start" />
-              加入收藏
+            <Button variant="ghost" className="w-full">
+              <span className="flex w-full items-center justify-start">
+                <BookmarkIcon data-icon="inline-start" />
+                加入收藏
+              </span>
             </Button>
           </div>
           <DrawerFooter>
@@ -1105,8 +1142,10 @@ export const demoCells: DemoCell[] = [
     label: "右键菜单",
     demo: (
       <ContextMenu>
-        <ContextMenuTrigger className="flex h-24 w-full max-w-72 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
-          在区域内右键点击
+        <ContextMenuTrigger className="flex h-24 w-full max-w-72 items-center justify-center">
+          <span className="flex size-full items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
+            在区域内右键点击
+          </span>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-44">
           <ContextMenuItem>
@@ -1200,7 +1239,7 @@ export const demoCells: DemoCell[] = [
             <Separator />
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>HTTPS</span>
-              <Badge className="bg-chart-5/15 text-chart-5">已启用</Badge>
+              <Badge variant="success">已启用</Badge>
             </div>
           </div>
         </PopoverContent>
@@ -1262,8 +1301,9 @@ export const demoCells: DemoCell[] = [
     name: "Command",
     label: "命令面板",
     demo: (
-      <Command className="w-full max-w-80 border">
-        <CommandInput placeholder="输入命令或搜索…" />
+      <div className="w-full max-w-80 overflow-hidden rounded-xl border">
+        <Command>
+          <CommandInput placeholder="输入命令或搜索…" />
         <CommandList>
           <CommandEmpty>没有匹配结果。</CommandEmpty>
           <CommandGroup heading="建议">
@@ -1285,20 +1325,22 @@ export const demoCells: DemoCell[] = [
               打开设置
             </CommandItem>
           </CommandGroup>
-        </CommandList>
-      </Command>
+          </CommandList>
+        </Command>
+      </div>
     ),
   },
   {
     name: "Calendar",
     label: "日期选择",
     demo: (
-      <Calendar
-        mode="single"
-        selected={new Date(2025, 8, 23)}
-        defaultMonth={new Date(2025, 8, 1)}
-        className="rounded-xl border"
-      />
+      <div className="w-fit overflow-hidden rounded-xl border">
+        <Calendar
+          mode="single"
+          selected={new Date(2025, 8, 23)}
+          defaultMonth={new Date(2025, 8, 1)}
+        />
+      </div>
     ),
   },
   {
@@ -1324,26 +1366,30 @@ export const demoCells: DemoCell[] = [
     name: "ScrollArea",
     label: "自定义滚动条",
     demo: (
-      <ScrollArea className="h-40 w-full max-w-72 rounded-lg border p-3">
-        <div className="grid gap-3 text-sm">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="text-muted-foreground">
-              第 {i + 1} 条部署日志 · 构建成功
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
+      <div className="h-40 w-full max-w-72 overflow-hidden rounded-lg border">
+        <ScrollArea className="h-full w-full">
+          <div className="grid gap-3 p-3 text-sm">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="text-muted-foreground">
+                第 {i + 1} 条部署日志 · 构建成功
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
     ),
   },
   {
     name: "AspectRatio",
     label: "固定宽高比",
     demo: (
-      <AspectRatio ratio={16 / 9} className="w-full max-w-72 overflow-hidden rounded-xl border">
-        <div className="flex size-full items-center justify-center bg-muted text-sm text-muted-foreground">
-          16 : 9
-        </div>
-      </AspectRatio>
+      <div className="w-full max-w-72 overflow-hidden rounded-xl border">
+        <AspectRatio ratio={16 / 9}>
+          <div className="flex size-full items-center justify-center bg-muted text-sm text-muted-foreground">
+            16 : 9
+          </div>
+        </AspectRatio>
+      </div>
     ),
   },
   {
@@ -1452,9 +1498,11 @@ export const demoCells: DemoCell[] = [
           </SidebarFooter>
           <SidebarRail />
         </Sidebar>
-        <SidebarInset className="flex items-center justify-center gap-3 text-sm text-muted-foreground">
-          <SidebarTrigger />
-          主内容区域
+        <SidebarInset className="flex items-center justify-center">
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <SidebarTrigger />
+            主内容区域
+          </div>
         </SidebarInset>
       </SidebarProvider>
     ),

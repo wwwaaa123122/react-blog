@@ -29,11 +29,8 @@ export default function LoadingBar() {
   if (barKey === null) return null;
 
   return (
-    <Progress
-      key={barKey}
-      value={0}
-      aria-hidden="true"
-      className="route-loading-bar"
-    />
+    <div key={barKey} className="route-loading-bar">
+      <Progress value={0} aria-hidden="true" className="h-full" />
+    </div>
   );
 }

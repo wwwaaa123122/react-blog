@@ -33,8 +33,8 @@ function Countdown() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm">
-          <Badge variant="secondary" className="text-xs">成年倒计时</Badge>
+        <CardTitle className="flex items-center text-sm">
+          <Badge variant="secondary">成年倒计时</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -54,7 +54,7 @@ export default function About() {
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">关于我</h1>
         <p className="text-sm text-muted-foreground">认识一下这个博客的主人</p>
       </div>
-      <div className="max-w-[600px]">
+      <div className="max-w-150">
         <div className="flex items-center gap-4 mb-6">
           <Avatar size="lg" className="size-14">
             <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
@@ -72,16 +72,16 @@ export default function About() {
 
         <h3 className="text-sm font-bold mb-3">联系方式</h3>
         <div className="flex flex-wrap gap-2 mb-6">
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="pill" size="sm-pill">
             <a href="https://space.bilibili.com/3493078983772353" target="_blank" rel="noreferrer noopener"><Icon name="bilibili" size={14} /> Bilibili</a>
           </Button>
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="pill" size="sm-pill">
             <a href="https://t.me/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="telegram" size={14} /> Telegram</a>
           </Button>
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="pill" size="sm-pill">
             <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="github" size={14} /> GitHub</a>
           </Button>
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="pill" size="sm-pill">
             <a href="mailto:wwwaaa123122@outlook.com"><Mail className="size-3.5" /> 邮箱</a>
           </Button>
         </div>

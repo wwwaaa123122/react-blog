@@ -4,7 +4,6 @@ import * as React from "react"
 import { Slot } from "radix-ui"
 
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 
 // shadcn 风格的装饰性按钮：以 Button 为基础，叠加一层循环扫过的高光。
 //
@@ -14,7 +13,7 @@ import { cn } from "@/lib/utils"
 //   2) 不依赖 cqw/cqh 等尺寸单位，微小的按钮尺寸下也能正确铺满；
 //   3) 结构更简单，不会再影响 Button 自身的 flex 居中（图标/文字不会偏向一侧）。
 export interface ShimmerButtonProps
-  extends Omit<React.ComponentProps<typeof Button>, "variant"> {
+  extends React.ComponentProps<typeof Button> {
   /** 高光颜色 */
   shimmerColor?: string
   /** 扫过一次的时长（如 3s） */
@@ -32,11 +31,7 @@ function ShimmerButton({
   shimmerDuration = "3s",
   background,
   borderRadius = "9999px",
-  // 固定「黑底 + 白字」+ 一层扫过的流光，两种主题下都一样。
-  // 注意不能用 text-primary-foreground：该 token 在深色模式下是 #0b0e14（近黑），
-  // 会把文字和图标刷黑，压在 #111827 的深色底上就看不见了。
-  // 图标颜色不要在这里单独指定 —— 让按钮的 color 继承下去，
-  // 这样文字与 data-icon 图标永远同色。
+  variant = "shimmer",
   className,
   children,
   ...props
@@ -44,23 +39,17 @@ function ShimmerButton({
   return (
     <Button
       data-slot="shimmer-button"
+      variant={variant}
       style={
         {
           "--shimmer-color": shimmerColor,
           "--speed": shimmerDuration,
-          "--radius": borderRadius,
-          "--shimmer-bg": background ?? "#111827",
+          // 底色与圆角走内联样式： backgroundColor 保证 hover 不会盖掉流光底色
+          backgroundColor: background ?? "#111827",
+          borderRadius,
         } as React.CSSProperties
       }
-      className={cn(
-        "group/shimmer relative isolate overflow-hidden rounded-[var(--radius)] whitespace-nowrap",
-        // 固定底色：Button 默认变体带 hover:bg-primary/80，会盖掉流光底色
-        "bg-[var(--shimmer-bg)] hover:bg-[var(--shimmer-bg)] text-white [&_svg]:text-white",
-        // 不额外描边：黑底白字本身就有对比，焦点样式交给 Button 基类
-        "border border-transparent",
-        "transition-transform duration-300 ease-in-out active:translate-y-px",
-        className
-      )}
+      className={className}
       {...props}
     >
       {/*
@@ -72,7 +61,8 @@ function ShimmerButton({
       */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden rounded-[var(--radius)]"
+        className="pointer-events-none absolute inset-0 overflow-hidden rounded-full"
+        style={{ borderRadius: "inherit" }}
       >
         <span
           className="animate-shimmer-sweep absolute inset-y-0 -left-full w-full"

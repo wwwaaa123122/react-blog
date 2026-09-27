@@ -106,19 +106,18 @@ function CodeBlock({
   };
 
   return (
-    <div className="my-4 overflow-hidden rounded-[var(--radius)] border border-border">
+    <div className="my-4 overflow-hidden rounded-lg border border-border">
       {/* 头部：shadcn Badge（语言）+ Button（复制），固定在外部不随代码滚动 */}
       <div className="flex items-center justify-between gap-2 bg-muted/50 px-3 py-1.5">
-        <Badge variant="secondary" className="font-mono text-[11px]">
+        <Badge variant="secondary" size="xs-mono">
           {lang || "code"}
         </Badge>
         <Button
-          variant="ghost"
+          variant="muted"
           size="xs"
           onClick={copy}
           aria-label={copied ? "已复制" : "复制代码"}
           aria-live="polite"
-          className="text-muted-foreground"
         >
           {copied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
           {copied ? "已复制" : "复制"}
@@ -211,7 +210,7 @@ export default function Markdown({ content }: { content: string }) {
         return <CodeBlock lang={lang} code={code} highlighted={child.props.children} />;
       }
       // 普通 pre（非代码块）保持原样
-      return <pre className="my-4 overflow-x-auto rounded-[var(--radius)] border border-border bg-card-nested p-4">{children}</pre>;
+      return <pre className="my-4 overflow-x-auto rounded-lg border border-border bg-card-nested p-4">{children}</pre>;
     },
     // 让 <code> 自带的 pre 不干扰
     code: ({ className, children }: any) => {
@@ -220,7 +219,7 @@ export default function Markdown({ content }: { content: string }) {
         return <code className={className}>{children}</code>;
       }
       // 行内 code — 带背景和颜色，不加 border 避免像代码块
-      return <code className="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-[0.88em]">{children}</code>;
+      return <code className="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-sm">{children}</code>;
     },
     a: ({ href, children }: any) => {
       const isExternal = href && (href.startsWith("http://") || href.startsWith("https://"));

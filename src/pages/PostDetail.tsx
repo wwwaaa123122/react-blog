@@ -142,7 +142,8 @@ export default function PostDetail() {
     return (
       <>
         <Seo title="文章不存在" description="文章不存在或已被删除" noindex />
-        <Empty className="py-20">
+        <div className="py-20">
+          <Empty>
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <BookOpen />
@@ -158,7 +159,8 @@ export default function PostDetail() {
               </Link>
             </Button>
           </EmptyContent>
-        </Empty>
+          </Empty>
+        </div>
       </>
     );
   }
@@ -186,27 +188,27 @@ export default function PostDetail() {
       {/* 双栏布局：文章 + 右侧目录 */}
       <div className="flex gap-8 lg:gap-12 relative">
         {/* 文章主体 */}
-        <article ref={articleRef} className="min-w-0 flex-1 max-w-[720px] mx-auto">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-4 [overflow-wrap:anywhere]">
+        <article ref={articleRef} className="min-w-0 flex-1 max-w-180 mx-auto">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-4">
             {post.title}
           </h1>
 
           <div className="mb-6 flex flex-wrap items-center gap-2 text-muted-foreground">
-            <Badge variant="secondary" className="font-normal">
+            <Badge variant="secondary">
               <time dateTime={post.published}>{formatDate(post.published)}</time>
             </Badge>
             {post.updated && post.updated !== post.published && (
-              <Badge variant="secondary" className="font-normal">
+              <Badge variant="secondary">
                 <RefreshCw data-icon="inline-start" />
                 <time dateTime={post.updated}>更新于 {formatDate(post.updated)}</time>
               </Badge>
             )}
-            <Badge variant="secondary" className="font-normal">
+            <Badge variant="secondary">
               <Clock data-icon="inline-start" />
               {readingTime(post.words)}
             </Badge>
             {post.category && (
-              <Badge variant="secondary" className="font-normal">
+              <Badge variant="secondary">
                 <BookOpen data-icon="inline-start" />
                 {post.category}
               </Badge>
@@ -217,7 +219,7 @@ export default function PostDetail() {
             <div className="flex flex-wrap gap-1.5 mb-6">
               {post.tags.map((t) => (
                 <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                  <Badge variant="secondary" className="text-xs">{t}</Badge>
+                  <Badge variant="secondary" size="xs">{t}</Badge>
                 </Link>
               ))}
             </div>
@@ -234,7 +236,7 @@ export default function PostDetail() {
           {toc.length > 1 && (
             <Collapsible className="mb-6 lg:hidden">
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <Button variant="muted" size="sm">
                   <ListTree data-icon="inline-start" />
                   目录
                 </Button>
@@ -262,25 +264,29 @@ export default function PostDetail() {
           <Separator className="mt-10" />
           <nav aria-label="上一篇/下一篇" className="grid gap-3 sm:grid-cols-2">
             {prevPost && (
-              <Item asChild variant="outline" className="hover:border-primary/40 transition-colors">
+              <Item asChild variant="outline-accent">
                 <Link to={"/posts/" + prevPost.slug}>
                   <ItemContent>
-                    <ItemDescription className="flex items-center gap-1">
-                      <ArrowLeft data-icon="inline-start" /> 上一篇
+                    <ItemDescription>
+                      <span className="flex items-center gap-1">
+                        <ArrowLeft data-icon="inline-start" /> 上一篇
+                      </span>
                     </ItemDescription>
-                    <ItemTitle className="line-clamp-1">{prevPost.title}</ItemTitle>
+                    <ItemTitle>{prevPost.title}</ItemTitle>
                   </ItemContent>
                 </Link>
               </Item>
             )}
             {nextPost && (
-              <Item asChild variant="outline" className="text-right hover:border-primary/40 transition-colors sm:col-start-2">
+              <Item asChild variant="outline-accent" className="text-right sm:col-start-2">
                 <Link to={"/posts/" + nextPost.slug}>
                   <ItemContent className="items-end">
-                    <ItemDescription className="flex items-center gap-1">
-                      下一篇 <ArrowRight data-icon="inline-end" />
+                    <ItemDescription>
+                      <span className="flex items-center gap-1">
+                        下一篇 <ArrowRight data-icon="inline-end" />
+                      </span>
                     </ItemDescription>
-                    <ItemTitle className="line-clamp-1">{nextPost.title}</ItemTitle>
+                    <ItemTitle>{nextPost.title}</ItemTitle>
                   </ItemContent>
                 </Link>
               </Item>
@@ -316,7 +322,7 @@ export default function PostDetail() {
           <aside className="hidden lg:block w-56 shrink-0">
             <div className="sticky top-20">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目录</p>
-              <nav aria-label="文章目录" className="max-h-[calc(100vh-7rem)] overflow-y-auto space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
+              <nav aria-label="文章目录" className="max-h-120 overflow-y-auto space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
                 {toc.map((item, i) => (
                   <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
                     <a

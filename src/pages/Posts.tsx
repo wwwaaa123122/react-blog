@@ -51,11 +51,11 @@ function FilterGroup({
         }}
         className="flex-wrap justify-start"
       >
-        <ToggleGroupItem value="all" className="rounded-full px-3 text-xs">
+        <ToggleGroupItem value="all">
           全部
         </ToggleGroupItem>
         {options.map((o) => (
-          <ToggleGroupItem key={o} value={o} className="rounded-full px-3 text-xs">
+          <ToggleGroupItem key={o} value={o}>
             {o}
           </ToggleGroupItem>
         ))}
@@ -173,7 +173,7 @@ export default function Posts() {
       </div>
 
       {/* 搜索：shadcn InputGroup（前缀图标 + 后缀清除按钮） */}
-      <InputGroup className="mb-4 h-10 rounded-xl">
+      <InputGroup shape="rounded" className="mb-4 h-10">
         <InputGroupAddon align="inline-start">
           <Search />
         </InputGroupAddon>
@@ -184,7 +184,7 @@ export default function Posts() {
           onChange={(e) => onKeywordChange(e.target.value)}
           placeholder="搜索文章…（按 / 快速聚焦）"
           aria-label="搜索文章（快捷键 /）"
-          className="text-sm [&::-webkit-search-cancel-button]:hidden"
+          className="[&::-webkit-search-cancel-button]:hidden"
         />
         {keyword && (
           <InputGroupAddon align="inline-end">
@@ -208,7 +208,7 @@ export default function Posts() {
 
       {/* 列表 / 空状态 */}
       {pagePosts.length === 0 ? (
-        <Empty className="border py-16">
+        <Empty className="my-16">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <Search />

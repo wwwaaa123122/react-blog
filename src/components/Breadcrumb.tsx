@@ -37,7 +37,7 @@ export default function Breadcrumb({ items }: { items: Crumb[] }) {
                     </Link>
                   </BreadcrumbLink>
                 ) : (
-                  <BreadcrumbPage className="font-semibold text-foreground">
+                  <BreadcrumbPage variant="emphasized">
                     {item.label}
                   </BreadcrumbPage>
                 )}

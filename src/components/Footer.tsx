@@ -27,7 +27,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border">
-      <div className="mx-auto w-full max-w-[920px] md:max-w-[1000px] lg:max-w-[1120px] px-5 py-6 sm:py-8">
+      <div className="mx-auto w-full max-w-230 md:max-w-250 lg:max-w-280 px-5 py-6 sm:py-8">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
           <p className="text-xs text-muted-foreground sm:text-sm">
             &copy; {new Date().getFullYear()} {siteConfig.author}
@@ -37,7 +37,7 @@ export default function Footer() {
 
           <div className="flex items-center gap-0.5 sm:gap-1">
             {navLinks.map((l) => (
-              <Button key={l.to} asChild variant="link" size="sm" className="px-1.5 text-xs sm:px-2.5 sm:text-[0.8rem]">
+              <Button key={l.to} asChild variant="link" size="sm">
                 <Link to={l.to}>{l.label}</Link>
               </Button>
             ))}
@@ -50,7 +50,6 @@ export default function Footer() {
                 asChild
                 variant="ghost"
                 size="icon-sm"
-                className="text-muted-foreground"
                 aria-label={l.label}
                 title={l.label}
               >
@@ -73,12 +72,11 @@ export default function Footer() {
             <Button
               variant="ghost"
               size="icon-sm"
-              className="text-muted-foreground"
               onClick={scrollTop}
               aria-label="回到顶部"
               title="回到顶部"
             >
-              <ArrowUp className="size-3.5" />
+              <ArrowUp className="size-3.5 text-muted-foreground" />
             </Button>
           </div>
         </div>

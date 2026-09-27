@@ -104,12 +104,11 @@ export default function Components() {
             <Button
               key={`${cell.name}-${i}`}
               asChild
-              variant="outline"
-              size="xs"
-              className="rounded-full text-muted-foreground hover:text-foreground"
+              variant="muted"
+              size="xs-pill"
             >
               <a href={`#demo-${i + 1}`}>
-                <span className="font-mono text-[10px] opacity-60">{pad(i)}</span>
+                <span className="mr-2 font-mono text-xs opacity-60">{pad(i)}</span>
                 {cell.name}
               </a>
             </Button>
@@ -122,9 +121,9 @@ export default function Components() {
       <div className="grid gap-4 lg:grid-cols-2">
         {demoCells.map((cell, i) => (
           <Card key={`${cell.name}-${i}`} id={`demo-${i + 1}`} className="scroll-mt-20">
-            <CardHeader className="border-b">
-              <CardTitle className="flex items-center gap-2">
-                <span className="font-mono text-xs text-muted-foreground">
+            <CardHeader variant="bordered">
+              <CardTitle className="flex items-center">
+                <span className="mr-2 font-mono text-xs text-muted-foreground">
                   {pad(i)}
                 </span>
                 {cell.name}

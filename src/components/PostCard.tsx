@@ -11,10 +11,8 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Item, ItemContent } from "@/components/ui/item";
 
-export default function PostCard({ post }: { post: Post }) {
-  // 网格断点：mobile 单列 ~360px、md 双列 ~484px、lg 三列 ~352px。
+export default function PostCard({ post }: { post: Post }) {  // 网格断点：mobile 单列 ~360px、md 双列 ~484px、lg 三列 ~352px。
   // 用 -md(760px) / -thumb(320px) 变体替代 1600px 原图，
   // 单页 9 张卡片封面从 ~1.4MB 降到 ~250KB。
   const cover = responsiveImageSrc(
@@ -24,9 +22,9 @@ export default function PostCard({ post }: { post: Post }) {
   );
 
   return (
-    <Card className="cv-auto group gap-0 p-0 transition-all duration-200 hover:ring-primary/40 hover:shadow-sm">
+    <Card size="flush" variant="subtle" className="group">
       {cover && (
-        <CardContent className="relative overflow-hidden rounded-t-xl p-0">
+        <CardContent className="relative overflow-hidden p-0">
           <Link
             to={"/posts/" + post.slug}
             className="block bg-muted"
@@ -37,7 +35,7 @@ export default function PostCard({ post }: { post: Post }) {
               srcSet={cover.srcSet}
               sizes={cover.sizes}
               alt={post.title}
-              className="w-full aspect-[2/1] object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+              className="w-full aspect-2/1 object-cover transition-transform duration-200 group-hover:scale-105"
               loading="lazy"
               decoding="async"
             />
@@ -60,8 +58,8 @@ export default function PostCard({ post }: { post: Post }) {
             {post.description}
           </CardDescription>
         </CardHeader>
-        <Item className="flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground p-0 mt-3 rounded-none">
-          <ItemContent className="flex-row flex-wrap items-center gap-x-3 gap-y-1 flex-none">
+        <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+          <div className="flex flex-none flex-row flex-wrap items-center gap-x-3 gap-y-1">
             <time dateTime={post.published}>{formatDate(post.published)}</time>
             {post.category && (
               <span className="inline-flex items-center gap-1">
@@ -73,14 +71,14 @@ export default function PostCard({ post }: { post: Post }) {
               <Clock className="size-3" />
               {readingTime(post.words)}
             </span>
-          </ItemContent>
-        </Item>
+          </div>
+        </div>
       </CardContent>
       {post.tags.length > 0 && (
         <CardFooter className="flex-wrap gap-1.5 px-5 pb-5 pt-0">
           {post.tags.map((t) => (
             <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-              <Badge variant="secondary" className="text-[10px] h-4 px-1.5">{t}</Badge>
+              <Badge variant="secondary" size="2xs">{t}</Badge>
             </Link>
           ))}
         </CardFooter>

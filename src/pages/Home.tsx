@@ -14,7 +14,6 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Item,
-  ItemActions,
   ItemContent,
   ItemDescription,
   ItemGroup,
@@ -30,7 +29,7 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
   const cover = responsiveImageSrc(post.image, [96, 112], "96px, (min-width: 640px) 112px");
 
   return (
-    <Item className="cv-auto border-b border-border last:border-0 rounded-none py-5">
+    <Item variant="divided" size="loose">
       {cover && (
         <ItemMedia className="self-start">
           <Link to={"/posts/" + post.slug} className="shrink-0">
@@ -47,7 +46,7 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
         </ItemMedia>
       )}
       <ItemContent className="min-w-0 flex-1">
-        <ItemTitle className="text-base sm:text-lg font-semibold leading-snug">
+        <ItemTitle variant="lg">
           <Link
             to={"/posts/" + post.slug}
             className="text-foreground hover:text-primary transition-colors duration-150"
@@ -55,10 +54,10 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
             {post.title}
           </Link>
         </ItemTitle>
-        <ItemDescription className="leading-relaxed mb-2">
+        <ItemDescription className="mb-2">
           {post.description}
         </ItemDescription>
-        <ItemActions className="flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <time dateTime={post.published}>{formatDate(post.published)}</time>
           {post.category && (
             <span className="inline-flex items-center gap-1">
@@ -70,15 +69,15 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
             <Clock className="size-3" />
             {readingTime(post.words)}
           </span>
-        </ItemActions>
+        </div>
         {post.tags.length > 0 && (
-          <ItemActions className="flex-wrap gap-1.5 mt-1.5">
+          <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
             {post.tags.map((t) => (
               <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                <Badge variant="secondary" className="text-[10px] h-4 px-1.5">{t}</Badge>
+                <Badge variant="secondary" size="xs">{t}</Badge>
               </Link>
             ))}
-          </ItemActions>
+          </div>
         )}
       </ItemContent>
     </Item>
@@ -176,7 +175,7 @@ export default function Home() {
       {/* Hero */}
       <section className="mb-10 md:mb-12 pt-4 md:pt-6">
         <div className="flex items-start gap-5 mb-6">
-          <Avatar className="size-14 md:size-16 rounded-full ring-2 ring-border">
+          <Avatar className="size-14 md:size-16">
             <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
           </Avatar>
           <div className="min-w-0">
@@ -189,14 +188,11 @@ export default function Home() {
                 {siteConfig.description}
               </p>
             ) : (
-              <TypingAnimation
-                as="p"
-                duration={28}
-                delay={300}
-                className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-lg"
-              >
-                {siteConfig.description}
-              </TypingAnimation>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-lg">
+                <TypingAnimation as="span" duration={28} delay={300}>
+                  {siteConfig.description}
+                </TypingAnimation>
+              </p>
             )}
           </div>
         </div>
@@ -207,7 +203,6 @@ export default function Home() {
           <ShimmerButton
             asChild
             size="lg"
-            className="px-5"
             shimmerColor="hsl(0 0% 100% / 28%)"
             shimmerDuration="2.5s"
           >
@@ -235,7 +230,7 @@ export default function Home() {
             最新文章
             <span className="text-xs font-normal text-muted-foreground">({publishedPosts.length} 篇)</span>
           </h2>
-          <ItemGroup ref={listRef} className="divide-y divide-border">
+          <ItemGroup ref={listRef}>
             {posts.map((post, i) => (
               <div
                 key={post.slug}
@@ -252,7 +247,7 @@ export default function Home() {
           </ItemGroup>
           {publishedPosts.length > 8 && (
             <div className="mt-6 text-center">
-              <Button asChild variant="outline" className="rounded-full">
+              <Button asChild variant="outline">
                 <Link to="/posts" data-icon="inline-end">
                   查看全部文章 <ArrowRight className="size-3.5" />
                 </Link>
@@ -267,7 +262,7 @@ export default function Home() {
             {/* About */}
             <Card size="sm">
               <CardHeader>
-                <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">关于</CardTitle>
+                <CardTitle variant="muted" className="text-xs font-semibold uppercase tracking-wider">关于</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <p className="text-sm text-muted-foreground leading-relaxed">
@@ -286,7 +281,7 @@ export default function Home() {
                 <div className="flex flex-wrap gap-1.5">
                   {categories.map((cat) => (
                     <Link key={cat} to={"/posts?cat=" + encodeURIComponent(cat)}>
-                      <Badge variant="secondary" className="text-xs cursor-pointer transition-colors hover:bg-muted">{cat}</Badge>
+                      <Badge variant="secondary">{cat}</Badge>
                     </Link>
                   ))}
                 </div>
@@ -300,7 +295,7 @@ export default function Home() {
                 <div className="flex flex-wrap gap-1.5">
                   {allTags.map((t) => (
                     <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                      <Badge variant="outline" className="text-xs hover:bg-muted transition-colors cursor-pointer">{t}</Badge>
+                      <Badge variant="outline">{t}</Badge>
                     </Link>
                   ))}
                 </div>
@@ -310,12 +305,12 @@ export default function Home() {
             {/* Recent Posts */}
             <div>
               <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">近期</h3>
-              <ItemGroup className="gap-2">
+              <ItemGroup>
                 {publishedPosts.slice(0, 5).map((post) => (
                   <Item key={post.slug} size="xs" variant="muted" asChild>
                     <Link to={"/posts/" + post.slug}>
                       <ItemContent>
-                        <ItemDescription className="line-clamp-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        <ItemDescription>
                           {post.title}
                         </ItemDescription>
                       </ItemContent>
@@ -328,7 +323,7 @@ export default function Home() {
             {/* GitHub */}
             <div>
               <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">GitHub</h3>
-              <Button asChild variant="ghost" size="sm" className="h-auto p-0 text-muted-foreground hover:text-foreground" data-icon="inline-start">
+              <Button asChild variant="ghost" size="none" data-icon="inline-start">
                 <a
                   href="https://github.com/wwwaaa123122"
                   target="_blank"

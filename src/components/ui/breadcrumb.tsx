@@ -55,14 +55,24 @@ function BreadcrumbLink({
   )
 }
 
-function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
+function BreadcrumbPage({
+  variant = "default",
+  className,
+  ...props
+}: React.ComponentProps<"span"> & {
+  variant?: "default" | "emphasized"
+}) {
   return (
     <span
       data-slot="breadcrumb-page"
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn("font-normal text-foreground", className)}
+      className={cn(
+        "text-foreground",
+        variant === "emphasized" ? "font-semibold" : "font-normal",
+        className
+      )}
       {...props}
     />
   )

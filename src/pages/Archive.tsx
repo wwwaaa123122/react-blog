@@ -24,21 +24,23 @@ export default function Archive() {
         <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章 · 按年份归档</p>
       </div>
       {years.map(([year, posts]) => (
-        <Card key={year} className="cv-auto mb-8 py-4">
+        <Card key={year} className="mb-8">
           <CardHeader>
-            <CardTitle className="text-lg font-bold flex items-center gap-2">
-              {year} <Badge variant="secondary" className="text-xs">{posts.length} 篇</Badge>
+            <CardTitle className="text-lg font-bold">
+              <span className="flex items-center gap-2">
+                {year} <Badge variant="secondary" size="xs">{posts.length} 篇</Badge>
+              </span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ItemGroup className="gap-0">
+            <ItemGroup size="flush">
               {posts.map((post) => (
-                <Item key={post.slug} size="sm" variant="muted" className="border-b border-border/50 last:border-b-0 px-0 py-2">
-                  <ItemMedia className="shrink-0 text-xs text-muted-foreground tabular-nums w-20">
+                <Item key={post.slug} size="flush" variant="muted-divided">
+                  <ItemMedia variant="meta" className="w-20">
                     <time dateTime={post.published}>{formatDate(post.published)}</time>
                   </ItemMedia>
                   <ItemContent>
-                    <Link className="text-sm font-medium text-foreground hover:text-primary transition-colors [overflow-wrap:anywhere]" to={"/posts/" + post.slug}>{post.title}</Link>
+                    <Link className="text-sm font-medium text-foreground hover:text-primary transition-colors break-words" to={"/posts/" + post.slug}>{post.title}</Link>
                   </ItemContent>
                 </Item>
               ))}

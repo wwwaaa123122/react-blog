@@ -56,19 +56,20 @@ function CopyIconButton({ text, label = "复制" }: { text: string; label?: stri
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="shrink-0 text-muted-foreground"
-          onClick={() => {
-            void copyText(text, label + "成功");
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
-          }}
-          aria-label={label}
-        >
-          {copied ? <Check className="text-primary" /> : <Copy />}
-        </Button>
+        <span className="inline-flex shrink-0 text-muted-foreground">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => {
+              void copyText(text, label + "成功");
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
+            }}
+            aria-label={label}
+          >
+            {copied ? <Check className="text-primary" /> : <Copy />}
+          </Button>
+        </span>
       </TooltipTrigger>
       <TooltipContent>{copied ? "已复制" : label}</TooltipContent>
     </Tooltip>
@@ -93,7 +94,7 @@ export default function Friends() {
 
   const steps = [
     { title: "添加本站友链", desc: "请先在您的网站友链页面添加本站信息，可直接复制下方内容" },
-    { title: "提交申请", desc: (<>将申请邮件发送至 <a href={"mailto:" + siteInfo.email} className="font-semibold text-primary hover:underline [overflow-wrap:anywhere]">{siteInfo.email}</a>，或使用下方模板在评论区留言</>) },
+    { title: "提交申请", desc: (<>将申请邮件发送至 <a href={"mailto:" + siteInfo.email} className="font-semibold text-primary hover:underline break-words">{siteInfo.email}</a>，或使用下方模板在评论区留言</>) },
     { title: "等待审核", desc: "确认信息无误后会尽快添加您的友链" },
   ];
 
@@ -107,7 +108,7 @@ export default function Friends() {
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">友链</h1>
           <p className="text-sm text-muted-foreground">与优秀的朋友们一起成长</p>
         </div>
-        <Badge variant="secondary" className="gap-1.5 rounded-full px-3 py-1 text-sm">
+        <Badge variant="secondary" size="pill">
           <Users data-icon="inline-start" />
           共 {friends.length} 位朋友
         </Badge>
@@ -116,12 +117,14 @@ export default function Friends() {
       <div className="mb-4 grid gap-4 md:grid-cols-2">
         {/* 本站信息 */}
         <Card>
-          <CardHeader className="border-b">
-            <CardTitle className="flex items-center gap-2.5">
-              <span className="grid size-8 place-items-center rounded-[10px] bg-accent text-accent-foreground">
-                <Globe className="size-4" />
+          <CardHeader variant="bordered">
+            <CardTitle>
+              <span className="flex items-center gap-2.5">
+                <span className="grid size-8 place-items-center rounded-md bg-accent text-accent-foreground">
+                  <Globe className="size-4" />
+                </span>
+                本站信息
               </span>
-              本站信息
             </CardTitle>
             <CardAction>
               <Button
@@ -137,28 +140,28 @@ export default function Friends() {
           <CardContent className="grid gap-2">
             {infoFields.map(({ key, label, icon }) => (
               <Item key={key} variant="muted" size="xs">
-                <ItemMedia variant="icon" className="text-primary">
+                <ItemMedia variant="primary">
                   {(() => {
                     const Ico = icon;
                     return <Ico />;
                   })()}
                 </ItemMedia>
                 <ItemContent className="min-w-0">
-                  <ItemDescription className="text-xs">{label}</ItemDescription>
-                  <ItemTitle className="text-xs font-medium [overflow-wrap:anywhere] [word-break:break-all]">
+                  <ItemDescription>{label}</ItemDescription>
+                  <ItemTitle className="break-all">
                     {siteInfo[key]}
                   </ItemTitle>
                 </ItemContent>
                 <CopyIconButton text={siteInfo[key]} label={"复制" + label} />
               </Item>
             ))}
-            <Item variant="outline" size="xs" className="border-primary/25 bg-primary/5">
-              <ItemMedia variant="icon" className="text-primary">
+            <Item variant="accent" size="xs">
+              <ItemMedia variant="primary">
                 <Mail />
               </ItemMedia>
               <ItemContent className="min-w-0">
-                <ItemDescription className="text-xs">申请邮箱</ItemDescription>
-                <ItemTitle className="text-xs font-medium [overflow-wrap:anywhere] [word-break:break-all]">
+                <ItemDescription>申请邮箱</ItemDescription>
+                <ItemTitle className="break-all">
                   <a
                     href={"mailto:" + siteInfo.email}
                     className="transition-colors hover:text-primary hover:underline"
@@ -173,13 +176,15 @@ export default function Friends() {
         </Card>
 
         {/* 申请流程 */}
-        <Card className="cv-auto flex flex-col">
-          <CardHeader className="border-b">
-            <CardTitle className="flex items-center gap-2.5">
-              <span className="grid size-8 place-items-center rounded-[10px] bg-accent text-accent-foreground">
-                <UserRound className="size-4" />
+        <Card className="flex flex-col">
+          <CardHeader variant="bordered">
+            <CardTitle>
+              <span className="flex items-center gap-2.5">
+                <span className="grid size-8 place-items-center rounded-md bg-accent text-accent-foreground">
+                  <UserRound className="size-4" />
+                </span>
+                申请友链
               </span>
-              申请友链
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-1 flex-col gap-4">
@@ -187,26 +192,26 @@ export default function Friends() {
               {steps.map((s, i) => (
                 <li key={i} className="relative flex gap-3">
                   {i < steps.length - 1 && (
-                    <span className="absolute bottom-[-4px] left-[13px] top-[30px] w-[2px] bg-border" />
+                    <span className="absolute -bottom-1 left-3.25 top-7.5 w-0.5 bg-border" />
                   )}
-                  <Badge className="z-10 size-[27px] shrink-0 justify-center rounded-full p-0 text-xs">
+                  <Badge size="step">
                     {i + 1}
                   </Badge>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold [overflow-wrap:anywhere]">{s.title}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground [overflow-wrap:anywhere]">{s.desc}</p>
+                    <p className="text-sm font-semibold break-words">{s.title}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground break-words">{s.desc}</p>
                   </div>
                 </li>
               ))}
             </ol>
 
-            <div className="rounded-[10px] border border-border bg-muted/50">
+            <div className="rounded-md border border-border bg-muted/50">
               <div className="flex items-center justify-between px-3 py-2">
                 <p className="text-xs font-semibold text-muted-foreground">申请模板</p>
                 <CopyIconButton text={friendTemplate} label="复制申请模板" />
               </div>
               <Separator />
-              <pre className="overflow-x-auto whitespace-pre-wrap p-3 font-mono text-xs leading-relaxed text-muted-foreground [overflow-wrap:anywhere] [word-break:break-word]">
+              <pre className="overflow-x-auto whitespace-pre-wrap p-3 font-mono text-xs leading-relaxed text-muted-foreground break-words">
                 {friendTemplate}
               </pre>
             </div>
@@ -216,20 +221,22 @@ export default function Friends() {
 
       {/* 注意事项 */}
       <Card className="mb-4">
-        <CardHeader className="border-b">
-          <CardTitle className="flex items-center gap-2">
-            <Info className="size-4 text-primary" />
-            注意事项
+        <CardHeader variant="bordered">
+          <CardTitle>
+            <span className="flex items-center gap-2">
+              <Info className="size-4 text-primary" />
+              注意事项
+            </span>
           </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-x-6 gap-y-0.5 sm:grid-cols-2">
           {friendNotes.map((note) => (
             <div
               key={note.title}
-              className="flex items-baseline gap-2.5 py-[7px] text-sm text-muted-foreground"
+              className="flex items-baseline gap-2.5 py-1.75 text-sm text-muted-foreground"
             >
-              <span className="size-[7px] shrink-0 translate-y-[-1px] rounded-full bg-primary" />
-              <p className="min-w-0 [overflow-wrap:anywhere]">
+              <span className="size-1.75 shrink-0 -translate-y-0.25 rounded-full bg-primary" />
+              <p className="min-w-0 break-words">
                 <strong className="font-semibold text-foreground">{note.title}</strong>：{note.content}
               </p>
             </div>
@@ -241,12 +248,9 @@ export default function Friends() {
       <h2 className="mb-4 mt-8 flex items-center gap-2.5 text-3xl font-bold tracking-tight">
         友链列表 <Badge variant="secondary">{friends.length}</Badge>
       </h2>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {friends.map((f) => (
-          <Card
-            key={f.title}
-            className="gap-3 p-4 transition-all duration-200 hover:-translate-y-1 hover:ring-primary/50 hover:shadow-lg"
-          >
+          <Card key={f.title} size="cozy" variant="interactive">
             <a
               className="group flex min-w-0 items-center gap-3"
               href={f.siteurl}
@@ -254,19 +258,19 @@ export default function Friends() {
               rel="noreferrer noopener"
             >
               {f.imgurl && (
-                <Avatar className="size-12 rounded-xl after:rounded-xl">
-                  <AvatarImage src={f.imgurl} alt={f.title} className="rounded-xl" loading="lazy" decoding="async" />
-                  <AvatarFallback className="rounded-xl">
+                <Avatar shape="rounded" className="size-12">
+                  <AvatarImage src={f.imgurl} alt={f.title} loading="lazy" decoding="async" />
+                  <AvatarFallback>
                     {f.title.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
               )}
               <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-1.5 text-sm font-bold text-foreground [overflow-wrap:anywhere] [word-break:break-word]">
+                <p className="flex items-center gap-1.5 text-sm font-bold text-foreground break-words">
                   {f.title}
                   <ExternalLink className="size-3 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
                 </p>
-                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground [overflow-wrap:anywhere] [word-break:break-word]">
+                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground break-words">
                   {f.desc}
                 </p>
               </div>
@@ -274,7 +278,7 @@ export default function Friends() {
             {f.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 border-t border-border/60 pt-2.5">
                 {f.tags.map((t) => (
-                  <Badge key={t} variant="secondary" className="text-[11px]">{t}</Badge>
+                  <Badge key={t} variant="secondary" size="xs">{t}</Badge>
                 ))}
               </div>
             )}

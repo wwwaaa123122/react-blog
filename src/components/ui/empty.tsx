@@ -1,13 +1,29 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-function Empty({ className, ...props }: React.ComponentProps<"div">) {
+const emptyVariants = cva(undefined, {
+  variants: {
+    variant: {
+      default: "border-dashed",
+      solid: "border",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+})
+
+function Empty({
+  className,
+  variant = "default",
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof emptyVariants>) {
   return (
     <div
       data-slot="empty"
       className={cn(
-        "flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance",
-        className
+        "flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl p-6 text-center text-balance",
+        emptyVariants({ variant, className })
       )}
       {...props}
     />
@@ -54,13 +70,29 @@ function EmptyMedia({
   )
 }
 
-function EmptyTitle({ className, ...props }: React.ComponentProps<"div">) {
+const emptyTitleVariants = cva(undefined, {
+  variants: {
+    variant: {
+      default: "text-sm font-medium",
+      icon: "text-lg font-bold",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+})
+
+function EmptyTitle({
+  className,
+  variant = "default",
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof emptyTitleVariants>) {
   return (
     <div
       data-slot="empty-title"
       className={cn(
-        "cn-font-heading text-sm font-medium tracking-tight",
-        className
+        "cn-font-heading tracking-tight",
+        emptyTitleVariants({ variant, className })
       )}
       {...props}
     />

@@ -49,7 +49,7 @@ export default function Navbar() {
           : "bg-background/50"
       )}
     >
-      <div className="mx-auto flex h-14 w-full max-w-[920px] md:max-w-[1000px] lg:max-w-[1120px] items-center justify-between px-5">
+      <div className="mx-auto flex h-14 w-full max-w-230 md:max-w-250 lg:max-w-280 items-center justify-between px-5">
         <Link to="/" className="flex items-center gap-2 text-foreground shrink-0">
           <span className="font-bold text-base tracking-tight">Starlr</span>
         </Link>
@@ -72,22 +72,24 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1">
-          <Button asChild variant="ghost" size="icon" className="size-9 text-muted-foreground" aria-label="搜索">
+        <div className="flex items-center gap-1 text-muted-foreground">
+          <Button asChild variant="ghost" size="icon-lg" aria-label="搜索">
             <Link to="/posts">
               <Search className="size-4" />
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="icon" className="size-9 text-muted-foreground" aria-label="GitHub">
+          <Button asChild variant="ghost" size="icon-lg" aria-label="GitHub">
             <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener">
               <Icon name="github" size={16} />
             </a>
           </Button>
-          <Button asChild variant="ghost" size="icon" className="size-9 text-muted-foreground hidden sm:inline-flex" aria-label="统计">
-            <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener">
-              <BarChart3 className="size-4" />
-            </a>
-          </Button>
+          <div className="hidden sm:inline-flex">
+            <Button asChild variant="ghost" size="icon-lg" aria-label="统计">
+              <a href="https://umami.xc-lr.cn/share/FNH4YZYF9xPh0Xjt" target="_blank" rel="noreferrer noopener">
+                <BarChart3 className="size-4" />
+              </a>
+            </Button>
+          </div>
           <ThemeToggle />
           <div className="md:hidden">
             {/* modal={false}：导航菜单不需要锁定页面滚动。
@@ -97,7 +99,7 @@ export default function Navbar() {
                 于是 body 右侧多出十几像素，居中容器看起来整体左移。 */}
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-9 text-muted-foreground" aria-label="菜单">
+                <Button variant="ghost" size="icon-lg" aria-label="菜单">
                   <Menu className="size-4" />
                 </Button>
               </DropdownMenuTrigger>

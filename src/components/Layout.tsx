@@ -35,14 +35,14 @@ export default function Layout() {
     <div className="flex min-h-screen flex-col">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:ring-2 focus:ring-ring"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:ring-2 focus:ring-ring"
       >
         跳到主要内容
       </a>
       <LoadingBar />
       <Navbar />
       <main id="main" tabIndex={-1} className="flex-1 outline-none">
-        <div className="mx-auto w-full max-w-[920px] md:max-w-[1000px] lg:max-w-[1120px] px-5 py-8 md:py-10 lg:py-12">
+        <div className="mx-auto w-full max-w-230 md:max-w-250 lg:max-w-280 px-5 py-8 md:py-10 lg:py-12">
           <div
             key={key}
             style={
