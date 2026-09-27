@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, Home, ListTree, RefreshCw } from "lucide-react";
 import { getPostBySlug, formatDate, readingTime, publishedPosts } from "../lib/posts";
@@ -20,6 +20,7 @@ import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/i
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import Giscus from "../components/Giscus";
+import ReadingProgress from "../components/ReadingProgress";
 
 function extractToc(content: string) {
   const toc: { level: number; text: string }[] = [];
@@ -49,28 +50,67 @@ function extractToc(content: string) {
   return toc.map((t) => ({ ...t, id: slug(t.text) }));
 }
 
-// 目录滚动高亮（scroll-spy）：滚动时找出视口上方最近的一个标题作为"当前章节"
+// 目录滚动高亮（scroll-spy）：视口上方最近的一个标题即"当前章节"。
+// 用 IntersectionObserver 而非 scroll 监听：浏览器在合成线程判断相交，
+// 不用每帧对每个标题做 getBoundingClientRect（长文最多 28 个标题）。
 function useActiveHeading(toc: { level: number; text: string; id: string }[]): string {
   const [active, setActive] = useState("");
+  const OFFSET = 140; // 导航栏高度 + 阅读余量
 
   useEffect(() => {
     setActive("");
-    // 标题由 Markdown 组件渲染（id 与目录一致，重复标题带 -1/-2 后缀）
-    const onScroll = () => {
-      const offset = 140; // 导航栏高度 + 阅读余量
-      let current = "";
-      for (const item of toc) {
-        const el = document.getElementById(item.id);
-        if (el && el.getBoundingClientRect().top <= offset) {
-          current = item.id;
+    if (toc.length === 0 || !("IntersectionObserver" in window)) return;
+
+    // above[i] = 第 i 个标题是否已越过 140px 分界线
+    const above = new Array<boolean>(toc.length).fill(false);
+    const mark = (id: string, isAbove: boolean) => {
+      const idx = toc.findIndex((t) => t.id === id);
+      if (idx >= 0 && above[idx] !== isAbove) {
+        above[idx] = isAbove;
+        // 取"已越过分界线"中序号最大的标题（即最靠近分界线且在其下方）
+        let current = "";
+        for (let i = toc.length - 1; i >= 0; i--) {
+          if (above[i]) { current = toc[i].id; break; }
         }
+        setActive(current);
       }
-      setActive(current);
     };
-    onScroll();
+
+    const els: HTMLElement[] = [];
+    for (const t of toc) {
+      const el = document.getElementById(t.id);
+      if (el) els.push(el);
+    }
+    if (els.length === 0) return;
+
+    const update = () => {
+      for (let i = 0; i < els.length; i++) {
+        mark(toc[i].id, els[i].getBoundingClientRect().top <= OFFSET);
+      }
+    };
+    // 初次定位（含深链 #anchor 场景）
+    update();
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          mark((e.target as HTMLElement).id, e.boundingClientRect.top <= OFFSET);
+        }
+      },
+      { rootMargin: `-${OFFSET}px 0px 0px 0px`, threshold: [0, 1] }
+    );
+    for (const el of els) io.observe(el);
+
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => { raf = 0; update(); });
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
+      io.disconnect();
+      if (raf) cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
@@ -88,6 +128,7 @@ function useActiveHeading(toc: { level: number; text: string; id: string }[]): s
 
 export default function PostDetail() {
   const { slug } = useParams();
+  const articleRef = useRef<HTMLElement>(null);
   const post = slug ? getPostBySlug(slug) : undefined;
 
   // 注意：所有 hooks 必须在早期 return 之前调用（保持调用顺序稳定）
@@ -133,14 +174,19 @@ export default function PostDetail() {
   return (
     <>
       <Seo title={post.title} description={post.description || siteConfig.description}
-        path={"/posts/" + post.slug + "/"} keywords={post.tags} ogType="article" ogImage={post.image} />
+        path={"/posts/" + post.slug + "/"} keywords={post.tags} ogType="article" ogImage={post.image}
+        articlePublished={post.published} articleModified={post.updated}
+        articleSection={post.category} articleTags={post.tags} />
       <Breadcrumb items={[{ label: "文章", to: "/posts/" }, { label: post.title }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleJsonLd(post)) }} />
+
+      {/* 阅读进度条：随滚动推进，scaleX 走合成器不触发回流 */}
+      <ReadingProgress target={articleRef} />
 
       {/* 双栏布局：文章 + 右侧目录 */}
       <div className="flex gap-8 lg:gap-12 relative">
         {/* 文章主体 */}
-        <article className="min-w-0 flex-1 max-w-[720px]">
+        <article ref={articleRef} className="min-w-0 flex-1 max-w-[720px] mx-auto">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-4 [overflow-wrap:anywhere]">
             {post.title}
           </h1>

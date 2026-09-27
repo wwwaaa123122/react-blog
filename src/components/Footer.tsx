@@ -27,7 +27,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border">
-      <div className="mx-auto w-full max-w-[900px] px-5 py-6 sm:py-8">
+      <div className="mx-auto w-full max-w-[920px] md:max-w-[1000px] lg:max-w-[1120px] px-5 py-6 sm:py-8">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
           <p className="text-xs text-muted-foreground sm:text-sm">
             &copy; {new Date().getFullYear()} {siteConfig.author}

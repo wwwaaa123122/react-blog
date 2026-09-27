@@ -32,7 +32,13 @@
     <!-- 评论与统计的早期连接（giscus 脚本为 CORS 模式，umami 为非 CORS） -->
     <link rel="preconnect" href="https://giscus.app" crossorigin />
     <link rel="preconnect" href="https://umami.xc-lr.cn" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- 添加到主屏幕（PWA）时的名称与全屏状态栏样式 -->
+    <meta name="application-name" content="Starlr Blog" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Starlr" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <!-- theme-color：JS 会按实际主题覆盖；media 变体让不响应 JS 更新的
          旧版 iOS Safari 也能按系统明暗自动取色 -->
     <meta name="theme-color" content="#f8f9fc" media="(prefers-color-scheme: light)" />
@@ -45,6 +51,12 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="max-width:40rem;margin:3rem auto;padding:0 1rem;font-family:system-ui,sans-serif;line-height:1.7;color:#333">
+        <p>本站需要启用 JavaScript 才能浏览。请在浏览器设置中开启 JavaScript 后重试。</p>
+        <p>或直接访问 <a href="%BASE_URL%llms.txt">llms.txt</a> 与 <a href="%BASE_URL%rss.xml">RSS</a> 获取内容摘要。</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

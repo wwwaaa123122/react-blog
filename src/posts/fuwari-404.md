@@ -2,7 +2,7 @@
 title: 为fuwari增加一个404界面
 published: 2025-09-24
 description: '为fuwari添加一个好看的404界面'
-image: '/images/fuwari-404.jpg'
+image: '/images/fuwari-404.webp'
 tags: [fuwari]
 category: 'tech'
 draft: false 
@@ -171,7 +171,7 @@ import { siteConfig } from "../config";
 ### 单语言404.astro  
 此方法直接在**src/pages**目录下创建404.astro即可  
 由于我没有语言的404，这里附上二叉树树的404界面  
-预览：![2x-404](../images/2x-404.jpg)
+预览：![2x-404](../images/2x-404.webp)
 ```astro
 ---
 import Layout from "@/layouts/Layout.astro";

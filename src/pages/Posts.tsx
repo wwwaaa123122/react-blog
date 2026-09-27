@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { publishedPosts, getAllTags } from "../lib/posts";
@@ -66,6 +66,7 @@ function FilterGroup({
 
 export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const searchRef = useRef<HTMLInputElement>(null);
   const tag = searchParams.get("tag") ?? "";
   const cat = searchParams.get("cat") ?? "";
   // 搜索词与页码也放进 URL（?q= / ?page=）：可分享、刷新/后退不丢失
@@ -91,6 +92,24 @@ export default function Posts() {
     }
     return list;
   }, [cat, tag, keyword]);
+
+// 键盘快捷键：按 / 聚焦搜索框（焦点已在可输入元素内时不拦截，避免吞掉 "/" 字符）
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = document.activeElement;
+      const typing =
+        el instanceof HTMLInputElement ||
+        el instanceof HTMLTextAreaElement ||
+        (el instanceof HTMLElement && el.isContentEditable);
+      if (typing) return;
+      e.preventDefault();
+      searchRef.current?.focus();
+      searchRef.current?.select();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, totalPages);
@@ -159,11 +178,12 @@ export default function Posts() {
           <Search />
         </InputGroupAddon>
         <InputGroupInput
+          ref={searchRef}
           type="search"
           value={keyword}
           onChange={(e) => onKeywordChange(e.target.value)}
-          placeholder="搜索文章…"
-          aria-label="搜索文章"
+          placeholder="搜索文章…（按 / 快速聚焦）"
+          aria-label="搜索文章（快捷键 /）"
           className="text-sm [&::-webkit-search-cancel-button]:hidden"
         />
         {keyword && (

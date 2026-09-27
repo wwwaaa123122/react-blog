@@ -163,6 +163,10 @@
     @apply font-sans;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* 字距与连字：拉丁字符排更紧凑，中英混排视觉更均衡 */
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
   }
   body {
     @apply bg-background text-foreground;
@@ -172,6 +176,9 @@
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* 中文之间不加额外字距，避免破坏汉字方块感 */
+    letter-spacing: 0;
   }
   ::selection {
     background: var(--primary-soft);
@@ -182,6 +189,9 @@
   }
   button {
     font-family: inherit;
+  }
+  a {
+    text-underline-offset: 3px;
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring/60;

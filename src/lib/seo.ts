@@ -28,6 +28,7 @@ export function websiteJsonLd(): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": siteUrl() + "#website",
     name: siteConfig.title,
     alternateName: siteConfig.author,
     description: siteConfig.description,
@@ -59,6 +60,7 @@ export function personJsonLd(): Record<string, unknown> {
 
 // 文章 JSON-LD
 export function articleJsonLd(post: Post): Record<string, unknown> {
+  const articleUrl = absoluteUrl(`/posts/${post.slug}/`);
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -68,15 +70,30 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
     dateModified: post.updated || post.published,
     keywords: post.tags.length > 0 ? post.tags.join(", ") : undefined,
     articleSection: post.category || undefined,
-    author: { "@type": "Person", name: siteConfig.author },
+    inLanguage: "zh-Hans",
+    mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
+    author: {
+      "@type": "Person",
+      name: profileConfig.name,
+      url: siteUrl(),
+    },
     publisher: {
       "@type": "Organization",
       name: siteConfig.title,
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/favicon.png"),
+      },
     },
     ...(post.image
       ? { image: absoluteUrl(post.image.replace(/\.\.\/images\//, "/images/")) }
       : {}),
-    mainEntityOfPage: absoluteUrl(`/posts/${post.slug}/`),
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": siteUrl() + "#website",
+      url: siteUrl(),
+      name: siteConfig.title,
+    },
   };
 }
 

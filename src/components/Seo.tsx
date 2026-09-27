@@ -12,9 +12,14 @@ interface SeoProps {
   noindex?: boolean;
   ogType?: "website" | "article";
   ogImage?: string; // 封面图路径（本地 /images/x 或绝对 URL）
+  // 文章类页面的补充 meta（对应 article: 前缀与 Twitter/X 卡片）
+  articlePublished?: string;
+  articleModified?: string;
+  articleSection?: string;
+  articleTags?: string[];
 }
 
-// 设置页面标题、描述、关键词、canonical 与 OG/Twitter 分享卡片 meta
+// 设置页面标题、描述、关键词、canonical、hreflang 与 OG/Twitter/文章 meta
 export default function Seo({
   title,
   description,
@@ -23,6 +28,10 @@ export default function Seo({
   noindex,
   ogType = "website",
   ogImage,
+  articlePublished,
+  articleModified,
+  articleSection,
+  articleTags,
 }: SeoProps) {
   useEffect(() => {
     const fullTitle = title
@@ -110,7 +119,43 @@ export default function Seo({
       removeMeta("property", "og:image:width");
       removeMeta("property", "og:image:height");
     }
-  }, [title, description, path, keywords, noindex, ogType, ogImage]);
+
+    // 图片 alt（无障碍 + 部分社交平台的图文说明）
+    if (ogImageUrl) setMeta("property", "og:image:alt", desc);
+    else removeMeta("property", "og:image:alt");
+
+    // ---- 文章扩展 meta（og:type=article 时 Google 新闻等会读取）----
+    // 先清掉上一页残留的同名 meta（article:tag 会重复出现多份），再按当前文章重写
+    const removeMetaAll = (attr: "name" | "property", key: string) => {
+      document.querySelectorAll(`meta[${attr}="${key}"]`).forEach((el) => el.remove());
+    };
+    removeMetaAll("property", "article:published_time");
+    removeMetaAll("property", "article:modified_time");
+    removeMetaAll("property", "article:section");
+    removeMetaAll("property", "article:tag");
+    if (articlePublished) {
+      setMeta("property", "article:published_time", articlePublished);
+      setMeta("property", "article:modified_time", articleModified || articlePublished);
+    }
+    if (articleSection) setMeta("property", "article:section", articleSection);
+    articleTags?.forEach((t) => setMeta("property", "article:tag", t));
+
+    // ---- hreflang：单语站点也显式声明，搜索引擎据此判定语言版本 ----
+    const setLangLink = (hreflang: string, url: string) => {
+      let link = document.querySelector<HTMLLinkElement>(`link[hreflang="${hreflang}"]`);
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "alternate";
+        link.setAttribute("hreflang", hreflang);
+        document.head.appendChild(link);
+      }
+      link.href = url;
+    };
+    if (!noindex) {
+      setLangLink("zh-Hans", url);
+      setLangLink("x-default", url);
+    }
+  }, [title, description, path, keywords, noindex, ogType, ogImage, articlePublished, articleModified, articleSection, articleTags]);
 
   return null;
 }

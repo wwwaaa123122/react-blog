@@ -14,23 +14,40 @@
   background: transparent;
 }
 
-/* ===== Markdown 排版 ===== */
+/* ===== Markdown 排版 =====
+   正文行宽控制在文章列（约 620-720px）内，中文字符 17px 时约 40 字/行，
+   英文约 70 字符/行，都在易读区间。 */
 .markdown {
   font-size: 16px;
   line-height: 1.8;
   color: var(--foreground);
   word-break: break-word;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 1024px) {
+  .markdown { font-size: 17px; }
+}
+
+.markdown p,
+.markdown li,
+.markdown blockquote,
+.markdown figure {
+  text-wrap: pretty;
 }
 
 .markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.35;
   margin: 1.8em 0 0.6em;
   scroll-margin-top: calc(var(--nav-height) + 24px);
+  text-wrap: balance;
+  letter-spacing: -0.011em;
+  overflow-wrap: anywhere;
 }
 /* 正文 # 标题降级为 h2 后保留原 h1 的大字号视觉 */
-.markdown h2.markdown-h1 { font-size: 1.75em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
-.markdown h2 { font-size: 1.45em; padding-bottom: 0.25em; border-bottom: 1px solid var(--border); }
+.markdown h2.markdown-h1 { font-size: 1.7em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+.markdown h2 { font-size: 1.4em; padding-bottom: 0.25em; border-bottom: 1px solid var(--border); }
 .markdown h3 { font-size: 1.2em; }
 .markdown h4 { font-size: 1.05em; }
 .markdown p { margin: 0.9em 0; }
@@ -47,9 +64,11 @@
 }
 .markdown blockquote p { margin: 0.3em 0; }
 
-.markdown ul, .markdown ol { margin: 0.9em 0; padding-left: 1.5em; }
-.markdown li { margin: 0.3em 0; }
+.markdown ul, .markdown ol { margin: 0.9em 0; padding-left: 1.4em; }
+.markdown li { margin: 0.35em 0; }
 .markdown li::marker { color: var(--primary); }
+/* 嵌套列表不再叠加过深的缩进 */
+.markdown li > ul, .markdown li > ol { margin: 0.3em 0; }
 .markdown img { border-radius: var(--radius); margin: 1.2em auto; }
 .markdown hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
 .markdown table { width: 100%; border-collapse: collapse; margin: 1.2em 0; font-size: 0.95em; display: block; overflow-x: auto; }
@@ -58,7 +77,7 @@
 .markdown tr:nth-child(even) td { background: color-mix(in srgb, var(--card) 60%, var(--code-bg)); }
 .markdown code {
   font-family: var(--font-mono);
-  font-size: 0.88em;
+  font-size: 0.875em;
   padding: 0.15em 0.4em;
   border-radius: 5px;
   background: var(--code-bg);
@@ -72,7 +91,7 @@
   background: var(--code-bg);
   border: 1px solid var(--border);
   overflow-x: auto;
-  line-height: 1.65;
+  line-height: 1.7;
   position: relative;
 }
 .markdown pre code {
@@ -80,7 +99,8 @@
   border: none;
   background: transparent;
   color: var(--foreground);
-  font-size: 13.5px;
+  font-size: 14px;
+  line-height: inherit;
 }
 
 /* ===== hljs 代码高亮 ===== */
@@ -103,3 +123,21 @@
 .dark .markdown .hljs-type, .dark .markdown .hljs-class .hljs-title { color: #ffa657; }
 .dark .markdown .hljs-attr, .dark .markdown .hljs-attribute, .dark .markdown .hljs-symbol, .dark .markdown .hljs-bullet, .dark .markdown .hljs-built_in, .dark .markdown .hljs-addition { color: #ffa657; }
 .dark .markdown .hljs-meta { color: #8b949e; }
+
+/* ===== 渲染性能 ===== */
+/* 首屏外的重复区块跳过布局与绘制，长页面首屏渲染更快。
+   contain-intrinsic-size 的 auto 会记住上次渲染高度，滚动时不抖动 */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+/* 代码块可能很长，同样跳过屏外计算 */
+.markdown pre {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+/* 减少滚动与动画的强制回流：只用于已有的 transform 动画元素 */
+.will-transform {
+  will-change: transform;
+}

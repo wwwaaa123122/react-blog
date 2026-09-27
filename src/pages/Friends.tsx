@@ -173,7 +173,7 @@ export default function Friends() {
         </Card>
 
         {/* 申请流程 */}
-        <Card className="flex flex-col">
+        <Card className="cv-auto flex flex-col">
           <CardHeader className="border-b">
             <CardTitle className="flex items-center gap-2.5">
               <span className="grid size-8 place-items-center rounded-[10px] bg-accent text-accent-foreground">
@@ -255,7 +255,7 @@ export default function Friends() {
             >
               {f.imgurl && (
                 <Avatar className="size-12 rounded-xl after:rounded-xl">
-                  <AvatarImage src={f.imgurl} alt={f.title} className="rounded-xl" />
+                  <AvatarImage src={f.imgurl} alt={f.title} className="rounded-xl" loading="lazy" decoding="async" />
                   <AvatarFallback className="rounded-xl">
                     {f.title.slice(0, 2)}
                   </AvatarFallback>

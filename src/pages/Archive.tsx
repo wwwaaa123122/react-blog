@@ -24,7 +24,7 @@ export default function Archive() {
         <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章 · 按年份归档</p>
       </div>
       {years.map(([year, posts]) => (
-        <Card key={year} className="mb-8 py-4">
+        <Card key={year} className="cv-auto mb-8 py-4">
           <CardHeader>
             <CardTitle className="text-lg font-bold flex items-center gap-2">
               {year} <Badge variant="secondary" className="text-xs">{posts.length} 篇</Badge>

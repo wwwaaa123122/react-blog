@@ -7,23 +7,51 @@
     "w": 100,
     "h": 100
   },
-  "/homeground.webp": {
-    "w": 2520,
-    "h": 1440
+  "/homeground-md.webp": {
+    "w": 760,
+    "h": 434
   },
-  "/images/2x-404.jpg": {
+  "/homeground-thumb.webp": {
+    "w": 320,
+    "h": 183
+  },
+  "/homeground.webp": {
+    "w": 1600,
+    "h": 914
+  },
+  "/images/2x-404.webp": {
     "w": 562,
     "h": 557
   },
+  "/images/SSH_Cloudflare-md.webp": {
+    "w": 760,
+    "h": 428
+  },
+  "/images/SSH_Cloudflare-thumb.webp": {
+    "w": 320,
+    "h": 180
+  },
   "/images/SSH_Cloudflare.webp": {
-    "w": 2560,
-    "h": 1440
+    "w": 1600,
+    "h": 900
+  },
+  "/images/aluona-md.webp": {
+    "w": 760,
+    "h": 426
+  },
+  "/images/aluona-thumb.webp": {
+    "w": 320,
+    "h": 179
   },
   "/images/aluona.webp": {
     "w": 1600,
     "h": 897
   },
-  "/images/archlinux.png": {
+  "/images/archlinux-thumb.webp": {
+    "w": 320,
+    "h": 180
+  },
+  "/images/archlinux.webp": {
     "w": 1067,
     "h": 600
   },
@@ -35,84 +63,124 @@
     "w": 900,
     "h": 1853
   },
+  "/images/ba3cai-md.webp": {
+    "w": 760,
+    "h": 342
+  },
+  "/images/ba3cai-thumb.webp": {
+    "w": 320,
+    "h": 144
+  },
   "/images/ba3cai.webp": {
     "w": 1600,
     "h": 720
   },
-  "/images/comment.jpg": {
+  "/images/comment-thumb.webp": {
+    "w": 320,
+    "h": 148
+  },
+  "/images/comment.webp": {
     "w": 775,
     "h": 359
   },
-  "/images/firefly.png": {
-    "w": 1920,
-    "h": 800
+  "/images/firefly-md.webp": {
+    "w": 760,
+    "h": 317
   },
-  "/images/fuwari-404.jpg": {
+  "/images/firefly-thumb.webp": {
+    "w": 320,
+    "h": 133
+  },
+  "/images/firefly.webp": {
+    "w": 1600,
+    "h": 667
+  },
+  "/images/fuwari-404-thumb.webp": {
+    "w": 320,
+    "h": 237
+  },
+  "/images/fuwari-404.webp": {
     "w": 724,
     "h": 537
   },
-  "/images/fuwari-rss-fix.jpg": {
+  "/images/fuwari-rss-fix-thumb.webp": {
+    "w": 320,
+    "h": 213
+  },
+  "/images/fuwari-rss-fix.webp": {
     "w": 1080,
     "h": 720
   },
-  "/images/how-use-bot-cover.webp": {
-    "w": 1672,
-    "h": 941
+  "/images/how-use-bot-cover-md.webp": {
+    "w": 760,
+    "h": 428
   },
-  "/images/kick.png": {
+  "/images/how-use-bot-cover-thumb.webp": {
+    "w": 320,
+    "h": 180
+  },
+  "/images/how-use-bot-cover.webp": {
+    "w": 1600,
+    "h": 900
+  },
+  "/images/kick-thumb.webp": {
+    "w": 320,
+    "h": 180
+  },
+  "/images/kick.webp": {
     "w": 1067,
     "h": 600
   },
+  "/images/mc-srv-md.webp": {
+    "w": 760,
+    "h": 544
+  },
+  "/images/mc-srv-thumb.webp": {
+    "w": 320,
+    "h": 229
+  },
   "/images/mc-srv.webp": {
-    "w": 2000,
-    "h": 1433
-  },
-  "/images/qiwei.jpg": {
-    "w": 1080,
-    "h": 2234
-  },
-  "/images/qrwechat.png": {
-    "w": 962,
-    "h": 1277
+    "w": 1600,
+    "h": 1146
   },
   "/images/rinai.webp": {
     "w": 1600,
     "h": 720
   },
-  "/images/screenshot2026-09-06-12-45-14-660commicrosoftemmx.png": {
+  "/images/screenshot2026-09-06-12-45-14-660commicrosoftemmx.webp": {
     "w": 931,
     "h": 166
   },
-  "/images/screenshot2026-09-06-13-05-07-556commicrosoftemmx.png": {
+  "/images/screenshot2026-09-06-13-05-07-556commicrosoftemmx.webp": {
     "w": 501,
     "h": 214
   },
-  "/images/screenshot2026-09-06-13-07-18-743commicrosoftemmx.png": {
+  "/images/screenshot2026-09-06-13-07-18-743commicrosoftemmx.webp": {
     "w": 884,
     "h": 370
   },
-  "/images/screenshot2026-09-06-13-10-55-395markvia.png": {
+  "/images/screenshot2026-09-06-13-10-55-395markvia.webp": {
     "w": 1170,
     "h": 875
   },
-  "/images/screenshot2026-09-06-13-11-09-365markvia.png": {
+  "/images/screenshot2026-09-06-13-11-09-365markvia.webp": {
     "w": 1185,
     "h": 722
   },
-  "/images/screenshot2026-09-06-13-14-38-528tvdanmakubili.png": {
+  "/images/screenshot2026-09-06-13-14-38-528tvdanmakubili.webp": {
     "w": 619,
     "h": 297
   },
-  "/images/tunelbrokerwarp.png": {
+  "/images/tunelbrokerwarp-thumb.webp": {
+    "w": 320,
+    "h": 180
+  },
+  "/images/tunelbrokerwarp.webp": {
     "w": 1067,
     "h": 600
   },
   "/images/yazi.webp": {
     "w": 1600,
     "h": 720
-  },
-  "/images/zeseshuxia.webp": {
-    "w": 1600,
-    "h": 915
   }
 }

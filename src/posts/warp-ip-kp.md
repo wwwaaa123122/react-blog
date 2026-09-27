@@ -4,7 +4,7 @@ published: 2026-09-06
 updated: 2026-09-06
 draft: false
 description: 使用Tunnel Broker IPv6 隧道与Cloudflare WARP获取任意地区的IP地址
-image: /images/tunelbrokerwarp.png
+image: /images/tunelbrokerwarp.webp
 tags:
   - cloudflare
   - warp
@@ -30,7 +30,7 @@ lang: zh_CN
 
 打开创建[隧道页面](https://tunnelbroker.net/new_tunnel.php)，IPv4 Endpoint填你的公网IPv4 地址，下面选择一个隧道服务器，可以直接选择你服务器附近地区的隧道服务器，也可以全部 ping 一遍，选择延迟最低的。推荐使用/48 作为服务器IPv6 段，但由于新账号的原因，可能需要 24~72 小时才能分配，就像这样 
 
-![](/images/screenshot2026-09-06-12-45-14-660commicrosoftemmx.png)
+![](/images/screenshot2026-09-06-12-45-14-660commicrosoftemmx.webp)
 
 这段时间可以先用/64 做连通性测试
 
@@ -243,11 +243,11 @@ TunnelBroker 创建隧道后通常还会提供 Routed `/64` 或 `/48`。隧道�
 
 创建入站及配置客户端后，点击侧栏出站 
 
-![](/images/screenshot2026-09-06-13-05-07-556commicrosoftemmx.png)
+![](/images/screenshot2026-09-06-13-05-07-556commicrosoftemmx.webp)
 
 编辑配置中只需要改为IPV6 优先 
 
-![](/images/screenshot2026-09-06-13-07-18-743commicrosoftemmx.png)
+![](/images/screenshot2026-09-06-13-07-18-743commicrosoftemmx.webp)
 
 再将warp移动到第一个，至此，配置完成，只需等待同步
 
@@ -255,14 +255,14 @@ TunnelBroker 创建隧道后通常还会提供 Routed `/64` 或 `/48`。隧道�
 
 等待了接近半个月，B站终于将warp的IP标为朝鲜
 
-![](/images/screenshot2026-09-06-13-10-55-395markvia.png)
+![](/images/screenshot2026-09-06-13-10-55-395markvia.webp)
 
-![](/images/screenshot2026-09-06-13-11-09-365markvia.png)
+![](/images/screenshot2026-09-06-13-11-09-365markvia.webp)
 
 B站评论区文章IP归属都会显示为朝鲜，主页需要1~3 周才会改变
 
 这里贴一张B站评论测试图
 
-![](/images/screenshot2026-09-06-13-14-38-528tvdanmakubili.png)
+![](/images/screenshot2026-09-06-13-14-38-528tvdanmakubili.webp)
 
 也是可以愉快地发评论了😋

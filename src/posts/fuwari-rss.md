@@ -2,7 +2,7 @@
 title: fuwari修复RSS图片不显示
 published: 2025-09-27
 description: '修复RSS图片链接问题'
-image: '/images/fuwari-rss-fix.jpg'
+image: '/images/fuwari-rss-fix.webp'
 tags: [fuwari,RSS]
 category: 'tech'
 draft: false 

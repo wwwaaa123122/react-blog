@@ -23,9 +23,10 @@ export default function ThemeToggle() {
           size="icon"
           aria-label="切换主题"
           title="切换主题"
+          className="size-9 text-muted-foreground"
         >
-          <Sun className="size-[19px] dark:hidden" />
-          <Moon className="hidden size-[19px] dark:block" />
+          <Sun className="size-[18px] dark:hidden" />
+          <Moon className="hidden size-[18px] dark:block" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

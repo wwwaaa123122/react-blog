@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, Clock } from "lucide-react";
 import type { Post } from "../types";
 import { formatDate, readingTime } from "../lib/posts";
-import { assetUrl } from "../lib/base";
+import { responsiveImageSrc } from "../lib/post-image";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -14,12 +14,17 @@ import {
 import { Item, ItemContent } from "@/components/ui/item";
 
 export default function PostCard({ post }: { post: Post }) {
-  const cover = post.image
-    ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/"))
-    : undefined;
+  // 网格断点：mobile 单列 ~360px、md 双列 ~484px、lg 三列 ~352px。
+  // 用 -md(760px) / -thumb(320px) 变体替代 1600px 原图，
+  // 单页 9 张卡片封面从 ~1.4MB 降到 ~250KB。
+  const cover = responsiveImageSrc(
+    post.image,
+    [360, 484, 352],
+    "360px, (min-width: 768px) 484px, (min-width: 1024px) 352px"
+  );
 
   return (
-    <Card className="group gap-0 p-0 transition-all duration-200 hover:ring-primary/40 hover:shadow-sm">
+    <Card className="cv-auto group gap-0 p-0 transition-all duration-200 hover:ring-primary/40 hover:shadow-sm">
       {cover && (
         <CardContent className="relative overflow-hidden rounded-t-xl p-0">
           <Link
@@ -28,7 +33,9 @@ export default function PostCard({ post }: { post: Post }) {
             aria-label={post.title + " 封面"}
           >
             <img
-              src={cover}
+              src={cover.src}
+              srcSet={cover.srcSet}
+              sizes={cover.sizes}
               alt={post.title}
               className="w-full aspect-[2/1] object-cover transition-transform duration-200 group-hover:scale-[1.02]"
               loading="lazy"

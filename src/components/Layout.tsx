@@ -42,7 +42,7 @@ export default function Layout() {
       <LoadingBar />
       <Navbar />
       <main id="main" tabIndex={-1} className="flex-1 outline-none">
-        <div className="mx-auto w-full max-w-[900px] px-5 py-8 md:py-10">
+        <div className="mx-auto w-full max-w-[920px] md:max-w-[1000px] lg:max-w-[1120px] px-5 py-8 md:py-10 lg:py-12">
           <div
             key={key}
             style={

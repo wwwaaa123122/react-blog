@@ -3,7 +3,7 @@ title: archlinux使用体验
 published: 2026-08-14
 draft: false
 description: 关于我的archlinux的使用体验
-image: /images/archlinux.png
+image: /images/archlinux.webp
 tags:
   - arch
   - linux

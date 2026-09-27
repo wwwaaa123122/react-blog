@@ -1,0 +1,226 @@
+{
+  "/homeground.webp": {
+    "src": "/homeground.webp",
+    "srcW": 1600,
+    "srcH": 914,
+    "srcBytes": 92890,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 183,
+        "bytes": 11898
+      },
+      {
+        "suffix": "-md",
+        "width": 760,
+        "height": 434,
+        "bytes": 35590
+      }
+    ]
+  },
+  "/images/SSH_Cloudflare.webp": {
+    "src": "/images/SSH_Cloudflare.webp",
+    "srcW": 1600,
+    "srcH": 900,
+    "srcBytes": 17268,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 180,
+        "bytes": 1732
+      },
+      {
+        "suffix": "-md",
+        "width": 760,
+        "height": 428,
+        "bytes": 5866
+      }
+    ]
+  },
+  "/images/aluona.webp": {
+    "src": "/images/aluona.webp",
+    "srcW": 1600,
+    "srcH": 897,
+    "srcBytes": 67714,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 179,
+        "bytes": 9632
+      },
+      {
+        "suffix": "-md",
+        "width": 760,
+        "height": 426,
+        "bytes": 27414
+      }
+    ]
+  },
+  "/images/archlinux.webp": {
+    "src": "/images/archlinux.webp",
+    "srcW": 1067,
+    "srcH": 600,
+    "srcBytes": 6112,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 180,
+        "bytes": 1682
+      }
+    ]
+  },
+  "/images/ba3cai.webp": {
+    "src": "/images/ba3cai.webp",
+    "srcW": 1600,
+    "srcH": 720,
+    "srcBytes": 62124,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 144,
+        "bytes": 7448
+      },
+      {
+        "suffix": "-md",
+        "width": 760,
+        "height": 342,
+        "bytes": 24522
+      }
+    ]
+  },
+  "/images/comment.webp": {
+    "src": "/images/comment.webp",
+    "srcW": 775,
+    "srcH": 359,
+    "srcBytes": 5076,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 148,
+        "bytes": 1298
+      }
+    ]
+  },
+  "/images/firefly.webp": {
+    "src": "/images/firefly.webp",
+    "srcW": 1600,
+    "srcH": 667,
+    "srcBytes": 55328,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 133,
+        "bytes": 6238
+      },
+      {
+        "suffix": "-md",
+        "width": 760,
+        "height": 317,
+        "bytes": 20272
+      }
+    ]
+  },
+  "/images/fuwari-404.webp": {
+    "src": "/images/fuwari-404.webp",
+    "srcW": 724,
+    "srcH": 537,
+    "srcBytes": 11202,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 237,
+        "bytes": 3580
+      }
+    ]
+  },
+  "/images/fuwari-rss-fix.webp": {
+    "src": "/images/fuwari-rss-fix.webp",
+    "srcW": 1080,
+    "srcH": 720,
+    "srcBytes": 25248,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 213,
+        "bytes": 6852
+      }
+    ]
+  },
+  "/images/how-use-bot-cover.webp": {
+    "src": "/images/how-use-bot-cover.webp",
+    "srcW": 1600,
+    "srcH": 900,
+    "srcBytes": 86374,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 180,
+        "bytes": 9884
+      },
+      {
+        "suffix": "-md",
+        "width": 760,
+        "height": 428,
+        "bytes": 32566
+      }
+    ]
+  },
+  "/images/kick.webp": {
+    "src": "/images/kick.webp",
+    "srcW": 1067,
+    "srcH": 600,
+    "srcBytes": 6666,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 180,
+        "bytes": 1968
+      }
+    ]
+  },
+  "/images/mc-srv.webp": {
+    "src": "/images/mc-srv.webp",
+    "srcW": 1600,
+    "srcH": 1146,
+    "srcBytes": 179578,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 229,
+        "bytes": 24350
+      },
+      {
+        "suffix": "-md",
+        "width": 760,
+        "height": 544,
+        "bytes": 80884
+      }
+    ]
+  },
+  "/images/tunelbrokerwarp.webp": {
+    "src": "/images/tunelbrokerwarp.webp",
+    "srcW": 1067,
+    "srcH": 600,
+    "srcBytes": 9168,
+    "variants": [
+      {
+        "suffix": "-thumb",
+        "width": 320,
+        "height": 180,
+        "bytes": 2558
+      }
+    ]
+  }
+}

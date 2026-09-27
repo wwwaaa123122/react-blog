@@ -2,7 +2,7 @@
 title: Kick 开播提醒：用 Python 监控直播并推送 QQ 通知
 published: 2026-06-14
 description: '基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知'
-image: '/images/kick.png'
+image: '/images/kick.webp'
 tags: [python,kick,qq,onebot,napcat]
 category: 'tech'
 draft: false 

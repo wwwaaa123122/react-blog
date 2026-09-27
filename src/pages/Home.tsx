@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Clock, Mail } from "lucide-react";
 import { publishedPosts, getAllTags, formatDate, readingTime } from "../lib/posts";
 import { siteConfig } from "../config/site";
 import { profileConfig } from "../config/profile";
-import { assetUrl } from "../lib/base";
+import { responsiveImageSrc } from "../lib/post-image";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
@@ -25,17 +25,19 @@ import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 
 function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
-  const cover = post.image
-    ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/"))
-    : undefined;
+  // 缩略图 96px(基础) / 112px(sm)，用 320px 宽的 -thumb 变体代替 1600px 原图，
+  // 首页 8 张封面从 ~800KB 降到 ~64KB
+  const cover = responsiveImageSrc(post.image, [96, 112], "96px, (min-width: 640px) 112px");
 
   return (
-    <Item className="border-b border-border last:border-0 rounded-none py-5">
+    <Item className="cv-auto border-b border-border last:border-0 rounded-none py-5">
       {cover && (
         <ItemMedia className="self-start">
           <Link to={"/posts/" + post.slug} className="shrink-0">
             <img
-              src={cover}
+              src={cover.src}
+              srcSet={cover.srcSet}
+              sizes={cover.sizes}
               alt={post.title}
               className="w-24 h-20 sm:w-28 sm:h-22 rounded-lg object-cover bg-muted"
               loading="lazy"

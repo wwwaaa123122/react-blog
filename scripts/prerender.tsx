@@ -10,7 +10,7 @@
 //
 // 用法: VITE_BASE=/react-blog/ npx tsx scripts/prerender.tsx （在 vite build 之后）
 import React from "react";
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
@@ -68,6 +68,34 @@ const esc = (s: string): string =>
 
 const template = readFileSync(join(dist, "index.html"), "utf-8");
 
+// ---------- 字体预加载 ----------
+// @font-face 声明在 CSS 包里，浏览器要解析完 CSS 才知道字体 URL；
+// 提前用 <link rel="preload"> 告知，字体请求可与 CSS 下载并行开始。
+// 只预加载 latin 子集（正文英文/数字实际会命中的那一个）：
+//   - 中文走系统字体栈兜底，不依赖 Geist 的中文子集
+//   - cyrillic / vietnamese 子集对中文站点是死重，预加载反而浪费带宽
+// 字体文件名带内容哈希，必须从构建产物里读，不能写死。
+function latinFontUrl(): string | undefined {
+  const cssDir = join(dist, "assets");
+  let files: string[] = [];
+  try {
+    files = readdirSync(cssDir).filter((f) => f.endsWith(".css"));
+  } catch {
+    return undefined;
+  }
+  for (const f of files) {
+    const css = readFileSync(join(cssDir, f), "utf-8");
+    // 按文件名识别 latin 子集（unicode-range 在 CSS 压缩后会被改写，不可靠）
+    const urls = [...css.matchAll(/url\(([^)]*-latin-wght-normal-[^)]*\.woff2)\)/g)].map((m) => m[1]);
+    for (const u of urls) {
+      return assetUrl(u.replace(/^["']|["']$/g, "").replace(/^\//, "/"));
+    }
+  }
+  return undefined;
+}
+
+const fontPreload = latinFontUrl();
+
 // 渲染单个路由的完整应用 HTML（同一组件树）
 function renderApp(path: string): string {
   // MemoryRouter 的 initialEntries 需包含 basename 前缀
@@ -83,6 +111,11 @@ interface PageMeta {
   title?: string;
   description?: string;
   ogImage?: string;
+  // 文章扩展 meta（写入静态 HTML 供爬虫读取，与客户端 Seo 组件同源）
+  articlePublished?: string;
+  articleModified?: string;
+  articleSection?: string;
+  articleTags?: string[];
 }
 
 // 按路径推导 JSON-LD（与客户端 seo.ts 同源）：WebSite / BlogPosting / BreadcrumbList
@@ -167,7 +200,13 @@ function withHead(
     ...(options.noindex
       ? [`<meta name="robots" content="noindex, nofollow">`]
       : []),
+    // 字体预加载：让字体请求与 CSS 下载并行（放在 head 最前，最早被解析）
+    ...(fontPreload
+      ? [`<link rel="preload" href="${esc(fontPreload)}" as="font" type="font/woff2" crossorigin>`]
+      : []),
     `<link rel="canonical" href="${esc(url)}">`,
+    `<link rel="alternate" hreflang="zh-Hans" href="${esc(url)}">`,
+    `<link rel="alternate" hreflang="x-default" href="${esc(url)}">`,
     `<meta property="og:site_name" content="${esc(site.title)}">`,
     `<meta property="og:title" content="${esc(fullTitle)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
@@ -177,6 +216,19 @@ function withHead(
     ogImageUrl ? `<meta property="og:image" content="${esc(ogImageUrl)}">` : "",
     ogImageUrl && ogSize ? `<meta property="og:image:width" content="${ogSize.w}">` : "",
     ogImageUrl && ogSize ? `<meta property="og:image:height" content="${ogSize.h}">` : "",
+    ogImageUrl ? `<meta property="og:image:alt" content="${esc(desc)}">` : "",
+    ...(meta.articlePublished
+      ? [
+          `<meta property="article:published_time" content="${esc(meta.articlePublished)}">`,
+          `<meta property="article:modified_time" content="${esc(meta.articleModified || meta.articlePublished)}">`,
+        ]
+      : []),
+    ...(meta.articleSection
+      ? [`<meta property="article:section" content="${esc(meta.articleSection)}">`]
+      : []),
+    ...(meta.articleTags
+      ? meta.articleTags.map((t) => `<meta property="article:tag" content="${esc(t)}">`)
+      : []),
     `<meta name="twitter:card" content="${ogImageUrl && path.startsWith("/posts/") ? "summary_large_image" : "summary"}">`,
     `<meta name="twitter:title" content="${esc(fullTitle)}">`,
     `<meta name="twitter:description" content="${esc(desc)}">`,
@@ -260,6 +312,10 @@ for (const post of publishedPosts) {
     title: post.title,
     description: post.description || site.description,
     ogImage: post.image,
+    articlePublished: post.published,
+    articleModified: post.updated,
+    articleSection: post.category,
+    articleTags: post.tags,
   });
 }
 

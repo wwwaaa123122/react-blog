@@ -18,3 +18,11 @@ artifacts/
 .sy.html
 .url.html
 .yxml.html
+
+# 本地构建/预览日志
+*.log
+
+# 图片优化过程中的临时产物（解码出的 PPM、转换中间文件、sharp 依赖）
+.tmp/
+.imgopt/
+.imgbak/

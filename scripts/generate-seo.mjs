@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadPosts } from "./lib/frontmatter.mjs";
+import { existsSync as _exists } from "node:fs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
@@ -14,6 +15,23 @@ const baseUrl = site.site_url.replace(/\/$/, "");
 
 // ---------- 读取文章（无尾斜杠路径） ----------
 const posts = loadPosts(join(root, "src/posts"));
+
+// 封面图尺寸：写入 sitemap 的 <image:image> 让搜索引擎抓图索引
+const coverSizesPath = join(root, "src/data/cover-sizes.json");
+const coverSizes = _exists(coverSizesPath)
+  ? JSON.parse(readFileSync(coverSizesPath, "utf-8"))
+  : {};
+// 文章 image 字段形如 "/images/xxx.webp" 或 "/homeground.webp"，cover-sizes 的 key 与此一致
+const imageFor = (image, title) => {
+  if (!image || !image.startsWith("/")) return null;
+  const size = coverSizes[image];
+  return {
+    loc: baseUrl + image,
+    title: title || "",
+    width: size ? size.w : undefined,
+    height: size ? size.h : undefined,
+  };
+};
 
 const today = new Date().toISOString().slice(0, 10);
 const esc = (s) =>
@@ -47,11 +65,13 @@ const urls = [
     lastmod: p.updated || p.published || today,
     changefreq: "monthly",
     priority: "0.7",
+    title: p.title,
+    image: imageFor(p.image, p.title),
   })),
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.sitemaps.org/schemas/sitemap-image/1.1">
 ${urls
   .map(
     (u) =>
@@ -60,6 +80,11 @@ ${urls
     <lastmod>${u.lastmod}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
+${u.image ? `    <image:image>
+    <image:loc>${esc(u.image.loc)}</image:loc>
+${u.image.title ? `    <image:title>${esc(u.image.title)}</image:title>` : ""}
+${u.image.width ? `    <image:width>${u.image.width}</image:width>\n    <image;height>${u.image.height}</image:height>` : ""}
+  </image:image>` : ""}
   </url>`
   )
   .join("\n")}
