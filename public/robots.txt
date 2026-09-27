@@ -1,9 +1,0 @@
-# Starlr Blog - robots.txt
-# 站点已预渲染为静态 HTML，正文与 meta 无需执行 JS 即可被抓取，
-# 因此放开整站爬取；仅需给爬虫指向 sitemap。
-
-User-agent: *
-Allow: /
-
-# 预渲染生成的 sitemap（含全部文章页与封面图 image:image 条目）
-Sitemap: https://xc-lr.cn/sitemap.xml

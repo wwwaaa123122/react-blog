@@ -153,14 +153,31 @@ ok(postDetailSrc.includes("IntersectionObserver"), "PostDetail: 目录高亮使�
 ok(postDetailSrc.includes("requestAnimationFrame"), "PostDetail: 滚动回退路径用 rAF 节流");
 ok(postDetailSrc.includes("passive: true"), "PostDetail: 滚动监听为 passive");
 
+// ---------- 8.46) 构建可移植性：CI 没有 cwebp/dwebp ----------
+// 缩略图与清单都已入库，CI 不需要（也不能）重新生成。
+// 脚本必须先探测外部工具，缺失时直接跳过并保留仓库里的清单，
+// 否则 CI 会把 cover-thumbnails.json 覆写成空对象导致本项断言失败。
+const genThumbs = read("scripts/generate-thumbnails.mjs");
+ok(genThumbs.includes("hasTool("), "generate-thumbnails: 探测外部图片工具");
+ok(/process\.exit\(0\)/.test(genThumbs), "generate-thumbnails: 工具缺失时正常退出（不阻断 CI）");
+ok(
+  genThumbs.includes("不覆写") || genThumbs.includes("保留已有清单"),
+  "generate-thumbnails: 拒绝用空结果覆写已有清单"
+);
+// cover-sizes 只能收录真实图片，不能把 robots.txt 当图片解析
+const coverSizesSrc = read("scripts/cover-sizes.mjs");
+ok(coverSizesSrc.includes("IMAGE_EXT"), "cover-sizes: 只收录图片扩展名（忽略 robots.txt 等）");
+
 // ---------- 8.45) 爬虫入口：robots.txt ----------
-// 站点已预渲染为静态 HTML，放开爬取并指向 sitemap
-ok(existsSync(join(root, "public", "robots.txt")), "public/robots.txt 存在");
-if (existsSync(join(root, "public", "robots.txt"))) {
-  const robots = read("public/robots.txt");
+// 由 scripts/generate-seo.mjs 在构建期生成到 dist/（public/ 里的手写版本会被覆盖，
+// 所以不入库、改校验产物），sitemap 地址取自 site.json 的 site_url
+ok(existsSync(join(root, "dist", "robots.txt")), "dist/robots.txt 存在（generate-seo 生成）");
+if (existsSync(join(root, "dist", "robots.txt"))) {
+  const robots = read("dist/robots.txt");
   ok(/User-agent:\s*\*/.test(robots), "robots.txt: 含 User-agent: *");
-  ok(/Sitemap:\s*https?:\/\//.test(robots), "robots.txt: 指向 sitemap");
+  ok(/Allow:\s*\//.test(robots), "robots.txt: 放开整站爬取");
   ok(!/Disallow:\s*\//.test(robots), "robots.txt: 未封禁整站");
+  ok(/Sitemap:\s*https?:\/\//.test(robots), "robots.txt: 指向 sitemap");
 }
 
 // ---------- 8.5) 响应式封面变体 ----------

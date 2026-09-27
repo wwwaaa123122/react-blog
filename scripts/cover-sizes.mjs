@@ -54,12 +54,14 @@ function imageSize(buf) {
   return null;
 }
 
+// 只收录真实图片扩展名（public 下还有 robots.txt 等文本文件，不能当图片解析）
+const IMAGE_EXT = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif"]);
+
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (!existsSync(p)) continue;
-    if (extname(p).toLowerCase() !== "") out.push(p);
-    else if (p.split("/").pop().includes(".")) out.push(p);
+    if (IMAGE_EXT.has(extname(p).toLowerCase())) out.push(p);
   }
   return out;
 }

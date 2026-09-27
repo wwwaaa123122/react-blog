@@ -9,6 +9,11 @@
 //                                     760px 与原图差异肉眼不可辨且省一半流量）
 // 尺寸信息写入 src/data/cover-thumbnails.json 供组件拼 srcset。
 //
+// 重要：缩略图与清单都已提交进 git，CI（Cloudflare Pages）只有 node/pnpm、
+// 没有 cwebp/dwebp，因此**不会**重新生成。脚本先探测工具，缺失时直接跳过并
+// 保留仓库里已提交的产物；只有真正干活时才覆写 cover-thumbnails.json，
+// 避免 CI 上把清单刷成空对象导致构建失败。
+//
 // 用法: node scripts/generate-thumbnails.mjs
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, readdirSync, renameSync, statSync, writeFileSync, existsSync } from "node:fs";
@@ -18,6 +23,26 @@ const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const PUBLIC = join(ROOT, "public");
 const OUT = join(ROOT, "src/data/cover-thumbnails.json");
 const TMP = join(ROOT, ".tmp");
+
+/** 探测外部图片工具是否可用（CI 环境通常没有） */
+function hasTool(cmd) {
+  try {
+    execFileSync(cmd, ["-version"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const haveWebpTools = hasTool("cwebp") && hasTool("dwebp");
+if (!haveWebpTools) {
+  console.log(
+    `[skip] 未找到 cwebp/dwebp，跳过缩略图生成（CI 环境）。` +
+      (existsSync(OUT) ? ` 沿用已提交的 ${OUT.replace(ROOT + "/", "")}` : ` 警告：${OUT.replace(ROOT + "/", "")} 不存在，响应式变体将回退原图`)
+  );
+  process.exit(0);
+}
+
 mkdirSync(TMP, { recursive: true });
 
 const SIZES = [
@@ -103,5 +128,13 @@ for (const rel of [...covers].sort()) {
   if (entry.variants.length) result[rel] = entry;
 }
 
+// 安全检查：不覆写已有清单为空对象（本地工具异常时不能把 CI 依赖的数据刷掉）
+const prevEntries = existsSync(OUT)
+  ? Object.keys(JSON.parse(readFileSync(OUT, "utf-8"))).length
+  : 0;
+if (prevEntries > 0 && Object.keys(result).length === 0) {
+  console.warn(`[warn] 本次未生成任何变体，保留已有清单（${prevEntries} 条），不覆写`);
+  process.exit(1);
+}
 writeFileSync(OUT, JSON.stringify(result, null, 2) + "\n");
 console.log(`\n生成 ${generated} 个缩略图, 跳过 ${skipped} 个 -> ${OUT.replace(ROOT + "/", "")}`);
