@@ -6,7 +6,7 @@
     <description>分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发</description>
     <language>zh-CN</language>
     <atom:link href="https://xc-lr.cn/rss.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Sat, 26 Sep 2026 03:45:07 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 27 Sep 2026 00:48:28 GMT</lastBuildDate>
   <item>
     <title>使用tunnelbroker隧道与warp获取任意地区IP（朝鲜）</title>
     <link>https://xc-lr.cn/posts/warp-ip-kp/</link>
@@ -22,7 +22,7 @@
 <p>创建完账号登录后，打开<a href="https://tunnelbroker.net/account.php" target="_blank" rel="noreferrer noopener">个人信息页面</a>，这里可以抓包，也可以直接用<a href="https://greasyfork.org/zh-CN/scripts/541616-tunnelbroker-%E6%9B%B4%E5%A4%9A%E5%9C%B0%E5%8C%BA" target="_blank" rel="noreferrer noopener">脚本（推荐）</a>安装插件后再次选择国家，就会出现朝鲜、南极洲等原来不可见地区，脚本需要记住国家代码，f12将原有的国家代码改为你要的国家的代码。</p>
 <h3 id="创建隧道">创建隧道</h3>
 <p>打开创建<a href="https://tunnelbroker.net/new_tunnel.php" target="_blank" rel="noreferrer noopener">隧道页面</a>，IPv4 Endpoint填你的公网IPv4 地址，下面选择一个隧道服务器，可以直接选择你服务器附近地区的隧道服务器，也可以全部 ping 一遍，选择延迟最低的。推荐使用/48 作为服务器IPv6 段，但由于新账号的原因，可能需要 24~72 小时才能分配，就像这样</p>
-<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-12-45-14-660commicrosoftemmx.png" alt="" loading="lazy" decoding="async"/></p>
+<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-12-45-14-660commicrosoftemmx.webp" alt="" loading="lazy" decoding="async"/></p>
 <p>这段时间可以先用/64 做连通性测试</p>
 <h2 id="配置vps">配置VPS</h2>
 <p><strong>此部分为AI生成</strong><br/>
@@ -148,19 +148,19 @@ curl -6 https://api64.ipify.org
 <h2 id="配置warp">配置warp</h2>
 <p>不推荐直接使用warp CLI，建议使用3x-ui，能在面板直观创建入站、出站。</p>
 <p>创建入站及配置客户端后，点击侧栏出站</p>
-<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-05-07-556commicrosoftemmx.png" alt="" loading="lazy" decoding="async"/></p>
+<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-05-07-556commicrosoftemmx.webp" alt="" loading="lazy" decoding="async"/></p>
 <p>编辑配置中只需要改为IPV6 优先</p>
-<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-07-18-743commicrosoftemmx.png" alt="" loading="lazy" decoding="async"/></p>
+<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-07-18-743commicrosoftemmx.webp" alt="" loading="lazy" decoding="async"/></p>
 <p>再将warp移动到第一个，至此，配置完成，只需等待同步</p>
 <h2 id="体验">体验</h2>
 <p>等待了接近半个月，B站终于将warp的IP标为朝鲜</p>
-<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-10-55-395markvia.png" alt="" loading="lazy" decoding="async"/></p>
-<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-11-09-365markvia.png" alt="" loading="lazy" decoding="async"/></p>
+<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-10-55-395markvia.webp" alt="" loading="lazy" decoding="async"/></p>
+<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-11-09-365markvia.webp" alt="" loading="lazy" decoding="async"/></p>
 <p>B站评论区文章IP归属都会显示为朝鲜，主页需要1~3 周才会改变</p>
 <p>这里贴一张B站评论测试图</p>
-<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-14-38-528tvdanmakubili.png" alt="" loading="lazy" decoding="async"/></p>
+<p><img src="https://xc-lr.cn/react-blog/images/screenshot2026-09-06-13-14-38-528tvdanmakubili.webp" alt="" loading="lazy" decoding="async"/></p>
 <p>也是可以愉快地发评论了😋</p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/tunelbrokerwarp.png" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/tunelbrokerwarp.webp" medium="image"/>
   </item>
   <item>
     <title>archlinux使用体验</title>
@@ -189,7 +189,7 @@ curl -6 https://api64.ipify.org
 <h2 class="markdown-h1" id="槽点">槽点</h2>
 <p>用惯了windows/debian系这些系统后，我相信下载应用习惯应该都是去浏览器搜索应用，而arch系由于没有使用apt，但拥有yay库，就出现了一个处境：<em>官网没有安装包，得单独搜yay包</em></p>
 <p>对于已经习惯用户，这个yay方式真的很麻烦</p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/archlinux.png" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/archlinux.webp" medium="image"/>
   </item>
   <item>
     <title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知</title>
@@ -388,7 +388,7 @@ python3 kick_notify.py
 <p>一个简单但实用的小工具。如果你也想监控 Kick 主播的开播状态，可以直接用这个脚本，改改配置就行。</p>
 <h2 class="markdown-h1" id="额外感想">额外感想</h2>
 <p>在制作之初，我是直接问ChatGPT如何做，甚至都没用搜索引擎查一下，ChatGPT说用webhook并使用fastapi封装，翻了十几分钟文档没咋看明白，直到直接用opencode+免费的mimo说了我要做开播提醒，mimo一开始其实也没多好，甚至想出来轮询每页找到目标，在他自己fetch几遍后直接用了kick的api，不过也算是完美完成了。</p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/kick.png" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/kick.webp" medium="image"/>
   </item>
   <item>
     <title>MC免端口域名生成器使用与部署教程</title>
@@ -554,7 +554,7 @@ npx wrangler secret put CF_ZONE_ID
 <h2 id="写在最后">写在最后</h2>
 <p>选择博客主题就像选择工具：合适的才是最好的。Fuwari 适合喜欢折腾、追求极简的用户；而 Firefly 则适合希望专注于内容、同时需要丰富功能的博主。</p>
 <p>如果你也在 Fuwari 中挣扎于各种自定义，不妨试试 Firefly，说不定会打开新世界的大门。</p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/firefly.png" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/firefly.webp" medium="image"/>
   </item>
   <item>
     <title>通过Cloudflare Tunnel使用SSH</title>
@@ -823,7 +823,7 @@ EOF
 <div class="my-4 overflow-hidden rounded-[var(--radius)] border border-border"><div class="flex items-center justify-between gap-2 bg-muted/50 px-3 py-1.5"><span data-slot="badge" data-variant="secondary" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80 font-mono text-[11px]">bash</span><button data-slot="button" data-variant="ghost" data-size="xs" class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-3 text-muted-foreground" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true" data-icon="inline-start"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>复制</button></div><div data-orientation="horizontal" role="none" data-slot="separator" class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"></div><pre class="!m-0 !rounded-none !border-0 overflow-x-auto" tabindex="0"><code class="language-bash">pnpm add node-html-parser
 </code></pre></div>
 <div data-slot="alert" role="alert" class="group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[&gt;svg]:grid-cols-[auto_1fr] has-[&gt;svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*=&#x27;size-&#x27;])]:size-4 bg-card my-4 text-chart-3 *:data-[slot=alert-description]:text-chart-3/90"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg><div data-slot="alert-title" class="font-medium group-has-[&gt;svg]/alert:col-start-2 [&amp;_a]:underline [&amp;_a]:underline-offset-3 [&amp;_a]:hover:text-foreground">警告</div><div data-slot="alert-description" class="text-sm text-balance text-muted-foreground md:text-pretty [&amp;_a]:underline [&amp;_a]:underline-offset-3 [&amp;_a]:hover:text-foreground [&amp;_p:not(:last-child)]:mb-4 [&amp;_p:first-child]:mt-1">在推送到仓库时，你可能会遇到warning: in the working copy of &#x27;pnpm-lock.yaml&#x27;, LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可</div></div></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/fuwari-rss-fix.jpg" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/fuwari-rss-fix.webp" medium="image"/>
   </item>
   <item>
     <title>为fuwari增加一个404界面</title>
@@ -990,7 +990,7 @@ import { siteConfig } from &quot;../config&quot;;
 <h3 id="单语言404-astro">单语言404.astro</h3>
 <p>此方法直接在<strong>src/pages</strong>目录下创建404.astro即可<br/>
 <!-- -->由于我没有语言的404，这里附上二叉树树的404界面<br/>
-<!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.jpg" alt="2x-404" loading="lazy" decoding="async"/></p>
+<!-- -->预览：<img src="https://xc-lr.cn/react-blog/images/2x-404.webp" alt="2x-404" loading="lazy" decoding="async"/></p>
 <div class="my-4 overflow-hidden rounded-[var(--radius)] border border-border"><div class="flex items-center justify-between gap-2 bg-muted/50 px-3 py-1.5"><span data-slot="badge" data-variant="secondary" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80 font-mono text-[11px]">astro</span><button data-slot="button" data-variant="ghost" data-size="xs" class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-3 text-muted-foreground" aria-label="复制代码" aria-live="polite"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true" data-icon="inline-start"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>复制</button></div><div data-orientation="horizontal" role="none" data-slot="separator" class="shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch"></div><pre class="!m-0 !rounded-none !border-0 overflow-x-auto" tabindex="0"><code class="language-astro">---
 import Layout from &quot;@/layouts/Layout.astro&quot;;
 import MainGridLayout from &quot;@/layouts/MainGridLayout.astro&quot;;
@@ -1048,7 +1048,7 @@ import { siteConfig } from &quot;@/config&quot;;
         <span class="hljs-tag">&lt;/<span class="hljs-name">MainGridLayout</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">Layout</span>&gt;</span>
 </code></pre></div></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/fuwari-404.jpg" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/fuwari-404.webp" medium="image"/>
   </item>
   <item>
     <title>BA周年庆直接9个彩</title>
@@ -1094,7 +1094,7 @@ Giscus就是一个非常合适的平台</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre></div>
 <p>最后本地测试一下，没问题就可以部署到服务器了</p></div>]]></content:encoded>
-    <media:content url="https://xc-lr.cn/react-blog/images/comment.jpg" medium="image"/>
+    <media:content url="https://xc-lr.cn/react-blog/images/comment.webp" medium="image"/>
   </item>
   <item>
     <title>edgeone加速worker</title>

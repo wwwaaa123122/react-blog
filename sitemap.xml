@@ -1,111 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.sitemaps.org/schemas/sitemap-image/1.1">
   <url>
     <loc>https://xc-lr.cn/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+
   </url>
   <url>
     <loc>https://xc-lr.cn/archive/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+
   </url>
   <url>
     <loc>https://xc-lr.cn/friends/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+
   </url>
   <url>
     <loc>https://xc-lr.cn/about/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+
   </url>
   <url>
     <loc>https://xc-lr.cn/components/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/warp-ip-kp/</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/tunelbrokerwarp.webp</image:loc>
+    <image:title>使用tunnelbroker隧道与warp获取任意地区IP（朝鲜）</image:title>
+    <image:width>1067</image:width>
+    <image;height>600</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/archlinux/</loc>
     <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/archlinux.webp</image:loc>
+    <image:title>archlinux使用体验</image:title>
+    <image:width>1067</image:width>
+    <image;height>600</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/kick-live-notify/</loc>
     <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/kick.webp</image:loc>
+    <image:title>Kick 开播提醒：用 Python 监控直播并推送 QQ 通知</image:title>
+    <image:width>1067</image:width>
+    <image;height>600</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/mc-srv-worker/</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/mc-srv.webp</image:loc>
+    <image:title>MC免端口域名生成器使用与部署教程</image:title>
+    <image:width>1600</image:width>
+    <image;height>1146</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/Why-to-Firefly/</loc>
     <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/firefly.webp</image:loc>
+    <image:title>关于本站迁移至Firefly</image:title>
+    <image:width>1600</image:width>
+    <image;height>667</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/ssh-by-tunnel/</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/SSH_Cloudflare.webp</image:loc>
+    <image:title>通过Cloudflare Tunnel使用SSH</image:title>
+    <image:width>1600</image:width>
+    <image;height>900</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/how-use-bot/</loc>
     <lastmod>2025-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/how-use-bot-cover.webp</image:loc>
+    <image:title>Bot使用文档</image:title>
+    <image:width>1600</image:width>
+    <image;height>900</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/fuwari-rss/</loc>
     <lastmod>2025-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/fuwari-rss-fix.webp</image:loc>
+    <image:title>fuwari修复RSS图片不显示</image:title>
+    <image:width>1080</image:width>
+    <image;height>720</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/fuwari-404/</loc>
     <lastmod>2025-09-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/fuwari-404.webp</image:loc>
+    <image:title>为fuwari增加一个404界面</image:title>
+    <image:width>724</image:width>
+    <image;height>537</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/ba2th/</loc>
     <lastmod>2025-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/ba3cai.webp</image:loc>
+    <image:title>BA周年庆直接9个彩</image:title>
+    <image:width>1600</image:width>
+    <image;height>720</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/comment/</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/comment.webp</image:loc>
+    <image:title>fuwari接入评论功能</image:title>
+    <image:width>775</image:width>
+    <image;height>359</image:height>
+  </image:image>
   </url>
   <url>
     <loc>https://xc-lr.cn/posts/edgeone-worker/</loc>
     <lastmod>2025-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+    <image:loc>https://xc-lr.cn/images/aluona.webp</image:loc>
+    <image:title>edgeone加速worker</image:title>
+    <image:width>1600</image:width>
+    <image;height>897</image:height>
+  </image:image>
   </url>
 </urlset>
