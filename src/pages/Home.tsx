@@ -304,38 +304,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Recent Posts */}
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">近期</h3>
-              <ItemGroup>
-                {publishedPosts.slice(0, 5).map((post) => (
-                  <Item key={post.slug} size="xs" variant="muted" asChild>
-                    <Link to={"/posts/" + post.slug}>
-                      <ItemContent>
-                        <ItemDescription>
-                          {post.title}
-                        </ItemDescription>
-                      </ItemContent>
-                    </Link>
-                  </Item>
-                ))}
-              </ItemGroup>
-            </div>
-
-            {/* GitHub */}
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">GitHub</h3>
-              <Button asChild variant="ghost" size="none" data-icon="inline-start">
-                <a
-                  href="https://github.com/wwwaaa123122"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <Icon name="github" size={14} />
-                  @wwwaaa123122
-                </a>
-              </Button>
-            </div>
           </div>
         </aside>
       </div>

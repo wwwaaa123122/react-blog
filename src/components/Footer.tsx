@@ -29,11 +29,23 @@ export default function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto w-full max-w-230 md:max-w-250 lg:max-w-280 px-5 py-6 sm:py-8">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
-          <p className="text-xs text-muted-foreground sm:text-sm">
-            &copy; {new Date().getFullYear()} {siteConfig.author}
-            <span className="mx-1.5 hidden sm:inline">·</span>
-            <span className="hidden sm:inline">{siteConfig.title}</span>
-          </p>
+          <div className="flex flex-col items-center gap-1 sm:items-start">
+            <p className="text-xs text-muted-foreground sm:text-sm">
+              &copy; {new Date().getFullYear()} {siteConfig.author}
+              <span className="mx-1.5 hidden sm:inline">·</span>
+              <span className="hidden sm:inline">{siteConfig.title}</span>
+            </p>
+
+            {/* 萌 ICP 备案：https://icp.gov.moe/ */}
+            <a
+              href="https://icp.gov.moe/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
+              萌ICP备20252123号
+            </a>
+          </div>
 
           <div className="flex items-center gap-0.5 sm:gap-1">
             {navLinks.map((l) => (
