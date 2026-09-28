@@ -29,6 +29,7 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
   const cover = responsiveImageSrc(post.image, [96, 112], "96px, (min-width: 640px) 112px");
 
   return (
+    <div className="cv-auto">
     <Item variant="divided" size="loose">
       {cover && (
         <ItemMedia className="self-start">
@@ -81,6 +82,7 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
         )}
       </ItemContent>
     </Item>
+    </div>
   );
 }
 

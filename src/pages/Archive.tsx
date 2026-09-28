@@ -24,7 +24,8 @@ export default function Archive() {
         <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章 · 按年份归档</p>
       </div>
       {years.map(([year, posts]) => (
-        <Card key={year} className="mb-8">
+        <div key={year} className="cv-auto mb-8">
+        <Card className="mb-0">
           <CardHeader>
             <CardTitle className="text-lg font-bold">
               <span className="flex items-center gap-2">
@@ -47,6 +48,7 @@ export default function Archive() {
             </ItemGroup>
           </CardContent>
         </Card>
+        </div>
       ))}
     </>
   );

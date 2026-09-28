@@ -250,7 +250,8 @@ export default function Friends() {
       </h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {friends.map((f) => (
-          <Card key={f.title} size="cozy" variant="interactive">
+          <div key={f.title} className="cv-auto">
+          <Card size="cozy" variant="interactive">
             <a
               className="group flex min-w-0 items-center gap-3"
               href={f.siteurl}
@@ -283,6 +284,7 @@ export default function Friends() {
               </div>
             )}
           </Card>
+          </div>
         ))}
       </div>
     </TooltipProvider>

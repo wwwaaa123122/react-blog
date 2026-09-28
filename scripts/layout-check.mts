@@ -13,18 +13,20 @@ const failures: string[] = [];
 const ok = (c: boolean, msg: string) => (c ? passes.push(msg) : failures.push(msg));
 
 // ---------- 1) 容器宽度：Layout / Navbar / Footer 三处必须一致 ----------
-const containerSpec = ['max-w-[920px]', 'md:max-w-[1000px]', 'lg:max-w-[1120px]'];
+// Tailwind v4 主题 token：230×4=920px、250×4=1000px、280×4=1120px（与旧 [Npx] 等价）
+const containerSpec = ['max-w-230', 'md:max-w-250', 'lg:max-w-280'];
 for (const file of ["src/components/Layout.tsx", "src/components/Navbar.tsx", "src/components/Footer.tsx"]) {
   const src = read(file);
   const missing = containerSpec.filter((c) => !src.includes(c));
-  ok(missing.length === 0, `${file}: 响应式容器宽度完整${missing.length ? `，缺少 ${missing.join(" ")}` : ""}`);
+  ok(missing.length === 0, `${file}: 响应式容器宽度完整（max-w-230/250/280 = 920/1000/1120px）${missing.length ? `，缺少 ${missing.join(" ")}` : ""}`);
 }
 
 // ---------- 2) 文章正文居中 + 上限 ----------
+// max-w-180 = 180×4 = 720px（Tailwind v4 主题 token，等价于旧 max-w-[720px]）
 const postDetail = read("src/pages/PostDetail.tsx");
 ok(
-  /<article\b[^>]*className="[^"]*min-w-0 flex-1 max-w-\[720px\][^"]*mx-auto[^"]*"/.test(postDetail),
-  "PostDetail: 文章列 max-w-[720px] 且水平居中（PC 端不被侧栏挤窄）"
+  /<article\b[^>]*className="[^"]*min-w-0 flex-1 max-w-180[^"]*mx-auto[^"]*"/.test(postDetail),
+  "PostDetail: 文章列 max-w-180（720px）且水平居中（PC 端不被侧栏挤窄）"
 );
 
 // ---------- 3) 文字排版：中英文可读性与代码块 ----------
@@ -51,14 +53,15 @@ ok(
 );
 
 // ---------- 4) 移动端：触控目标 >= 36px ----------
+// Button size="icon-lg" 映射到 size-9（36px），符合 WCAG 推荐的最小触控目标
 const navbar = read("src/components/Navbar.tsx");
 ok(
-  !navbar.includes('className="size-8 ') && (navbar.match(/size-9/g) || []).length >= 4,
-  "Navbar: 图标按钮触控目标 36px（原 32px 低于推荐值）"
+  !navbar.includes('className="size-8 ') && (navbar.match(/size="icon-lg"/g) || []).length >= 4,
+  "Navbar: 图标按钮触控目标 36px（size=\"icon-lg\"，原 size-8/32px 低于推荐值）"
 );
 ok(
-  read("src/components/theme-toggle.tsx").includes('className="size-9'),
-  "ThemeToggle: 与导航栏按钮尺寸统一（36px）"
+  read("src/components/theme-toggle.tsx").includes('size="icon-lg"'),
+  "ThemeToggle: 与导航栏按钮尺寸统一（size=\"icon-lg\" = 36px）"
 );
 
 // ---------- 5) 移动端：刘海/手势条安全区 ----------
@@ -115,16 +118,27 @@ ok(sitemap.includes("image:width") && sitemap.includes("image:title"), "sitemap.
 
 // ---------- 8) 渲染性能：屏外区块跳过布局 ----------
 // 长列表页（归档/文章/友链/首页）的重复区块应启用 content-visibility，
-// 否则首屏要完整布局数百个 DOM 节点
+// 否则首屏要完整布局数百个 DOM 节点。
+// cv-auto 可由 className 直接指定，也可由 Card/Item 的 size="flush" 变体内置提供。
 const cvSpecs: [string, string, string][] = [
   ["src/styles/global.css", ".cv-auto", "cv-auto 工具类已定义"],
-  ["src/components/PostCard.tsx", "cv-auto", "PostCard: 卡片启用 cv-auto"],
-  ["src/pages/Archive.tsx", "cv-auto", "Archive: 年份分组启用 cv-auto"],
-  ["src/pages/Friends.tsx", "cv-auto", "Friends: 友链卡片启用 cv-auto"],
-  ["src/pages/Home.tsx", "cv-auto", "Home: 文章条目启用 cv-auto"],
 ];
 for (const [file, needle, label] of cvSpecs) {
   ok(read(file).includes(needle), label);
+}
+// 组件级：Card size="flush" 内置 cv-auto，无需在每个调用处重复
+const cvAutoViaComponent = (file: string): boolean => {
+  const src = read(file);
+  return src.includes("cv-auto") || /Card[^>]*size="flush"/.test(src) || /Item[^>]*size="flush"/.test(src);
+};
+const cvComponentChecks: [string, string][] = [
+  ["src/components/PostCard.tsx", "PostCard: 卡片启用 cv-auto（Card size=\"flush\"）"],
+  ["src/pages/Archive.tsx", "Archive: 年份分组启用 cv-auto"],
+  ["src/pages/Friends.tsx", "Friends: 友链卡片启用 cv-auto"],
+  ["src/pages/Home.tsx", "Home: 文章条目启用 cv-auto"],
+];
+for (const [file, label] of cvComponentChecks) {
+  ok(cvAutoViaComponent(file), label);
 }
 ok(/content-visibility:\s*auto/.test(read("src/styles/global.css")), "cv-auto: content-visibility: auto");
 ok(/contain-intrinsic-size/.test(read("src/styles/global.css")), "cv-auto: contain-intrinsic-size 防滚动抖动");
