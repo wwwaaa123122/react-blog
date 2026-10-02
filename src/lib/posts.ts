@@ -7,22 +7,25 @@ import type { Post } from "../types";
 const __isNode = typeof process !== "undefined" && !!process.versions?.node;
 
 async function loadModules(): Promise<Record<string, string>> {
-  // Node 预渲染（scripts/prerender.tsx）：从文件系统读取，浏览器中不会进入此分支
+  // Node 预渲染（scripts/prerender.tsx / 检查脚本）：从文件系统读取，浏览器中不会进入此分支
   if (__isNode) {
+    const pathMod = await import("node:path");
     const dir =
       process.env.POSTS_DIR ||
-      (globalThis as unknown as { __POSTS_DIR__?: string }).__POSTS_DIR__;
+      (globalThis as unknown as { __POSTS_DIR__?: string }).__POSTS_DIR__ ||
+      pathMod.join(process.cwd(), "src/posts");
     if (dir) {
       // 动态导入避免打进浏览器 bundle
       const fs = await import("node:fs");
-      const pathMod = await import("node:path");
       const modules: Record<string, string> = {};
-      for (const f of fs.readdirSync(dir)) {
-        if (f.endsWith(".md")) {
-          modules["../posts/" + f] = fs.readFileSync(
-            pathMod.join(dir, f),
-            "utf-8"
-          );
+      if (fs.existsSync(dir)) {
+        for (const f of fs.readdirSync(dir)) {
+          if (f.endsWith(".md")) {
+            modules["../posts/" + f] = fs.readFileSync(
+              pathMod.join(dir, f),
+              "utf-8"
+            );
+          }
         }
       }
       return modules;

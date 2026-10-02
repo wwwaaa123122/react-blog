@@ -87,6 +87,40 @@ export default function About() {
         </div>
 
         <Separator className="mb-6" />
+
+        <h3 className="text-sm font-bold mb-3">关注领域与技术</h3>
+        <div className="grid gap-3 sm:grid-cols-2 mb-6">
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle variant="muted" className="text-xs font-semibold uppercase">技术栈与开发</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                React 19, TypeScript, Tailwind CSS, Vite, shadcn/ui, Node.js
+              </p>
+            </CardContent>
+          </Card>
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle variant="muted" className="text-xs font-semibold uppercase">运维与网络</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Arch Linux, Cloudflare Pages/Workers, Docker, 内网穿透, CDN 优化
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <h3 className="text-sm font-bold mb-3">关于本站</h3>
+        <div className="prose-sm text-muted-foreground space-y-2 mb-6 text-xs leading-relaxed">
+          <p>
+            本站建于 2025 年，是一个记录个人技术探索与生活的极简博客。
+            界面由 React 19 + shadcn/ui + Tailwind v4 搭建，采用静态预渲染与极速客户端导航，具备完整的亮/暗主题支持与即时全局检索体验。
+          </p>
+        </div>
+
+        <Separator className="mb-6" />
         <Countdown />
       </div>
     </>

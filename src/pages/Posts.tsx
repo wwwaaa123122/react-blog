@@ -6,7 +6,7 @@ import PostCard from "../components/PostCard";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
@@ -206,6 +206,64 @@ export default function Posts() {
 
       <Separator className="mb-6" />
 
+      {(cat || tag || keyword) && (
+        <div className="mb-6 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <span>当前筛选：</span>
+          {cat && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-foreground">
+              分类: {cat}
+              <button
+                type="button"
+                onClick={() => selectCat(cat)}
+                aria-label="移除分类筛选"
+                className="hover:text-primary cursor-pointer"
+              >
+                <X className="size-3" />
+              </button>
+            </span>
+          )}
+          {tag && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-foreground">
+              标签: {tag}
+              <button
+                type="button"
+                onClick={() => selectTag(tag)}
+                aria-label="移除标签筛选"
+                className="hover:text-primary cursor-pointer"
+              >
+                <X className="size-3" />
+              </button>
+            </span>
+          )}
+          {keyword && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-foreground">
+              关键词: "{keyword}"
+              <button
+                type="button"
+                onClick={() => onKeywordChange("")}
+                aria-label="清除关键词"
+                className="hover:text-primary cursor-pointer"
+              >
+                <X className="size-3" />
+              </button>
+            </span>
+          )}
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={() => {
+              updateParams((sp) => {
+                sp.delete("cat");
+                sp.delete("tag");
+                sp.delete("q");
+              }, { resetPage: true });
+            }}
+          >
+            重置全部
+          </Button>
+        </div>
+      )}
+
       {/* 列表 / 空状态 */}
       {pagePosts.length === 0 ? (
         <Empty className="my-16">
@@ -216,6 +274,21 @@ export default function Posts() {
             <EmptyTitle>没有找到相关文章</EmptyTitle>
             <EmptyDescription>换个关键词，或清除筛选条件试试。</EmptyDescription>
           </EmptyHeader>
+          <EmptyContent>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                updateParams((sp) => {
+                  sp.delete("cat");
+                  sp.delete("tag");
+                  sp.delete("q");
+                }, { resetPage: true });
+              }}
+            >
+              清除所有筛选条件
+            </Button>
+          </EmptyContent>
         </Empty>
       ) : (
         <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

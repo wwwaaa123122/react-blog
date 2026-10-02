@@ -6,6 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Item, ItemContent, ItemGroup, ItemMedia } from "@/components/ui/item";
 
+function formatMonthDay(d: string): string {
+  if (!d) return "";
+  const parts = d.split(/[-/]/);
+  if (parts.length >= 3) {
+    return `${parts[1]}-${parts[2].slice(0, 2)}`;
+  }
+  return formatDate(d);
+}
+
 export default function Archive() {
   const byYear = new Map<string, typeof publishedPosts>();
   for (const post of publishedPosts) {
@@ -37,11 +46,22 @@ export default function Archive() {
             <ItemGroup size="flush">
               {posts.map((post) => (
                 <Item key={post.slug} size="flush" variant="muted-divided">
-                  <ItemMedia variant="meta" className="w-20">
-                    <time dateTime={post.published}>{formatDate(post.published)}</time>
+                  <ItemMedia variant="meta" className="w-16 shrink-0">
+                    <time dateTime={post.published}>{formatMonthDay(post.published)}</time>
                   </ItemMedia>
                   <ItemContent>
-                    <Link className="text-sm font-medium text-foreground hover:text-primary transition-colors break-words" to={"/posts/" + post.slug}>{post.title}</Link>
+                    <div className="flex items-center justify-between gap-2">
+                      <Link className="text-sm font-medium text-foreground hover:text-primary transition-colors break-words" to={"/posts/" + post.slug}>
+                        {post.title}
+                      </Link>
+                      {post.category && (
+                        <span className="hidden sm:inline shrink-0">
+                          <Badge variant="secondary" size="2xs">
+                            {post.category}
+                          </Badge>
+                        </span>
+                      )}
+                    </div>
                   </ItemContent>
                 </Item>
               ))}

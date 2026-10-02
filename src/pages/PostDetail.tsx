@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Home, ListTree, RefreshCw } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, FileText, Home, ListTree, RefreshCw, Share2 } from "lucide-react";
+import { toast } from "sonner";
 import { getPostBySlug, formatDate, readingTime, publishedPosts } from "../lib/posts";
 import Markdown, { createSlugger } from "../components/Markdown";
 import Seo from "../components/Seo";
@@ -207,6 +208,12 @@ export default function PostDetail() {
               <Clock data-icon="inline-start" />
               {readingTime(post.words)}
             </Badge>
+            {post.words > 0 && (
+              <Badge variant="secondary">
+                <FileText data-icon="inline-start" />
+                {post.words.toLocaleString("zh-CN")} 字
+              </Badge>
+            )}
             {post.category && (
               <Badge variant="secondary">
                 <BookOpen data-icon="inline-start" />
@@ -294,7 +301,53 @@ export default function PostDetail() {
           </nav>
 
           <Separator className="mt-6" />
-          <footer className="pt-4 text-sm text-muted-foreground">
+
+          {/* 版权信息卡片 */}
+          <div className="mt-6 rounded-lg border border-border bg-muted/30 p-4 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-2.5">
+              <span className="font-semibold text-foreground text-sm">{post.title}</span>
+              <Button
+                variant="ghost"
+                size="xs"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    toast.success("文章链接已复制到剪贴板");
+                  } catch {
+                    toast.error("复制失败，请手动复制地址栏链接");
+                  }
+                }}
+              >
+                <Share2 data-icon="inline-start" />
+                分享 / 复制链接
+              </Button>
+            </div>
+            <div className="mt-2.5 space-y-1">
+              <p>
+                <span className="font-medium text-foreground">本文作者：</span>
+                {siteConfig.author}
+              </p>
+              <p>
+                <span className="font-medium text-foreground">本文链接：</span>
+                <span className="break-all">{siteConfig.site_url}/posts/{post.slug}/</span>
+              </p>
+              <p>
+                <span className="font-medium text-foreground">版权声明：</span>
+                自由转载-非商用-保持署名（
+                <a
+                  href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-primary hover:underline"
+                >
+                  CC BY-NC-SA 4.0
+                </a>
+                ）。
+              </p>
+            </div>
+          </div>
+
+          <footer className="pt-6 text-sm text-muted-foreground">
             <p className="mb-4">
               本文发布于 {formatDate(post.published)} · &copy; {currentYear} {siteConfig.author}
             </p>
@@ -330,11 +383,19 @@ export default function PostDetail() {
                       data-toc-id={item.id}
                       aria-current={activeHeading === item.id ? "location" : undefined}
                       className={cn(
-                        "block transition-colors hover:text-foreground truncate",
+                        "block transition-all duration-150 hover:text-foreground truncate rounded-sm py-0.5",
                         activeHeading === item.id
-                          ? "text-primary font-medium"
-                          : undefined
+                          ? "text-primary font-medium pl-1.5 -ml-1.5 border-l-2 border-primary bg-primary-soft/30"
+                          : "hover:translate-x-0.5"
                       )}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const el = document.getElementById(item.id);
+                        if (el) {
+                          el.scrollIntoView({ behavior: "smooth" });
+                          window.history.replaceState(null, "", "#" + item.id);
+                        }
+                      }}
                     >
                       {item.text}
                     </a>

@@ -10,7 +10,7 @@ import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Item,
@@ -33,13 +33,13 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
     <Item variant="divided" size="loose">
       {cover && (
         <ItemMedia className="self-start">
-          <Link to={"/posts/" + post.slug} className="shrink-0">
+          <Link to={"/posts/" + post.slug} className="shrink-0 overflow-hidden rounded-lg">
             <img
               src={cover.src}
               srcSet={cover.srcSet}
               sizes={cover.sizes}
               alt={post.title}
-              className="w-24 h-20 sm:w-28 sm:h-22 rounded-lg object-cover bg-muted"
+              className="w-24 h-20 sm:w-28 sm:h-22 rounded-lg object-cover bg-muted transition-transform duration-300 hover:scale-105"
               loading="lazy"
               decoding="async"
             />
@@ -107,6 +107,14 @@ export default function Home() {
   const allTags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
   const totalWords = publishedPosts.reduce((sum, p) => sum + (p.words || 0), 0);
+  const categoryCounts = categories.reduce<Record<string, number>>((acc, cat) => {
+    acc[cat] = publishedPosts.filter(p => p.category === cat).length;
+    return acc;
+  }, {});
+  const tagCounts = allTags.reduce<Record<string, number>>((acc, t) => {
+    acc[t] = publishedPosts.filter(p => p.tags.includes(t)).length;
+    return acc;
+  }, {});
   const reducedMotion = usePrefersReducedMotion();
   // 打字机动画每会话只播一次：老访客直接看到完整文字，不必等待逐字打完
   const [typingPlayed, setTypingPlayed] = useState(true);
@@ -179,6 +187,7 @@ export default function Home() {
         <div className="flex items-start gap-5 mb-6">
           <Avatar className="size-14 md:size-16">
             <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
+            <AvatarBadge variant="success" />
           </Avatar>
           <div className="min-w-0">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">
@@ -283,7 +292,7 @@ export default function Home() {
                 <div className="flex flex-wrap gap-1.5">
                   {categories.map((cat) => (
                     <Link key={cat} to={"/posts?cat=" + encodeURIComponent(cat)}>
-                      <Badge variant="secondary">{cat}</Badge>
+                      <Badge variant="secondary">{cat} · {categoryCounts[cat] || 0}</Badge>
                     </Link>
                   ))}
                 </div>
@@ -297,7 +306,7 @@ export default function Home() {
                 <div className="flex flex-wrap gap-1.5">
                   {allTags.map((t) => (
                     <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                      <Badge variant="outline">{t}</Badge>
+                      <Badge variant="outline">{t} · {tagCounts[t] || 0}</Badge>
                     </Link>
                   ))}
                 </div>

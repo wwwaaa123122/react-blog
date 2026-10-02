@@ -22,7 +22,7 @@ export default function PostCard({ post }: { post: Post }) {  // 网格断点：
   );
 
   return (
-    <Card size="flush" variant="subtle" className="group">
+    <Card size="flush" variant="interactive" className="group">
       {cover && (
         <CardContent className="relative overflow-hidden p-0">
           <Link
@@ -35,11 +35,16 @@ export default function PostCard({ post }: { post: Post }) {  // 网格断点：
               srcSet={cover.srcSet}
               sizes={cover.sizes}
               alt={post.title}
-              className="w-full aspect-2/1 object-cover transition-transform duration-200 group-hover:scale-105"
+              className="w-full aspect-2/1 object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
               decoding="async"
             />
           </Link>
+          {post.category && (
+            <div className="absolute top-2.5 right-2.5 pointer-events-none">
+              <Badge variant="secondary" size="2xs">{post.category}</Badge>
+            </div>
+          )}
         </CardContent>
       )}
       <CardContent className="p-5">
@@ -49,7 +54,7 @@ export default function PostCard({ post }: { post: Post }) {  // 网格断点：
           <h2 className="font-heading text-base font-semibold leading-snug">
             <Link
               to={"/posts/" + post.slug}
-              className="text-foreground hover:text-primary transition-colors duration-150"
+              className="text-foreground group-hover:text-primary transition-colors duration-150"
             >
               {post.title}
             </Link>

@@ -107,11 +107,18 @@ function CodeBlock({
 
   return (
     <div className="my-4 overflow-hidden rounded-lg border border-border">
-      {/* 头部：shadcn Badge（语言）+ Button（复制），固定在外部不随代码滚动 */}
-      <div className="flex items-center justify-between gap-2 bg-muted/50 px-3 py-1.5">
-        <Badge variant="secondary" size="xs-mono">
-          {lang || "code"}
-        </Badge>
+      {/* 头部：macOS 装饰圆点 + shadcn Badge（语言）+ Button（复制），固定在外部不随代码滚动 */}
+      <div className="flex items-center justify-between gap-2 bg-muted/60 px-3.5 py-2">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 opacity-70">
+            <span className="size-2 rounded-full bg-destructive/70" />
+            <span className="size-2 rounded-full bg-chart-3/70" />
+            <span className="size-2 rounded-full bg-chart-5/70" />
+          </div>
+          <Badge variant="secondary" size="xs-mono">
+            {lang || "code"}
+          </Badge>
+        </div>
         <Button
           variant="muted"
           size="xs"

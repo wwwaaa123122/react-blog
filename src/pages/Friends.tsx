@@ -267,7 +267,7 @@ export default function Friends() {
                 </Avatar>
               )}
               <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-1.5 text-sm font-bold text-foreground break-words">
+                <p className="flex items-center gap-1.5 text-sm font-bold text-foreground transition-colors group-hover:text-primary break-words">
                   {f.title}
                   <ExternalLink className="size-3 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
                 </p>
