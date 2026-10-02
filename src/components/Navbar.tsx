@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Archive, BarChart3, BookOpen, Home as HomeIcon, Link2, Menu, Search, Sparkles, User } from "lucide-react";
+import { Archive, BarChart3, BookOpen, Home as HomeIcon, Link2, Menu, Search, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { assetUrl } from "@/lib/base";
 import ThemeToggle from "./theme-toggle";
 import SearchDialog from "./SearchDialog";
 import { Icon } from "./icons";
@@ -54,9 +55,11 @@ export default function Navbar() {
       >
         <div className="mx-auto flex h-14 w-full max-w-230 md:max-w-250 lg:max-w-280 items-center justify-between px-5">
           <Link to="/" className="flex items-center gap-2 text-foreground shrink-0 group">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-              <Sparkles className="size-4" />
-            </span>
+            <img
+              src={assetUrl("/favicon.png")}
+              alt="Logo"
+              className="size-6 sm:size-7 rounded-md object-contain transition-transform duration-200 group-hover:scale-105"
+            />
             <span className="font-bold text-base tracking-tight">Starlr</span>
           </Link>
 
