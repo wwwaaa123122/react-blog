@@ -25,8 +25,9 @@ function Slider({
   return (
     <SliderPrimitive.Root
       data-slot="slider"
-      defaultValue={defaultValue}
-      value={value}
+      // 仅传入已定义的 value / defaultValue，避免两者同时为 undefined 时
+      // 触发 React "controlled/uncontrolled" 警告
+      {...(value !== undefined ? { value } : defaultValue !== undefined ? { defaultValue } : {})}
       min={min}
       max={max}
       className={cn(

@@ -9,14 +9,14 @@ const __isNode = typeof process !== "undefined" && !!process.versions?.node;
 async function loadModules(): Promise<Record<string, string>> {
   // Node 预渲染（scripts/prerender.tsx / 检查脚本）：从文件系统读取，浏览器中不会进入此分支
   if (__isNode) {
-    const pathMod = await import("node:path");
+    const pathMod = await import(/* @vite-ignore */ "node:path");
     const dir =
       process.env.POSTS_DIR ||
       (globalThis as unknown as { __POSTS_DIR__?: string }).__POSTS_DIR__ ||
       pathMod.join(process.cwd(), "src/posts");
     if (dir) {
       // 动态导入避免打进浏览器 bundle
-      const fs = await import("node:fs");
+      const fs = await import(/* @vite-ignore */ "node:fs");
       const modules: Record<string, string> = {};
       if (fs.existsSync(dir)) {
         for (const f of fs.readdirSync(dir)) {

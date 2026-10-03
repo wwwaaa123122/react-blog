@@ -27,7 +27,6 @@ export default function ThemeToggle() {
         <DropdownMenuItem
           onClick={() => setTheme("light")}
           data-active={theme === "light" ? "" : undefined}
-         
         >
           <Sun />
           浅色模式
@@ -35,7 +34,6 @@ export default function ThemeToggle() {
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
           data-active={theme === "dark" ? "" : undefined}
-         
         >
           <Moon />
           深色模式
@@ -43,7 +41,6 @@ export default function ThemeToggle() {
         <DropdownMenuItem
           onClick={() => setTheme("system")}
           data-active={theme === "system" ? "" : undefined}
-         
         >
           <Monitor />
           跟随系统
