@@ -15,7 +15,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
 import { MemoryRouter } from "react-router-dom";
-import App from "../src/App";
+import App, { type AppProps } from "../src/App";
 import { routerBase, assetUrl } from "../src/lib/base";
 import { publishedPosts, rewriteImagePaths } from "../src/lib/posts";
 import Markdown from "../src/components/Markdown";
@@ -96,13 +96,23 @@ function latinFontUrl(): string | undefined {
 
 const fontPreload = latinFontUrl();
 
+// 懒加载页面组件：在 writePage 之前 await loadLazyPages() 注入
+let lazyPages: AppProps = {};
+const loadLazyPages = async (): Promise<void> => {
+  const [{ default: Components }, { default: PostDetail }] = await Promise.all([
+    import("../src/pages/Components"),
+    import("../src/pages/PostDetail"),
+  ]);
+  lazyPages = { ComponentsComponent: Components, PostDetailComponent: PostDetail };
+};
+
 // 渲染单个路由的完整应用 HTML（同一组件树）
 function renderApp(path: string): string {
   // MemoryRouter 的 initialEntries 需包含 basename 前缀
   const fullPath = routerBase === "" ? path : routerBase + path;
   return renderToString(
     <MemoryRouter basename={routerBase} initialEntries={[fullPath]}>
-      <App />
+      <App {...lazyPages} />
     </MemoryRouter>
   );
 }
@@ -268,6 +278,7 @@ function writePage(path: string, meta: PageMeta): void {
 }
 
 // ---------- 预渲染主要页面 ----------
+await loadLazyPages();
 // 首页标题与客户端 Seo 组件保持一致（"Starlr Blog - 爱你所爱"），避免水合后标题翻转
 writePage("/", {
   title: `${site.title} - ${site.subtitle}`,
@@ -284,28 +295,6 @@ writePage("/friends/", {
   description: "友情链接与友链申请方式，与优秀的朋友们一起成长",
 });
 writePage("/about/", { title: "关于我", description: "认识一下这个博客的主人" });
-// 组件预览页：不进导航，但可被直接访问/收录
-// /components 走 React.lazy 分包，需先等模块加载完成再用 renderToStaticMarkup 渲染，
-// 否则静态 HTML 只会序列化出 Suspense fallback。
-async function prerenderComponents(): Promise<void> {
-  const { default: Components } = await import("../src/pages/Components");
-  const appHtml = renderToStaticMarkup(
-    <MemoryRouter basename={routerBase} initialEntries={[routerBase + "/components"]}>
-      <Components />
-    </MemoryRouter>
-  );
-  const doc = template.replace("<div id=\"root\"></div>", "<div id=\"root\">" + appHtml + "</div>");
-  const html = withHead(doc, "/components/", {
-    title: "全组件预览",
-    description:
-      "以 shadcn/ui 组件库搭建的界面组件预览：按钮、表单、数据展示、浮层与反馈等全部组件一次看全。",
-  });
-  const filePath = join(dist, "components", "index.html");
-  mkdirSync(dirname(filePath), { recursive: true });
-  writeFileSync(filePath, html, "utf-8");
-  console.log("[prerender] /components/ (" + Buffer.byteLength(html) + " bytes, lazy)");
-}
-
 // 每篇文章：/posts/<slug>/ （GitHub Pages 静态目录形态，sitemap/canonical 与之对应）
 for (const post of publishedPosts) {
   writePage(`/posts/${post.slug}/`, {
@@ -318,8 +307,6 @@ for (const post of publishedPosts) {
     articleTags: post.tags,
   });
 }
-
-await prerenderComponents();
 
 // 404 页面：GitHub Pages 等静态托管以 404.html 承载（HTTP 404 状态）。
 // 用真实 NotFound 组件渲染并标记 noindex，避免爬虫把软 404 当正常页面收录。

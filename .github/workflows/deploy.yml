@@ -31,8 +31,22 @@ jobs:
           version: 9
           run_install: false
 
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
+      # 生产 CI 必须与 lockfile 完全一致，禁止重新解析依赖
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Type check
         run: pnpm typecheck
@@ -41,6 +55,15 @@ jobs:
         run: pnpm build
         env:
           VITE_BASE: /react-blog/ # GitHub Pages 子路径部署
+
+      # 全站冒烟测试：起 preview 服务逐页验证（h1/canonical/死链/console 错误等）
+      - name: Smoke test
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          pnpm preview --port 4173 & echo $! > /tmp/preview.pid
+          npx --yes wait-on http://localhost:4173 --timeout 30000
+          pnpm smoke-test http://localhost:4173
+          kill $(cat /tmp/preview.pid)
 
       - name: Create .nojekyll file
         run: touch dist/.nojekyll

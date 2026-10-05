@@ -7,6 +7,7 @@ const { renderToString } = await import("react-dom/server");
 const { MemoryRouter } = await import("react-router-dom");
 const React = (await import("react")).default;
 const { default: App } = await import("../src/App");
+const { default: PostDetail } = await import("../src/pages/PostDetail");
 const { publishedPosts } = await import("../src/lib/posts");
 
 // 文章路由由 publishedPosts 派生，而不是硬编码 slug：
@@ -25,7 +26,7 @@ const routes = [
 let issues = 0;
 for (const r of routes) {
   const html = renderToString(
-    React.createElement(MemoryRouter, { basename: "", initialEntries: [r] }, React.createElement(App))
+    React.createElement(MemoryRouter, { basename: "", initialEntries: [r] }, React.createElement(App, { PostDetailComponent: PostDetail }))
   );
   const heads = [...html.matchAll(/<h([1-6])[^>]*>/g)].map((m) => parseInt(m[1]));
   const h1s = heads.filter((h) => h === 1).length;

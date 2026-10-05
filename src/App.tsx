@@ -1,10 +1,9 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ComponentType } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { assetUrl } from "./lib/base";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Posts from "./pages/Posts";
-import PostDetail from "./pages/PostDetail";
 import Friends from "./pages/Friends";
 import About from "./pages/About";
 import Archive from "./pages/Archive";
@@ -12,11 +11,35 @@ import NotFound from "./pages/NotFound";
 import { Spinner } from "./components/ui/spinner";
 
 // 组件预览页聚合了整个 shadcn/ui 组件库（含 cmdk / react-day-picker / vaul 等），
-// 体积远大于内容页，因此单独分包：只有访问 /components 的访客才下载。
-// 预渲染在 Node 中等待 lazy 解析完成，静态 HTML 依然是完整内容。
+// 文章详情页含 react-markdown + highlight.js（Markdown 渲染链最重），
+// 两者都远大于其它内容页，因此单独分包：只有对应路由的访客才下载。
 const Components = lazy(() => import("./pages/Components"));
+const PostDetail = lazy(() => import("./pages/PostDetail"));
 
-export default function App() {
+function LazyFallback() {
+  return (
+    <div className="flex justify-center py-20 text-muted-foreground">
+      <Spinner className="size-6" />
+    </div>
+  );
+}
+
+/**
+ * 懒加载页面的注入点。
+ *
+ * 浏览器运行时用默认的 React.lazy 版本（分包下载）；预渲染脚本在 Node 里
+ * 先用 `await import()` 取到真实组件再注入，renderToStaticMarkup 才能同步
+ * 序列化出真实内容，而不是 Suspense fallback。
+ */
+export interface AppProps {
+  PostDetailComponent?: ComponentType;
+  ComponentsComponent?: ComponentType;
+}
+
+export default function App({ PostDetailComponent, ComponentsComponent }: AppProps = {}) {
+  const PostDetailPage = PostDetailComponent ?? PostDetail;
+  const ComponentsPage = ComponentsComponent ?? Components;
+
   return (
     <Routes>
       {/* 站外跳转（不经过 Layout） */}
@@ -28,21 +51,22 @@ export default function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<Posts />} />
-        <Route path="/posts/:slug" element={<PostDetail />} />
+        <Route
+          path="/posts/:slug"
+          element={
+            <Suspense fallback={<LazyFallback />}>
+              <PostDetailPage />
+            </Suspense>
+          }
+        />
         <Route path="/friends" element={<Friends />} />
         <Route path="/about" element={<About />} />
         <Route path="/archive" element={<Archive />} />
         <Route
           path="/components"
           element={
-            <Suspense
-              fallback={
-                <div className="flex justify-center py-20 text-muted-foreground">
-                  <Spinner className="size-6" />
-                </div>
-              }
-            >
-              <Components />
+            <Suspense fallback={<LazyFallback />}>
+              <ComponentsPage />
             </Suspense>
           }
         />

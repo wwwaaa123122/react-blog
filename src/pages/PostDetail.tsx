@@ -16,7 +16,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia } from "@/components/ui/empty";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -149,7 +149,7 @@ export default function PostDetail() {
             <EmptyMedia variant="icon">
               <BookOpen />
             </EmptyMedia>
-            <EmptyTitle>文章不存在或已被删除</EmptyTitle>
+            <h1 className="text-3xl font-bold tracking-tight">文章不存在或已被删除</h1>
             <EmptyDescription>链接可能已失效，或这篇文章已被移除。</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
@@ -173,6 +173,20 @@ export default function PostDetail() {
   const currentIdx = publishedPosts.findIndex((p) => p.slug === slug);
   const prevPost = currentIdx > 0 ? publishedPosts[currentIdx - 1] : null;
   const nextPost = currentIdx < publishedPosts.length - 1 ? publishedPosts[currentIdx + 1] : null;
+
+  // 相关文章：按共享标签数排序，同分类加分，取前 3 篇（不含当前文章）
+  const relatedPosts = publishedPosts
+    .filter((p) => p.slug !== slug)
+    .map((p) => ({
+      post: p,
+      score:
+        p.tags.filter((t) => post.tags.includes(t)).length * 2 +
+        (p.category === post.category ? 1 : 0),
+    }))
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score || b.post.published.localeCompare(a.post.published))
+    .slice(0, 3)
+    .map((x) => x.post);
 
   return (
     <>
@@ -299,6 +313,34 @@ export default function PostDetail() {
               </Item>
             )}
           </nav>
+
+          {/* 相关文章：按共享标签/分类推荐（无相关内容则不渲染） */}
+          {relatedPosts.length > 0 && (
+            <section aria-labelledby="related-posts-heading" className="mt-10">
+              <h2
+                id="related-posts-heading"
+                className="mb-3 text-sm font-semibold text-muted-foreground"
+              >
+                相关文章
+              </h2>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {relatedPosts.map((rp) => (
+                  <Item key={rp.slug} asChild variant="outline" size="sm">
+                    <Link to={"/posts/" + rp.slug}>
+                      <ItemContent>
+                        <ItemTitle className="text-sm leading-snug">
+                          {rp.title}
+                        </ItemTitle>
+                        <ItemDescription>
+                          <time dateTime={rp.published}>{formatDate(rp.published)}</time>
+                        </ItemDescription>
+                      </ItemContent>
+                    </Link>
+                  </Item>
+                ))}
+              </div>
+            </section>
+          )}
 
           <Separator className="mt-6" />
 

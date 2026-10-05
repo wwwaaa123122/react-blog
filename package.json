@@ -16,7 +16,8 @@
     "check:mobile-menu": "tsx scripts/mobile-menu-check.mts",
     "check:layout": "node scripts/layout-check.mts",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "smoke-test": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
