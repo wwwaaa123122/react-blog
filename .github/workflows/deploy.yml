@@ -60,9 +60,12 @@ jobs:
       - name: Smoke test
         run: |
           pnpm exec playwright install --with-deps chromium
-          pnpm preview --port 4173 & echo $! > /tmp/preview.pid
-          npx --yes wait-on http://localhost:4173 --timeout 30000
-          pnpm smoke-test http://localhost:4173
+          # preview 服务器读取 vite.config.ts 的 base（VITE_BASE），必须显式导出，
+          # 否则静态资源会命中 SPA fallback 返回 text/html 导致浏览器 404
+          export VITE_BASE=/react-blog/
+          pnpm preview --port 4173 --strictPort & echo $! > /tmp/preview.pid
+          npx --yes wait-on http://localhost:4173/react-blog/ --timeout 30000
+          pnpm smoke-test http://localhost:4173/react-blog/
           kill $(cat /tmp/preview.pid)
 
       - name: Create .nojekyll file
