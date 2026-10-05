@@ -83,7 +83,7 @@ ${urls
 ${u.image ? `    <image:image>
     <image:loc>${esc(u.image.loc)}</image:loc>
 ${u.image.title ? `    <image:title>${esc(u.image.title)}</image:title>` : ""}
-${u.image.width ? `    <image:width>${u.image.width}</image:width>\n    <image;height>${u.image.height}</image:height>` : ""}
+${u.image.width ? `    <image:width>${u.image.width}</image:width>\n    <image:height>${u.image.height}</image:height>` : ""}
   </image:image>` : ""}
   </url>`
   )
