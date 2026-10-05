@@ -115,6 +115,8 @@ ok(
 const sitemap = read("dist/sitemap.xml");
 ok(sitemap.includes('xmlns:image=') && (sitemap.match(/<image:image>/g) || []).length > 0, "sitemap.xml: 含 image:image 图片索引");
 ok(sitemap.includes("image:width") && sitemap.includes("image:title"), "sitemap.xml: 图片含宽高与标题");
+// 整份 XML 必须能被解析（此前 image;height 笔误导致非法标签名逃过检查）
+ok(!/[<]image;/.test(sitemap), "sitemap.xml: 无非法标签（分号冒号笔误）");
 
 // ---------- 8) 渲染性能：屏外区块跳过布局 ----------
 // 长列表页（归档/文章/友链/首页）的重复区块应启用 content-visibility，
