@@ -482,17 +482,17 @@ export const demoCells: DemoCell[] = [
     label: "选中 / 未选 / 禁用",
     demo: (
       <div className="grid gap-3">
-        <Label>
-          <Checkbox defaultChecked />
+        <Label htmlFor="demo-cb-1">
+          <Checkbox id="demo-cb-1" defaultChecked />
           同步到远端仓库
         </Label>
-        <Label>
-          <Checkbox />
+        <Label htmlFor="demo-cb-2">
+          <Checkbox id="demo-cb-2" />
           构建时生成 sitemap
         </Label>
         <div className="opacity-60">
-          <Label>
-            <Checkbox disabled />
+          <Label htmlFor="demo-cb-3">
+            <Checkbox id="demo-cb-3" disabled />
             历史版本归档（暂不可用）
           </Label>
         </div>
@@ -504,17 +504,17 @@ export const demoCells: DemoCell[] = [
     label: "单选",
     demo: (
       <RadioGroup defaultValue="ssg">
-        <Label>
-          <RadioGroupItem value="ssg" />
+        <Label htmlFor="demo-rg-1">
+          <RadioGroupItem value="ssg" id="demo-rg-1" />
           静态预渲染（SSG）
         </Label>
-        <Label>
-          <RadioGroupItem value="ssr" />
+        <Label htmlFor="demo-rg-2">
+          <RadioGroupItem value="ssr" id="demo-rg-2" />
           服务端渲染（SSR）
         </Label>
         <div className="opacity-60">
-          <Label>
-            <RadioGroupItem value="csr" disabled />
+          <Label htmlFor="demo-rg-3">
+            <RadioGroupItem value="csr" id="demo-rg-3" disabled />
             纯客户端渲染（CSR）
           </Label>
         </div>
@@ -526,17 +526,17 @@ export const demoCells: DemoCell[] = [
     label: "default / sm / 禁用",
     demo: (
       <div className="grid gap-3">
-        <Label>
-          <Switch defaultChecked />
+        <Label htmlFor="demo-sw-1">
+          <Switch id="demo-sw-1" defaultChecked />
           跟随系统主题
         </Label>
-        <Label>
-          <Switch size="sm" defaultChecked />
+        <Label htmlFor="demo-sw-2">
+          <Switch id="demo-sw-2" size="sm" defaultChecked />
           紧凑尺寸
         </Label>
         <div className="opacity-60">
-          <Label>
-            <Switch disabled />
+          <Label htmlFor="demo-sw-3">
+            <Switch id="demo-sw-3" disabled />
             禁用
           </Label>
         </div>

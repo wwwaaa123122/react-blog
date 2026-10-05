@@ -8,13 +8,30 @@ import { MinusIcon } from "lucide-react"
 function InputOTP({
   className,
   containerClassName,
+  value,
+  defaultValue,
+  onChange,
   ...props
 }: React.ComponentProps<typeof OTPInput> & {
   containerClassName?: string
 }) {
+  // input-otp 会在内部同时传 value 和 defaultValue 给 <input>，触发 React
+  // controlled/uncontrolled 警告；这里把 defaultValue 转为内部受控 state。
+  const [internal, setInternal] = React.useState(
+    typeof defaultValue === "string" ? defaultValue : undefined
+  )
+  const handleChange = React.useCallback(
+    (v: string) => {
+      setInternal(v)
+      onChange?.(v)
+    },
+    [onChange]
+  )
   return (
     <OTPInput
       data-slot="input-otp"
+      value={value ?? internal}
+      onChange={handleChange}
       containerClassName={cn(
         "cn-input-otp flex items-center has-disabled:opacity-50",
         containerClassName

@@ -21,7 +21,7 @@ export default function NotFound() {
             <EmptyMedia variant="icon">
               <BookOpen />
             </EmptyMedia>
-            <p className="text-6xl font-bold tracking-tight text-muted-foreground/60">404</p>
+            <h1 className="text-6xl font-bold tracking-tight text-muted-foreground/60">404</h1>
             <EmptyTitle variant="icon" className="mt-2">页面飞走了</EmptyTitle>
             <EmptyDescription>你访问的页面不存在或已被移除</EmptyDescription>
           </EmptyHeader>
