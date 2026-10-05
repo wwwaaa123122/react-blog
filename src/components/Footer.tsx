@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowUp, FileText, Rss } from "lucide-react";
+import { ArrowUp, FileText, Map, Rss } from "lucide-react";
 import { siteConfig } from "../config/site";
-import { Icon } from "./icons";
 import { assetUrl } from "../lib/base";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -15,7 +14,7 @@ const navLinks = [
 ];
 
 const iconLinks = [
-  { href: "https://github.com/wwwaaa123122", label: "GitHub", external: true, icon: "github" as const },
+  { href: "/sitemap.xml", label: "站点地图", external: true, icon: "sitemap" as const },
   { href: "/rss.xml", label: "RSS", external: true, icon: "rss" as const },
   { href: "/llms.txt", label: "llms.txt", external: true, icon: "llms" as const },
 ];
@@ -65,13 +64,9 @@ export default function Footer() {
                 aria-label={l.label}
                 title={l.label}
               >
-                <a
-                  href={l.icon === "github" ? l.href : assetUrl(l.href)}
-                  target={l.external ? "_blank" : undefined}
-                  rel={l.external ? "noreferrer noopener" : undefined}
-                >
-                  {l.icon === "github" ? (
-                    <Icon name="github" size={15} />
+                <a href={assetUrl(l.href)} target="_blank" rel="noreferrer noopener">
+                  {l.icon === "sitemap" ? (
+                    <Map className="size-3.5" />
                   ) : l.icon === "rss" ? (
                     <Rss className="size-3.5" />
                   ) : (
