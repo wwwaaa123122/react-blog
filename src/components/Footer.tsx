@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUp, FileText, Map, Rss } from "lucide-react";
 import { siteConfig } from "../config/site";
 import { assetUrl } from "../lib/base";
+import { prefersReducedMotion } from "../lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -22,7 +23,11 @@ const iconLinks = [
 // 页脚：移动端两行（版权 + 链接），桌面端一行左右分布。
 // 之间用 Separator 分隔，间距统一走 gap，避免小屏挤成一团。
 export default function Footer() {
-  const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const scrollTop = () =>
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
 
   return (
     <footer className="border-t border-border">
@@ -46,9 +51,12 @@ export default function Footer() {
             </a>
           </div>
 
-          <div className="flex items-center gap-0.5 sm:gap-1">
+          <nav
+            aria-label="页脚导航"
+            className="flex flex-wrap items-center justify-center gap-0.5 sm:gap-1"
+          >
             {navLinks.map((l) => (
-              <Button key={l.to} asChild variant="link" size="sm">
+              <Button key={l.to} asChild variant="muted" size="sm">
                 <Link to={l.to}>{l.label}</Link>
               </Button>
             ))}
@@ -85,7 +93,7 @@ export default function Footer() {
             >
               <ArrowUp className="size-3.5 text-muted-foreground" />
             </Button>
-          </div>
+          </nav>
         </div>
       </div>
     </footer>

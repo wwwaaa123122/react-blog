@@ -21,3 +21,10 @@ export const assetUrl = (path: string): string => {
   const p = path.startsWith("/") ? path.slice(1) : path;
   return rawBase + p;
 };
+
+// 站点配置里的图片地址既可能是站内路径，也可能是外链（如 CMS 填入的头像 URL）。
+// 外链/内联数据直接返回，站内路径才套部署 base，避免把 https:// 拼成 /react-blog/https://。
+export const resolveAssetUrl = (path: string): string =>
+  /^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith("data:")
+    ? path
+    : assetUrl(path);

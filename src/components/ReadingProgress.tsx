@@ -19,8 +19,11 @@ export default function ReadingProgress({ target }: { target?: React.RefObject<H
       // 以目标元素（文章）为准，回退到整页
       const el = target?.current;
       if (el) {
-        const top = el.offsetTop;
-        const bottom = top + el.offsetHeight;
+        // offsetTop 相对最近的定位祖先（文章外面的 .relative 容器），不是文档；
+        // 用 rect + scrollY 取得文章在文档中的真实起点。
+        const rect = el.getBoundingClientRect();
+        const top = rect.top + window.scrollY;
+        const bottom = top + rect.height;
         cacheRef.current.scrollable = Math.max(1, bottom - window.innerHeight);
         // 起点偏移：文章顶部滚到视口顶时进度才从 0 开始
         cacheRef.current.offset = top;
@@ -50,14 +53,30 @@ export default function ReadingProgress({ target }: { target?: React.RefObject<H
       });
     };
 
+    // 封面图、字体、评论 iframe 加载都会改变文章高度：
+    // 重新测量，否则进度条会按旧的（更短的）高度提前走到 100%。
+    const onResize = () => {
+      measure();
+      onScroll();
+    };
+
     measure();
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", onResize);
+
+    const el = target?.current;
+    const ro = typeof ResizeObserver !== "undefined" && el
+      ? new ResizeObserver(onResize)
+      : undefined;
+    if (el) ro?.observe(el);
+    document.fonts?.ready.then(onResize).catch(() => {});
+
     return () => {
+      ro?.disconnect();
       if (cacheRef.current.raf) cancelAnimationFrame(cacheRef.current.raf);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
     };
   }, [target]);
 

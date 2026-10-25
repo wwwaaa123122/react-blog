@@ -1,5 +1,6 @@
 import { siteConfig } from "../config/site";
 import { profileConfig } from "../config/profile";
+import { assetUrl } from "./base";
 import type { Post } from "../types";
 
 export const siteUrl = (): string => siteConfig.site_url.replace(/\/$/, "");
@@ -52,7 +53,10 @@ export function personJsonLd(): Record<string, unknown> {
     "@type": "Person",
     name: profileConfig.name,
     url: siteUrl(),
-    image: profileConfig.avatar,
+    // schema.org image 必须是绝对地址：站内头像套上 base 与站点域名，外链原样保留
+    image: /^https?:\/\//i.test(profileConfig.avatar)
+      ? profileConfig.avatar
+      : absoluteUrl(assetUrl(profileConfig.avatar)),
     description: profileConfig.bio,
     sameAs: profileConfig.links.map((l) => l.url),
   };
@@ -86,7 +90,11 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
       },
     },
     ...(post.image
-      ? { image: absoluteUrl(post.image.replace(/\.\.\/images\//, "/images/")) }
+      ? {
+          image: /^https?:\/\//i.test(post.image)
+            ? post.image
+            : absoluteUrl(assetUrl(post.image.replace(/\.\.\/images\//, "/images/"))),
+        }
       : {}),
     isPartOf: {
       "@type": "WebSite",

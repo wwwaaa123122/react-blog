@@ -173,6 +173,14 @@
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     font-kerning: normal;
     text-rendering: optimizeLegibility;
+    /* Firefox 滚动条（WebKit 版见 global.css）；thin 比默认更不抢视觉 */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  /* 标题避免单字孤行；超长英文/链接不撑破容器 */
+  h1, h2, h3 {
+    text-wrap: balance;
+    overflow-wrap: break-word;
   }
   body {
     @apply bg-background text-foreground;
@@ -195,9 +203,11 @@
   }
   button {
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
   }
   a {
     text-underline-offset: 3px;
+    -webkit-tap-highlight-color: transparent;
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring/60;

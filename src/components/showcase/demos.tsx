@@ -3,6 +3,7 @@
 // 组件库实现，不含任何手写样式型控件（手写样式统一收敛在 ui 目录内）。
 // 注意：本文件会被预渲染（react-dom/server），必须保持 SSR 安全（不在模块顶层访问 window）。
 import * as React from "react"
+import { assetUrl } from "@/lib/base"
 import {
   AlertCircleIcon,
   ArrowRightIcon,
@@ -769,7 +770,7 @@ export const demoCells: DemoCell[] = [
     demo: (
       <div className="flex items-center gap-4">
         <Avatar>
-          <AvatarImage src="/favicon.png" alt="星辰旅人" />
+          <AvatarImage src={assetUrl("/avatar.jpg")} alt="星辰旅人" />
           <AvatarFallback>SL</AvatarFallback>
         </Avatar>
         <Avatar>
@@ -844,11 +845,11 @@ export const demoCells: DemoCell[] = [
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">首页</BreadcrumbLink>
+            <BreadcrumbLink href={assetUrl("/")}>首页</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/posts">文章</BreadcrumbLink>
+            <BreadcrumbLink href={assetUrl("/posts")}>文章</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -1204,16 +1205,16 @@ export const demoCells: DemoCell[] = [
             <NavigationMenuContent>
               <ul className="grid w-48 gap-1 p-2">
                 <li>
-                  <NavigationMenuLink href="/posts">文章列表</NavigationMenuLink>
+                  <NavigationMenuLink href={assetUrl("/posts")}>文章列表</NavigationMenuLink>
                 </li>
                 <li>
-                  <NavigationMenuLink href="/archive">归档</NavigationMenuLink>
+                  <NavigationMenuLink href={assetUrl("/archive")}>归档</NavigationMenuLink>
                 </li>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/about">关于</NavigationMenuLink>
+            <NavigationMenuLink href={assetUrl("/about")}>关于</NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
@@ -1257,7 +1258,7 @@ export const demoCells: DemoCell[] = [
         <HoverCardContent className="w-72">
           <div className="flex gap-3">
             <Avatar>
-              <AvatarImage src="/favicon.png" alt="星辰旅人" />
+              <AvatarImage src={assetUrl("/avatar.jpg")} alt="星辰旅人" />
               <AvatarFallback>SL</AvatarFallback>
             </Avatar>
             <div className="grid gap-1 text-sm">

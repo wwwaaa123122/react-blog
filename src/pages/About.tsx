@@ -1,33 +1,37 @@
 import { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
 import { profileConfig } from "../config/profile";
+import { resolveAssetUrl } from "../lib/base";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { jsonLd, personJsonLd } from "../lib/seo";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 const ADULT_DATE = new Date("2030-07-20T00:00:00").getTime();
 
+function formatRemaining(ms: number): string {
+  if (ms <= 0) return "成年了！";
+  const days = Math.floor(ms / 86400000);
+  const h = Math.floor((ms % 86400000) / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return days + " 天 " + h + " 小时 " + m + " 分 " + s + " 秒";
+}
+
 function Countdown() {
-  const [text, setText] = useState("");
+  // 初值同步计算：避免首帧显示空白、再被 effect 填入
+  const [text, setText] = useState(() => formatRemaining(ADULT_DATE - Date.now()));
   useEffect(() => {
-    const update = () => {
-      const d = ADULT_DATE - Date.now();
-      if (d <= 0) { setText("成年了！"); return false; }
-      const days = Math.floor(d / 86400000);
-      const h = Math.floor((d % 86400000) / 3600000);
-      const m = Math.floor((d % 3600000) / 60000);
-      const s = Math.floor((d % 60000) / 1000);
-      setText(days + " 天 " + h + " 小时 " + m + " 分 " + s + " 秒");
-      return true;
-    };
-    update();
-    const timer = setInterval(() => { if (!update()) clearInterval(timer); }, 1000);
+    const timer = setInterval(() => {
+      const remaining = ADULT_DATE - Date.now();
+      setText(formatRemaining(remaining));
+      if (remaining <= 0) clearInterval(timer);
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
   return (
@@ -47,7 +51,12 @@ function Countdown() {
 export default function About() {
   return (
     <>
-      <Seo title="关于我" description="认识一下这个博客的主人" path="/about/" />
+      <Seo
+        title="关于我"
+        description="认识一下这个博客的主人"
+        path="/about/"
+        ogImage={profileConfig.avatar}
+      />
       <Breadcrumb items={[{ label: "关于", to: "/about/" }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(personJsonLd()) }} />
       <div className="mb-6">
@@ -57,7 +66,13 @@ export default function About() {
       <div className="max-w-150">
         <div className="flex items-center gap-4 mb-6">
           <Avatar size="lg" className="size-14">
-            <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
+            <AvatarImage
+              src={resolveAssetUrl(profileConfig.avatar)}
+              alt={profileConfig.name}
+              loading="eager"
+              decoding="async"
+            />
+            <AvatarFallback>{profileConfig.name.slice(0, 1)}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
             <h2 className="text-lg font-bold">{profileConfig.name}</h2>

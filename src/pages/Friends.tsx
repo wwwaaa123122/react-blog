@@ -4,9 +4,11 @@ import {
   Info, Link2, Mail, MessageSquareText, UserRound, Users,
 } from "lucide-react";
 import { toast } from "sonner";
+import { copyToClipboard } from "../lib/clipboard";
 import {
   getEnabledFriends, siteInfo, friendNotes, friendTemplate,
 } from "../config/friends";
+import { profileConfig } from "../config/profile";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -31,22 +33,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 // 复制到剪贴板：成功/失败都用 shadcn Sonner 反馈，不再各自维护状态
 async function copyText(text: string, message: string): Promise<void> {
-  try {
-    await navigator.clipboard.writeText(text);
-    toast.success(message);
-  } catch {
-    try {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      toast.success(message);
-    } catch {
-      toast.error("复制失败，请手动选择文本");
-    }
-  }
+  if (await copyToClipboard(text)) toast.success(message);
+  else toast.error("复制失败，请手动选择文本");
 }
 
 // 复制按钮：shadcn Button + Tooltip，图标随复制状态短暂切换为对勾
@@ -100,7 +88,12 @@ export default function Friends() {
 
   return (
     <TooltipProvider>
-      <Seo title="友链" description="友情链接与友链申请方式，与优秀的朋友们一起成长" path="/friends/" />
+      <Seo
+        title="友链"
+        description="友情链接与友链申请方式，与优秀的朋友们一起成长"
+        path="/friends/"
+        ogImage={profileConfig.avatar}
+      />
       <Breadcrumb items={[{ label: "友链", to: "/friends/" }]} />
 
       <div className="mb-8 flex flex-wrap items-end justify-between gap-3">

@@ -1,10 +1,11 @@
-import { useState, type ReactNode } from "react";
+import { memo, useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import type { Components } from "react-markdown";
 import { rewriteImagePaths } from "../lib/posts";
 import { assetUrl } from "../lib/base";
+import { copyToClipboard } from "../lib/clipboard";
 import remarkAdmonitions from "../lib/remark-admonition";
 import {
   Check,
@@ -96,11 +97,7 @@ function CodeBlock({
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
-    try { await navigator.clipboard.writeText(code); } catch {
-      const ta = document.createElement("textarea");
-      ta.value = code; document.body.appendChild(ta); ta.select();
-      document.execCommand("copy"); document.body.removeChild(ta);
-    }
+    if (!(await copyToClipboard(code))) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
@@ -201,7 +198,7 @@ function Admonition({
   );
 }
 
-export default function Markdown({ content }: { content: string }) {
+function Markdown({ content }: { content: string }) {
   // 每次渲染新建 slugger：同一文档内标题 id 唯一（重复标题追加 -1/-2）
   const slug = createSlugger();
   const components: Components = {
@@ -287,3 +284,7 @@ export default function Markdown({ content }: { content: string }) {
     </div>
   );
 }
+
+// 正文是静态 Markdown：PostDetail 的目录高亮每次变化都会重渲染父组件，
+// memo 避免重新解析整篇文章（长文 + 代码高亮时开销明显）。
+export default memo(Markdown);

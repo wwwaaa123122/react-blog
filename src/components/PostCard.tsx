@@ -25,16 +25,19 @@ export default function PostCard({ post }: { post: Post }) {  // 网格断点：
     <Card size="flush" variant="interactive" className="group">
       {cover && (
         <CardContent className="relative overflow-hidden p-0">
+          {/* 封面是标题链接的视觉重复：移出 Tab 顺序与无障碍树，
+              避免读屏/键盘用户在同一张卡片上遇到两个指向相同文章的链接 */}
           <Link
             to={"/posts/" + post.slug}
             className="block bg-muted"
-            aria-label={post.title + " 封面"}
+            tabIndex={-1}
+            aria-hidden="true"
           >
             <img
               src={cover.src}
               srcSet={cover.srcSet}
               sizes={cover.sizes}
-              alt={post.title}
+              alt=""
               className="w-full aspect-2/1 object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
               decoding="async"

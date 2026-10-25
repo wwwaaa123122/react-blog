@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { publishedPosts, getAllTags } from "../lib/posts";
+import { profileConfig } from "../config/profile";
 import PostCard from "../components/PostCard";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { prefersReducedMotion } from "@/lib/utils";
 
 const PAGE_SIZE = 9;
 
@@ -44,6 +46,7 @@ function FilterGroup({
         variant="outline"
         size="sm"
         spacing={1}
+        aria-label={label}
         value={value === "" ? "all" : value}
         onValueChange={(v) => {
           // 再次点击已选中项时 v 为空字符串，视为回到「全部」
@@ -77,23 +80,30 @@ export default function Posts() {
   const tags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))] as string[];
 
+  // 搜索索引只建一次：每个字输入时若重新 toLowerCase 全文，等于每次按键
+  // 都把全部文章正文复制一遍；现在只做 includes 扫描。
+  const searchIndex = useMemo(
+    () => new Map(
+      publishedPosts.map((p) => [
+        p.slug,
+        (p.title + "\n" + p.description + "\n" + p.content + "\n" + p.tags.join(" ")).toLowerCase(),
+      ])
+    ),
+    []
+  );
+
   const filtered = useMemo(() => {
     let list = publishedPosts;
     if (cat) list = list.filter((p) => p.category === cat);
     if (tag) list = list.filter((p) => p.tags.includes(tag));
-    if (keyword.trim()) {
-      const kw = keyword.trim().toLowerCase();
-      list = list.filter(
-        (p) => p.title.toLowerCase().includes(kw) ||
-          p.description.toLowerCase().includes(kw) ||
-          p.content.toLowerCase().includes(kw) ||
-          p.tags.some((t) => t.toLowerCase().includes(kw))
-      );
+    const kw = keyword.trim().toLowerCase();
+    if (kw) {
+      list = list.filter((p) => searchIndex.get(p.slug)?.includes(kw));
     }
     return list;
-  }, [cat, tag, keyword]);
+  }, [cat, tag, keyword, searchIndex]);
 
-// 键盘快捷键：按 / 聚焦搜索框（焦点已在可输入元素内时不拦截，避免吞掉 "/" 字符）
+  // 键盘快捷键：按 / 聚焦搜索框（焦点已在可输入元素内时不拦截，避免吞掉 "/" 字符）
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -151,21 +161,25 @@ export default function Posts() {
   // 翻页时回到页面顶部，避免停留在旧列表的滚动位置
   const goToPage = (n: number) => {
     updateParams((sp) => sp.set("page", String(n)));
-    try {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch {
-      window.scrollTo(0, 0);
-    }
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   };
 
   return (
     <>
-      <Seo title="文章" description={publishedPosts.length + " 篇技术文章"} path="/posts/" />
+      <Seo
+        title="文章"
+        description={publishedPosts.length + " 篇技术文章"}
+        path="/posts/"
+        ogImage={profileConfig.avatar}
+      />
       <Breadcrumb items={[{ label: "文章", to: "/posts/" }]} />
 
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">文章</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground" aria-live="polite" aria-atomic="true">
           {filtered.length === publishedPosts.length
             ? `共 ${publishedPosts.length} 篇文章`
             : `找到 ${filtered.length} 篇文章`}
@@ -184,6 +198,9 @@ export default function Posts() {
           onChange={(e) => onKeywordChange(e.target.value)}
           placeholder="搜索文章…（按 / 快速聚焦）"
           aria-label="搜索文章（快捷键 /）"
+          autoComplete="off"
+          spellCheck={false}
+          enterKeyHint="search"
           className="[&::-webkit-search-cancel-button]:hidden"
         />
         {keyword && (

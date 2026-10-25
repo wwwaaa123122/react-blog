@@ -87,6 +87,8 @@ src/
    - **站点配置**（`src/data/site.json`，标题 / 副标题 / 描述等）
 4. 编辑并保存，CMS 会提交到仓库，推送触发 `.github/workflows/deploy.yml` 自动构建并部署到 `pages` 分支。
 
+> **头像说明**：顶栏 Logo、首页/关于页头像都读取 `src/data/profile.json` 的 `avatar`（当前为站内 `public/avatar.jpg`，取自 QQ 头像 `https://q2.qlogo.cn/headimg_dl?dst_uin=3385016019&spec=5`）。浏览器图标 `public/favicon.png`、`apple-touch-icon.png`、`favicon.ico` 是同一张头像的静态尺寸版本，更换头像时需要一并替换以保持一致。
+
 > 首次使用需要把仓库推到 GitHub 并安装 Pages CMS GitHub App；若部署到 GitHub Pages，请在仓库 Settings → Pages 中选择 `pages` 分支。
 ## SEO 与站点文件
 

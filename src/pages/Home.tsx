@@ -4,13 +4,14 @@ import { ArrowRight, BookOpen, Clock, Mail } from "lucide-react";
 import { publishedPosts, getAllTags, formatDate, readingTime } from "../lib/posts";
 import { siteConfig } from "../config/site";
 import { profileConfig } from "../config/profile";
+import { resolveAssetUrl } from "../lib/base";
 import { responsiveImageSrc } from "../lib/post-image";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarBadge, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Item,
@@ -33,12 +34,19 @@ function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
     <Item variant="divided" size="loose">
       {cover && (
         <ItemMedia className="self-start">
-          <Link to={"/posts/" + post.slug} className="shrink-0 overflow-hidden rounded-lg">
+          {/* 缩略图只是标题链接的视觉补充：从无障碍树与 Tab 顺序中移除，
+              避免同一篇文章产生两个同名焦点目标 */}
+          <Link
+            to={"/posts/" + post.slug}
+            tabIndex={-1}
+            aria-hidden="true"
+            className="shrink-0 overflow-hidden rounded-lg"
+          >
             <img
               src={cover.src}
               srcSet={cover.srcSet}
               sizes={cover.sizes}
-              alt={post.title}
+              alt=""
               className="w-24 h-20 sm:w-28 sm:h-22 rounded-lg object-cover bg-muted transition-transform duration-300 hover:scale-105"
               loading="lazy"
               decoding="async"
@@ -105,16 +113,18 @@ function usePrefersReducedMotion(): boolean {
 export default function Home() {
   const posts = publishedPosts.slice(0, 8);
   const allTags = getAllTags();
-  const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))];
-  const totalWords = publishedPosts.reduce((sum, p) => sum + (p.words || 0), 0);
-  const categoryCounts = categories.reduce<Record<string, number>>((acc, cat) => {
-    acc[cat] = publishedPosts.filter(p => p.category === cat).length;
-    return acc;
-  }, {});
-  const tagCounts = allTags.reduce<Record<string, number>>((acc, t) => {
-    acc[t] = publishedPosts.filter(p => p.tags.includes(t)).length;
-    return acc;
-  }, {});
+  // 一次遍历同时统计总字数、分类与标签数量（此前每个分类/标签都要重扫全部文章）
+  const categoryCounts: Record<string, number> = {};
+  const tagCounts: Record<string, number> = {};
+  let totalWords = 0;
+  for (const p of publishedPosts) {
+    totalWords += p.words || 0;
+    if (p.category) {
+      categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
+    }
+    for (const t of p.tags) tagCounts[t] = (tagCounts[t] || 0) + 1;
+  }
+  const categories = Object.keys(categoryCounts);
   const reducedMotion = usePrefersReducedMotion();
   // 打字机动画每会话只播一次：老访客直接看到完整文字，不必等待逐字打完
   const [typingPlayed, setTypingPlayed] = useState(true);
@@ -186,8 +196,14 @@ export default function Home() {
       <section className="mb-10 md:mb-12 pt-4 md:pt-6">
         <div className="flex items-start gap-5 mb-6">
           <Avatar className="size-14 md:size-16">
-            <AvatarImage src={profileConfig.avatar} alt={profileConfig.name} />
-            <AvatarBadge variant="success" />
+            <AvatarImage
+              src={resolveAssetUrl(profileConfig.avatar)}
+              alt={profileConfig.name}
+              loading="eager"
+              decoding="async"
+            />
+            <AvatarFallback>{profileConfig.name.slice(0, 1)}</AvatarFallback>
+            <AvatarBadge variant="success" aria-hidden="true" />
           </Avatar>
           <div className="min-w-0">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">
@@ -279,7 +295,7 @@ export default function Home() {
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {siteConfig.subtitle} · 分享技术、生活与热爱
                 </p>
-                <p className="text-xs text-muted-foreground/80">
+                <p className="text-xs text-muted-foreground">
                   {publishedPosts.length} 篇文章 · 总计 {totalWords.toLocaleString("zh-CN")} 字
                 </p>
               </CardContent>

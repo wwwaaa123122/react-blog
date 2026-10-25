@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Archive, BarChart3, BookOpen, Home as HomeIcon, Link2, Menu, Search, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { assetUrl } from "@/lib/base";
+import { resolveAssetUrl } from "@/lib/base";
+import { profileConfig } from "@/config/profile";
 import ThemeToggle from "./theme-toggle";
 import { Icon } from "./icons";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
+    // 刷新后浏览器可能恢复到页面中部：先同步一次，避免导航栏错误地保持透明
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -53,9 +56,13 @@ export default function Navbar() {
       <div className="mx-auto flex h-14 w-full max-w-230 md:max-w-250 lg:max-w-280 items-center justify-between px-5">
         <Link to="/" className="flex items-center gap-2 text-foreground shrink-0 group">
           <img
-            src={assetUrl("/favicon.png")}
-            alt="Logo"
-            className="size-6 sm:size-7 rounded-md object-contain transition-transform duration-200 group-hover:scale-105"
+            src={resolveAssetUrl(profileConfig.avatar)}
+            alt=""
+            width={32}
+            height={32}
+            decoding="async"
+            draggable={false}
+            className="size-7 sm:size-8 rounded-full object-cover ring-1 ring-border/70 transition-transform duration-200 group-hover:scale-105"
           />
           <span className="font-bold text-base tracking-tight">Starlr</span>
         </Link>

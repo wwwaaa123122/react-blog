@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { publishedPosts, formatDate } from "../lib/posts";
+import { profileConfig } from "../config/profile";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Item, ItemContent, ItemGroup, ItemMedia } from "@/components/ui/item";
 
 function formatMonthDay(d: string): string {
@@ -26,7 +27,12 @@ export default function Archive() {
 
   return (
     <>
-      <Seo title="归档" description="全部文章按年份归档" path="/archive/" />
+      <Seo
+        title="归档"
+        description="全部文章按年份归档"
+        path="/archive/"
+        ogImage={profileConfig.avatar}
+      />
       <Breadcrumb items={[{ label: "归档", to: "/archive/" }]} />
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">归档</h1>
@@ -36,11 +42,10 @@ export default function Archive() {
         <div key={year} className="cv-auto mb-8">
         <Card className="mb-0">
           <CardHeader>
-            <CardTitle className="text-lg font-bold">
-              <span className="flex items-center gap-2">
-                {year} <Badge variant="secondary" size="xs">{posts.length} 篇</Badge>
-              </span>
-            </CardTitle>
+            {/* 年份是页面 h1 下的真实分节标题，直接使用 h2 保持文档大纲 */}
+            <h2 className="flex items-center gap-2 font-heading text-lg font-bold leading-snug">
+              {year} <Badge variant="secondary" size="xs">{posts.length} 篇</Badge>
+            </h2>
           </CardHeader>
           <CardContent>
             <ItemGroup size="flush">

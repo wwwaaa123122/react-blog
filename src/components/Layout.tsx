@@ -28,6 +28,9 @@ export default function Layout() {
         // 旧浏览器不支持 behavior:"instant"，退化为直接跳转
         window.scrollTo(0, 0);
       }
+      // SPA 换页不会触发浏览器的焦点重置：把焦点交给主内容，
+      // 键盘/读屏用户不必从头再 Tab 一遍导航。
+      document.getElementById("main")?.focus({ preventScroll: true });
     }
   }, [loc.pathname]);
 

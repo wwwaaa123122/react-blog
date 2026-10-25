@@ -195,12 +195,12 @@ function withHead(
       ? meta.ogImage
       : siteUrl + assetUrl(rewriteImagePaths(meta.ogImage))
     : undefined;
-  const ogImagePath = ogImageUrl?.startsWith(siteUrl)
-    ? ogImageUrl.slice(siteUrl.length)
-    : ogImageUrl && !ogImageUrl.startsWith("http")
-      ? ogImageUrl
-      : undefined;
-  const ogSize = ogImagePath ? coverSizes[ogImagePath] : undefined;
+  // 用源路径（不含部署 base）查尺寸表：子路径部署时 URL 会变成
+  // /react-blog/images/x.webp，而 cover-sizes.json 的键是 /images/x.webp。
+  const ogSizeKey = meta.ogImage && !/^https?:\/\//i.test(meta.ogImage)
+    ? "/" + rewriteImagePaths(meta.ogImage).replace(/^\.\/|^(\.\.\/)+/, "").replace(/^\//, "")
+    : undefined;
+  const ogSize = ogSizeKey ? coverSizes[ogSizeKey] : undefined;
 
   const jsonLdBlocks = jsonLdFor(path);
 
@@ -288,13 +288,23 @@ writePage("/", {
 writePage("/posts/", {
   title: "文章",
   description: `共 ${publishedPosts.length} 篇文章 · 分享技术、生活与热爱`,
+  ogImage: profileData.avatar,
 });
-writePage("/archive/", { title: "归档", description: "全部文章按年份归档" });
+writePage("/archive/", {
+  title: "归档",
+  description: "全部文章按年份归档",
+  ogImage: profileData.avatar,
+});
 writePage("/friends/", {
   title: "友链",
   description: "友情链接与友链申请方式，与优秀的朋友们一起成长",
+  ogImage: profileData.avatar,
 });
-writePage("/about/", { title: "关于我", description: "认识一下这个博客的主人" });
+writePage("/about/", {
+  title: "关于我",
+  description: "认识一下这个博客的主人",
+  ogImage: profileData.avatar,
+});
 // 每篇文章：/posts/<slug>/ （GitHub Pages 静态目录形态，sitemap/canonical 与之对应）
 for (const post of publishedPosts) {
   writePage(`/posts/${post.slug}/`, {

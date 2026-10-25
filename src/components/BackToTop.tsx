@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { prefersReducedMotion } from "@/lib/utils";
 
 // 回到顶部：shadcn Button（圆形 + 主色），移动端更靠边、不遮挡正文。
 // 刻意不套 Tooltip：触屏没有 hover，长按还会弹出系统菜单，反而碍事。
@@ -19,9 +20,17 @@ export default function BackToTop() {
     <Button
       variant="default"
       size="icon"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      onClick={() =>
+        window.scrollTo({
+          top: 0,
+          behavior: prefersReducedMotion() ? "auto" : "smooth",
+        })
+      }
       aria-label="回到顶部"
       title="回到顶部"
+      // 隐藏时移出 Tab 顺序与无障碍树：不可见的按钮不应获得焦点
+      tabIndex={visible ? 0 : -1}
+      aria-hidden={!visible}
       className={
         // safe-area-inset：viewport-fit=cover 后内容会延伸到刘海/横条区域，
         // 用环境变量把按钮抬离底部安全区，避免挡住全面屏手势条

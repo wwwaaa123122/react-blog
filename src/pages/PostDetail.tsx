@@ -8,7 +8,10 @@ import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { articleJsonLd, jsonLd } from "../lib/seo";
 import { siteConfig } from "../config/site";
-import { assetUrl } from "../lib/base";
+import { resolveAssetUrl } from "../lib/base";
+import { copyToClipboard } from "../lib/clipboard";
+import { normalizeCover, variantUrl } from "../lib/post-image";
+import coverSizes from "../data/cover-sizes.json";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +22,7 @@ import {
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia } from "@/components/ui/empty";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn, prefersReducedMotion } from "@/lib/utils";
 import Giscus from "../components/Giscus";
 import ReadingProgress from "../components/ReadingProgress";
 
@@ -62,58 +65,59 @@ function useActiveHeading(toc: { level: number; text: string; id: string }[]): s
     setActive("");
     if (toc.length === 0 || !("IntersectionObserver" in window)) return;
 
-    // above[i] = 第 i 个标题是否已越过 140px 分界线
-    const above = new Array<boolean>(toc.length).fill(false);
-    const mark = (id: string, isAbove: boolean) => {
-      const idx = toc.findIndex((t) => t.id === id);
-      if (idx >= 0 && above[idx] !== isAbove) {
-        above[idx] = isAbove;
-        // 取"已越过分界线"中序号最大的标题（即最靠近分界线且在其下方）
-        let current = "";
-        for (let i = toc.length - 1; i >= 0; i--) {
-          if (above[i]) { current = toc[i].id; break; }
-        }
-        setActive(current);
-      }
+    const items = toc
+      .map((t) => ({ id: t.id, el: document.getElementById(t.id) }))
+      .filter((x): x is { id: string; el: HTMLElement } => x.el !== null);
+    if (items.length === 0) return;
+
+    // 缓存每个标题在文档中的纵向位置：滚动时只做数值比较，
+    // 不必每帧对几十个标题逐个 getBoundingClientRect（会强制同步布局）。
+    // 图片/字体/评论加载改变布局时，由 ResizeObserver 与 fonts.ready 重新测量。
+    let tops: number[] = [];
+    const measure = () => {
+      const scrollY = window.scrollY;
+      tops = items.map(({ el }) => el.getBoundingClientRect().top + scrollY);
     };
-
-    const els: HTMLElement[] = [];
-    for (const t of toc) {
-      const el = document.getElementById(t.id);
-      if (el) els.push(el);
-    }
-    if (els.length === 0) return;
-
     const update = () => {
-      for (let i = 0; i < els.length; i++) {
-        mark(toc[i].id, els[i].getBoundingClientRect().top <= OFFSET);
+      const line = window.scrollY + OFFSET;
+      let idx = -1;
+      for (let i = tops.length - 1; i >= 0; i--) {
+        if (tops[i] <= line) { idx = i; break; }
       }
+      setActive(idx >= 0 ? items[idx].id : "");
     };
+
+    measure();
     // 初次定位（含深链 #anchor 场景）
     update();
 
     const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          mark((e.target as HTMLElement).id, e.boundingClientRect.top <= OFFSET);
-        }
-      },
+      () => { measure(); update(); },
       { rootMargin: `-${OFFSET}px 0px 0px 0px`, threshold: [0, 1] }
     );
-    for (const el of els) io.observe(el);
+    for (const { el } of items) io.observe(el);
 
     let raf = 0;
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => { raf = 0; update(); });
     };
+    const onResize = () => { measure(); update(); };
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", onResize);
+
+    const ro = typeof ResizeObserver !== "undefined"
+      ? new ResizeObserver(onResize)
+      : undefined;
+    ro?.observe(document.body);
+    document.fonts?.ready.then(onResize).catch(() => {});
+
     return () => {
       io.disconnect();
+      ro?.disconnect();
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
     };
   }, [toc]);
 
@@ -166,7 +170,23 @@ export default function PostDetail() {
     );
   }
 
-  const cover = post.image ? assetUrl(post.image.replace(/\.\.\/images\//, "/images/")) : undefined;
+  const cover = post.image
+    ? resolveAssetUrl(post.image.replace(/\.\.\/images\//, "/images/"))
+    : undefined;
+  // 本地封面在构建期记录了宽高：写进 img 属性，图片下载前就按比例预留空间，
+  // 避免慢网下封面加载完成时把正文整体往下推（CLS）。
+  const coverKey = post.image && !/^https?:\/\//i.test(post.image)
+    ? normalizeCover(post.image)
+    : undefined;
+  const coverSize = coverKey
+    ? (coverSizes as Record<string, { w: number; h: number }>)[coverKey]
+    : undefined;
+  // 详情页封面在移动端只有 ~350px 宽，没必要加载 1600px 原图：
+  // 给浏览器一份 760px 变体 + 原图，由 sizes/srcset 自行选择（桌面 2x 仍用原图）。
+  const coverMd = post.image ? variantUrl(post.image, "-md") : undefined;
+  const coverSrcSet = cover && coverSize && coverKey && coverMd && coverMd !== coverKey
+    ? `${resolveAssetUrl(coverMd)} 760w, ${cover} ${coverSize.w}w`
+    : undefined;
   const currentYear = new Date().getFullYear();
 
   // 上一篇 = 更新的文章（后发），下一篇 = 更早的文章（先发）；列表按发布时间倒序
@@ -198,7 +218,8 @@ export default function PostDetail() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleJsonLd(post)) }} />
 
       {/* 阅读进度条：随滚动推进，scaleX 走合成器不触发回流 */}
-      <ReadingProgress target={articleRef} />
+      {/* key：客户端在文章之间跳转时组件不卸载，必须重挂载以重新测量新正文 */}
+      <ReadingProgress key={post.slug} target={articleRef} />
 
       {/* 双栏布局：文章 + 右侧目录 */}
       <div className="flex gap-8 lg:gap-12 relative">
@@ -249,7 +270,17 @@ export default function PostDetail() {
           {cover && (
             <div className="mb-8 -mx-5 md:mx-0">
               {/* 首屏封面：急切加载并提高优先级（LCP 元素），避免 lazy 延迟 */}
-              <img className="w-full rounded-xl shadow-sm bg-muted" src={cover} alt={post.title} decoding="async" fetchPriority="high" />
+              <img
+                className="w-full h-auto rounded-xl shadow-sm bg-muted"
+                src={cover}
+                srcSet={coverSrcSet}
+                sizes="(min-width: 768px) 720px, 100vw"
+                alt={post.title}
+                width={coverSize?.w}
+                height={coverSize?.h}
+                decoding="async"
+                fetchPriority="high"
+              />
             </div>
           )}
 
@@ -328,7 +359,7 @@ export default function PostDetail() {
                   <Item key={rp.slug} asChild variant="outline" size="sm">
                     <Link to={"/posts/" + rp.slug}>
                       <ItemContent>
-                        <ItemTitle className="text-sm leading-snug">
+                        <ItemTitle>
                           {rp.title}
                         </ItemTitle>
                         <ItemDescription>
@@ -352,10 +383,9 @@ export default function PostDetail() {
                 variant="ghost"
                 size="xs"
                 onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(window.location.href);
+                  if (await copyToClipboard(window.location.href)) {
                     toast.success("文章链接已复制到剪贴板");
-                  } catch {
+                  } else {
                     toast.error("复制失败，请手动复制地址栏链接");
                   }
                 }}
@@ -409,7 +439,8 @@ export default function PostDetail() {
             </div>
           </footer>
 
-          <Giscus />
+          {/* key：文章间跳转时重新注入 giscus，否则 iframe 仍显示上一篇的评论区 */}
+          <Giscus key={post.slug} />
         </article>
 
         {/* 桌面端：右侧目录 */}
@@ -434,7 +465,9 @@ export default function PostDetail() {
                         e.preventDefault();
                         const el = document.getElementById(item.id);
                         if (el) {
-                          el.scrollIntoView({ behavior: "smooth" });
+                          el.scrollIntoView({
+                            behavior: prefersReducedMotion() ? "auto" : "smooth",
+                          });
                           window.history.replaceState(null, "", "#" + item.id);
                         }
                       }}

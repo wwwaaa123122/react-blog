@@ -10,7 +10,8 @@ const fail = (n, w) => report.failures.push(n + " :: " + w);
   const page = await browser.newPage();
   await page.goto(base + "/", { waitUntil: "networkidle" });
   const hero = await page.evaluate(() => {
-    const img = document.querySelector("img[alt='星辰旅人' i], .rounded-full");
+    // 精确匹配首页头像（alt），不要用 .rounded-full：顶栏 Logo 也是圆形了
+    const img = document.querySelector("img[alt='星辰旅人' i]");
     return {
       imgLoaded: img ? (img.naturalWidth || 0) > 0 : false,
       bg: getComputedStyle(document.body).backgroundColor,

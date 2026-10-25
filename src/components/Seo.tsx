@@ -103,8 +103,13 @@ export default function Seo({
     if (ogImageUrl) {
       setMeta("property", "og:image", ogImageUrl);
       setMeta("name", "twitter:image", ogImageUrl);
-      const size = ogImage && !ogImage.startsWith("http")
-        ? coverSizes[ogImage as keyof typeof coverSizes]
+      // cover-sizes.json 的键统一为 /images/x.webp；frontmatter 可能写成 ../images/x，
+      // 先归一化再查表，否则客户端会误删静态 HTML 里已有的宽高 meta。
+      const sizeKey = ogImage && !ogImage.startsWith("http")
+        ? "/" + ogImage.replace(/^\.\/|^(\.\.\/)+/, "").replace(/^\//, "")
+        : undefined;
+      const size = sizeKey
+        ? coverSizes[sizeKey as keyof typeof coverSizes]
         : undefined;
       if (size) {
         setMeta("property", "og:image:width", String(size.w));
@@ -154,6 +159,11 @@ export default function Seo({
     if (!noindex) {
       setLangLink("zh-Hans", url);
       setLangLink("x-default", url);
+    } else {
+      // 从可索引页面跳到 404 等 noindex 页面时，清掉上一页残留的 hreflang
+      document
+        .querySelectorAll('link[rel="alternate"][hreflang]')
+        .forEach((el) => el.remove());
     }
   }, [title, description, path, keywords, noindex, ogType, ogImage, articlePublished, articleModified, articleSection, articleTags]);
 
