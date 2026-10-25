@@ -79,14 +79,17 @@ for (const [name, load] of pages) {
   }
 }
 
-// 4) 移动端固定元素检查：回到顶部按钮必须存在且不被 Tooltip 包裹（触屏无 hover）
+// 4) 桌面端固定元素检查：回到顶部按钮仅在桌面端显示（移动端已有悬浮按钮），
+//    且不被 Tooltip 包裹（触屏无 hover）
 const backToTopSrc = readFileSync(join(root, "src/components/BackToTop.tsx"), "utf-8");
 if (!/aria-label="回到顶部"/.test(backToTopSrc)) {
   failures.push("BackToTop: 缺少 aria-label=\"回到顶部\"");
+} else if (!/max-sm:hidden/.test(backToTopSrc)) {
+  failures.push("BackToTop: 移动端未隐藏（缺少 max-sm:hidden，与悬浮按钮重复）");
 } else if (/TooltipProvider/.test(backToTopSrc)) {
   failures.push("BackToTop: 仍被 Tooltip 包裹（触屏长按会弹系统菜单）");
 } else {
-  passes.push("BackToTop: 移动端无 Tooltip、含可访问名称");
+  passes.push("BackToTop: 仅桌面端显示、无 Tooltip、含可访问名称");
 }
 
 // 已知第三方噪音：input-otp 未受控时会同时传 value 与 defaultValue 给内部 input，

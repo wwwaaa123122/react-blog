@@ -4,7 +4,8 @@ import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { prefersReducedMotion } from "@/lib/utils";
 
-// 回到顶部：shadcn Button（圆形 + 主色），移动端更靠边、不遮挡正文。
+// 回到顶部：shadcn Button（圆形 + 主色），仅桌面端显示。
+// 移动端已有悬浮按钮承担该入口，重复的固定按钮会遮挡正文，故用 max-sm:hidden 隐藏。
 // 刻意不套 Tooltip：触屏没有 hover，长按还会弹出系统菜单，反而碍事。
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -34,7 +35,8 @@ export default function BackToTop() {
       className={
         // safe-area-inset：viewport-fit=cover 后内容会延伸到刘海/横条区域，
         // 用环境变量把按钮抬离底部安全区，避免挡住全面屏手势条
-        "fixed bottom-4 right-4 z-40 size-10 rounded-full shadow-lg ring-1 ring-foreground/10 transition-all duration-200 sm:bottom-6 sm:right-6 sm:size-11 " +
+        // max-sm:hidden：移动端已有悬浮按钮，不再显示这个回到顶部
+        "max-sm:hidden fixed bottom-4 right-4 z-40 size-10 rounded-full shadow-lg ring-1 ring-foreground/10 transition-all duration-200 sm:bottom-6 sm:right-6 sm:size-11 " +
         "[bottom:calc(1rem+env(safe-area-inset-bottom))] sm:[bottom:calc(1.5rem+env(safe-area-inset-bottom))] " +
         "[right:calc(1rem+env(safe-area-inset-right))] sm:[right:calc(1.5rem+env(safe-area-inset-right))] " +
         (visible
