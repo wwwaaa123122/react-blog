@@ -1,4 +1,4 @@
-import{ot as e,yt as t}from"./dist-BVtNLTZQ.js";var n=e(`book-open`,[[`path`,{d:`M12 5v16`,key:`1f6ucr`}],[`path`,{d:`M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z`,key:`1fyvmf`}]]),r=e(`circle-check`,[[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}],[`path`,{d:`m9 12 2 2 4-4`,key:`dzmm74`}]]),i=e(`clock`,[[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}],[`path`,{d:`M12 6v6l4 2`,key:`mmk7yg`}]]),a=`---
+import{St as e,ct as t,lt as n}from"./dist-zV7aCx-E.js";var r=t(`book-open`,[[`path`,{d:`M12 5v16`,key:`1f6ucr`}],[`path`,{d:`M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z`,key:`1fyvmf`}]]),i=t(`circle-check`,[[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}],[`path`,{d:`m9 12 2 2 4-4`,key:`dzmm74`}]]),a=t(`clock`,[[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}],[`path`,{d:`M12 6v6l4 2`,key:`mmk7yg`}]]),o=`---
 title: 关于本站迁移至Firefly
 published: 2026-05-18
 description: '讲述从fuwari迁移至Firefly的一些原因'
@@ -53,7 +53,7 @@ Firefly 几乎覆盖了我所有的使用需求，不需要再为了一个功能
 选择博客主题就像选择工具：合适的才是最好的。Fuwari 适合喜欢折腾、追求极简的用户；而 Firefly 则适合希望专注于内容、同时需要丰富功能的博主。
 
 如果你也在 Fuwari 中挣扎于各种自定义，不妨试试 Firefly，说不定会打开新世界的大门。
-`,o=`---
+`,s=`---
 title: archlinux使用体验
 published: 2026-08-14
 draft: false
@@ -107,7 +107,7 @@ linux想要安装双系统，分盘时给我的感觉非常麻烦，他不能像
 
 用惯了windows/debian系这些系统后，我相信下载应用习惯应该都是去浏览器搜索应用，而arch系由于没有使用apt，但拥有yay库，就出现了一个处境：*官网没有安装包，得单独搜yay包*
 
-对于已经习惯用户，这个yay方式真的很麻烦`,s=`---
+对于已经习惯用户，这个yay方式真的很麻烦`,c=`---
 title: BA周年庆直接9个彩
 published: 2025-08-07
 description: '两个亚子还有礼服日奈'
@@ -123,7 +123,7 @@ lang: 'zh_CN'
 还有我的支付宝和QQ主题😋  
 ![支付宝](../images/ba-alipay.webp)  
 ![QQ](../images/ba-qq.webp)
-`,c=`---
+`,l=`---
 title: fuwari接入评论功能
 published: 2025-08-04
 description: '让你的fuwari接入评论，并让它在文章末显示出'
@@ -156,7 +156,7 @@ Giscus就是一个非常合适的平台
 </div>
 \`\`\`
 
-最后本地测试一下，没问题就可以部署到服务器了`,l=`---
+最后本地测试一下，没问题就可以部署到服务器了`,u=`---
 title: edgeone加速worker
 published: 2025-07-29
 description: '如何使用edgeone加速cf worker'
@@ -177,7 +177,7 @@ lang: 'zh_CN'
 添加加速域名，我就填www，v6随便，我个人选择关闭，源站就写刚刚路由的域名协议https即可，**回源Host头一定要选使用源站域名**，最后保存就好啦
 
 END
-`,u=`---
+`,d=`---
 title: 为fuwari增加一个404界面
 published: 2025-09-24
 description: '为fuwari添加一个好看的404界面'
@@ -409,7 +409,7 @@ import { siteConfig } from "@/config";
         </MainGridLayout>
 </Layout>
 \`\`\`  
-`,d=`---
+`,f=`---
 title: Fuwari 主题背景图功能教程
 published: 2026-03-29
 description: 为 Fuwari 主题添加背景图、高斯模糊和半透明效果的完整配置教程
@@ -792,7 +792,7 @@ A: 当前版本所有页面使用同一背景图，如需不同背景需要修�
 
 ---
 
-希望这个教程能帮助你更好地使用 Fuwari 主题的背景图功能！`,f=`---
+希望这个教程能帮助你更好地使用 Fuwari 主题的背景图功能！`,p=`---
 title: fuwari修复RSS图片不显示
 published: 2025-09-27
 description: '修复RSS图片链接问题'
@@ -899,7 +899,7 @@ pnpm add node-html-parser
 \`\`\`  
 :::warning
 在推送到仓库时，你可能会遇到warning: in the working copy of 'pnpm-lock.yaml', LF will be replaced by CRLF the next time Git touches it 这是由于空格不同引起的，但并不会影响部署，忽略即可
-:::  `,p=`---
+:::  `,m=`---
 title: Bot使用文档
 published: 2025-10-25
 description: '星辰旅人Bot使用文档'
@@ -1025,7 +1025,7 @@ lang: 'zh_CN'
 
 
 
-`,m=`---
+`,h=`---
 title: Kick 开播提醒：用 Python 监控直播并推送 QQ 通知
 published: 2026-06-14
 description: '基于 Kick 私有 API 监控主播开播状态，通过 NapCat (OneBot 11) 发送 QQ 消息通知'
@@ -1267,7 +1267,7 @@ python3 kick_notify.py
 
 # 额外感想
 在制作之初，我是直接问ChatGPT如何做，甚至都没用搜索引擎查一下，ChatGPT说用webhook并使用fastapi封装，翻了十几分钟文档没咋看明白，直到直接用opencode+免费的mimo说了我要做开播提醒，mimo一开始其实也没多好，甚至想出来轮询每页找到目标，在他自己fetch几遍后直接用了kick的api，不过也算是完美完成了。
-`,h=`---
+`,g=`---
 title: MC免端口域名生成器使用与部署教程
 published: 2026-05-31
 description: '基于Cloudflare Workers的Minecraft免端口域名服务，让你的MC服务器玩家无需输入端口号'
@@ -1426,7 +1426,7 @@ curl -X POST https://你的域名/api/delete \\
 
 ### 后记
 纯纯不知道写啥了，稍稍水个文章qwq
-`,g=`---
+`,_=`---
 title: 通过Cloudflare Tunnel使用SSH
 published: 2026-02-04
 description: 通过Cloudflare Tunnel连接无公网IP的服务
@@ -1521,7 +1521,7 @@ sudo cloudflared service install <你的令牌>
 
 # 最终体验
 
-打开你的域名，此时应会跳转到Cloudflare的验证界面，按照你自己选择的验证方式过后应该就会跳转到输入*User* 的界面，输入你的用户名提交后输入密码，至此就大功告成了。`,_=`---
+打开你的域名，此时应会跳转到Cloudflare的验证界面，按照你自己选择的验证方式过后应该就会跳转到输入*User* 的界面，输入你的用户名提交后输入密码，至此就大功告成了。`,v=`---
 title: 使用tunnelbroker隧道与warp获取任意地区IP（朝鲜）
 published: 2026-09-06
 updated: 2026-09-06
@@ -1789,7 +1789,7 @@ B站评论区文章IP归属都会显示为朝鲜，主页需要1~3 周才会改�
 ![](/images/screenshot2026-09-06-13-14-38-528tvdanmakubili.webp)
 
 也是可以愉快地发评论了😋
-`,v=typeof process<`u`&&!!process.versions?.node;async function y(){if(v){let e=await t(()=>import(`node:path`),[]),n={}.POSTS_DIR||globalThis.__POSTS_DIR__||e.join(process.cwd(),`src/posts`);if(n){let r=await t(()=>import(`node:fs`),[]),i={};if(r.existsSync(n))for(let t of r.readdirSync(n))t.endsWith(`.md`)&&(i[`../posts/`+t]=r.readFileSync(e.join(n,t),`utf-8`));return i}}return Object.assign({"../posts/Why-to-Firefly.md":a,"../posts/archlinux.md":o,"../posts/ba2th.md":s,"../posts/comment.md":c,"../posts/edgeone-worker.md":l,"../posts/fuwari-404.md":u,"../posts/fuwari-background-image.md":d,"../posts/fuwari-rss.md":f,"../posts/how-use-bot.md":p,"../posts/kick-live-notify.md":m,"../posts/mc-srv-worker.md":h,"../posts/ssh-by-tunnel.md":g,"../posts/warp-ip-kp.md":_})}var b=await y();function x(e){let t=e.split(`
+`,y=typeof process<`u`&&!!process.versions?.node;async function b(){if(y){let t=await e(()=>import(`node:path`),[]),n={}.POSTS_DIR||globalThis.__POSTS_DIR__||t.join(process.cwd(),`src/posts`);if(n){let r=await e(()=>import(`node:fs`),[]),i={};if(r.existsSync(n))for(let e of r.readdirSync(n))e.endsWith(`.md`)&&(i[`../posts/`+e]=r.readFileSync(t.join(n,e),`utf-8`));return i}}return Object.assign({"../posts/Why-to-Firefly.md":o,"../posts/archlinux.md":s,"../posts/ba2th.md":c,"../posts/comment.md":l,"../posts/edgeone-worker.md":u,"../posts/fuwari-404.md":d,"../posts/fuwari-background-image.md":f,"../posts/fuwari-rss.md":p,"../posts/how-use-bot.md":m,"../posts/kick-live-notify.md":h,"../posts/mc-srv-worker.md":g,"../posts/ssh-by-tunnel.md":_,"../posts/warp-ip-kp.md":v})}var x=await b();function S(e){let t=e.split(`
 `);if(t[0]?.trim()!==`---`)return{data:{},content:e};let n=1,r={};for(;n<t.length&&t[n].trim()!==`---`;){let e=t[n],i=e.indexOf(`:`);if(i>0){let a=e.slice(0,i).trim(),o=e.slice(i+1).trim();if(o===``&&t[n+1]?.trimStart().startsWith(`- `)){let e=[];for(n++;n<t.length;){let r=t[n];if(!r.trimStart().startsWith(`- `))break;e.push(r.trim().slice(2).trim().replace(/^['"]|['"]$/g,``)),n++}r[a]=e;continue}if(o===`|`||o===`>`||o===`|-`||o===`>-`){let e=o===`>`||o===`>-`,i=[];for(n++;n<t.length&&(t[n].startsWith(` `)||t[n]===``);)i.push(t[n]),n++;let s=i.join(`
 `).replace(/^\s+/gm,``);e&&(s=s.replace(/\n+/g,` `)),r[a]=s;continue}r[a]=o.startsWith(`"`)&&o.endsWith(`"`)||o.startsWith(`'`)&&o.endsWith(`'`)?o.slice(1,-1):o.startsWith(`[`)&&o.endsWith(`]`)?o.slice(1,-1).split(`,`).map(e=>e.trim().replace(/^['"]|['"]$/g,``)).filter(Boolean):o===`true`||o===`false`?o===`true`:o===``||o===`null`||o===`~`?null:o}n++}return{data:r,content:t.slice(n+1).join(`
-`)}}function S(e){return(e.match(/[\u4e00-\u9fa5]/g)||[]).length+e.replace(/[\u4e00-\u9fa5]/g,` `).split(/\s+/).filter(Boolean).length}function C(){let e=[];for(let[t,n]of Object.entries(b)){let r=(t.split(`/`).pop()||``).replace(/\.md$/,``),{data:i,content:a}=x(n),o=Array.isArray(i.tags)?i.tags.map(String):[];e.push({slug:r,title:String(i.title||r),published:String(i.published||``),updated:i.updated?String(i.updated):void 0,description:String(i.description||``),image:i.image?String(i.image):void 0,tags:o,category:String(i.category||``),draft:!!i.draft,lang:String(i.lang||`zh_CN`),content:a,words:S(a)})}return e}var w=C().filter(e=>!e.draft).sort((e,t)=>e.published<t.published?1:-1),T=e=>w.find(t=>t.slug===e),E=()=>{let e=new Set;for(let t of w)for(let n of t.tags)e.add(n);return Array.from(e).sort()},D=e=>{if(!e)return``;let t=new Date(e);return Number.isNaN(t.getTime())?e:t.toLocaleDateString(`zh-CN`,{year:`numeric`,month:`2-digit`,day:`2-digit`})},O=e=>`约 ${Math.max(1,Math.round(e/300))} 分钟`,k=e=>e.replace(/\.\.\/images\//g,`/images/`);export{O as a,r as c,w as i,n as l,E as n,k as o,T as r,i as s,D as t};
+`)}}function C(e){return(e.match(/[\u4e00-\u9fa5]/g)||[]).length+e.replace(/[\u4e00-\u9fa5]/g,` `).split(/\s+/).filter(Boolean).length}function w(){let e=[];for(let[t,n]of Object.entries(x)){let r=(t.split(`/`).pop()||``).replace(/\.md$/,``),{data:i,content:a}=S(n),o=Array.isArray(i.tags)?i.tags.map(String):[];e.push({slug:r,title:String(i.title||r),published:String(i.published||``),updated:i.updated?String(i.updated):void 0,description:String(i.description||``),image:i.image?String(i.image):void 0,tags:o,category:String(i.category||``),draft:!!i.draft,lang:String(i.lang||`zh_CN`),content:a,words:C(a)})}return e}var T=w().filter(e=>!e.draft).sort((e,t)=>e.published<t.published?1:-1),E=e=>T.find(t=>t.slug===e),D=()=>{let e=new Set;for(let t of T)for(let n of t.tags)e.add(n);return Array.from(e).sort()},O=e=>{if(!e)return``;let t=new Date(e);return Number.isNaN(t.getTime())?e:t.toLocaleDateString(`zh-CN`,{year:`numeric`,month:`2-digit`,day:`2-digit`})},k=e=>`约 ${Math.max(1,Math.round(e/300))} 分钟`,A=e=>e.replace(/\.\.\/images\//g,`/images/`),j={"/homeground.webp":{src:`/homeground.webp`,srcW:1600,srcH:914,srcBytes:92890,variants:[{suffix:`-thumb`,width:320,height:183,bytes:11898},{suffix:`-md`,width:760,height:434,bytes:35590}]},"/images/SSH_Cloudflare.webp":{src:`/images/SSH_Cloudflare.webp`,srcW:1600,srcH:900,srcBytes:17268,variants:[{suffix:`-thumb`,width:320,height:180,bytes:1732},{suffix:`-md`,width:760,height:428,bytes:5866}]},"/images/aluona.webp":{src:`/images/aluona.webp`,srcW:1600,srcH:897,srcBytes:67714,variants:[{suffix:`-thumb`,width:320,height:179,bytes:9632},{suffix:`-md`,width:760,height:426,bytes:27414}]},"/images/archlinux.webp":{src:`/images/archlinux.webp`,srcW:1067,srcH:600,srcBytes:6112,variants:[{suffix:`-thumb`,width:320,height:180,bytes:1682}]},"/images/ba3cai.webp":{src:`/images/ba3cai.webp`,srcW:1600,srcH:720,srcBytes:62124,variants:[{suffix:`-thumb`,width:320,height:144,bytes:7448},{suffix:`-md`,width:760,height:342,bytes:24522}]},"/images/comment.webp":{src:`/images/comment.webp`,srcW:775,srcH:359,srcBytes:5076,variants:[{suffix:`-thumb`,width:320,height:148,bytes:1298}]},"/images/firefly.webp":{src:`/images/firefly.webp`,srcW:1600,srcH:667,srcBytes:55328,variants:[{suffix:`-thumb`,width:320,height:133,bytes:6238},{suffix:`-md`,width:760,height:317,bytes:20272}]},"/images/fuwari-404.webp":{src:`/images/fuwari-404.webp`,srcW:724,srcH:537,srcBytes:11202,variants:[{suffix:`-thumb`,width:320,height:237,bytes:3580}]},"/images/fuwari-rss-fix.webp":{src:`/images/fuwari-rss-fix.webp`,srcW:1080,srcH:720,srcBytes:25248,variants:[{suffix:`-thumb`,width:320,height:213,bytes:6852}]},"/images/how-use-bot-cover.webp":{src:`/images/how-use-bot-cover.webp`,srcW:1600,srcH:900,srcBytes:86374,variants:[{suffix:`-thumb`,width:320,height:180,bytes:9884},{suffix:`-md`,width:760,height:428,bytes:32566}]},"/images/kick.webp":{src:`/images/kick.webp`,srcW:1067,srcH:600,srcBytes:6666,variants:[{suffix:`-thumb`,width:320,height:180,bytes:1968}]},"/images/mc-srv.webp":{src:`/images/mc-srv.webp`,srcW:1600,srcH:1146,srcBytes:179578,variants:[{suffix:`-thumb`,width:320,height:229,bytes:24350},{suffix:`-md`,width:760,height:544,bytes:80884}]},"/images/tunelbrokerwarp.webp":{src:`/images/tunelbrokerwarp.webp`,srcW:1067,srcH:600,srcBytes:9168,variants:[{suffix:`-thumb`,width:320,height:180,bytes:2558}]}};function M(e){if(e)return`/`+e.replace(/^\.\/|^(\.\.\/)+/,``).replace(/^\//,``)}function N(e){let t=M(e);return t?j[t]:void 0}function P(e,t){let n=M(e);if(!n)return;let r=N(e)?.variants.find(e=>e.suffix===t);return r?n.replace(/\.webp$/,r.suffix+`.webp`):n}function F(e,t){let n=M(e);if(!n)return;let r=N(e),i=e=>{let t=r?.variants.filter(t=>t.width>=e).sort((e,t)=>e.width-t.width)[0];return t?{url:n.replace(/\.webp$/,t.suffix+`.webp`),w:t.width}:{url:n,w:1600}},a=new Map;for(let e of t){let{url:t,w:n}=i(e*2);a.has(t)||a.set(t,n)}a.has(n)||a.set(n,1600);let o=[...a.entries()].sort((e,t)=>e[1]-t[1]);return{src:o[o.length-1][0],srcSet:o.map(([e,t])=>`${e} ${t}w`).join(`, `),sizes:`${t[t.length-1]}px`}}function I(e,t,r){let i=F(e,t);if(i)return{src:n(i.src),srcSet:i.srcSet.split(`,`).map(e=>{let[t,r]=e.trim().split(/\s+/);return`${n(t)} ${r}`}).join(`, `),sizes:r}}async function L(e){try{return await navigator.clipboard.writeText(e),!0}catch{}try{let t=document.createElement(`textarea`);t.value=e,t.setAttribute(`readonly`,``),t.style.position=`fixed`,t.style.opacity=`0`,document.body.appendChild(t),t.select();let n=document.execCommand(`copy`);return document.body.removeChild(t),n}catch{return!1}}export{O as a,T as c,a as d,i as f,P as i,k as l,M as n,D as o,r as p,I as r,E as s,L as t,A as u};
