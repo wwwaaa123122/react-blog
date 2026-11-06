@@ -63,36 +63,40 @@ export default function Footer() {
 
             <Separator orientation="vertical" className="mx-1 h-3.5 sm:mx-2 sm:h-4" />
 
-            {iconLinks.map((l) => (
+            {/* 图标链接（RSS/站点地图/llms）与「回到顶部」同组：
+                作为一个整体换行，保证移动端也始终在同一行 */}
+            <div className="flex items-center gap-0.5 sm:gap-1">
+              {iconLinks.map((l) => (
+                <Button
+                  key={l.label}
+                  asChild
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={l.label}
+                  title={l.label}
+                >
+                  <a href={assetUrl(l.href)} target="_blank" rel="noreferrer noopener">
+                    {l.icon === "sitemap" ? (
+                      <Map className="size-3.5" />
+                    ) : l.icon === "rss" ? (
+                      <Rss className="size-3.5" />
+                    ) : (
+                      <FileText className="size-3.5" />
+                    )}
+                  </a>
+                </Button>
+              ))}
+
               <Button
-                key={l.label}
-                asChild
                 variant="ghost"
                 size="icon-sm"
-                aria-label={l.label}
-                title={l.label}
+                onClick={scrollTop}
+                aria-label="回到顶部"
+                title="回到顶部"
               >
-                <a href={assetUrl(l.href)} target="_blank" rel="noreferrer noopener">
-                  {l.icon === "sitemap" ? (
-                    <Map className="size-3.5" />
-                  ) : l.icon === "rss" ? (
-                    <Rss className="size-3.5" />
-                  ) : (
-                    <FileText className="size-3.5" />
-                  )}
-                </a>
+                <ArrowUp className="size-3.5 text-muted-foreground" />
               </Button>
-            ))}
-
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={scrollTop}
-              aria-label="回到顶部"
-              title="回到顶部"
-            >
-              <ArrowUp className="size-3.5 text-muted-foreground" />
-            </Button>
+            </div>
           </nav>
         </div>
       </div>
