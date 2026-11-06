@@ -26,7 +26,8 @@ export default function NotFound() {
             <EmptyDescription>你访问的页面不存在或已被移除</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <div className="flex flex-wrap justify-center gap-3">
+            {/* 移动端纵向堆叠居中，PC 端并排（布局类在容器上，按钮保持设计系统尺寸） */}
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
               <Button asChild>
                 <Link to="/"><Home data-icon="inline-start" className="size-4" /> 回到首页</Link>
               </Button>

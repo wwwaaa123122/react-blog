@@ -273,8 +273,8 @@ export default function Home() {
             ))}
           </ItemGroup>
           {publishedPosts.length > 8 && (
-            <div className="mt-6 text-center">
-              <Button asChild variant="outline">
+            <div className="mt-6 text-center w-full sm:w-auto sm:mx-auto">
+              <Button asChild variant="outline" className="w-full">
                 <Link to="/posts" data-icon="inline-end">
                   查看全部文章 <ArrowRight className="size-3.5" />
                 </Link>
