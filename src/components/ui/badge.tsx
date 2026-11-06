@@ -26,8 +26,8 @@ const badgeVariants = cva(
       },
       size: {
         default: "",
-        pill: "gap-1.5 rounded-full px-3 py-1 text-sm",
-        step: "size-6.75 rounded-full p-0 text-xs",
+        pill: "gap-1.5 rounded-none px-3 py-1 text-sm",
+        step: "size-6.75 rounded-none p-0 text-xs",
         xs: "text-xs",
         "xs-mono": "font-mono text-xs",
         "2xs": "h-4 px-1.5 text-xs",

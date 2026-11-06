@@ -104,7 +104,8 @@
   --chart-3: #f59e0b;
   --chart-4: #8b5cf6;
   --chart-5: #10b981;
-  --radius: 0.75rem;
+  /* 直角风：全局圆角归零，所有界面元素呈方形直角 */
+  --radius: 0;
   --sidebar: #f1f3f7;
   --sidebar-foreground: #1a1d26;
   --sidebar-primary: #2563eb;

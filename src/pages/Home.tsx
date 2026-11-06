@@ -319,10 +319,11 @@ export default function Home() {
             {allTags.length > 0 && (
               <div>
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">标签</h3>
-                <div className="flex flex-wrap gap-1.5">
+                {/* 直角风标签组：无逐项边框，柔和底色罗列成行，排列有序 */}
+                <div className="flex flex-wrap items-center gap-1.5">
                   {allTags.map((t) => (
                     <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                      <Badge variant="outline">{t} · {tagCounts[t] || 0}</Badge>
+                      <Badge variant="secondary" size="xs">{t} · {tagCounts[t] || 0}</Badge>
                     </Link>
                   ))}
                 </div>

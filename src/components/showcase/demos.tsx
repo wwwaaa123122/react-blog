@@ -806,7 +806,7 @@ export const demoCells: DemoCell[] = [
     label: "骨架屏",
     demo: (
       <div className="flex w-full max-w-72 items-center gap-3">
-        <div className="size-10 overflow-hidden rounded-full">
+        <div className="size-10 overflow-hidden rounded-none">
           <Skeleton className="h-full w-full" />
         </div>
         <div className="grid flex-1 gap-2">

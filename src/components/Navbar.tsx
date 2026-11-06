@@ -62,7 +62,7 @@ export default function Navbar() {
             height={32}
             decoding="async"
             draggable={false}
-            className="size-7 sm:size-8 rounded-full object-cover ring-1 ring-border/70 transition-transform duration-200 group-hover:scale-105"
+            className="size-7 sm:size-8 rounded-none object-cover ring-1 ring-border/70 transition-transform duration-200 group-hover:scale-105"
           />
           <span className="font-bold text-base tracking-tight">Starlr</span>
         </Link>

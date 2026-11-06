@@ -223,7 +223,7 @@ function Markdown({ content }: { content: string }) {
         return <code className={className}>{children}</code>;
       }
       // 行内 code — 带背景和颜色，不加 border 避免像代码块
-      return <code className="px-1.5 py-0.5 rounded bg-muted/70 text-primary font-medium text-sm">{children}</code>;
+      return <code className="px-1.5 py-0.5 rounded-none bg-muted/70 text-primary font-medium text-sm">{children}</code>;
     },
     a: ({ href, children }: any) => {
       const isExternal = href && (href.startsWith("http://") || href.startsWith("https://"));

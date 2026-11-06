@@ -5,7 +5,7 @@
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 4px;
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
@@ -79,7 +79,7 @@
   font-family: var(--font-mono);
   font-size: 0.875em;
   padding: 0.15em 0.4em;
-  border-radius: 5px;
+  border-radius: 0;
   background: var(--code-bg);
   color: var(--primary);
   border: 1px solid var(--border);

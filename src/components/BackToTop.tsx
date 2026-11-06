@@ -36,7 +36,7 @@ export default function BackToTop() {
         // safe-area-inset：viewport-fit=cover 后内容会延伸到刘海/横条区域，
         // 用环境变量把按钮抬离底部安全区，避免挡住全面屏手势条
         // max-sm:hidden：移动端已有悬浮按钮，不再显示这个回到顶部
-        "max-sm:hidden fixed bottom-4 right-4 z-40 size-10 rounded-full shadow-lg ring-1 ring-foreground/10 transition-all duration-200 sm:bottom-6 sm:right-6 sm:size-11 " +
+        "max-sm:hidden fixed bottom-4 right-4 z-40 size-10 rounded-none shadow-lg ring-1 ring-foreground/10 transition-all duration-200 sm:bottom-6 sm:right-6 sm:size-11 " +
         "[bottom:calc(1rem+env(safe-area-inset-bottom))] sm:[bottom:calc(1.5rem+env(safe-area-inset-bottom))] " +
         "[right:calc(1rem+env(safe-area-inset-right))] sm:[right:calc(1.5rem+env(safe-area-inset-right))] " +
         (visible

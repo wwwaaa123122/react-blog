@@ -61,7 +61,7 @@ function ShimmerButton({
       */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden rounded-full"
+        className="pointer-events-none absolute inset-0 overflow-hidden rounded-none"
         style={{ borderRadius: "inherit" }}
       >
         <span
