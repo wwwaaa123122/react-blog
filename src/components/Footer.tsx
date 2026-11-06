@@ -32,8 +32,9 @@ export default function Footer() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto w-full max-w-230 md:max-w-250 lg:max-w-280 px-5 py-6 sm:py-8">
-        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
-          <div className="flex flex-col items-center gap-1 sm:items-start">
+        {/* 移动端左对齐：换行后各排按钮共享左边缘，避免 justify-center 逐排居中导致错位 */}
+        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="flex flex-col items-start gap-1">
             <p className="text-xs text-muted-foreground sm:text-sm">
               &copy; {new Date().getFullYear()} {siteConfig.author}
               <span className="mx-1.5 hidden sm:inline">·</span>
@@ -53,7 +54,7 @@ export default function Footer() {
 
           <nav
             aria-label="页脚导航"
-            className="flex flex-wrap items-center justify-center gap-0.5 sm:gap-1"
+            className="flex flex-wrap items-center justify-start gap-0.5 sm:gap-1"
           >
             {navLinks.map((l) => (
               <Button key={l.to} asChild variant="muted" size="sm">
