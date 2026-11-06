@@ -30,7 +30,8 @@ function ShimmerButton({
   shimmerColor = "hsl(0 0% 100% / 30%)",
   shimmerDuration = "3s",
   background,
-  borderRadius = "9999px",
+  // 直角风：默认圆角归零（与全站直角风格一致），需要圆角时由调用方传 borderRadius
+  borderRadius = "0",
   variant = "shimmer",
   className,
   children,
