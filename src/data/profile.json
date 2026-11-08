@@ -4,24 +4,24 @@
   "bio": "Protect What You Love./爱你所爱！",
   "links": [
     {
-      "name": "GitHub",
-      "url": "https://github.com/wwwaaa123122",
-      "icon": "github"
-    },
-    {
-      "name": "X",
-      "url": "https://x.com/wwwaaa123122",
-      "icon": "x"
-    },
-    {
       "name": "Telegram",
       "url": "https://t.me/wwwaaa123122",
       "icon": "telegram"
     },
     {
+      "name": "GitHub",
+      "url": "https://github.com/wwwaaa123122",
+      "icon": "github"
+    },
+    {
       "name": "Bilibili",
       "url": "https://space.bilibili.com/3493078983772353",
       "icon": "bilibili"
+    },
+    {
+      "name": "X",
+      "url": "https://x.com/wwwaaa123122",
+      "icon": "x"
     }
   ]
 }
