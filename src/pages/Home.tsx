@@ -223,9 +223,10 @@ export default function Home() {
             )}
           </div>
         </div>
-        {/* 按钮区：移动端两列等宽网格（阅读文章+Telegram、GitHub+Bilibili 成对，左右边框对齐），
-            PC 端恢复单行自适应宽度。按钮统一 size="lg" 等宽高，避免相邻按钮高度不一而"歪" */}
-        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+        {/* 按钮区：自然宽度换行，顺序 阅读文章→Telegram→X→GitHub→Bilibili，
+            让短小的 X 挤进第 1 排，GitHub+Bilibili 成对落到第 2 排。
+            按钮统一 size="lg" 等宽高，避免相邻按钮高度不一而"歪" */}
+        <div className="flex flex-wrap items-center gap-2">
           {/* 深色按钮 + 白字：浅色模式靠自身对比即可，
               深色模式由 ShimmerButton 用 dark:border-foreground/25 描边与背景分开 */}
           <ShimmerButton
