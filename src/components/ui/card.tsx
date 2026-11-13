@@ -18,10 +18,12 @@ function Card({
       className={cn(
         size === "flush" && "cv-auto gap-0 py-0",
         "group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 data-[size=cozy]:gap-3 data-[size=cozy]:px-4 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        // 悬停只改描边颜色：全站是「直角 + 细描边 + 无阴影」的平面语言，
+        // 位移与投影属于另一套视觉体系（且位移会让网格里的卡片互相错位）。
         variant === "subtle" &&
-          "transition-all duration-200 hover:ring-primary/40 hover:shadow-sm",
+          "transition-colors duration-200 hover:ring-primary/40",
         variant === "interactive" &&
-          "transition-all duration-200 hover:-translate-y-1 hover:ring-primary/50 hover:shadow-lg",
+          "transition-colors duration-200 hover:ring-primary/60",
         className
       )}
       {...props}
@@ -57,7 +59,7 @@ function CardTitle({
       data-slot="card-title"
       data-variant={variant}
       className={cn(
-        "font-heading text-base leading-snug font-medium group-data-[size=sm]/card:text-sm",
+        "font-heading text-base leading-snug font-semibold group-data-[size=sm]/card:text-sm",
         variant === "muted" && "text-muted-foreground",
         className
       )}

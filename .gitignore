@@ -3,7 +3,13 @@ dist
 *.local
 .DS_Store
 
+# 构建期从 Markdown 生成的文章数据（scripts/build-content.mts 产出，不入库）
+src/generated/
+
 artifacts/
+
+# 本地 AI 协作工具的会话记忆（仅本机有效，不入库）
+.workbuddy/
 
 # 本地临时抓取/调试残留：curl 保存的页面、主机面板导出、cookie jar 等
 # ⚠️ 这些文件可能含会话凭据（如 .cj.txt 里的 PHPSESSID/user_token），切勿入库

@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../lib/router";
 import {
   Breadcrumb as Crumb,
   BreadcrumbList,
@@ -28,7 +28,11 @@ export default function Breadcrumb({ items }: { items: Crumb[] }) {
             const last = i === all.length - 1;
             return (
               <Fragment key={i}>
-                <BreadcrumbItem>
+                <BreadcrumbItem
+                  className={
+                    last && all.length > 2 ? "hidden min-w-0 sm:inline-flex" : last ? "min-w-0" : undefined
+                  }
+                >
                   {!last && item.to ? (
                     <BreadcrumbLink asChild>
                       <Link
@@ -39,12 +43,18 @@ export default function Breadcrumb({ items }: { items: Crumb[] }) {
                       </Link>
                     </BreadcrumbLink>
                   ) : (
-                    <BreadcrumbPage variant="emphasized">
-                      {item.label}
-                    </BreadcrumbPage>
+                    // 末级可能是长文章标题：外层包一层做单行截断，
+                    // 避免在移动端把面包屑折成两行（标题下方紧接着就是 h1）
+                    <span className={last ? "block max-w-64 truncate md:max-w-none" : undefined}>
+                      <BreadcrumbPage variant="emphasized">{item.label}</BreadcrumbPage>
+                    </span>
                   )}
                 </BreadcrumbItem>
-                {!last && <BreadcrumbSeparator />}
+                {!last && (
+                  <BreadcrumbSeparator
+                    className={i === all.length - 2 && all.length > 2 ? "hidden sm:flex" : undefined}
+                  />
+                )}
               </Fragment>
             );
           })}

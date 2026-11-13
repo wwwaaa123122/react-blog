@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight, BookOpen, Clock, Mail } from "lucide-react";
-import { publishedPosts, getAllTags, formatDate, readingTime } from "../lib/posts";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Link } from "../lib/router";
+import { ArrowRight, BookOpen, Mail } from "lucide-react";
+import { publishedPosts, getAllTags } from "../lib/posts";
 import { siteConfig } from "../config/site";
 import { profileConfig } from "../config/profile";
 import { resolveAssetUrl } from "../lib/base";
@@ -9,10 +9,10 @@ import { responsiveImageSrc } from "../lib/post-image";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import { jsonLd, websiteJsonLd } from "../lib/seo";
+import { PostMeta, SectionHeading, SectionLabel, TagList } from "../components/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Item,
   ItemContent,
@@ -26,70 +26,50 @@ import { TypingAnimation } from "@/components/ui/typing-animation";
 
 function PostListItem({ post }: { post: typeof publishedPosts[0] }) {
   // 缩略图 96px(基础) / 112px(sm)，用 320px 宽的 -thumb 变体代替 1600px 原图，
-  // 首页 8 张封面从 ~800KB 降到 ~64KB
+  // 首页 8 张封面从 ~800KB 降到 ~64KB。
+  // 容器固定 16:9：封面源图以 16:9 为主（少数 2:1 / 1:1），此前的 6:5 会把
+  // 横版文字封面裁掉近四成（"tunnelbroker warp" 只剩半截）。
   const cover = responsiveImageSrc(post.image, [96, 112], "96px, (min-width: 640px) 112px");
 
   return (
     <div className="cv-auto">
-    <Item variant="divided" size="loose">
-      {cover && (
-        <ItemMedia className="self-start">
-          {/* 缩略图只是标题链接的视觉补充：从无障碍树与 Tab 顺序中移除，
-              避免同一篇文章产生两个同名焦点目标 */}
-          <Link
-            to={"/posts/" + post.slug}
-            tabIndex={-1}
-            aria-hidden="true"
-            className="shrink-0 overflow-hidden rounded-lg"
-          >
-            <img
-              src={cover.src}
-              srcSet={cover.srcSet}
-              sizes={cover.sizes}
-              alt=""
-              className="w-24 h-20 sm:w-28 sm:h-22 rounded-lg object-cover bg-muted transition-transform duration-300 hover:scale-105"
-              loading="lazy"
-              decoding="async"
-            />
-          </Link>
-        </ItemMedia>
-      )}
-      <ItemContent className="min-w-0 flex-1">
-        <ItemTitle variant="lg">
-          <Link
-            to={"/posts/" + post.slug}
-            className="text-foreground hover:text-primary transition-colors duration-150"
-          >
-            {post.title}
-          </Link>
-        </ItemTitle>
-        <ItemDescription className="mb-2">
-          {post.description}
-        </ItemDescription>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          <time dateTime={post.published}>{formatDate(post.published)}</time>
-          {post.category && (
-            <span className="inline-flex items-center gap-1">
-              <BookOpen className="size-3" />
-              {post.category}
-            </span>
-          )}
-          <span className="inline-flex items-center gap-1">
-            <Clock className="size-3" />
-            {readingTime(post.words)}
-          </span>
-        </div>
-        {post.tags.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-            {post.tags.map((t) => (
-              <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                <Badge variant="secondary" size="xs">{t}</Badge>
-              </Link>
-            ))}
-          </div>
+      <Item variant="divided" size="loose">
+        {cover && (
+          <ItemMedia className="self-start">
+            {/* 缩略图只是标题链接的视觉补充：从无障碍树与 Tab 顺序中移除，
+                避免同一篇文章产生两个同名焦点目标 */}
+            <Link
+              to={"/posts/" + post.slug}
+              tabIndex={-1}
+              aria-hidden="true"
+              className="block shrink-0 overflow-hidden bg-muted ring-1 ring-inset ring-border/60"
+            >
+              <img
+                src={cover.src}
+                srcSet={cover.srcSet}
+                sizes={cover.sizes}
+                alt=""
+                className="aspect-video w-24 object-cover transition-transform duration-300 hover:scale-105 sm:w-28"
+                loading="lazy"
+                decoding="async"
+              />
+            </Link>
+          </ItemMedia>
         )}
-      </ItemContent>
-    </Item>
+        <ItemContent className="min-w-0 flex-1">
+          <ItemTitle variant="lg">
+            <Link
+              to={"/posts/" + post.slug}
+              className="text-foreground transition-colors duration-150 hover:text-primary"
+            >
+              {post.title}
+            </Link>
+          </ItemTitle>
+          <ItemDescription className="mb-0.5">{post.description}</ItemDescription>
+          <PostMeta post={post} className="mt-1" />
+          <TagList tags={post.tags} className="mt-1.5" />
+        </ItemContent>
+      </Item>
     </div>
   );
 }
@@ -108,6 +88,16 @@ function usePrefersReducedMotion(): boolean {
   }, []);
 
   return reduced;
+}
+
+/** 侧栏分组：与文章页目录共用「小标签 + 细分隔线」的堆叠规则。 */
+function AsideSection({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <section className="py-5 first:pt-0 last:pb-0">
+      <SectionLabel className="mb-3">{label}</SectionLabel>
+      {children}
+    </section>
+  );
 }
 
 export default function Home() {
@@ -193,9 +183,9 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(websiteJsonLd()) }} />
 
       {/* Hero */}
-      <section className="mb-10 md:mb-12 pt-4 md:pt-6">
-        <div className="flex items-start gap-5 mb-6">
-          <Avatar className="size-14 md:size-16">
+      <section className="mb-10 md:mb-12">
+        <div className="mb-6 flex items-start gap-5">
+          <Avatar size="lg" className="size-14 shrink-0 md:size-16">
             <AvatarImage
               src={resolveAssetUrl(profileConfig.avatar)}
               alt={profileConfig.name}
@@ -206,16 +196,16 @@ export default function Home() {
             <AvatarBadge variant="success" aria-hidden="true" />
           </Avatar>
           <div className="min-w-0">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
               {profileConfig.name}
             </h1>
-            <p className="text-sm text-muted-foreground">{profileConfig.bio}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{profileConfig.bio}</p>
             {reducedMotion || !typingPlayed ? (
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-lg">
+              <p className="mt-2 max-w-lg text-sm leading-relaxed text-muted-foreground">
                 {siteConfig.description}
               </p>
             ) : (
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-lg">
+              <p className="mt-2 max-w-lg text-sm leading-relaxed text-muted-foreground">
                 <TypingAnimation as="span" duration={28} delay={300}>
                   {siteConfig.description}
                 </TypingAnimation>
@@ -241,9 +231,13 @@ export default function Home() {
             </Link>
           </ShimmerButton>
           {profileConfig.links.map((link) => (
-            <Button asChild key={link.name} variant="outline" size="lg" data-icon="inline-start">
+            <Button asChild key={link.name} variant="outline" size="lg">
               <a href={link.url} target="_blank" rel="noreferrer noopener">
-                {link.icon === "mail" ? <Mail /> : <Icon name={link.icon} size={16} />}
+                {link.icon === "mail" ? (
+                  <Mail data-icon="inline-start" />
+                ) : (
+                  <Icon name={link.icon} size={16} data-icon="inline-start" />
+                )}
                 {link.name}
               </a>
             </Button>
@@ -254,11 +248,8 @@ export default function Home() {
       {/* 双栏布局 */}
       <div className="flex flex-col md:flex-row md:gap-10">
         {/* 左侧：文章列表 */}
-        <div className="flex-1 min-w-0">
-          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            最新文章
-            <span className="text-xs font-normal text-muted-foreground">({publishedPosts.length} 篇)</span>
-          </h2>
+        <div className="min-w-0 flex-1">
+          <SectionHeading meta={`${publishedPosts.length} 篇`}>最新文章</SectionHeading>
           <ItemGroup ref={listRef}>
             {posts.map((post, i) => (
               <div
@@ -275,63 +266,56 @@ export default function Home() {
             ))}
           </ItemGroup>
           {publishedPosts.length > 8 && (
-            <div className="mt-6 text-center w-full sm:w-auto sm:mx-auto">
-              <Button asChild variant="outline" className="w-full">
-                <Link to="/posts" data-icon="inline-end">
-                  查看全部文章 <ArrowRight className="size-3.5" />
+            <div className="mt-8 flex justify-center">
+              <Button asChild variant="outline">
+                <Link to="/posts">
+                  查看全部文章
+                  <ArrowRight data-icon="inline-end" />
                 </Link>
               </Button>
             </div>
           )}
         </div>
 
-        {/* 右侧：侧边栏 */}
-        <aside className="md:w-56 shrink-0 mt-10 md:mt-0">
-          <div className="md:sticky md:top-20 space-y-6">
-            {/* About */}
-            <Card size="sm">
-              <CardHeader>
-                <CardTitle variant="muted" className="text-xs font-semibold uppercase tracking-wider">关于</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {siteConfig.subtitle} · 分享技术、生活与热爱
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {publishedPosts.length} 篇文章 · 总计 {totalWords.toLocaleString("zh-CN")} 字
-                </p>
-              </CardContent>
-            </Card>
+        {/* 右侧：侧边栏（与文章页目录同一套「小标签 + 细分隔线」规则，不用卡片） */}
+        <aside className="mt-10 shrink-0 md:mt-0 md:w-56">
+          <div className="divide-y divide-border md:sticky md:top-20">
+            <AsideSection label="关于">
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {siteConfig.subtitle} · 分享技术、生活与热爱
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {publishedPosts.length} 篇文章 · 总计 {totalWords.toLocaleString("zh-CN")} 字
+              </p>
+            </AsideSection>
 
-            {/* Categories */}
             {categories.length > 0 && (
-              <div>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">分类</h3>
+              <AsideSection label="分类">
                 <div className="flex flex-wrap gap-1.5">
                   {categories.map((cat) => (
                     <Link key={cat} to={"/posts?cat=" + encodeURIComponent(cat)}>
-                      <Badge variant="secondary">{cat} · {categoryCounts[cat] || 0}</Badge>
+                      <Badge variant="secondary" size="xs">
+                        {cat} · {categoryCounts[cat] || 0}
+                      </Badge>
                     </Link>
                   ))}
                 </div>
-              </div>
+              </AsideSection>
             )}
 
-            {/* Tags */}
             {allTags.length > 0 && (
-              <div>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">标签</h3>
-                {/* 直角风标签组：无逐项边框，柔和底色罗列成行，排列有序 */}
+              <AsideSection label="标签">
                 <div className="flex flex-wrap items-center gap-1.5">
                   {allTags.map((t) => (
                     <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                      <Badge variant="secondary" size="xs">{t} · {tagCounts[t] || 0}</Badge>
+                      <Badge variant="secondary" size="xs">
+                        {t} · {tagCounts[t] || 0}
+                      </Badge>
                     </Link>
                   ))}
                 </div>
-              </div>
+              </AsideSection>
             )}
-
           </div>
         </aside>
       </div>

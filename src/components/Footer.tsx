@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "../lib/router";
 import { ArrowUp, FileText, Map, Rss } from "lucide-react";
 import { siteConfig } from "../config/site";
 import { assetUrl } from "../lib/base";

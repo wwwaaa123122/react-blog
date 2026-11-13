@@ -1,290 +1,61 @@
-import { memo, useState, type ReactNode } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-import type { Components } from "react-markdown";
-import { rewriteImagePaths } from "../lib/posts";
-import { assetUrl } from "../lib/base";
+import { useEffect, useRef } from "react";
 import { copyToClipboard } from "../lib/clipboard";
-import remarkAdmonitions from "../lib/remark-admonition";
-import {
-  Check,
-  CircleCheck,
-  CircleX,
-  Copy,
-  Info,
-  Lightbulb,
-  OctagonAlert,
-  TriangleAlert,
-  type LucideIcon,
-} from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
-export function slugify(text: string): string {
-  return text.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
-}
+/**
+ * 文章正文渲染器（客户端）。
+ *
+ * 正文 HTML 由构建脚本预先生成（scripts/build-content.mts，渲染器在 lib/markdown-render.tsx）。
+ * 这样浏览器既不用下载 react-markdown / remark / rehype / highlight.js（约 340 KB JS），
+ * 也不用在每篇文章上重新解析一遍 Markdown —— 只插入一段字符串。
+ *
+ * 唯一需要 JS 的交互是代码块的「复制」按钮：用事件委托 + DOM 属性切换，
+ * 避免为每个代码块挂一个 React 组件与 state。
+ */
+export default function Markdown({ html }: { html: string }) {
+  const rootRef = useRef<HTMLDivElement>(null);
 
-// GitHub 风格的标题 id 去重：重复的标题追加 -1、-2… 后缀，
-// 保证锚点唯一（同一文档内按出现顺序调用）
-export function createSlugger(): (text: string) => string {
-  const used = new Set<string>();
-  return (text: string) => {
-    const base = slugify(text);
-    if (!used.has(base)) {
-      used.add(base);
-      return base;
-    }
-    let i = 1;
-    while (used.has(`${base}-${i}`)) i++;
-    const id = `${base}-${i}`;
-    used.add(id);
-    return id;
-  };
-}
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
 
-// 递归提取 heading 的纯文本：标题里若含 <code>/<strong>/<a> 等行内元素，
-// String(children) 会得到 "[object Object]" 导致锚点 id 与目录 href 失配
-function headingText(children: ReactNode): string {
-  if (typeof children === "string" || typeof children === "number") {
-    return String(children);
-  }
-  if (Array.isArray(children)) {
-    return children.map(headingText).join("");
-  }
-  if (children && typeof children === "object" && "props" in children) {
-    const props = (children as { props?: { children?: React.ReactNode } }).props;
-    return headingText(props?.children);
-  }
-  return "";
-}
+    const timers = new WeakMap<HTMLButtonElement, number>();
 
-const HIGHLIGHT_SUBSET = [
-  "javascript", "typescript", "jsx", "tsx", "bash", "shell", "json",
-  "markdown", "css", "html", "xml", "python", "yaml", "dockerfile",
-  "ini", "diff", "sql", "java", "nginx", "powershell",
-  // 博客文章中实际使用的语言（此前缺失导致不高亮）
-  "stylus", "toml",
-];
+    const onClick = async (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const button = target?.closest<HTMLButtonElement>("[data-copy-code]");
+      if (!button || !root.contains(button)) return;
 
-// astro/svelte 不是 highlight.js 注册语言，但文章里大量使用；
-// 映射到 markup/xml 语法高亮（注册方向：已注册语言 -> 别名列表）
-const HIGHLIGHT_ALIASES = { xml: ["astro", "svelte"] };
+      const block = button.closest(".code-block");
+      const code = block?.querySelector("code");
+      if (!code) return;
+      if (!(await copyToClipboard(code.textContent ?? ""))) return;
 
-// 递归提取代码块纯文本：高亮后的 children 是 hljs span 元素数组，
-// String(children) 会得到 "[object Object]" 导致复制内容损坏
-function codeText(node: unknown): string {
-  if (node == null) return "";
-  if (typeof node === "string" || typeof node === "number") return String(node);
-  if (Array.isArray(node)) return node.map(codeText).join("");
-  if (typeof node === "object" && "props" in (node as object)) {
-    return codeText((node as { props?: { children?: unknown } }).props?.children);
-  }
-  return "";
-}
+      button.dataset.copied = "true";
+      button.setAttribute("aria-label", "已复制");
+      const label = button.querySelector("[data-copy-label]");
+      if (label) label.textContent = "已复制";
 
-function CodeBlock({
-  lang,
-  code,
-  highlighted,
-}: {
-  lang: string;
-  code: string;
-  highlighted: ReactNode;
-}) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = async () => {
-    if (!(await copyToClipboard(code))) return;
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-
-  return (
-    <div className="my-4 overflow-hidden rounded-lg border border-border">
-      {/* 头部：macOS 装饰圆点 + shadcn Badge（语言）+ Button（复制），固定在外部不随代码滚动 */}
-      <div className="flex items-center justify-between gap-2 bg-muted/60 px-3.5 py-2">
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5 opacity-70">
-            <span className="size-2 rounded-full bg-destructive/70" />
-            <span className="size-2 rounded-full bg-chart-3/70" />
-            <span className="size-2 rounded-full bg-chart-5/70" />
-          </div>
-          <Badge variant="secondary" size="xs-mono">
-            {lang || "code"}
-          </Badge>
-        </div>
-        <Button
-          variant="muted"
-          size="xs"
-          onClick={copy}
-          aria-label={copied ? "已复制" : "复制代码"}
-          aria-live="polite"
-        >
-          {copied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
-          {copied ? "已复制" : "复制"}
-        </Button>
-      </div>
-      <Separator />
-      {/* 代码区：独立横向滚动；highlighted 保留 rehype-highlight 生成的 span，
-          code 纯文本供复制按钮使用 */}
-      <pre className="!m-0 !rounded-none !border-0 overflow-x-auto" tabIndex={0}>
-        <code className={"language-" + lang}>{highlighted}</code>
-      </pre>
-    </div>
-  );
-}
-
-// ===== 提示卡片（:::warning 等 admonition 容器）=====
-// 使用 shadcn Alert 渲染，语义色统一由组件库的 token 提供
-
-type AdmonitionType =
-  | "warning"
-  | "danger"
-  | "caution"
-  | "tip"
-  | "success"
-  | "error"
-  | "note"
-  | "info";
-
-const ADMONITION_META: Record<
-  AdmonitionType,
-  { icon: LucideIcon; defaultTitle: string }
-> = {
-  warning: { icon: TriangleAlert, defaultTitle: "警告" },
-  danger: { icon: OctagonAlert, defaultTitle: "危险" },
-  caution: { icon: OctagonAlert, defaultTitle: "小心" },
-  tip: { icon: Lightbulb, defaultTitle: "提示" },
-  success: { icon: CircleCheck, defaultTitle: "成功" },
-  error: { icon: CircleX, defaultTitle: "错误" },
-  note: { icon: Info, defaultTitle: "注意" },
-  info: { icon: Info, defaultTitle: "信息" },
-};
-
-// 各类型的图标与 shadcn Alert 语义色（Alert 只有 default / destructive 两个 variant，
-// 其余语义色按组件库的写法用文字色 + 描述色覆盖）
-const ADMONITION_STYLE: Record<AdmonitionType, string> = {
-  warning: "text-chart-3 *:data-[slot=alert-description]:text-chart-3/90",
-  caution: "text-chart-3 *:data-[slot=alert-description]:text-chart-3/90",
-  danger: "text-destructive *:data-[slot=alert-description]:text-destructive/90",
-  error: "text-destructive *:data-[slot=alert-description]:text-destructive/90",
-  success: "text-chart-5 *:data-[slot=alert-description]:text-chart-5/90",
-  tip: "text-primary *:data-[slot=alert-description]:text-primary/90",
-  note: "text-primary *:data-[slot=alert-description]:text-primary/90",
-  info: "text-primary *:data-[slot=alert-description]:text-primary/90",
-};
-
-function Admonition({
-  type,
-  title,
-  children,
-}: {
-  type: string;
-  title?: string;
-  children: ReactNode;
-}) {
-  const key = (type as AdmonitionType) in ADMONITION_META ? (type as AdmonitionType) : "warning";
-  const meta = ADMONITION_META[key];
-  const Icon = meta.icon;
-  return (
-    <Alert className={`my-4 ${ADMONITION_STYLE[key]}`}>
-      <Icon />
-      <AlertTitle>{title || meta.defaultTitle}</AlertTitle>
-      <AlertDescription className="[&_p:first-child]:mt-1">{children}</AlertDescription>
-    </Alert>
-  );
-}
-
-function Markdown({ content }: { content: string }) {
-  // 每次渲染新建 slugger：同一文档内标题 id 唯一（重复标题追加 -1/-2）
-  const slug = createSlugger();
-  const components: Components = {
-    // 拦截 <pre>，检测子元素是否为代码块
-    pre: ({ children }) => {
-      const child = children as any;
-      const cls = child?.props?.className as string | undefined;
-      // rehype-highlight 生成的类名形如 "hljs language-typescript"（hljs 在前），
-      // 必须用词边界匹配而非 startsWith，否则所有代码块都会退化为普通 pre
-      if (cls && /\blanguage-/.test(cls)) {
-        const lang = cls.match(/language-([\w+-]+)/)?.[1] ?? "";
-        const code = codeText(child.props.children).replace(/\n$/, "");
-        return <CodeBlock lang={lang} code={code} highlighted={child.props.children} />;
-      }
-      // 普通 pre（非代码块）保持原样
-      return <pre className="my-4 overflow-x-auto rounded-lg border border-border bg-card-nested p-4">{children}</pre>;
-    },
-    // 让 <code> 自带的 pre 不干扰
-    code: ({ className, children }: any) => {
-      // 含 language- 类的是代码块，返回裸 code 供 pre 处理（类名顺序不固定）
-      if (className && /\blanguage-/.test(className)) {
-        return <code className={className}>{children}</code>;
-      }
-      // 行内 code — 带背景和颜色，不加 border 避免像代码块
-      return <code className="px-1.5 py-0.5 rounded-none bg-muted/70 text-primary font-medium text-sm">{children}</code>;
-    },
-    a: ({ href, children }: any) => {
-      const isExternal = href && (href.startsWith("http://") || href.startsWith("https://"));
-      return (
-        <a href={href} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noreferrer noopener" : undefined}>
-          {children}
-        </a>
+      const prev = timers.get(button);
+      if (prev) window.clearTimeout(prev);
+      timers.set(
+        button,
+        window.setTimeout(() => {
+          button.dataset.copied = "false";
+          button.setAttribute("aria-label", "复制代码");
+          if (label) label.textContent = "复制";
+        }, 1500)
       );
-    },
-    // remarkAdmonitions 生成的提示卡片：<div class="admonition admonition-warning">
-    // 注意：不要解构 key —— React 会把 key 从 props 中摘走，组件内拿不到
-    div: ({ node, className, children, ...props }: any) => {
-      const cls =
-        typeof className === "string"
-          ? className
-          : Array.isArray(className)
-            ? className.join(" ")
-            : "";
-      if (/\badmonition\b/.test(cls)) {
-        const type = cls.match(/admonition-([a-z]+)/)?.[1] ?? "warning";
-        const title =
-          typeof node?.properties?.["data-admonition-title"] === "string"
-            ? node.properties["data-admonition-title"]
-            : "";
-        return (
-          <Admonition type={type} title={title}>
-            {children}
-          </Admonition>
-        );
+    };
+
+    root.addEventListener("click", onClick);
+    return () => {
+      root.removeEventListener("click", onClick);
+      for (const button of root.querySelectorAll<HTMLButtonElement>("[data-copy-code]")) {
+        const t = timers.get(button);
+        if (t) window.clearTimeout(t);
       }
-      // 普通 div 原样透传（不把 hast node 传给 DOM）
-      return (
-        <div className={className} {...props}>
-          {children}
-        </div>
-      );
-    },
-    img: ({ src, alt }: any) => (
-      <img src={assetUrl(rewriteImagePaths(src || ""))} alt={alt || ""} loading="lazy" decoding="async" />
-    ),
-    // 文章正文里的 # 标题降级为 h2：页面已有文章标题作为唯一的 h1，
-    // 避免文档大纲出现多个同级 h1（对读屏与大纲结构友好）
-    h1: ({ children }) => (
-      <h2 className="markdown-h1" id={slug(headingText(children))}>
-        {children}
-      </h2>
-    ),
-    h2: ({ children }) => <h2 id={slug(headingText(children))}>{children}</h2>,
-    h3: ({ children }) => <h3 id={slug(headingText(children))}>{children}</h3>,
-    h4: ({ children }) => <h4 id={slug(headingText(children))}>{children}</h4>,
-  };
+    };
+  }, []);
 
-  return (
-    <div className="markdown">
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkAdmonitions]} rehypePlugins={[[rehypeHighlight, { subset: HIGHLIGHT_SUBSET, aliases: HIGHLIGHT_ALIASES }]]} components={components}>
-        {rewriteImagePaths(content)}
-      </ReactMarkdown>
-    </div>
-  );
+  return <div ref={rootRef} className="markdown" dangerouslySetInnerHTML={{ __html: html }} />;
 }
-
-// 正文是静态 Markdown：PostDetail 的目录高亮每次变化都会重渲染父组件，
-// memo 避免重新解析整篇文章（长文 + 代码高亮时开销明显）。
-export default memo(Markdown);

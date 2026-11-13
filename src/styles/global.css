@@ -141,3 +141,13 @@
 .will-transform {
   will-change: transform;
 }
+
+/* 代码块的复制按钮：HTML 由构建期生成（lib/markdown-render.tsx），
+   复制状态通过 data-copied 属性切换图标与文案，无需为每个代码块挂 React state */
+[data-copy-code][data-copied="true"] [data-copy-icon] {
+  display: none;
+}
+[data-copy-code][data-copied="false"] [data-check-icon] {
+  display: none;
+}
+

@@ -9,7 +9,7 @@ export interface Post {
   category: string;
   draft: boolean;
   lang: string;
-  content: string;
+  /** 正文字数（构建期统计），用于阅读时长与统计展示 */
   words: number;
 }
 

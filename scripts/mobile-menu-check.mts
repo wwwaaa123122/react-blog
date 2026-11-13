@@ -9,7 +9,7 @@
 // 用法: npx tsx scripts/mobile-menu-check.mts
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "../src/lib/router";
 import Navbar from "../src/components/Navbar";
 import ThemeToggle from "../src/components/theme-toggle";
 
@@ -21,7 +21,13 @@ process.env.POSTS_DIR = process.env.POSTS_DIR || "src/posts";
 const failures: string[] = [];
 const passes: string[] = [];
 
-// 1) 静态检查源码：相关 DropdownMenu 根组件必须声明 modal={false}
+// 1) 静态检查源码：导航 / 主题菜单不得再用 Radix 下拉。
+//    Radix 的 modal 菜单会通过 RemoveScroll 消除滚动条，并向文档注入
+//    `body[data-scroll-locked] { margin-right: <gap>px !important }`
+//    （react-remove-scroll-bar 的 gapMode 默认 "margin"）。滚动条宽度一旦被测量
+//    就会单例缓存，于是菜单展开时居中的主内容整体左移。
+//    现在改用 ui/menu.tsx（纯 DOM 相对定位，不碰 body），因此这条不变量直接
+//    落到"菜单实现不得改写 body 样式"上。
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,19 +36,20 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 for (const file of ["src/components/Navbar.tsx", "src/components/theme-toggle.tsx"]) {
   const src = readFileSync(join(root, file), "utf-8");
-  const roots = [...src.matchAll(/<DropdownMenu(\s[^>]*)?>/g)].map((m) => m[1] ?? "");
-  if (roots.length === 0) {
-    failures.push(`${file}: 未找到 <DropdownMenu> 根组件`);
-    continue;
-  }
-  const bad = roots.filter((attrs) => !/modal=\{false\}/.test(attrs));
-  if (bad.length) {
-    failures.push(
-      `${file}: ${bad.length} 处 <DropdownMenu> 未设置 modal={false}（会导致 body margin-right 补偿、内容左移）`
-    );
+  if (/ui\/dropdown-menu/.test(src)) {
+    failures.push(`${file}: 仍在使用 Radix DropdownMenu（会注入 body margin-right 补偿）`);
+  } else if (!/ui\/menu"/.test(src)) {
+    failures.push(`${file}: 未使用轻量 Menu（找不到 @/components/ui/menu）`);
   } else {
-    passes.push(`${file}: DropdownMenu 均为非模态（modal={false}）`);
+    passes.push(`${file}: 使用非模态轻量菜单`);
   }
+}
+
+const menuSrc = readFileSync(join(root, "src/components/ui/menu.tsx"), "utf-8");
+if (/document\.body|style\.overflow|marginRight|data-scroll-locked/.test(menuSrc)) {
+  failures.push("ui/menu.tsx: 出现 body 样式 / 滚动锁改写（会导致居中内容位移）");
+} else {
+  passes.push("ui/menu.tsx: 不改写 body 样式、无滚动锁");
 }
 
 // 2) 渲染检查：非模态菜单展开时，输出中不应出现 aria-modal / 滚动锁标记

@@ -14,11 +14,11 @@ import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
-import { MemoryRouter } from "react-router-dom";
-import App, { type AppProps } from "../src/App";
+import { MemoryRouter } from "../src/lib/router";
+import App, { type AppPages } from "../src/App";
 import { routerBase, assetUrl } from "../src/lib/base";
 import { publishedPosts, rewriteImagePaths } from "../src/lib/posts";
-import Markdown from "../src/components/Markdown";
+import { getPostContentOrSuspend, preloadAllContent } from "../src/lib/post-content";
 import {
   articleJsonLd,
   breadcrumbJsonLd,
@@ -97,13 +97,26 @@ function latinFontUrl(): string | undefined {
 const fontPreload = latinFontUrl();
 
 // 懒加载页面组件：在 writePage 之前 await loadLazyPages() 注入
-let lazyPages: AppProps = {};
+let lazyPages: AppPages = {};
 const loadLazyPages = async (): Promise<void> => {
-  const [{ default: Components }, { default: PostDetail }] = await Promise.all([
-    import("../src/pages/Components"),
+  const [posts, postDetail, friends, about, archive, components, notFound] = await Promise.all([
+    import("../src/pages/Posts"),
     import("../src/pages/PostDetail"),
+    import("../src/pages/Friends"),
+    import("../src/pages/About"),
+    import("../src/pages/Archive"),
+    import("../src/pages/Components"),
+    import("../src/pages/NotFound"),
   ]);
-  lazyPages = { ComponentsComponent: Components, PostDetailComponent: PostDetail };
+  lazyPages = {
+    posts: posts.default,
+    postDetail: postDetail.default,
+    friends: friends.default,
+    about: about.default,
+    archive: archive.default,
+    components: components.default,
+    notFound: notFound.default,
+  };
 };
 
 // 渲染单个路由的完整应用 HTML（同一组件树）
@@ -112,7 +125,7 @@ function renderApp(path: string): string {
   const fullPath = routerBase === "" ? path : routerBase + path;
   return renderToString(
     <MemoryRouter basename={routerBase} initialEntries={[fullPath]}>
-      <App {...lazyPages} />
+      <App pages={lazyPages} />
     </MemoryRouter>
   );
 }
@@ -278,6 +291,8 @@ function writePage(path: string, meta: PageMeta): void {
 }
 
 // ---------- 预渲染主要页面 ----------
+// 先把构建期编译好的正文读进缓存，后续 renderApp 才能同步拿到文章 HTML
+await preloadAllContent();
 await loadLazyPages();
 // 首页标题与客户端 Seo 组件保持一致（"Starlr Blog - 爱你所爱"），避免水合后标题翻转
 writePage("/", {
@@ -354,11 +369,10 @@ function buildRss(): string {
   const items = publishedPosts
     .map((p) => {
       const postUrl = `${siteUrl}/posts/${p.slug}/`;
+      // 正文 HTML 已在构建期编译好，直接复用（不再在这里重跑一遍 Markdown 管线）
       let bodyHtml = "";
       try {
-        bodyHtml = renderToString(
-          <Markdown content={rewriteImagePaths(p.content)} />
-        );
+        bodyHtml = getPostContentOrSuspend(p.slug)?.html ?? "";
       } catch {
         bodyHtml = esc(p.description || "");
       }

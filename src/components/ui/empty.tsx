@@ -91,7 +91,7 @@ function EmptyTitle({
     <div
       data-slot="empty-title"
       className={cn(
-        "cn-font-heading tracking-tight",
+        "font-heading tracking-tight",
         emptyTitleVariants({ variant, className })
       )}
       {...props}

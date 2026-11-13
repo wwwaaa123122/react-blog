@@ -1,18 +1,12 @@
-import { Link } from "react-router-dom";
-import { BookOpen, Clock } from "lucide-react";
+import { Link } from "../lib/router";
 import type { Post } from "../types";
-import { formatDate, readingTime } from "../lib/posts";
 import { responsiveImageSrc } from "../lib/post-image";
+import { PostMeta, TagList } from "../components/page";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-export default function PostCard({ post }: { post: Post }) {  // 网格断点：mobile 单列 ~360px、md 双列 ~484px、lg 三列 ~352px。
+export default function PostCard({ post }: { post: Post }) {
+  // 网格断点：mobile 单列 ~360px、md 双列 ~484px、lg 三列 ~352px。
   // 用 -md(760px) / -thumb(320px) 变体替代 1600px 原图，
   // 单页 9 张卡片封面从 ~1.4MB 降到 ~250KB。
   const cover = responsiveImageSrc(
@@ -38,59 +32,37 @@ export default function PostCard({ post }: { post: Post }) {  // 网格断点：
               srcSet={cover.srcSet}
               sizes={cover.sizes}
               alt=""
-              className="w-full aspect-2/1 object-cover transition-transform duration-300 group-hover:scale-105"
+              className="aspect-2/1 w-full object-cover ring-1 ring-inset ring-border/60 transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
               decoding="async"
             />
           </Link>
           {post.category && (
-            <div className="absolute top-2.5 right-2.5 pointer-events-none">
+            <div className="pointer-events-none absolute top-3 right-3">
               <Badge variant="secondary" size="2xs">{post.category}</Badge>
             </div>
           )}
         </CardContent>
       )}
-      <CardContent className="p-5">
-        {/* 卡片标题用真实 h2（h1 文章页标题 → h2 卡片，不跳级） */}
+      <CardContent className="p-4">
+        {/* 卡片标题用真实 h2（h1 文章页标题 → h2 卡片，不跳级）。
+            18px 与首页列表标题（ItemTitle variant="lg"）保持同号。 */}
         <CardHeader className="p-0">
-          {/* h2 直接承担卡片标题语义与排版（不在标题内再套 CardTitle 的 div） */}
-          <h2 className="font-heading text-base font-semibold leading-snug">
+          <h2 className="font-heading text-lg leading-snug font-semibold">
             <Link
               to={"/posts/" + post.slug}
-              className="text-foreground group-hover:text-primary transition-colors duration-150"
+              className="text-foreground transition-colors duration-150 group-hover:text-primary"
             >
               {post.title}
             </Link>
           </h2>
-          <CardDescription className="text-sm leading-relaxed line-clamp-2 mt-2">
-            {post.description}
-          </CardDescription>
         </CardHeader>
-        <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          <div className="flex flex-none flex-row flex-wrap items-center gap-x-3 gap-y-1">
-            <time dateTime={post.published}>{formatDate(post.published)}</time>
-            {post.category && (
-              <span className="inline-flex items-center gap-1">
-                <BookOpen className="size-3" />
-                {post.category}
-              </span>
-            )}
-            <span className="inline-flex items-center gap-1">
-              <Clock className="size-3" />
-              {readingTime(post.words)}
-            </span>
-          </div>
-        </div>
+        <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+          {post.description}
+        </p>
+        <PostMeta post={post} className="mt-3" />
+        <TagList tags={post.tags} className="mt-2.5" />
       </CardContent>
-      {post.tags.length > 0 && (
-        <CardFooter className="flex-wrap gap-1.5 px-5 pb-5 pt-0">
-          {post.tags.map((t) => (
-            <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-              <Badge variant="secondary" size="2xs">{t}</Badge>
-            </Link>
-          ))}
-        </CardFooter>
-      )}
     </Card>
   );
 }

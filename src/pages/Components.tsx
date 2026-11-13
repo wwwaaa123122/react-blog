@@ -6,6 +6,7 @@ import { ArrowUpRightIcon, BoxesIcon, CodeIcon, LayersIcon, PaletteIcon } from "
 
 import Seo from "../components/Seo"
 import Breadcrumb from "../components/Breadcrumb"
+import { PageHeader } from "../components/page"
 import { demoCells } from "../components/showcase/demos"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -42,47 +43,45 @@ export default function Components() {
       />
       <Breadcrumb items={[{ label: "组件预览", to: "/components/" }]} />
 
-      <header className="mb-6">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <Badge variant="secondary">React 19</Badge>
-          <Badge variant="secondary">shadcn/ui</Badge>
-          <Badge variant="secondary">Tailwind v4</Badge>
-          <Badge variant="outline">亮 / 暗双主题</Badge>
-        </div>
-        <h1 className="mb-2 text-2xl font-bold tracking-tight md:text-3xl">
-          全组件预览
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          本站界面全部由 shadcn/ui 组件库搭建，每个格子只演示一个组件。共{" "}
-          {demoCells.length} 个预览单元。
-        </p>
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button asChild variant="outline" size="sm">
-                  <a
-                    href="https://ui.shadcn.com/docs/components"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    <CodeIcon data-icon="inline-start" />
-                    shadcn/ui 文档
-                    <ArrowUpRightIcon data-icon="inline-end" />
-                  </a>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>查看组件库官方文档与用法</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </header>
+      <PageHeader
+        eyebrow={
+          <>
+            <Badge variant="secondary">React 19</Badge>
+            <Badge variant="secondary">shadcn/ui</Badge>
+            <Badge variant="secondary">Tailwind v4</Badge>
+            <Badge variant="outline">亮 / 暗双主题</Badge>
+          </>
+        }
+        title="全组件预览"
+        description={`本站界面全部由 shadcn/ui 组件库搭建，每个格子只演示一个组件。共 ${demoCells.length} 个预览单元。`}
+        className="mb-0"
+      />
+      <div className="mt-4 mb-8 flex flex-wrap items-center gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button asChild variant="outline" size="sm">
+                <a
+                  href="https://ui.shadcn.com/docs/components"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <CodeIcon data-icon="inline-start" />
+                  shadcn/ui 文档
+                  <ArrowUpRightIcon data-icon="inline-end" />
+                </a>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>查看组件库官方文档与用法</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
       <Card className="mb-8">
         <CardContent className="grid gap-4 sm:grid-cols-3">
           {stats.map((s) => (
             <div key={s.label} className="flex items-center gap-3">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary">
+              <div className="flex size-8 shrink-0 items-center justify-center bg-accent text-accent-foreground">
                 <s.icon className="size-4" />
               </div>
               <div className="min-w-0">
@@ -104,8 +103,8 @@ export default function Components() {
             <Button
               key={`${cell.name}-${i}`}
               asChild
-              variant="muted"
-              size="xs-pill"
+              variant="outline"
+              size="xs"
             >
               <a href={`#demo-${i + 1}`}>
                 <span className="mr-2 font-mono text-xs opacity-60">{pad(i)}</span>

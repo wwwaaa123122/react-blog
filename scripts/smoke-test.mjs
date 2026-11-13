@@ -15,12 +15,23 @@
 import { chromium } from "playwright";
 
 const base = process.argv[2] || "http://localhost:4173";
-const routes = ["/", "/posts", "/archive", "/about", "/friends", "/posts/not-exist-slug"];
+const routes = [
+  "/",
+  "/posts",
+  "/archive",
+  "/about",
+  "/friends",
+  "/components",
+  "/posts/not-exist-slug",
+];
 
 const results = [];
 let failures = 0;
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({
+  // CI 里用 playwright install 的 chromium；本机可用 PLAYWRIGHT_CHANNEL=msedge 复用系统 Edge
+  channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
+});
 const page = await browser.newPage();
 
 for (const route of routes) {
@@ -46,6 +57,21 @@ for (const route of routes) {
     checks["无损坏图片"] = await page.evaluate(
       () => [...document.images].every((i) => i.complete && i.naturalWidth > 0)
     );
+
+    // Preact 兼容性回归：Radix 的集合/索引类组件在 Preact 下可能「渲染了但不可见」
+    // （例如 Slider 的滑块拿到 undefined 后被 display:none），这里直接量尺寸。
+    if (route === "/components") {
+      checks["滑块实际可见"] = await page.evaluate(() => {
+        const thumbs = [...document.querySelectorAll('[data-slot="slider-thumb"]')];
+        return (
+          thumbs.length > 0 &&
+          thumbs.every((el) => {
+            const rect = el.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0;
+          })
+        );
+      });
+    }
 
     // 内部链接抽查（最多 10 条）：fetch 不跟随 SPA，直接 HEAD
     const internalHrefs = await page.evaluate(() =>

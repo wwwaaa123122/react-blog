@@ -5,11 +5,11 @@ import { resolveAssetUrl } from "../lib/base";
 import { Icon } from "../components/icons";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
+import { PageHeader, SectionHeading, SectionLabel } from "../components/page";
 import { jsonLd, personJsonLd } from "../lib/seo";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 const ADULT_DATE = new Date("2030-07-20T00:00:00").getTime();
@@ -35,14 +35,12 @@ function Countdown() {
     return () => clearInterval(timer);
   }, []);
   return (
-    <Card>
+    <Card size="sm">
       <CardHeader>
-        <CardTitle className="flex items-center text-sm">
-          <Badge variant="secondary">成年倒计时</Badge>
-        </CardTitle>
+        <SectionLabel>成年倒计时</SectionLabel>
       </CardHeader>
       <CardContent>
-        <p className="text-xl font-semibold tabular-nums">{text}</p>
+        <p className="text-2xl font-semibold tabular-nums">{text}</p>
       </CardContent>
     </Card>
   );
@@ -57,15 +55,15 @@ export default function About() {
         path="/about/"
         ogImage={profileConfig.avatar}
       />
+      {/* 单列页面：连同面包屑与标题一起收进 720px 居中列，
+          否则 1080 的容器里正文只占左侧三分之二，右侧大片留白 */}
+      <div className="mx-auto max-w-180">
       <Breadcrumb items={[{ label: "关于", to: "/about/" }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(personJsonLd()) }} />
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">关于我</h1>
-        <p className="text-sm text-muted-foreground">认识一下这个博客的主人</p>
-      </div>
-      <div className="max-w-150">
-        <div className="flex items-center gap-4 mb-6">
-          <Avatar size="lg" className="size-14">
+      <PageHeader title="关于我" description="认识一下这个博客的主人" />
+
+        <div className="mb-6 flex items-center gap-4">
+          <Avatar size="lg" className="size-14 shrink-0">
             <AvatarImage
               src={resolveAssetUrl(profileConfig.avatar)}
               alt={profileConfig.name}
@@ -75,67 +73,73 @@ export default function About() {
             <AvatarFallback>{profileConfig.name.slice(0, 1)}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <h2 className="text-lg font-bold">{profileConfig.name}</h2>
-            <p className="text-sm text-muted-foreground">{profileConfig.bio}</p>
+            <h2 className="text-lg font-bold tracking-tight">{profileConfig.name}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{profileConfig.bio}</p>
           </div>
         </div>
 
-        <div className="prose-sm text-muted-foreground space-y-3 mb-8">
+        <div className="mb-8 space-y-3 text-sm leading-relaxed text-muted-foreground">
           <p>一个初中生，喜欢折腾技术、打游戏、看番。</p>
           <p>这个博客主要分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN 优化、容器化部署等教程与实践经验，偶尔记录生活。</p>
         </div>
 
-        <h3 className="text-sm font-bold mb-3">联系方式</h3>
-        <div className="flex flex-wrap gap-2 mb-6">
-          <Button asChild variant="pill" size="sm-pill">
-            <a href="https://space.bilibili.com/3493078983772353" target="_blank" rel="noreferrer noopener"><Icon name="bilibili" size={14} /> Bilibili</a>
+        <SectionHeading as="h3" className="mb-3">联系方式</SectionHeading>
+        <div className="mb-8 flex flex-wrap gap-2">
+          <Button asChild variant="outline" size="sm">
+            <a href="https://space.bilibili.com/3493078983772353" target="_blank" rel="noreferrer noopener">
+              <Icon name="bilibili" size={14} data-icon="inline-start" /> Bilibili
+            </a>
           </Button>
-          <Button asChild variant="pill" size="sm-pill">
-            <a href="https://t.me/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="telegram" size={14} /> Telegram</a>
+          <Button asChild variant="outline" size="sm">
+            <a href="https://t.me/wwwaaa123122" target="_blank" rel="noreferrer noopener">
+              <Icon name="telegram" size={14} data-icon="inline-start" /> Telegram
+            </a>
           </Button>
-          <Button asChild variant="pill" size="sm-pill">
-            <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener"><Icon name="github" size={14} /> GitHub</a>
+          <Button asChild variant="outline" size="sm">
+            <a href="https://github.com/wwwaaa123122" target="_blank" rel="noreferrer noopener">
+              <Icon name="github" size={14} data-icon="inline-start" /> GitHub
+            </a>
           </Button>
-          <Button asChild variant="pill" size="sm-pill">
-            <a href="mailto:wwwaaa123122@outlook.com"><Mail className="size-3.5" /> 邮箱</a>
+          <Button asChild variant="outline" size="sm">
+            <a href="mailto:wwwaaa123122@outlook.com">
+              <Mail className="size-3.5" data-icon="inline-start" /> 邮箱
+            </a>
           </Button>
         </div>
 
-        <Separator className="mb-6" />
+        <Separator className="mb-8" />
 
-        <h3 className="text-sm font-bold mb-3">关注领域与技术</h3>
-        <div className="grid gap-3 sm:grid-cols-2 mb-6">
+        <SectionHeading as="h3" className="mb-3">关注领域与技术</SectionHeading>
+        <div className="mb-8 grid gap-3 sm:grid-cols-2">
           <Card size="sm">
             <CardHeader>
-              <CardTitle variant="muted" className="text-xs font-semibold uppercase">技术栈与开发</CardTitle>
+              <SectionLabel>技术栈与开发</SectionLabel>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 React 19, TypeScript, Tailwind CSS, Vite, shadcn/ui, Node.js
               </p>
             </CardContent>
           </Card>
           <Card size="sm">
             <CardHeader>
-              <CardTitle variant="muted" className="text-xs font-semibold uppercase">运维与网络</CardTitle>
+              <SectionLabel>运维与网络</SectionLabel>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 Arch Linux, Cloudflare Pages/Workers, Docker, 内网穿透, CDN 优化
               </p>
             </CardContent>
           </Card>
         </div>
 
-        <h3 className="text-sm font-bold mb-3">关于本站</h3>
-        <div className="prose-sm text-muted-foreground space-y-2 mb-6 text-xs leading-relaxed">
-          <p>
-            本站建于 2025 年，是一个记录个人技术探索与生活的极简博客。
-            界面由 React 19 + shadcn/ui + Tailwind v4 搭建，采用静态预渲染与极速客户端导航，具备完整的亮/暗主题支持与即时全局检索体验。
-          </p>
-        </div>
+        <SectionHeading as="h3" className="mb-3">关于本站</SectionHeading>
+        <p className="mb-8 text-sm leading-relaxed text-muted-foreground">
+          本站建于 2025 年，是一个记录个人技术探索与生活的极简博客。
+          界面由 React 19 + shadcn/ui + Tailwind v4 搭建，采用静态预渲染与极速客户端导航，具备完整的亮/暗主题支持与即时全局检索体验。
+        </p>
 
-        <Separator className="mb-6" />
+        <Separator className="mb-8" />
         <Countdown />
       </div>
     </>

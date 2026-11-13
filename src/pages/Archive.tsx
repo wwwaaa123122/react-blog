@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link } from "../lib/router";
 import { publishedPosts, formatDate } from "../lib/posts";
 import { profileConfig } from "../config/profile";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
+import { PageHeader, SectionHeading } from "../components/page";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Item, ItemContent, ItemGroup, ItemMedia } from "@/components/ui/item";
 
 function formatMonthDay(d: string): string {
@@ -34,33 +35,37 @@ export default function Archive() {
         ogImage={profileConfig.avatar}
       />
       <Breadcrumb items={[{ label: "归档", to: "/archive/" }]} />
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">归档</h1>
-        <p className="text-sm text-muted-foreground">共 {publishedPosts.length} 篇文章 · 按年份归档</p>
-      </div>
+      <PageHeader
+        title="归档"
+        description={`共 ${publishedPosts.length} 篇文章 · 按年份归档`}
+      />
       {years.map(([year, posts]) => (
-        <div key={year} className="cv-auto mb-8">
-        <Card className="mb-0">
-          <CardHeader>
-            {/* 年份是页面 h1 下的真实分节标题，直接使用 h2 保持文档大纲 */}
-            <h2 className="flex items-center gap-2 font-heading text-lg font-bold leading-snug">
-              {year} <Badge variant="secondary" size="xs">{posts.length} 篇</Badge>
-            </h2>
-          </CardHeader>
-          <CardContent>
+        <div key={year} className="cv-auto mb-6">
+          {/* 年份卡片：标题下方一条分隔线，行与行之间只用发丝线，
+              不再给每行铺底色 —— 底色会把列表切成一块块"表格行" */}
+          <Card size="flush">
+            <div className="border-b border-border px-4 py-3">
+              <SectionHeading className="mb-0" meta={`${posts.length} 篇`}>
+                {year}
+              </SectionHeading>
+            </div>
+            <div className="px-4 pb-1.5">
             <ItemGroup size="flush">
               {posts.map((post) => (
-                <Item key={post.slug} size="flush" variant="muted-divided">
-                  <ItemMedia variant="meta" className="w-16 shrink-0">
+                <Item key={post.slug} variant="divided" size="flush">
+                  <ItemMedia variant="meta" className="w-11 shrink-0">
                     <time dateTime={post.published}>{formatMonthDay(post.published)}</time>
                   </ItemMedia>
                   <ItemContent>
-                    <div className="flex items-center justify-between gap-2">
-                      <Link className="text-sm font-medium text-foreground hover:text-primary transition-colors break-words" to={"/posts/" + post.slug}>
+                    <div className="flex items-center justify-between gap-3">
+                      <Link
+                        className="text-sm font-medium text-foreground transition-colors hover:text-primary"
+                        to={"/posts/" + post.slug}
+                      >
                         {post.title}
                       </Link>
                       {post.category && (
-                        <span className="hidden sm:inline shrink-0">
+                        <span className="hidden shrink-0 sm:inline">
                           <Badge variant="secondary" size="2xs">
                             {post.category}
                           </Badge>
@@ -71,8 +76,8 @@ export default function Archive() {
                 </Item>
               ))}
             </ItemGroup>
-          </CardContent>
-        </Card>
+            </div>
+          </Card>
         </div>
       ))}
     </>

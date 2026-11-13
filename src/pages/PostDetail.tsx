@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "../lib/router";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, FileText, Home, ListTree, RefreshCw, Share2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "../lib/toast";
 import { getPostBySlug, formatDate, readingTime, publishedPosts } from "../lib/posts";
-import Markdown, { createSlugger } from "../components/Markdown";
+import { getPostContentOrSuspend } from "../lib/post-content";
+import type { TocItem } from "../lib/toc";
+import Markdown from "../components/Markdown";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
 import { articleJsonLd, jsonLd } from "../lib/seo";
@@ -12,7 +14,6 @@ import { resolveAssetUrl } from "../lib/base";
 import { copyToClipboard } from "../lib/clipboard";
 import { normalizeCover, variantUrl } from "../lib/post-image";
 import coverSizes from "../data/cover-sizes.json";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -23,41 +24,14 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia } from "
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
 import { cn, prefersReducedMotion } from "@/lib/utils";
+import { MetaItem, MetaRow, SectionHeading, SectionLabel, TagList } from "../components/page";
 import Giscus from "../components/Giscus";
 import ReadingProgress from "../components/ReadingProgress";
-
-function extractToc(content: string) {
-  const toc: { level: number; text: string }[] = [];
-  let inFence = false;
-  for (const line of content.split("\n")) {
-    // 代码围栏内的 # 注释行不是标题，跳过（此前会被误判为目录项）
-    if (/^```/.test(line.trim())) {
-      inFence = !inFence;
-      continue;
-    }
-    if (inFence) continue;
-    const m = line.match(/^(#{1,4})\s+(.+)$/);
-    if (m) {
-      // 与 Markdown.tsx 的 headingText 对齐：图片整体去掉，链接只留文字，
-      // 再去除粗体/斜体/代码标记（避免 TOC 锚点 href 与标题 id 失配）
-      const text = m[2]
-        .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
-        .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-        .replace(/[#*_`]/g, "")
-        .trim();
-      // 正文 # 标题在渲染时降级为 h2（页面已有文章标题 h1），目录按 level 2 对齐
-      toc.push({ level: Math.max(2, m[1].length), text });
-    }
-  }
-  // 与 Markdown 渲染一致的去重 id（重复标题追加 -1/-2）
-  const slug = createSlugger();
-  return toc.map((t) => ({ ...t, id: slug(t.text) }));
-}
 
 // 目录滚动高亮（scroll-spy）：视口上方最近的一个标题即"当前章节"。
 // 用 IntersectionObserver 而非 scroll 监听：浏览器在合成线程判断相交，
 // 不用每帧对每个标题做 getBoundingClientRect（长文最多 28 个标题）。
-function useActiveHeading(toc: { level: number; text: string; id: string }[]): string {
+function useActiveHeading(toc: TocItem[]): string {
   const [active, setActive] = useState("");
   const OFFSET = 140; // 导航栏高度 + 阅读余量
 
@@ -135,15 +109,14 @@ export default function PostDetail() {
   const { slug } = useParams();
   const articleRef = useRef<HTMLElement>(null);
   const post = slug ? getPostBySlug(slug) : undefined;
+  // 正文 HTML 与目录都在构建期算好：首屏从已预渲染的 DOM 复用，站内跳转时按需加载
+  const content = slug ? getPostContentOrSuspend(slug) : undefined;
 
   // 注意：所有 hooks 必须在早期 return 之前调用（保持调用顺序稳定）
-  const toc = useMemo(
-    () => (post ? extractToc(post.content) : []),
-    [post]
-  );
+  const toc = content?.toc ?? [];
   const activeHeading = useActiveHeading(toc);
 
-  if (!post) {
+  if (!post || !content) {
     return (
       <>
         <Seo title="文章不存在" description="文章不存在或已被删除" noindex />
@@ -214,6 +187,10 @@ export default function PostDetail() {
         path={"/posts/" + post.slug + "/"} keywords={post.tags} ogType="article" ogImage={post.image}
         articlePublished={post.published} articleModified={post.updated}
         articleSection={post.category} articleTags={post.tags} />
+      {/* 文章页整体（面包屑 + 正文 + 目录）收进一个 960px 的居中列：
+          正文列 720 + 间距 + 目录 224，这样面包屑与标题左边缘对齐，
+          此前面包屑贴着容器左沿、正文被 mx-auto 又推进 64px，两者错位 */}
+      <div className="mx-auto max-w-248">
       <Breadcrumb items={[{ label: "文章", to: "/posts/" }, { label: post.title }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleJsonLd(post)) }} />
 
@@ -224,54 +201,38 @@ export default function PostDetail() {
       {/* 双栏布局：文章 + 右侧目录 */}
       <div className="flex gap-8 lg:gap-12 relative">
         {/* 文章主体 */}
-        <article ref={articleRef} className="min-w-0 flex-1 max-w-180 mx-auto">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-4">
+        <article
+          ref={articleRef}
+          data-prerendered-post={post.slug}
+          className="min-w-0 flex-1 max-w-180 mx-auto"
+        >
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight leading-tight mb-4">
             {post.title}
           </h1>
 
-          <div className="mb-6 flex flex-wrap items-center gap-2 text-muted-foreground">
-            <Badge variant="secondary">
-              <time dateTime={post.published}>{formatDate(post.published)}</time>
-            </Badge>
+          {/* 元信息与列表页同款：12px 文本 + 12px 图标，不再用一排徽章
+              —— 徽章与下方标签同视觉，读者分不清"事实"和"可点的标签" */}
+          <MetaRow className="mb-4">
+            <time dateTime={post.published}>{formatDate(post.published)}</time>
             {post.updated && post.updated !== post.published && (
-              <Badge variant="secondary">
-                <RefreshCw data-icon="inline-start" />
+              <MetaItem icon={RefreshCw}>
                 <time dateTime={post.updated}>更新于 {formatDate(post.updated)}</time>
-              </Badge>
+              </MetaItem>
             )}
-            <Badge variant="secondary">
-              <Clock data-icon="inline-start" />
-              {readingTime(post.words)}
-            </Badge>
+            <MetaItem icon={Clock}>{readingTime(post.words)}</MetaItem>
             {post.words > 0 && (
-              <Badge variant="secondary">
-                <FileText data-icon="inline-start" />
-                {post.words.toLocaleString("zh-CN")} 字
-              </Badge>
+              <MetaItem icon={FileText}>{post.words.toLocaleString("zh-CN")} 字</MetaItem>
             )}
-            {post.category && (
-              <Badge variant="secondary">
-                <BookOpen data-icon="inline-start" />
-                {post.category}
-              </Badge>
-            )}
-          </div>
+            {post.category && <MetaItem icon={BookOpen}>{post.category}</MetaItem>}
+          </MetaRow>
 
-          {post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-6">
-              {post.tags.map((t) => (
-                <Link key={t} to={"/posts?tag=" + encodeURIComponent(t)}>
-                  <Badge variant="secondary" size="xs">{t}</Badge>
-                </Link>
-              ))}
-            </div>
-          )}
+          <TagList tags={post.tags} className="mb-6" />
 
           {cover && (
-            <div className="mb-8 -mx-5 md:mx-0">
+            <div className="mb-8">
               {/* 首屏封面：急切加载并提高优先级（LCP 元素），避免 lazy 延迟 */}
               <img
-                className="w-full h-auto rounded-xl shadow-sm bg-muted"
+                className="h-auto w-full bg-muted ring-1 ring-border/60"
                 src={cover}
                 srcSet={coverSrcSet}
                 sizes="(min-width: 768px) 720px, 100vw"
@@ -288,19 +249,26 @@ export default function PostDetail() {
           {toc.length > 1 && (
             <Collapsible className="mb-6 lg:hidden">
               <CollapsibleTrigger asChild>
-                <Button variant="muted" size="sm">
+                <Button variant="outline" size="sm">
                   <ListTree data-icon="inline-start" />
                   目录
+                  <span className="ml-1 text-xs font-normal text-muted-foreground">
+                    {toc.length}
+                  </span>
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <nav
                   aria-label="文章目录"
-                  className="mt-2 max-h-72 overflow-y-auto space-y-0.5 border-l-2 border-border pl-4 text-sm leading-7 text-muted-foreground"
+                  className="mt-3 max-h-72 overflow-y-auto border-l border-border text-sm leading-7 text-muted-foreground"
                 >
                   {toc.map((item, i) => (
                     <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
-                      <a href={"#" + item.id} data-toc-id={item.id} className="transition-colors hover:text-foreground">
+                      <a
+                        href={"#" + item.id}
+                        data-toc-id={item.id}
+                        className="block py-0.5 pl-3 transition-colors hover:text-foreground"
+                      >
                         {item.text}
                       </a>
                     </div>
@@ -310,7 +278,7 @@ export default function PostDetail() {
             </Collapsible>
           )}
 
-          <Markdown content={post.content} />
+          <Markdown html={content.html} />
 
           {/* 上一篇 / 下一篇（shadcn Item，只渲染存在的邻居） */}
           <Separator className="mt-10" />
@@ -348,12 +316,9 @@ export default function PostDetail() {
           {/* 相关文章：按共享标签/分类推荐（无相关内容则不渲染） */}
           {relatedPosts.length > 0 && (
             <section aria-labelledby="related-posts-heading" className="mt-10">
-              <h2
-                id="related-posts-heading"
-                className="mb-3 text-sm font-semibold text-muted-foreground"
-              >
+              <SectionHeading id="related-posts-heading" className="mb-3">
                 相关文章
-              </h2>
+              </SectionHeading>
               <div className="grid gap-3 sm:grid-cols-3">
                 {relatedPosts.map((rp) => (
                   <Item key={rp.slug} asChild variant="outline" size="sm">
@@ -376,8 +341,8 @@ export default function PostDetail() {
           <Separator className="mt-6" />
 
           {/* 版权信息卡片 */}
-          <div className="mt-6 rounded-lg border border-border bg-muted/30 p-4 text-xs text-muted-foreground">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-2.5">
+          <div className="mt-6 border border-border bg-card-nested p-4 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-2.5">
               <span className="font-semibold text-foreground text-sm">{post.title}</span>
               <Button
                 variant="ghost"
@@ -424,13 +389,13 @@ export default function PostDetail() {
               本文发布于 {formatDate(post.published)} · &copy; {currentYear} {siteConfig.author}
             </p>
             <div className="flex flex-wrap gap-3">
-              <Button asChild variant="ghost" size="sm">
+              <Button asChild variant="outline" size="sm">
                 <Link to="/posts">
                   <ArrowLeft data-icon="inline-start" />
                   返回文章列表
                 </Link>
               </Button>
-              <Button asChild variant="ghost" size="sm">
+              <Button asChild variant="outline" size="sm">
                 <Link to="/">
                   <Home data-icon="inline-start" />
                   首页
@@ -445,41 +410,58 @@ export default function PostDetail() {
 
         {/* 桌面端：右侧目录 */}
         {toc.length > 1 && (
-          <aside className="hidden lg:block w-56 shrink-0">
+          <aside className="hidden w-56 shrink-0 lg:block">
             <div className="sticky top-20">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">目录</p>
-              <nav aria-label="文章目录" className="max-h-120 overflow-y-auto space-y-0.5 border-l-2 border-border pl-3 text-sm leading-7 text-muted-foreground">
-                {toc.map((item, i) => (
-                  <div key={i} style={{ paddingLeft: (item.level - 2) * 12 }}>
-                    <a
-                      href={"#" + item.id}
-                      data-toc-id={item.id}
-                      aria-current={activeHeading === item.id ? "location" : undefined}
-                      className={cn(
-                        "block transition-all duration-150 hover:text-foreground truncate rounded-sm py-0.5",
-                        activeHeading === item.id
-                          ? "text-primary font-medium pl-1.5 -ml-1.5 border-l-2 border-primary bg-primary-soft/30"
-                          : "hover:translate-x-0.5"
-                      )}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const el = document.getElementById(item.id);
-                        if (el) {
-                          el.scrollIntoView({
-                            behavior: prefersReducedMotion() ? "auto" : "smooth",
-                          });
-                          window.history.replaceState(null, "", "#" + item.id);
-                        }
-                      }}
+              <SectionLabel className="mb-3">目录</SectionLabel>
+              {/* 导轨只有一条 1px：当前章节用绝对定位的 2px 竖条压在导轨上，
+                  此前是给当前项再加一层 border-l-2，视觉上会出现两条并行的线 */}
+              <nav
+                aria-label="文章目录"
+                className="relative max-h-120 overflow-y-auto border-l border-border text-sm leading-7 text-muted-foreground"
+              >
+                {toc.map((item, i) => {
+                  const active = activeHeading === item.id;
+                  return (
+                    <div
+                      key={i}
+                      className="relative"
+                      style={{ paddingLeft: (item.level - 2) * 12 }}
                     >
-                      {item.text}
-                    </a>
-                  </div>
-                ))}
+                      {active && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute top-0 -left-px h-full w-0.5 bg-primary"
+                        />
+                      )}
+                      <a
+                        href={"#" + item.id}
+                        data-toc-id={item.id}
+                        aria-current={active ? "location" : undefined}
+                        className={cn(
+                          "block truncate py-0.5 pr-1 pl-3 transition-colors hover:text-foreground",
+                          active && "font-medium text-primary"
+                        )}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const el = document.getElementById(item.id);
+                          if (el) {
+                            el.scrollIntoView({
+                              behavior: prefersReducedMotion() ? "auto" : "smooth",
+                            });
+                            window.history.replaceState(null, "", "#" + item.id);
+                          }
+                        }}
+                      >
+                        {item.text}
+                      </a>
+                    </div>
+                  );
+                })}
               </nav>
             </div>
           </aside>
         )}
+      </div>
       </div>
     </>
   );

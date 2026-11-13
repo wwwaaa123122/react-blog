@@ -82,5 +82,9 @@ for (const file of files) {
   }
 }
 
-writeFileSync(OUT, JSON.stringify(sizes, null, 2) + "\n");
-console.log(`[cover-sizes] ${Object.keys(sizes).length} 张图片尺寸 -> ${OUT}${failed ? ` (${failed} 失败)` : ""}`);
+// 按路径排序后写出：readdirSync 的返回顺序随文件系统变化，
+// 不排序会让这个入库文件每次构建都产生纯换序的假 diff。
+const sorted = Object.fromEntries(Object.entries(sizes).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+
+writeFileSync(OUT, JSON.stringify(sorted, null, 2) + "\n");
+console.log(`[cover-sizes] ${Object.keys(sorted).length} 张图片尺寸 -> ${OUT}${failed ? ` (${failed} 失败)` : ""}`);

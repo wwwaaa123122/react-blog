@@ -84,7 +84,9 @@ export default function ReadingProgress({ target }: { target?: React.RefObject<H
     <div
       ref={barRef}
       aria-hidden="true"
-      className="fixed top-0 left-0 right-0 z-50 h-0.5 origin-left bg-primary/80"
+      // 贴在导航栏下沿而非视口顶端：顶端已经有路由加载条（3px 渐变），
+      // 两条进度条叠在同一条边上会互相干扰；放在导航下沿读作"导航的下划线"
+      className="fixed top-14 left-0 right-0 z-40 h-0.5 origin-left bg-primary"
       style={{ transform: "scaleX(0)", opacity: 0 }}
     />
   );

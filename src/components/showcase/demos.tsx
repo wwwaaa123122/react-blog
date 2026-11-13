@@ -276,7 +276,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { toast } from "sonner"
+import { toast } from "../../lib/toast"
 import { ButtonGroup } from "@/components/ui/button-group"
 
 export interface DemoCell {
@@ -1445,8 +1445,12 @@ export const demoCells: DemoCell[] = [
   {
     name: "Sidebar",
     label: "侧边栏壳（含切换按钮）",
+    // 必须给 Provider 一个定位上下文（relative）：Sidebar 在 absolute 定位下
+    // 会以最近的定位祖先为参照，此前 Provider 没有 relative，侧栏直接跑到
+    // 视口最左侧盖住导航栏。
     demo: (
-      <SidebarProvider className="min-h-64 w-full max-w-80">
+      <div className="w-full max-w-80 border border-border">
+      <SidebarProvider className="relative min-h-64 w-full overflow-hidden">
         <Sidebar collapsible="icon" className="absolute">
           <SidebarHeader>
             <SidebarMenu>
@@ -1506,6 +1510,7 @@ export const demoCells: DemoCell[] = [
           </div>
         </SidebarInset>
       </SidebarProvider>
+      </div>
     ),
   },
   {

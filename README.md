@@ -1,6 +1,6 @@
 # React Blog · 星辰旅人
 
-基于 **React 19 + Vite 8 + TypeScript** 重写的个人博客，内容与数据来源于原仓库 Firefly（Fuwari/Astro 主题）。
+基于 **React 19 API + Vite 8 + TypeScript** 重写的个人博客（运行时是 Preact 11 的 compat 兼容层），内容与数据来源于原仓库 Firefly（Fuwari/Astro 主题）。
 
 ## 页面与功能
 
@@ -24,7 +24,7 @@
 - 🖼️ 图片路径自动重写（`../images/` → `/images/`）
 
 ## 技术栈
-React 19 · React Router 7 · **shadcn/ui + Tailwind v4 + Radix UI** · react-markdown + remark-gfm + rehype-highlight · Vite 8 · TypeScript
+Preact 11（`preact/compat`，源码按 React 19 API 编写）· 自研极简路由 · **shadcn/ui + Tailwind v4 + Radix UI** · react-markdown + remark-gfm + rehype-highlight（仅构建期）· Vite 8 · TypeScript
 
 ### UI 组件库（shadcn/ui）
 
@@ -37,7 +37,11 @@ React 19 · React Router 7 · **shadcn/ui + Tailwind v4 + Radix UI** · react-ma
 - 反馈统一用 Sonner（`toast`），浮层统一用 Dialog/Sheet/Drawer/Popover/Tooltip；
 - 文章正文的提示块（`:::warning` 等）与代码块也使用组件库：`Alert` / `Badge` / `Button` / `Separator`；
 - `/components` 页面把全部组件按 acofork 风格的「编号 + 网格」逐个预览，
-  示例集中在 `src/components/showcase/demos.tsx`。
+  示例集中在 `src/components/showcase/demos.tsx`；
+- 视觉规则以 [`docs/ui-guidelines.md`](docs/ui-guidelines.md) 为唯一口径（颜色/表面、字号层级、
+  间距节奏、组件用法、页面骨架、动效）；页面标题、区块标题、小标签、元信息、标签组这五种固定排版角色
+  由 `src/components/page.tsx` 的原语（`PageHeader` / `SectionHeading` / `SectionLabel` /
+  `MetaRow` / `PostMeta` / `TagList`）提供，页面只做组合，不再各写一套。
 
 组件源码来自官方 registry，由脚本拉取并按本项目规则适配（别名 `@/lib/utils`、
 registry 内部导入改写、`IconPlaceholder` 展开为 lucide-react 图标）：
@@ -54,6 +58,59 @@ pnpm dev        # 开发服务器 http://localhost:5173
 pnpm build      # 生产构建 → dist/
 pnpm preview    # 预览生产构建
 ```
+
+### 文章内容的构建期编译
+
+文章是静态内容，所以 Markdown **不在浏览器里解析**：`pnpm dev` / `pnpm build` 会先运行
+`scripts/build-content.mts`，把 `src/posts/*.md` 编译成 `src/generated/` 下的产物（已被 git 忽略）：
+
+| 产物 | 用途 | 谁下载 |
+| --- | --- | --- |
+| `posts-meta.json` | 标题 / 日期 / 标签 / 字数（约 3 KB） | 所有页面 |
+| `posts/<slug>.json` | 单篇正文 HTML + 目录锚点 | 只有该文章的读者 |
+| `search-index.json` | 全文搜索文本索引 | 列表页碰搜索框时 |
+
+因此客户端不再需要 `react-markdown` / `remark` / `rehype` / `highlight.js`；代码高亮、目录锚点、
+提示卡片都在构建期完成。文章页首屏直接复用预渲染好的 DOM（`primeFromPrerenderedDom`），
+站内跳转时才按需下载对应文章的 chunk。
+
+> 改了 Markdown 之后需要重新生成内容：`pnpm content`（或重启 `pnpm dev`）。
+> `pnpm typecheck` 也会先补齐这一步。
+
+### 首屏只加载必要的东西
+
+首屏 JS 大约 45 KB（gzip），其中已经没有 react-dom —— 运行时换成了 Preact。几条刻意的取舍：
+
+| 做法 | 位置 | 省下的 |
+| --- | --- | --- |
+| 运行时换成 Preact 11（`preact/compat` 兼容层） | `vite.config.ts` | 每页约 50 KB gzip（react-dom 整块消失） |
+| 自研极简路由（约 360 行，覆盖本站用到的全部 API） | `src/lib/router.tsx` | 每页约 11 KB gzip |
+| 手写下拉菜单替代 Radix DropdownMenu | `src/components/ui/menu.tsx` | 约 13 KB，且不再给 `<body>` 注入滚动锁补偿 |
+| toast 只在第一次触发时加载 sonner | `src/lib/toast.ts` / `toast-host.tsx` | 约 10 KB |
+| 全文索引改为「碰搜索框才下载」 | `src/pages/Posts.tsx` | 不与首屏封面图抢带宽 |
+
+Markdown 渲染链（`react-markdown` / `remark` / `rehype` / `highlight.js`）已经完全不在客户端。
+
+### 为什么运行时是 Preact
+
+`@preact/preset-vite` 在构建时把 `react` / `react-dom` / `react/jsx-runtime` 别名到
+`preact/compat`，业务源码仍按 React 19 的写法、用 `@types/react` 做类型检查；预渲染脚本
+（`scripts/prerender.tsx`）与 `tsc` 依旧跑在真正的 React 上，互不影响。
+
+- 首屏 JS：94 KB → 45 KB（gzip）；文章页 105 KB → 56 KB；
+- 实测 LCP：首页 −21%、列表页 −21%、文章页 −15%（Slow 4G + 4× CPU，7 轮中位数）；
+- 代价：Preact 是同步渲染，首屏会压出一个较长的任务（4× CPU 下约 0.6 s），
+  TBT 指标比 React 的时间切片高；但总主线程耗时更低，正文（LCP）出现得更早。
+
+两条硬约束，都有自动化兜底：
+
+1. **不要用 React 19 新增 API**（`use` / `useActionState` / `useOptimistic` / `cache` …）：
+   类型检查能过，但 Preact compat 没有实现，线上会白屏。ESLint 的
+   `no-restricted-syntax` 会在 `pnpm lint` 时直接报错。
+2. **Radix 的「集合 + 索引」类组件要单独验证**：Slider 依赖 `useEffect` 注册集合、再按索引
+   取 value，而 Preact 在 ref 回调里的 setState 会先于 passive effect 刷新，索引恒为 -1，
+   滑块被 `display:none`。`src/components/ui/slider.tsx` 因此改为原生指针 / 键盘实现；
+   `scripts/smoke-test.mjs` 会检查 `/components` 里所有滑块的实际尺寸。
 
 ## 目录结构
 

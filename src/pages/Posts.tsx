@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "../lib/router";
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { publishedPosts, getAllTags } from "../lib/posts";
 import { profileConfig } from "../config/profile";
 import PostCard from "../components/PostCard";
 import Seo from "../components/Seo";
 import Breadcrumb from "../components/Breadcrumb";
+import { PageHeader, SectionLabel } from "../components/page";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import {
@@ -39,8 +40,9 @@ function FilterGroup({
 }) {
   if (options.length === 0) return null;
   return (
-    <div className="mb-3">
-      <div className="mb-1.5 text-xs text-muted-foreground">{label}</div>
+    <div className="mb-4">
+      <SectionLabel className="mb-2">{label}</SectionLabel>
+      <div className="-mx-5 overflow-x-auto px-5 pb-0.5 md:mx-0 md:overflow-visible md:px-0">
       <ToggleGroup
         type="single"
         variant="outline"
@@ -52,7 +54,8 @@ function FilterGroup({
           // 再次点击已选中项时 v 为空字符串，视为回到「全部」
           onChange(v === "" || v === "all" ? "" : v);
         }}
-        className="flex-wrap justify-start"
+        // 移动端单行横向滚动：24 个标签若全部换行要占 9 行，把列表挤到首屏之外
+        className="flex-nowrap justify-start md:flex-wrap"
       >
         <ToggleGroupItem value="all">
           全部
@@ -63,7 +66,33 @@ function FilterGroup({
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
+      </div>
     </div>
+  );
+}
+
+/** 已选筛选条件：与 Badge secondary 同一视觉（h-5 / 12px / 方角），右侧挂删除按钮。 */
+function FilterChip({
+  label,
+  onRemove,
+  removeLabel,
+}: {
+  label: string;
+  onRemove: () => void;
+  removeLabel: string;
+}) {
+  return (
+    <span className="inline-flex h-5 items-center gap-1 bg-secondary px-2 text-xs font-medium text-foreground">
+      {label}
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={removeLabel}
+        className="cursor-pointer text-muted-foreground transition-colors hover:text-primary"
+      >
+        <X className="size-3" />
+      </button>
+    </span>
   );
 }
 
@@ -80,25 +109,37 @@ export default function Posts() {
   const tags = getAllTags();
   const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))] as string[];
 
-  // 搜索索引只建一次：每个字输入时若重新 toLowerCase 全文，等于每次按键
-  // 都把全部文章正文复制一遍；现在只做 includes 扫描。
-  const searchIndex = useMemo(
-    () => new Map(
-      publishedPosts.map((p) => [
-        p.slug,
-        (p.title + "\n" + p.description + "\n" + p.content + "\n" + p.tags.join(" ")).toLowerCase(),
-      ])
-    ),
-    []
-  );
+  // 全文搜索索引（含正文）体积约 45 KB，只在列表页按需加载：
+  // 首屏不下载它，输入时也不必每次重复 toLowerCase 全文。
+  //
+  // 触发时机从"空闲 2 秒"改成"用户碰搜索框/开始输入"：这一页的 LCP 是首屏
+  // 卡片封面图，而空闲回调很可能正好落在图片下载中途，几十 KB 的索引会和
+  // 封面图抢慢速带宽（实测把 LCP 推后 300~400 ms）。搜索框没被碰过时，
+  // 索引对用户没有任何价值，等 8 秒兜底即可。
+  const [searchIndex, setSearchIndex] = useState<Record<string, string> | null>(null);
+  const indexRequested = useRef(false);
+  const loadSearchIndex = useCallback(() => {
+    if (indexRequested.current) return;
+    indexRequested.current = true;
+    import("../generated/search-index.json")
+      .then((mod) => setSearchIndex(mod.default as Record<string, string>))
+      .catch(() => {
+        /* 索引缺失时搜索降级为「不过滤」，不影响列表浏览 */
+      });
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(loadSearchIndex, 8000);
+    return () => window.clearTimeout(timer);
+  }, [loadSearchIndex]);
 
   const filtered = useMemo(() => {
     let list = publishedPosts;
     if (cat) list = list.filter((p) => p.category === cat);
     if (tag) list = list.filter((p) => p.tags.includes(tag));
     const kw = keyword.trim().toLowerCase();
-    if (kw) {
-      list = list.filter((p) => searchIndex.get(p.slug)?.includes(kw));
+    if (kw && searchIndex) {
+      list = list.filter((p) => searchIndex[p.slug]?.includes(kw));
     }
     return list;
   }, [cat, tag, keyword, searchIndex]);
@@ -114,12 +155,13 @@ export default function Posts() {
         (el instanceof HTMLElement && el.isContentEditable);
       if (typing) return;
       e.preventDefault();
+      loadSearchIndex();
       searchRef.current?.focus();
       searchRef.current?.select();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [loadSearchIndex]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, totalPages);
@@ -177,17 +219,19 @@ export default function Posts() {
       />
       <Breadcrumb items={[{ label: "文章", to: "/posts/" }]} />
 
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">文章</h1>
-        <p className="text-sm text-muted-foreground" aria-live="polite" aria-atomic="true">
-          {filtered.length === publishedPosts.length
-            ? `共 ${publishedPosts.length} 篇文章`
-            : `找到 ${filtered.length} 篇文章`}
-        </p>
-      </div>
+      <PageHeader
+        title="文章"
+        description={
+          <span aria-live="polite" aria-atomic="true">
+            {filtered.length === publishedPosts.length
+              ? `共 ${publishedPosts.length} 篇文章`
+              : `找到 ${filtered.length} 篇文章`}
+          </span>
+        }
+      />
 
       {/* 搜索：shadcn InputGroup（前缀图标 + 后缀清除按钮） */}
-      <InputGroup shape="rounded" className="mb-4 h-10">
+      <InputGroup className="mb-4 h-10">
         <InputGroupAddon align="inline-start">
           <Search />
         </InputGroupAddon>
@@ -195,7 +239,12 @@ export default function Posts() {
           ref={searchRef}
           type="search"
           value={keyword}
-          onChange={(e) => onKeywordChange(e.target.value)}
+          onChange={(e) => {
+            loadSearchIndex();
+            onKeywordChange(e.target.value);
+          }}
+          onFocus={loadSearchIndex}
+          onPointerEnter={loadSearchIndex}
           placeholder="搜索文章…（按 / 快速聚焦）"
           aria-label="搜索文章（快捷键 /）"
           autoComplete="off"
@@ -217,53 +266,21 @@ export default function Posts() {
       </InputGroup>
 
       <FilterGroup label="分类" value={cat} options={categories} onChange={selectCat} />
-      <div className="mb-6">
-        <FilterGroup label="标签" value={tag} options={tags} onChange={selectTag} />
-      </div>
+      <FilterGroup label="标签" value={tag} options={tags} onChange={selectTag} />
 
-      <Separator className="mb-6" />
+      <Separator className="my-6" />
 
       {(cat || tag || keyword) && (
         <div className="mb-6 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           <span>当前筛选：</span>
-          {cat && (
-            <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-foreground">
-              分类: {cat}
-              <button
-                type="button"
-                onClick={() => selectCat(cat)}
-                aria-label="移除分类筛选"
-                className="hover:text-primary cursor-pointer"
-              >
-                <X className="size-3" />
-              </button>
-            </span>
-          )}
-          {tag && (
-            <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-foreground">
-              标签: {tag}
-              <button
-                type="button"
-                onClick={() => selectTag(tag)}
-                aria-label="移除标签筛选"
-                className="hover:text-primary cursor-pointer"
-              >
-                <X className="size-3" />
-              </button>
-            </span>
-          )}
+          {cat && <FilterChip label={"分类: " + cat} onRemove={() => selectCat(cat)} removeLabel="移除分类筛选" />}
+          {tag && <FilterChip label={"标签: " + tag} onRemove={() => selectTag(tag)} removeLabel="移除标签筛选" />}
           {keyword && (
-            <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-foreground">
-              关键词: "{keyword}"
-              <button
-                type="button"
-                onClick={() => onKeywordChange("")}
-                aria-label="清除关键词"
-                className="hover:text-primary cursor-pointer"
-              >
-                <X className="size-3" />
-              </button>
-            </span>
+            <FilterChip
+              label={'关键词: "' + keyword + '"'}
+              onRemove={() => onKeywordChange("")}
+              removeLabel="清除关键词"
+            />
           )}
           <Button
             variant="ghost"
@@ -283,7 +300,7 @@ export default function Posts() {
 
       {/* 列表 / 空状态 */}
       {pagePosts.length === 0 ? (
-        <Empty className="my-16">
+        <Empty variant="solid" className="my-16">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <Search />

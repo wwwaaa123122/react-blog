@@ -4,11 +4,25 @@ process.env.POSTS_DIR = join(process.cwd(), "src/posts");
 process.env.VITE_BASE = "/";
 
 const { renderToString } = await import("react-dom/server");
-const { MemoryRouter } = await import("react-router-dom");
+const { MemoryRouter } = await import("../src/lib/router");
 const React = (await import("react")).default;
 const { default: App } = await import("../src/App");
-const { default: PostDetail } = await import("../src/pages/PostDetail");
 const { publishedPosts } = await import("../src/lib/posts");
+const { preloadAllContent } = await import("../src/lib/post-content");
+
+// 路由页面都是按需加载的：这里先全部取到再注入 App，
+// 否则 renderToString 只会序列化出 Suspense fallback（没有 h1，误报大纲问题）。
+const [PostDetail, Posts, Friends, About, Archive, NotFound] = await Promise.all([
+  import("../src/pages/PostDetail").then((m) => m.default),
+  import("../src/pages/Posts").then((m) => m.default),
+  import("../src/pages/Friends").then((m) => m.default),
+  import("../src/pages/About").then((m) => m.default),
+  import("../src/pages/Archive").then((m) => m.default),
+  import("../src/pages/NotFound").then((m) => m.default),
+]);
+// 正文 HTML 是构建期产物，先读进缓存，文章页才能同步渲染
+await preloadAllContent();
+const pages = { postDetail: PostDetail, posts: Posts, friends: Friends, about: About, archive: Archive, notFound: NotFound };
 
 // 文章路由由 publishedPosts 派生，而不是硬编码 slug：
 // 草稿（draft: true）会被自动排除，避免「文章转为草稿」时这里拿不到文章、
@@ -26,7 +40,7 @@ const routes = [
 let issues = 0;
 for (const r of routes) {
   const html = renderToString(
-    React.createElement(MemoryRouter, { basename: "", initialEntries: [r] }, React.createElement(App, { PostDetailComponent: PostDetail }))
+    React.createElement(MemoryRouter, { basename: "", initialEntries: [r] }, React.createElement(App, { pages }))
   );
   const heads = [...html.matchAll(/<h([1-6])[^>]*>/g)].map((m) => parseInt(m[1]));
   const h1s = heads.filter((h) => h === 1).length;

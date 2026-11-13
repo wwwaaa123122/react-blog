@@ -247,7 +247,6 @@
     90deg,
     var(--primary),
     hsl(187 100% 45%),
-    var(--chart-4),
     var(--primary)
   );
   background-size: 200% 100%;
