@@ -30,23 +30,31 @@ export function PageHeader({
   title,
   description,
   eyebrow,
+  meta,
   className,
 }: {
   title: ReactNode;
   description?: ReactNode;
   /** 标题上方的一行小徽章（技术栈、状态等） */
   eyebrow?: ReactNode;
+  /** 与标题同一基线右侧的次要信息（数量、更新时间） */
+  meta?: ReactNode;
   className?: string;
 }) {
   return (
-    <header className={cn("mb-8", className)}>
-      <div className="min-w-0">
-        {eyebrow && <div className="mb-3 flex flex-wrap items-center gap-2">{eyebrow}</div>}
-        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">{title}</h1>
-        {description && (
-          <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+    <header className={cn("mb-10 border-b border-border pb-7", className)}>
+      {eyebrow && <div className="mb-3 flex flex-wrap items-center gap-2">{eyebrow}</div>}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h1>
+        {meta && (
+          <div className="text-xs text-muted-foreground tabular-nums">{meta}</div>
         )}
       </div>
+      {description && (
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          {description}
+        </p>
+      )}
     </header>
   );
 }
@@ -58,6 +66,7 @@ export function SectionHeading({
   action,
   as: Tag = "h2",
   id,
+  rule = false,
   className,
 }: {
   children: ReactNode;
@@ -67,10 +76,18 @@ export function SectionHeading({
   action?: ReactNode;
   as?: "h2" | "h3";
   id?: string;
+  /** 在标题上方压一条通栏细线：用于页面中段的独立区块，强化分节 */
+  rule?: boolean;
   className?: string;
 }) {
   return (
-    <div className={cn("mb-4 flex items-center justify-between gap-3", className)}>
+    <div
+      className={cn(
+        "mb-4 flex items-center justify-between gap-3",
+        rule && "border-t border-border pt-4",
+        className
+      )}
+    >
       <Tag
         id={id}
         className={cn(
@@ -79,7 +96,11 @@ export function SectionHeading({
         )}
       >
         {children}
-        {meta && <span className="text-xs font-normal text-muted-foreground">{meta}</span>}
+        {meta && (
+          <span className="text-xs font-normal text-muted-foreground tabular-nums">
+            {meta}
+          </span>
+        )}
       </Tag>
       {action}
     </div>
@@ -117,7 +138,7 @@ export function MetaRow({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground",
+        "flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground tabular-nums",
         className
       )}
     >

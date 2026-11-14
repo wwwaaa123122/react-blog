@@ -23,7 +23,8 @@ import {
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia } from "@/components/ui/empty";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
-import { cn, prefersReducedMotion } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { prefersReducedMotion } from "@/lib/motion";
 import { MetaItem, MetaRow, SectionHeading, SectionLabel, TagList } from "../components/page";
 import Giscus from "../components/Giscus";
 import ReadingProgress from "../components/ReadingProgress";
@@ -206,13 +207,13 @@ export default function PostDetail() {
           data-prerendered-post={post.slug}
           className="min-w-0 flex-1 max-w-180 mx-auto"
         >
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight leading-tight mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
             {post.title}
           </h1>
 
           {/* 元信息与列表页同款：12px 文本 + 12px 图标，不再用一排徽章
               —— 徽章与下方标签同视觉，读者分不清"事实"和"可点的标签" */}
-          <MetaRow className="mb-4">
+          <MetaRow>
             <time dateTime={post.published}>{formatDate(post.published)}</time>
             {post.updated && post.updated !== post.published && (
               <MetaItem icon={RefreshCw}>
@@ -226,13 +227,16 @@ export default function PostDetail() {
             {post.category && <MetaItem icon={BookOpen}>{post.category}</MetaItem>}
           </MetaRow>
 
-          <TagList tags={post.tags} className="mb-6" />
+          {/* 标题区用一条导线收口：把「标题/元信息/标签」与正文分开 */}
+          <div className="mt-3 mb-6 border-b border-border pb-6">
+            <TagList tags={post.tags} />
+          </div>
 
           {cover && (
             <div className="mb-8">
               {/* 首屏封面：急切加载并提高优先级（LCP 元素），避免 lazy 延迟 */}
               <img
-                className="h-auto w-full bg-muted ring-1 ring-border/60"
+                className="aspect-2/1 w-full border border-border bg-secondary object-cover"
                 src={cover}
                 srcSet={coverSrcSet}
                 sizes="(min-width: 768px) 720px, 100vw"
@@ -412,7 +416,7 @@ export default function PostDetail() {
         {toc.length > 1 && (
           <aside className="hidden w-56 shrink-0 lg:block">
             <div className="sticky top-20">
-              <SectionLabel className="mb-3">目录</SectionLabel>
+              <SectionLabel className="mb-3">目录 · {toc.length}</SectionLabel>
               {/* 导轨只有一条 1px：当前章节用绝对定位的 2px 竖条压在导轨上，
                   此前是给当前项再加一层 border-l-2，视觉上会出现两条并行的线 */}
               <nav

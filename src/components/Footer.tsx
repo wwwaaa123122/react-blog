@@ -2,7 +2,7 @@ import { Link } from "../lib/router";
 import { ArrowUp, FileText, Map, Rss } from "lucide-react";
 import { siteConfig } from "../config/site";
 import { assetUrl } from "../lib/base";
-import { prefersReducedMotion } from "../lib/utils";
+import { prefersReducedMotion } from "../lib/motion";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 

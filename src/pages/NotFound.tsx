@@ -15,13 +15,13 @@ export default function NotFound() {
   return (
     <>
       <Seo title="404" description="页面不存在或已被移除" noindex />
-      <div className="py-20">
+      <div className="mx-auto max-w-lg py-20">
         <Empty variant="solid">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <BookOpen />
             </EmptyMedia>
-            <h1 className="text-6xl font-bold tracking-tight text-muted-foreground/60">404</h1>
+            <h1 className="text-5xl font-bold tracking-tight text-muted-foreground tabular-nums">404</h1>
             <EmptyTitle variant="icon" className="mt-2">页面飞走了</EmptyTitle>
             <EmptyDescription>你访问的页面不存在或已被移除</EmptyDescription>
           </EmptyHeader>

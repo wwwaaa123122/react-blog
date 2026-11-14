@@ -241,8 +241,8 @@ export default function Friends() {
       <SectionHeading meta={`${friends.length} 位`}>友链列表</SectionHeading>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {friends.map((f) => (
-          <div key={f.title} className="cv-auto">
-            <Card size="cozy" variant="interactive">
+          <div key={f.title} className="cv-auto h-full">
+            <Card size="cozy" variant="interactive" className="h-full">
               <a
                 className="group flex min-w-0 items-center gap-3"
                 href={f.siteurl}
@@ -268,7 +268,7 @@ export default function Friends() {
                 </div>
               </a>
               {f.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 border-t border-border pt-3">
+                <div className="mt-auto flex flex-wrap gap-1.5 border-t border-border pt-3">
                   {f.tags.map((t) => (
                     <Badge key={t} variant="secondary" size="xs">{t}</Badge>
                   ))}

@@ -46,7 +46,7 @@ export default function Components() {
       <PageHeader
         eyebrow={
           <>
-            <Badge variant="secondary">React 19</Badge>
+            <Badge variant="secondary">Preact 11</Badge>
             <Badge variant="secondary">shadcn/ui</Badge>
             <Badge variant="secondary">Tailwind v4</Badge>
             <Badge variant="outline">亮 / 暗双主题</Badge>

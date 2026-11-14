@@ -22,11 +22,17 @@ import {
 } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { prefersReducedMotion } from "@/lib/utils";
+import { prefersReducedMotion } from "@/lib/motion";
 
 const PAGE_SIZE = 9;
 
-// 筛选组：标题 + 一组 ToggleGroup 形式的「标签页」（选中态由组件库的 data-state 提供）
+// 筛选选项来自静态文章数据：只在模块加载时算一次，不随输入/翻页重算
+const tags = getAllTags();
+const categories = [
+  ...new Set(publishedPosts.map((p) => p.category).filter(Boolean)),
+] as string[];
+
+// 筛选组：标签内联在左侧（省掉一行标题），芯片在移动端单行横滑、md 以上换行
 function FilterGroup({
   label,
   value,
@@ -40,32 +46,32 @@ function FilterGroup({
 }) {
   if (options.length === 0) return null;
   return (
-    <div className="mb-4">
-      <SectionLabel className="mb-2">{label}</SectionLabel>
-      <div className="-mx-5 overflow-x-auto px-5 pb-0.5 md:mx-0 md:overflow-visible md:px-0">
-      <ToggleGroup
-        type="single"
-        variant="outline"
-        size="sm"
-        spacing={1}
-        aria-label={label}
-        value={value === "" ? "all" : value}
-        onValueChange={(v) => {
-          // 再次点击已选中项时 v 为空字符串，视为回到「全部」
-          onChange(v === "" || v === "all" ? "" : v);
-        }}
-        // 移动端单行横向滚动：24 个标签若全部换行要占 9 行，把列表挤到首屏之外
-        className="flex-nowrap justify-start md:flex-wrap"
-      >
-        <ToggleGroupItem value="all">
-          全部
-        </ToggleGroupItem>
-        {options.map((o) => (
-          <ToggleGroupItem key={o} value={o}>
-            {o}
+    <div className="mb-3 flex items-start gap-3">
+      <SectionLabel className="w-8 shrink-0 pt-1.5">{label}</SectionLabel>
+      <div className="min-w-0 flex-1 overflow-x-auto pb-1">
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          size="sm"
+          spacing={1}
+          aria-label={label}
+          value={value === "" ? "all" : value}
+          onValueChange={(v) => {
+            // 再次点击已选中项时 v 为空字符串，视为回到「全部」
+            onChange(v === "" || v === "all" ? "" : v);
+          }}
+          // 移动端 20 多个标签若全部换行要占 9 行，把列表挤到首屏之外
+          className="flex-nowrap justify-start md:flex-wrap"
+        >
+          <ToggleGroupItem value="all">
+            全部
           </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
+          {options.map((o) => (
+            <ToggleGroupItem key={o} value={o}>
+              {o}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
       </div>
     </div>
   );
@@ -105,9 +111,6 @@ export default function Posts() {
   const keyword = searchParams.get("q") ?? "";
   const rawPage = parseInt(searchParams.get("page") ?? "1", 10);
   const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
-
-  const tags = getAllTags();
-  const categories = [...new Set(publishedPosts.map(p => p.category).filter(Boolean))] as string[];
 
   // 全文搜索索引（含正文）体积约 45 KB，只在列表页按需加载：
   // 首屏不下载它，输入时也不必每次重复 toLowerCase 全文。
@@ -231,7 +234,7 @@ export default function Posts() {
       />
 
       {/* 搜索：shadcn InputGroup（前缀图标 + 后缀清除按钮） */}
-      <InputGroup className="mb-4 h-10">
+      <InputGroup className="mb-3 h-10">
         <InputGroupAddon align="inline-start">
           <Search />
         </InputGroupAddon>
@@ -268,7 +271,7 @@ export default function Posts() {
       <FilterGroup label="分类" value={cat} options={categories} onChange={selectCat} />
       <FilterGroup label="标签" value={tag} options={tags} onChange={selectTag} />
 
-      <Separator className="my-6" />
+      <Separator className="my-4" />
 
       {(cat || tag || keyword) && (
         <div className="mb-6 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

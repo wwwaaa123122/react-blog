@@ -81,23 +81,23 @@
 
 :root {
   color-scheme: light;
-  --background: #f8f9fc;
-  --foreground: #1a1d26;
+  --background: #f6f8fb;
+  --foreground: #151922;
   --card: #ffffff;
-  --card-foreground: #1a1d26;
+  --card-foreground: #151922;
   --popover: #ffffff;
-  --popover-foreground: #1a1d26;
+  --popover-foreground: #151922;
   --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --secondary: #f1f3f7;
-  --secondary-foreground: #1a1d26;
-  --muted: #f1f3f7;
-  --muted-foreground: #6b7280;
-  --accent: hsl(221 83% 53% / 10%);
+  --secondary: #eef2f7;
+  --secondary-foreground: #151922;
+  --muted: #eef2f7;
+  --muted-foreground: #5d6673;
+  --accent: hsl(221 83% 53% / 9%);
   --accent-foreground: #2563eb;
-  --destructive: #ef4444;
-  --border: #e5e7eb;
-  --input: #e5e7eb;
+  --destructive: #dc2626;
+  --border: #dde3ec;
+  --input: #e2e6ee;
   --ring: #2563eb;
   --chart-1: #2563eb;
   --chart-2: #06b6d4;
@@ -115,32 +115,32 @@
   --sidebar-border: #e5e7eb;
   --sidebar-ring: #2563eb;
   /* 博客自定义 */
-  --primary-soft: hsl(221 83% 53% / 10%);
-  --card-nested: #f4f6fa;
-  --code-bg: #f6f8fa;
-  --text-tertiary: #9ca3af;
+  --primary-soft: hsl(221 83% 53% / 9%);
+  --card-nested: #f2f5fa;
+  --code-bg: #f4f7fb;
+  --text-tertiary: #8b95a5;
   --nav-height: 56px;
 }
 
 .dark {
   color-scheme: dark;
-  --background: #0b0e14;
-  --foreground: #e2e8f0;
-  --card: #131722;
-  --card-foreground: #e2e8f0;
-  --popover: #131722;
-  --popover-foreground: #e2e8f0;
+  --background: #0a0d13;
+  --foreground: #e5eaf2;
+  --card: #121723;
+  --card-foreground: #e5eaf2;
+  --popover: #121723;
+  --popover-foreground: #e5eaf2;
   --primary: #60a5fa;
-  --primary-foreground: #0b0e14;
-  --secondary: #1a1f2e;
-  --secondary-foreground: #e2e8f0;
-  --muted: #1a1f2e;
-  --muted-foreground: #94a3b8;
-  --accent: hsl(214 94% 67% / 12%);
+  --primary-foreground: #0a0d13;
+  --secondary: #182032;
+  --secondary-foreground: #e5eaf2;
+  --muted: #182032;
+  --muted-foreground: #97a3b6;
+  --accent: hsl(214 94% 67% / 13%);
   --accent-foreground: #60a5fa;
   --destructive: #f87171;
-  --border: #1e293b;
-  --input: #1e293b;
+  --border: #263043;
+  --input: #232c3d;
   --ring: #60a5fa;
   --chart-1: #60a5fa;
   --chart-2: #22d3ee;
@@ -156,10 +156,10 @@
   --sidebar-border: #1e293b;
   --sidebar-ring: #60a5fa;
   /* 博客自定义 */
-  --primary-soft: hsl(214 94% 67% / 12%);
-  --card-nested: #171c2a;
-  --code-bg: #0f1420;
-  --text-tertiary: #64748b;
+  --primary-soft: hsl(214 94% 67% / 13%);
+  --card-nested: #171d2b;
+  --code-bg: #0d1220;
+  --text-tertiary: #6b7a91;
 }
 
 @layer base {
@@ -183,9 +183,14 @@
     text-wrap: balance;
     overflow-wrap: break-word;
   }
+  /* 段落用 pretty：避免最后一行只剩一两个字的"孤字行"，
+     中文长段落尤其明显（balance 会让段落每行等长，反而更差） */
+  p {
+    text-wrap: pretty;
+  }
   body {
     @apply bg-background text-foreground;
-    line-height: 1.7;
+    line-height: 1.75;
     font-size: 16px;
     transition: background-color 0.3s ease, color 0.3s ease;
     min-height: 100vh;
@@ -197,6 +202,7 @@
   }
   ::selection {
     background: var(--primary-soft);
+    color: var(--foreground);
   }
   img {
     max-width: 100%;

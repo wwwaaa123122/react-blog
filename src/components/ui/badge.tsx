@@ -23,6 +23,9 @@ const badgeVariants = cva(
           "bg-chart-5/15 text-chart-5 [a]:hover:bg-chart-5/25 [a]:hover:text-chart-5",
         warning:
           "bg-chart-3/15 text-chart-3 [a]:hover:bg-chart-3/25 [a]:hover:text-chart-3",
+        // 覆盖在图片上的徽章：半透明底 + 描边，避免白底封面把浅色徽章吞掉
+        overlay:
+          "bg-background/85 text-foreground ring-1 ring-border backdrop-blur-sm",
       },
       size: {
         default: "",

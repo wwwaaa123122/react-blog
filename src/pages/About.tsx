@@ -117,7 +117,7 @@ export default function About() {
             </CardHeader>
             <CardContent>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                React 19, TypeScript, Tailwind CSS, Vite, shadcn/ui, Node.js
+                Preact 11 · TypeScript · Tailwind CSS v4 · Vite · shadcn/ui · Node.js
               </p>
             </CardContent>
           </Card>
@@ -136,7 +136,8 @@ export default function About() {
         <SectionHeading as="h3" className="mb-3">关于本站</SectionHeading>
         <p className="mb-8 text-sm leading-relaxed text-muted-foreground">
           本站建于 2025 年，是一个记录个人技术探索与生活的极简博客。
-          界面由 React 19 + shadcn/ui + Tailwind v4 搭建，采用静态预渲染与极速客户端导航，具备完整的亮/暗主题支持与即时全局检索体验。
+          界面由 Preact 11 + shadcn/ui + Tailwind v4 搭建，采用构建期预渲染、
+          自研极简路由与静态资源优化，具备完整的亮/暗主题支持与即时全局检索体验。
         </p>
 
         <Separator className="mb-8" />

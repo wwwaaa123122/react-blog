@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { prefersReducedMotion } from "@/lib/utils";
+import { prefersReducedMotion } from "@/lib/motion";
 
 // 回到顶部：shadcn Button（直角 + 主色），仅桌面端显示。
 // 移动端已有悬浮按钮承担该入口，重复的固定按钮会遮挡正文，故用 max-sm:hidden 隐藏。

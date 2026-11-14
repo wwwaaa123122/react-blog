@@ -17,15 +17,19 @@ function formatMonthDay(d: string): string {
   return formatDate(d);
 }
 
-export default function Archive() {
+// 归档结构是静态的：构建完成后年份分组不会变，算一次即可
+// （此前每次渲染都重建 Map 并重新排序）
+const years = (() => {
   const byYear = new Map<string, typeof publishedPosts>();
   for (const post of publishedPosts) {
     const year = post.published.slice(0, 4) || "未知";
     if (!byYear.has(year)) byYear.set(year, []);
     byYear.get(year)!.push(post);
   }
-  const years = Array.from(byYear.entries()).sort((a, b) => a[0] < b[0] ? 1 : -1);
+  return Array.from(byYear.entries()).sort((a, b) => (a[0] < b[0] ? 1 : -1));
+})();
 
+export default function Archive() {
   return (
     <>
       <Seo
